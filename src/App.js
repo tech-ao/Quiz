@@ -1,13 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import AdminDashboard from './Components/AdminDashboard'
-
+import React from 'react';
+import AdminDashboard from './Components/AdminDashboard';
+import StudentLists from './Components/Students';
+import Login from './Components/Login'
 function App() {
   return (
-   <div>
-<AdminDashboard/>
-   </div>
+    
+      <div className="App">
+        <StudentLists />
+      </div>
   );
 }
 

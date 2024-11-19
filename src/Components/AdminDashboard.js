@@ -1,10 +1,14 @@
 import React from 'react';
 import { Container, Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
 import '../Style.css'
+import Sidebar from './SidePannel';
 function AdminDashboard() {
   return (
+
+    <div className="d-flex">
+      <Sidebar />    
     <Container fluid className="p-4 bg-light">
-      <Row className="align-items-center mb-4">
+             <Row className="align-items-center mb-4">
         <Col md={6} className="d-flex align-items-center">
           <h2 className="fw-bold">Dashboard</h2>
           <span className="ms-3 text-secondary">12:40 PM</span>
@@ -91,6 +95,7 @@ function AdminDashboard() {
         </Col>
       </Row>
     </Container>
+    </div>
   );
 }
 
