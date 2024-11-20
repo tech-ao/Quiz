@@ -51,9 +51,7 @@ const ViewStudentPanel = ({ show, onClose, studentData }) => {
           </Col>
         </Row>
         <div className="d-flex justify-content-end">
-          <Button variant="secondary" onClick={onClose}>
-            Close
-          </Button>
+         
         </div>
       </Offcanvas.Body>
     </Offcanvas>
