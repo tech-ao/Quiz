@@ -2,32 +2,32 @@ import React from 'react';
 import { Container, Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
 import '../Style.css'
 import Sidebar from './SidePannel';
+import AdminHeader from './AdminHeader'
+
 function AdminDashboard() {
   return (
-
+    <div>
+    <AdminHeader />
     <div className="d-flex">
-      <Sidebar />    
-    <Container fluid className="p-4 bg-light">
+        <Sidebar />
+    <Container fluid className="p-4 bg-light min-vh-100">
              <Row className="align-items-center mb-4">
         <Col md={6} className="d-flex align-items-center">
           <h2 className="fw-bold">Dashboard</h2>
           <span className="ms-3 text-secondary">12:40 PM</span>
         </Col>
-        <Col md={6} className="d-flex justify-content-end gap-3">
-          <Button variant="link">🌐 Website</Button>
-          <Button variant="link">👤 Admin</Button>
-        </Col>
+        
       </Row>
       <Row className="align-items-center mb-4">
         <Col md={6}>
           <InputGroup>
             <Form.Control placeholder="Search" />
-            <Button variant="outline-secondary">Search</Button>
+            <Button  variant="outline-secondary">Search</Button>
           </InputGroup>
         </Col>      
         <Col md={6} className="d-flex justify-content-end gap-3">
-          <Button  className='chipButton' variant="outline-secondary">Add Students</Button>
-          <Button className ='chipButton' variant="outline-secondary">Add Quiz</Button>
+          <Button  className='chipButton ' variant="outline-secondary">Add Students</Button>
+          <Button className ='chipButton ' variant="outline-secondary">Add Quiz</Button>
         </Col>
       </Row>
       <Row className="mb-4">
@@ -38,7 +38,7 @@ function AdminDashboard() {
           { label: "Completed Projects", count: "29", icon: "✅" }
         ].map((item, index) => (
           <Col md={3} key={index}>
-            <Card className="shadow-sm p-3 mb-3 ">
+            <Card className="shadow-sm p-3 mb-3  border-success">
               <Card.Body>
                 <h5>{item.label}</h5>
                 <h3>{item.count}</h3>
@@ -50,7 +50,7 @@ function AdminDashboard() {
       </Row>
       <Row>
         <Col md={4}>
-          <Card className="shadow-sm p-3 mb-3 bg-white rounded">
+          <Card className="shadow-sm p-3 mb-3 bg-white border-success rounded">
             <Card.Body>
               <h5>Quiz</h5>
               <Row>
@@ -95,6 +95,7 @@ function AdminDashboard() {
         </Col>
       </Row>
     </Container>
+    </div>
     </div>
   );
 }

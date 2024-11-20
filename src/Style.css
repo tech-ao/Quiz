@@ -1,3 +1,4 @@
+import 
 body {
     background-color: #f8f9fa;
   }
@@ -34,7 +35,7 @@ body {
 
   .side-panel {
     width: 200px;
-    background-color: #f8f9fa;
+    background-color: #f3f8e0;
     padding-top: 20px;
   }
   
@@ -52,9 +53,9 @@ body {
   }
   
   .nav-link.active {
-    background-color: #e6f2ff;
+    background-color: #f3f8e0;
     border-radius: 10px;
-    color: #0d6efd;
+    color: #178031;
   }
 
   .displayFlex{
@@ -64,7 +65,7 @@ body {
   .nav-link:hover {
     background-color: #e6f2ff;
     border-radius: 10px;
-    color: #0d6efd;
+    color: #f3f8e0;
   }
 
   .login-card {
@@ -108,6 +109,46 @@ body {
   box-shadow: 0 4px 8px rgba(0, 128, 0, 0.3); 
   object-fit: contain;
  }
+
+ .bg-custom {
+  background-color: #f3f8e0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.auth-buttons .login-btn,
+.auth-buttons .subscribe-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+}
+/* .bg-image {
+  background-image: url('./Components/images/BGIMG.JPG');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+} */
+
+.bg-image {
+  background-image:  url('./Components/images/BGIMG.JPG');/* Update with your background image path */
+  background-size: cover;
+  background-position: center;
+}
+
+
+
+
 
  
   

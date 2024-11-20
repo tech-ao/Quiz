@@ -8,7 +8,6 @@ const AdminLoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your login logic here
     console.log("User ID:", userId, "Password:", password);
   };
 
