@@ -1,30 +1,53 @@
 import React, { useState } from "react";
-import '../Style.css'
-import logo from '../Components/images/Logo.png'
+import { useNavigate } from "react-router-dom"; // For navigation
+import '../Style.css';
+import logo from '../Components/images/Logo.png';
+
 const AdminLoginPage = () => {
-  const [userId, setUserId] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(""); // State to display error messages
+  const navigate = useNavigate(); // React Router's navigation hook
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("User ID:", userId, "Password:", password);
+    setError(""); // Clear any previous errors
+
+    try {
+      const response = await fetch("https://appsail-10091564320.development.catalystappsail.com/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Login Successful:", data);   
+        navigate("/adminDashboard"); 
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setError("An error occurred. Please check your connection.");
+    }
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 ">
+    <div className="d-flex justify-content-center align-items-center vh-100">
       <div className="login-card border border-success rounded-3 p-4 bg-white shadow">
         <div className="text-center mb-4">
-          <img className ="logo"
-            src={logo}
-            alt="Math Gym Logo"
-            
-          />
+          <img className="logo" src={logo} alt="Math Gym Logo" />
           <h2 className="text-success">WELCOME TO MATH GYM</h2>
           <small className="text-muted">Admin Login to Quizlab Dashboard</small>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="mb-3 " >
+          {error && <div className="alert alert-danger">{error}</div>}
+          <div className="mb-3">
             <label htmlFor="userId" className="form-label">
               User ID
             </label>
@@ -33,12 +56,12 @@ const AdminLoginPage = () => {
               className="form-control"
               id="userId"
               placeholder="Enter your User ID"
-              value={userId}
-              onChange={(e) => setUserId(e.target.value)}
+              value={username}
+              onChange={(e) => setUserName(e.target.value)}
               required
             />
           </div>
-          <div className="mb-3 position-relative ">
+          <div className="mb-3 position-relative">
             <label htmlFor="password" className="form-label">
               Password
             </label>
@@ -57,7 +80,7 @@ const AdminLoginPage = () => {
               onClick={() => setShowPassword(!showPassword)}
               style={{ textDecoration: "none", color: "gray" }}
             >
-             
+              {showPassword ? "Hide" : "Show"}
             </button>
           </div>
           <div className="d-flex justify-content-end mb-3">
@@ -68,7 +91,6 @@ const AdminLoginPage = () => {
           <button type="submit" className="btn btn-success w-100">
             Login
           </button>
-          
         </form>
       </div>
     </div>
