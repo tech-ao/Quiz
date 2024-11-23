@@ -1,4 +1,4 @@
-import 
+
 body {
     background-color: #f8f9fa;
   }
@@ -39,34 +39,34 @@ body {
     padding-top: 20px;
   }
   
-  .nav-link {
-    color: black;
-    font-size: 16px;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-  }
   
-  .nav-link i {
-    margin-right: 10px;
-    font-size: 20px;
+  .nav-link {
+    color: #09690c !important;
+    font-weight: 500;
+    padding: 12px 16px;
+    transition: background-color 0.2s ease;
   }
   
   .nav-link.active {
-    background-color: #f3f8e0;
-    border-radius: 10px;
-    color: #178031;
+    background-color: #e3f1ac !important; /* Light green color */
+    border-left: 4px solid #8bc34a; /* Left border for the active item */
+    color: #000;
   }
+  
+  .nav-link:hover {
+    background-color: #e3f1ac !important;
+    color: #000 !important;
+  }
+  
+  .nav-link i {
+    font-size: 1.2rem;
+  }
+  
 
   .displayFlex{
     display: flex;
   }
-  
-  .nav-link:hover {
-    background-color: #e6f2ff;
-    border-radius: 10px;
-    color: #f3f8e0;
-  }
+ 
 
   .login-card {
     width: 450px;
@@ -122,11 +122,7 @@ body {
   background-color: #f8f9fa;
 }
 
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-}
+
 
 .auth-buttons .login-btn,
 .auth-buttons .subscribe-btn {

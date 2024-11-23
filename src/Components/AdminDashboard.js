@@ -25,10 +25,7 @@ function AdminDashboard() {
             <Button  variant="outline-secondary">Search</Button>
           </InputGroup>
         </Col>      
-        <Col md={6} className="d-flex justify-content-end gap-3">
-          <Button  className='chipButton ' variant="outline-secondary">Add Students</Button>
-          <Button className ='chipButton ' variant="outline-secondary">Add Quiz</Button>
-        </Col>
+        
       </Row>
       <Row className="mb-4">
         {[

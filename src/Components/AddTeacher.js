@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
-import axios from "axios"; // Ensure axios is installed: npm install axios
 
-const AddStudentPanel = ({ show, onClose }) => {
+const AddTeacher = ({ show, onClose }) => {
   // State to store form values
   const [formData, setFormData] = useState({
     firstName: "",
@@ -15,9 +14,6 @@ const AddStudentPanel = ({ show, onClose }) => {
     countryCode: "+91", // Default country code
   });
 
-  // State to handle submission feedback
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -28,37 +24,14 @@ const AddStudentPanel = ({ show, onClose }) => {
   };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show a loading state (optional)
+    console.log("Form Data:", formData); // Log the collected form data
 
-    try {
-      const response = await axios.post("https://appsail-10091564320.development.catalystappsail.com/api/registerStudent", {
-        ...formData,
-        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`, // Combine country code and phone number
-        password: "admin@123", // Use a default password or let the user input
-        role: "user", // Set the default role as 'student' or use dynamic data
-      });
+    // Perform any action with the form data (e.g., API call, state update)
+    console.log("Student added successfully!");
 
-      console.log("Student added successfully:", response.data);
-
-      // Clear the form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        dob: "",
-        grade: "",
-        address: "",
-      });
-
-      onClose(); // Close the form
-    } catch (error) {
-      console.error("Failed to register student:", error.response?.data || error.message);
-    } finally {
-      setIsSubmitting(false); // Reset loading state
-    }
+    onClose(); // Close the form after submission
   };
 
   return (
@@ -158,11 +131,11 @@ const AddStudentPanel = ({ show, onClose }) => {
               required
             >
               <option value="">Select Grade</option>
-              <option value="1">Grade 1</option>
-              <option value="2">Grade 2</option>
-              <option value="3">Grade 3</option>
-              <option value="4">Grade 4</option>
-              <option value="5">Grade 5</option>
+              <option value="Grade 1">Grade 1</option>
+              <option value="Grade 2">Grade 2</option>
+              <option value="Grade 3">Grade 3</option>
+              <option value="Grade 4">Grade 4</option>
+              <option value="Grade 5">Grade 5</option>
               {/* Add more grades as needed */}
             </Form.Select>
           </Form.Group>
@@ -180,8 +153,8 @@ const AddStudentPanel = ({ show, onClose }) => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Add Student"}
+          <Button variant="primary" type="submit">
+            Add Student
           </Button>
         </Form>
       </Offcanvas.Body>
@@ -189,4 +162,4 @@ const AddStudentPanel = ({ show, onClose }) => {
   );
 };
 
-export default AddStudentPanel;
+export default AddTeacher;
