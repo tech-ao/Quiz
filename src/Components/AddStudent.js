@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState  } from "react";
 import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
-import axios from "axios"; // Ensure axios is installed: npm install axios
+import { addStudentAction } from "../redux/Action/StudentAction";
+import { useDispatch } from 'react-redux';
 
 const AddStudentPanel = ({ show, onClose }) => {
-  // State to store form values
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -12,53 +12,21 @@ const AddStudentPanel = ({ show, onClose }) => {
     dob: "",
     grade: "",
     address: "",
-    countryCode: "+91", // Default country code
+    countryCode: "+91", 
   });
-
-  // State to handle submission feedback
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value, // Dynamically update the state for each field
+      [name]: value, 
     });
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  const dispatch = useDispatch();
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setIsSubmitting(true); // Show a loading state (optional)
-
-    try {
-      const response = await axios.post("https://appsail-10091564320.development.catalystappsail.com/api/registerStudent", {
-        ...formData,
-        phoneNumber: `${formData.countryCode}${formData.phoneNumber}`, // Combine country code and phone number
-        password: "admin@123", // Use a default password or let the user input
-        role: "user", // Set the default role as 'student' or use dynamic data
-      });
-
-      console.log("Student added successfully:", response.data);
-
-      // Clear the form
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        phoneNumber: "",
-        dob: "",
-        grade: "",
-        address: "",
-      });
-
-      onClose(); // Close the form
-    } catch (error) {
-      console.error("Failed to register student:", error.response?.data || error.message);
-    } finally {
-      setIsSubmitting(false); // Reset loading state
-    }
+    dispatch(addStudentAction(formData)); 
   };
 
   return (
