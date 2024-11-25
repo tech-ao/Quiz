@@ -43,11 +43,10 @@ const StudentList = () => {
   const handleCloseViewStudent = () => setShowViewStudent(false);
 
   const handleClickEditStudent = (studentId)=>{
+    console.log(studentId);    
     dispatch(fetchStudent(studentId));
     handleOpenEditStudent()
-
-
-  }
+    }
 
   const studentData = {
     firstName: "John",
@@ -120,9 +119,9 @@ const filteredStudents = (Array.isArray(students?.users) ? students.users : []).
                 </tr>
               </thead>
               <tbody>
-                {currentStudents.length > 0 ? (
-                 
-                  currentStudents.map((student , index) => (                  
+                {currentStudents.length > 0 ? (                 
+                  currentStudents.map((student , index) => (                    
+                                 
                     <tr key={student.id}>
                       <td>{index+1}</td>
                       <td>{student.firstName}</td>
@@ -132,7 +131,7 @@ const filteredStudents = (Array.isArray(students?.users) ? students.users : []).
                       <td>
                         <div className="d-flex">
                           <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={handleClickEditStudent(student.id)}>
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleClickEditStudent(student._id)}>
                               <FaEdit className="icon" />
                             </Button>
                             <span className="tooltip-text">Edit</span>

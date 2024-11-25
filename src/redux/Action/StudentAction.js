@@ -11,10 +11,10 @@ export const getStudents = () => async (dispatch) => {
   }
 };
 
-export const fetchStudent = ()=>async (dispatch)=>{
+export const fetchStudent = (studentId)=>async (dispatch)=>{
   dispatch({type:"FETCH_STUDENT_REQUEST"});
   try{
-    const student = await getStudent();
+    const student = await getStudent(studentId);
     dispatch ({type:"FETCH_STUDENT_SUCCESS", payload: student})
   }catch(error){
     dispatch({type:"FETCH_STUDENT_FAILURE" , payload:error.message})
