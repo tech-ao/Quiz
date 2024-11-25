@@ -8,6 +8,7 @@ import ListTeacher from './Components/ListTeacher';
 import QuizPage from './Components/QuizTest';
 import StudentList from './Components/StudentList';
 import StudentHeader from './Components/StudentHeader';
+import StudentDashboard from './Components/StudentDashboard';
 
 // Import Redux Provider and Store
 import { Provider } from 'react-redux';
@@ -26,6 +27,7 @@ function App() {
           <Route path='/listTeacher' element={<ListTeacher />} />
           <Route path='/quiztest' element={<QuizPage />} />
           <Route path='/StudentHeader' element={<StudentHeader />} />
+          <Route path='/StudentDashboard' element={<StudentDashboard />} />
         </Routes>
       </Router>
     </Provider>
