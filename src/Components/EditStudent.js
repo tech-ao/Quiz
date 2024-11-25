@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
 
 const EditStudent = ({ show, onClose }) => {
-  // State to store form values
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -11,27 +10,25 @@ const EditStudent = ({ show, onClose }) => {
     dob: "",
     grade: "",
     address: "",
-    countryCode: "+91", // Default country code
+    countryCode: "+91", 
   });
 
-  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value, // Dynamically update the state for each field
+      [name]: value, 
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData); // Log the collected form data
+    console.log("Form Data:", formData); 
 
-    // Perform any action with the form data (e.g., API call, state update)
+  
     console.log("Student added successfully!");
 
-    onClose(); // Close the form after submission
+    onClose(); 
   };
 
   return (

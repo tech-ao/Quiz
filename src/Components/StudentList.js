@@ -8,7 +8,7 @@ import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-boot
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
-import { getStudents } from "../redux/Action/StudentAction";
+import { getStudents ,fetchStudent } from "../redux/Action/StudentAction";
 
 const StudentList = () => {
   const { students, loading, error } = useSelector((state) => state.students);
@@ -28,7 +28,7 @@ const StudentList = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(0); // Reset pagination on search
+    setCurrentPage(0); 
   };
 
   const handlePageChange = ({ selected }) => {
@@ -41,6 +41,13 @@ const StudentList = () => {
   const handleCloseEditStudent = () => setShowEditStudent(false);
   const handleOpenViewStudent = () => setShowViewStudent(true);
   const handleCloseViewStudent = () => setShowViewStudent(false);
+
+  const handleClickEditStudent = (studentId)=>{
+    dispatch(fetchStudent(studentId));
+    handleOpenEditStudent()
+
+
+  }
 
   const studentData = {
     firstName: "John",
@@ -125,7 +132,7 @@ const filteredStudents = (Array.isArray(students?.users) ? students.users : []).
                       <td>
                         <div className="d-flex">
                           <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={handleOpenEditStudent}>
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={handleClickEditStudent(student.id)}>
                               <FaEdit className="icon" />
                             </Button>
                             <span className="tooltip-text">Edit</span>

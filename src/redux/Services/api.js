@@ -3,6 +3,8 @@ export const fetchStudents = async () => {
       "https://appsail-10091564320.development.catalystappsail.com/api/getStudents"
     );
     if (!response.ok) throw new Error("Failed to fetch students");
+    console.log(response);
+    
     return await response.json();
   };
   
@@ -35,4 +37,18 @@ export const fetchStudents = async () => {
     )
     if (!response.ok) throw new Error("Faild to edit student")
       return await response.json();
+    }
+
+    export const getStudent = async (studentId)=>{
+      const response = await fetch(
+        `https://appsail-10091564320.development.catalystappsail.com/api/getStudents/${studentId}`,
+        {
+          method:"GET",
+          headers:{
+            "Content-Type":"application/json",            
+          }
+        }
+      )
+      if(!response.ok)  throw new Error("faild to fetch data")
+        return await response.json();
     }

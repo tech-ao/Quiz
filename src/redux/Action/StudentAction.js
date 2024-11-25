@@ -1,5 +1,5 @@
 import { type } from "@testing-library/user-event/dist/type";
-import { fetchStudents, addStudent, editStudent} from "../Services/api";
+import { fetchStudents, addStudent, editStudent ,getStudent } from "../Services/api";
 
 export const getStudents = () => async (dispatch) => {
   dispatch({ type: "FETCH_STUDENTS_REQUEST" });
@@ -10,6 +10,16 @@ export const getStudents = () => async (dispatch) => {
     dispatch({ type: "FETCH_STUDENTS_FAILURE", payload: error.message });
   }
 };
+
+export const fetchStudent = ()=>async (dispatch)=>{
+  dispatch({type:"FETCH_STUDENT_REQUEST"});
+  try{
+    const student = await getStudent();
+    dispatch ({type:"FETCH_STUDENT_SUCCESS", payload: student})
+  }catch(error){
+    dispatch({type:"FETCH_STUDENT_FAILURE" , payload:error.message})
+  }
+}
 
 export const addStudentAction = (studentDate) => async (dispatch) => {
   dispatch({type:"Add_STUDENT_REQUEST"});

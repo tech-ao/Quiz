@@ -34,11 +34,33 @@ body {
   }
 
   .side-panel {
-    width: 200px;
-    background-color: #f3f8e0;
-    padding-top: 20px;
+  width: 200px;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  transition: transform 0.3s ease-in-out;
+  border-right: 1px solid #ddd;
+  
+  }
+
+  .side-panel.closed {
+    transform: translateX(-100%);
   }
   
+  .side-panel.open {
+    transform: translateX(0);
+  }
+  
+
+  .toggle-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+  }
   
   .nav-link {
     color: #09690c !important;
