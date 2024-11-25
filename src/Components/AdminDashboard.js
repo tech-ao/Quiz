@@ -5,12 +5,16 @@ import Sidebar from './SidePannel';
 import AdminHeader from './AdminHeader'
 
 function AdminDashboard() {
+
+
   return (
     <div>
     <AdminHeader />
     <div className="d-flex">
         <Sidebar />
+
     <Container fluid className="p-4 bg-light min-vh-100">
+      <div className='sub-container'>
              <Row className="align-items-center mb-4">
         <Col md={6} className="d-flex align-items-center">
           <h2 className="fw-bold">Dashboard</h2>
@@ -91,6 +95,7 @@ function AdminDashboard() {
           </Card>
         </Col>
       </Row>
+      </div>
     </Container>
     </div>
     </div>

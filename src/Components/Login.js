@@ -10,10 +10,15 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isHuman, setIsHuman] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("User ID:", userId, "Password:", password);
+    if (!isHuman) {
+      alert("Please confirm that you are human.");
+      return;
+    }
+    console.log("User ID:", userId, "Password:", password ,isHuman);
   };
 
   return (
@@ -61,6 +66,14 @@ const LoginPage = () => {
                   Forgot Password?
                 </a>
               </div>
+              <Form.Group controlId="formHumanCheck">
+              <Form.Check
+                type="checkbox"
+                label="I am a human"
+                checked={isHuman}
+                onChange={() => setIsHuman(!isHuman)} // Toggle checkbox state
+              />
+            </Form.Group>
               <Button type="submit" variant="success" className="w-100">
                 Login
               </Button>
