@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 
 const EditStudent = ({ show, onClose }) => {
+  
+  const { selectedStudent } = useSelector((state) => state.students);
+  
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -12,6 +17,21 @@ const EditStudent = ({ show, onClose }) => {
     address: "",
     countryCode: "+91", 
   });
+
+  useEffect(() => {
+    if (selectedStudent && selectedStudent?.user) {
+      setFormData({
+        firstName: selectedStudent.user.firstName || "",
+        lastName: selectedStudent.user.lastName || "",
+        email: selectedStudent.user.email || "",
+        phoneNumber: selectedStudent.user.phoneNumber || "",
+        dob: selectedStudent.user.dob || "",
+        grade: selectedStudent.user.Grade || "",
+        address: selectedStudent.user.address || "",
+        countryCode: selectedStudent.user.countryCode || "+91",
+      });
+    }
+  }, [selectedStudent]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

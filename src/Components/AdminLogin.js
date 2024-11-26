@@ -15,7 +15,7 @@ const AdminLoginPage = () => {
     setError(""); // Clear any previous errors
 
     try {
-      const response = await fetch("https://appsail-10091564320.development.catalystappsail.com/api/login", {
+      const response = await fetch("http://localhost:2000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -88,7 +88,7 @@ const AdminLoginPage = () => {
               Forgot Password?
             </a>
           </div>
-          <button type="submit" className="btn btn-success w-100">
+          <button onClick = {(e)=> handleSubmit(e)}type="submit" className="btn btn-success w-100">
             Login
           </button>
         </form>

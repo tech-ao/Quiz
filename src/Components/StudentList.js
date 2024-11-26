@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Sidebar from './SidePannel';
 import AddStudent from './AddStudent'
@@ -8,10 +8,11 @@ import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-boot
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
-import { getStudents ,fetchStudent } from "../redux/Action/StudentAction";
+import { getStudents, fetchStudent } from "../redux/Action/StudentAction";
 
 const StudentList = () => {
   const { students, loading, error } = useSelector((state) => state.students);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,7 +29,7 @@ const StudentList = () => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(0); 
+    setCurrentPage(0);
   };
 
   const handlePageChange = ({ selected }) => {
@@ -42,31 +43,26 @@ const StudentList = () => {
   const handleOpenViewStudent = () => setShowViewStudent(true);
   const handleCloseViewStudent = () => setShowViewStudent(false);
 
-  const handleClickEditStudent = (studentId)=>{
-    console.log(studentId);    
+  const handleClickEditStudent = (studentId) => {
+    console.log(studentId);
     dispatch(fetchStudent(studentId));
     handleOpenEditStudent()
-    }
+  }
+  const handleViewStudent = (studentId) => {
+    console.log(studentId);
+    dispatch(fetchStudent(studentId));
+    handleOpenViewStudent()
+  }
 
-  const studentData = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@example.com",
-    phoneNumber: "1234567890",
-    countryCode: "+91",
-    dob: "2000-01-01",
-    grade: "Grade 3",
-    address: "123 Street, City",
-  };
 
-console.log(students);
+  console.log(students);
 
-const filteredStudents = (Array.isArray(students?.users) ? students.users : []).filter((student) =>
-  [student.firstName, student.email]
-    .join(' ')
-    .toLowerCase()
-    .includes(searchTerm.toLowerCase())
-);
+  const filteredStudents = (Array.isArray(students?.users) ? students.users : []).filter((student) =>
+    [student.firstName, student.email]
+      .join(' ')
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
 
 
   const currentStudents = filteredStudents.slice(
@@ -75,7 +71,7 @@ const filteredStudents = (Array.isArray(students?.users) ? students.users : []).
   );
 
   console.log(currentStudents);
-                  
+
 
   return (
     <div>
@@ -83,107 +79,109 @@ const filteredStudents = (Array.isArray(students?.users) ? students.users : []).
       <div className="d-flex">
         <Sidebar />
         <Container fluid className="p-4 bg-light min-vh-100">
-          <Row className="align-items-center mb-4">
-            <Col md={6}>
-              <h2 className="fw-bold">Student List</h2>
-            </Col>
+          <div className='sub-container'>
+            <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <h2 className="fw-bold">Student List</h2>
+              </Col>
 
-          </Row>
-          <Row className="align-items-center mb-4">
-            <Col md={6}>
-              <InputGroup>
-                <Form.Control
-                  placeholder="Search students by name or email"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
-              </InputGroup>
-            </Col>
-            <Col md={6} className="d-flex justify-content-end gap-3">
-              <Button variant="outline-secondary" onClick={handleOpenAddStudent}>
-                Add Student
-              </Button>
-             
-            </Col>
-          </Row>
-          <div className="table-responsive">
-            <Table hover className="mb-0">
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>Student Name</th>
-                  <th>Email</th>
-                  <th>Date of Birth</th>
-                  <th>Phone</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentStudents.length > 0 ? (                 
-                  currentStudents.map((student , index) => (                    
-                                 
-                    <tr key={student.id}>
-                      <td>{index+1}</td>
-                      <td>{student.firstName}</td>
-                      <td>{student.email}</td>
-                      <td>{student.dob || 'N/A'}</td>
-                      <td>{student.phoneNumber}</td>
-                      <td>
-                        <div className="d-flex">
-                          <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleClickEditStudent(student._id)}>
-                              <FaEdit className="icon" />
-                            </Button>
-                            <span className="tooltip-text">Edit</span>
+            </Row>
+            <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <InputGroup>
+                  <Form.Control
+                    placeholder="Search students by name or email"
+                    value={searchTerm}
+                    onChange={handleSearch}
+                  />
+                </InputGroup>
+              </Col>
+              <Col md={6} className="d-flex justify-content-end gap-3">
+                <Button variant="outline-secondary" onClick={handleOpenAddStudent}>
+                  Add Student
+                </Button>
+
+              </Col>
+            </Row>
+            <div className="table-responsive">
+              <Table hover className="mb-0">
+                <thead>
+                  <tr>
+                    <th>S.No</th>
+                    <th>Student Name</th>
+                    <th>Email</th>
+                    <th>Date of Birth</th>
+                    <th>Phone</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentStudents.length > 0 ? (
+                    currentStudents.map((student, index) => (
+
+                      <tr key={student.id}>
+                        <td>{index + 1}</td>
+                        <td>{`${student.firstName} ${student.lastName}`}</td>
+                        <td>{student.email}</td>
+                        <td>{student.dob || 'N/A'}</td>
+                        <td>{student.phoneNumber}</td>
+                        <td>
+                          <div className="d-flex">
+                            <div className="icon-button-container">
+                              <Button variant="outlined" size="sm" className="icon-button" onClick={() => handleClickEditStudent(student._id)}>
+                                <FaEdit className="icon" />
+                              </Button>
+                              <span className="tooltip-text">Edit</span>
+                            </div>
+                            <div className="icon-button-container">
+                              <Button variant="outlined" size="sm" className="icon-button">
+                                <FaTrash className="icon" />
+                              </Button>
+                              <span className="tooltip-text">Delete</span>
+                            </div>
+                            <div className="icon-button-container">
+                              <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleViewStudent(student._id)}>
+                                <FaEye className="icon" />
+                              </Button>
+                              <span className="tooltip-text">View</span>
+                            </div>
                           </div>
-                          <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button">
-                              <FaTrash className="icon" />
-                            </Button>
-                            <span className="tooltip-text">Delete</span>
-                          </div>
-                          <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={handleOpenViewStudent}>
-                              <FaEye className="icon" />
-                            </Button>
-                            <span className="tooltip-text">View</span>
-                          </div>
-                        </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center">
+                        No students found.
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="5" className="text-center">
-                      No students found.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
-          </div>
-          <div className="d-flex justify-content-center mt-4">
-            <ReactPaginate
-              pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
-              pageRangeDisplayed={10}
-              marginPagesDisplayed={2}
-              onPageChange={handlePageChange}
-              containerClassName="pagination"
-              activeClassName="active"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousLabel="&laquo;"
-              nextLabel="&raquo;"
-              previousClassName="page-item"
-              nextClassName="page-item"
-              previousLinkClassName="page-link"
-              nextLinkClassName="page-link"
-            />
+                  )}
+                </tbody>
+              </Table>
+            </div>
+            <div className="d-flex justify-content-center mt-4">
+              <ReactPaginate
+                pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
+                pageRangeDisplayed={10}
+                marginPagesDisplayed={2}
+                onPageChange={handlePageChange}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousLabel="&laquo;"
+                nextLabel="&raquo;"
+                previousClassName="page-item"
+                nextClassName="page-item"
+                previousLinkClassName="page-link"
+                nextLinkClassName="page-link"
+              />
+            </div>
           </div>
         </Container>
         <AddStudent show={showAddStudent} onClose={handleCloseAddStudent} />
         <EditStudent show={showEditStudent} onClose={handleCloseEditStudent} />
-        <ViewStudentPanel  show={showViewStudent} onClose={() => setShowViewStudent(false)}   studentData={studentData} />
+        <ViewStudentPanel show={showViewStudent} onClose={() => setShowViewStudent(false)} />
       </div>
     </div>
   );

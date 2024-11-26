@@ -52,3 +52,17 @@ export const fetchStudents = async () => {
       if(!response.ok)  throw new Error("faild to fetch data")
         return await response.json();
     }
+
+    export const deleteStudent = async (studentId)=>{
+      const response = await fetch (
+        ` http://localhost:2000/api/registerStudent/${studentId}`,
+        {
+          method:"DELETE",
+          headers:{
+            "Content-Type":"application/json"
+          }
+        }
+      )
+      if(!response.ok) throw new Error ("faild to Delete student")
+        return await response.json();
+    }

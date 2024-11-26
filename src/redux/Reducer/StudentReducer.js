@@ -11,7 +11,7 @@ const studentReducer = (state = initialState, action) => {
       case "FETCH_STUDENT_REQUEST":
       return { ...state, loading: true };
     case "FETCH_STUDENT_SUCCESS":
-      return { ...state, loading: false, students: action.payload };
+      return { ...state, loading: false, selectedStudent: action.payload };
     case "FETCH_STUDENT_FAILURE":
       return { ...state, loading: false, error: action.payload };
       case "ADD_STUDENT_REQUEST":

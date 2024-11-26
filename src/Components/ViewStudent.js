@@ -1,7 +1,12 @@
 import React from "react";
 import { Offcanvas, Button, Row, Col } from "react-bootstrap";
+import { useSelector, useDispatch } from "react-redux";
 
-const ViewStudentPanel = ({ show, onClose, studentData }) => {
+const ViewStudentPanel = ({ show, onClose }) => {
+
+  const { selectedStudent } = useSelector((state) => state.students);
+ const studentData = selectedStudent && selectedStudent.user
+  
   return (
     <Offcanvas show={show} onHide={onClose} placement="end">
       <Offcanvas.Header closeButton>
@@ -41,7 +46,7 @@ const ViewStudentPanel = ({ show, onClose, studentData }) => {
         <Row className="mb-3">
           <Col>
             <strong>Grade:</strong>
-            <p>{studentData?.grade || "N/A"}</p>
+            <p>{studentData?.Grade || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">
