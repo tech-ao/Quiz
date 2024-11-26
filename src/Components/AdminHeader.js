@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
 import { RiLockPasswordLine, RiLogoutCircleRLine, RiAdminLine, RiGlobalLine } from 'react-icons/ri';
 import '../Style.css';
+import logo from "../Components/images/Logo.png";
 
 const Header = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -33,12 +34,15 @@ const Header = () => {
   };
 
   return (
-    <Navbar expand="lg" className="py-2 bg-custom shadow-sm">
+    <Navbar expand="lg" className="header">
       <Container fluid>
         <Row className="align-items-center w-100">
+
           <Col xs={4} md={3}>
-            <Navbar.Brand className="text-success fw-bold">QUIZ</Navbar.Brand>
+          <img className="logo1" src={logo} alt="Math Gym Logo" />
+            <Navbar.Brand className="text-success fw-bold">MATH GYM</Navbar.Brand>
           </Col>
+          
           <Col xs={4} md={5} className="text-center">
             <span className="fw-bold">Welcome, Admin</span>{' '}
             <span role="img" aria-label="wave">

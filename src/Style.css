@@ -10,14 +10,14 @@ h5 {
 .card {
   border: none;
   background-color: #f3f3f3;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
 }
 
-.card:hover {
+/* .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
   background-color: #bef3bc;
-}
+} */
 
 .button:hover {
   transform: translateY(-5px);
@@ -42,8 +42,8 @@ button {
 .side-panel {
   width: 200px;
   height: 100%;
-  background-color: #f8f9fa;
-  padding: 20px;
+  background-color: #e7ffec;
+  padding: 5px;
   transition: transform 0.3s ease-in-out;
   border-right: 1px solid #ddd;
 
@@ -76,15 +76,15 @@ button {
 }
 
 .nav-link.active {
-  background-color: #e3f1ac !important;
+  background-color: #bdfdd9 !important;
   /* Light green color */
-  border-left: 4px solid #8bc34a;
+  border-left: 4px solid green;
   /* Left border for the active item */
   color: #000;
 }
 
 .nav-link:hover {
-  background-color: #e3f1ac !important;
+  background-color: #bdfdd9 !important;
   color: #000 !important;
 }
 
@@ -144,6 +144,16 @@ button {
   object-fit: contain;
 }
 
+.logo1 {
+  width: 50px;
+  height: auto;
+  border: 1px solid green;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 128, 0, 0.3);
+  object-fit: contain;
+  margin-right: 1rem;
+}
+
 .bg-custom {
   background-color: #f3f8e0;
 }
@@ -153,7 +163,8 @@ button {
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #f8f9fa;
+  background-color: #e7ffec;
+  height:100px;
 }
 
 

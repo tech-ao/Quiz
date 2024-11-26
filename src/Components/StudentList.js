@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Sidebar from './SidePannel';
-import AddStudent from './AddStudent'
+import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
-import AdminHeader from './AdminHeader'
-import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
+import AdminHeader from './AdminHeader';
+import { Container, Row, Col, Button, Table, Form, InputGroup, Modal } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent } from "../redux/Action/StudentAction";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const StudentList = () => {
   const { students, loading, error } = useSelector((state) => state.students);
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getStudents());
-  }, [dispatch]);
-
 
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showAddStudent, setShowAddStudent] = useState(false);
   const [showEditStudent, setShowEditStudent] = useState(false);
   const [showViewStudent, setShowViewStudent] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
+
   const studentsPerPage = 10;
+
+  useEffect(() => {
+    dispatch(getStudents());
+  }, [dispatch]);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -36,27 +39,6 @@ const StudentList = () => {
     setCurrentPage(selected);
   };
 
-  const handleOpenAddStudent = () => setShowAddStudent(true);
-  const handleCloseAddStudent = () => setShowAddStudent(false);
-  const handleOpenEditStudent = () => setShowEditStudent(true);
-  const handleCloseEditStudent = () => setShowEditStudent(false);
-  const handleOpenViewStudent = () => setShowViewStudent(true);
-  const handleCloseViewStudent = () => setShowViewStudent(false);
-
-  const handleClickEditStudent = (studentId) => {
-    console.log(studentId);
-    dispatch(fetchStudent(studentId));
-    handleOpenEditStudent()
-  }
-  const handleViewStudent = (studentId) => {
-    console.log(studentId);
-    dispatch(fetchStudent(studentId));
-    handleOpenViewStudent()
-  }
-
-
-  console.log(students);
-
   const filteredStudents = (Array.isArray(students?.users) ? students.users : []).filter((student) =>
     [student.firstName, student.email]
       .join(' ')
@@ -64,14 +46,53 @@ const StudentList = () => {
       .includes(searchTerm.toLowerCase())
   );
 
-
   const currentStudents = filteredStudents.slice(
     currentPage * studentsPerPage,
     (currentPage + 1) * studentsPerPage
   );
 
-  console.log(currentStudents);
+  const handleOpenAddStudent = () => setShowAddStudent(true);
+  const handleCloseAddStudent = () => setShowAddStudent(false);
 
+  const handleOpenEditStudent = (studentId) => {
+    setSelectedStudentId(studentId);
+    dispatch(fetchStudent(studentId));
+    setShowEditStudent(true);
+  };
+
+  const handleCloseEditStudent = () => {
+    setShowEditStudent(false);
+    setSelectedStudentId(null);
+  };
+
+  const handleOpenViewStudent = (studentId) => {
+    setSelectedStudentId(studentId);
+    dispatch(fetchStudent(studentId));
+    setShowViewStudent(true);
+  };
+
+  const handleCloseViewStudent = () => {
+    setShowViewStudent(false);
+    setSelectedStudentId(null);
+  };
+
+  const handleOpenDeleteModal = (studentId) => {
+    setSelectedStudentId(studentId);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteStudent = () => {
+    console.log("Student deleted!", selectedStudentId);
+    setShowDeleteModal(false);
+    setSelectedStudentId(null);
+    // Add dispatch logic to delete the student
+    toast.success("Student deleted successfully!");
+  };
+
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedStudentId(null);
+  };
 
   return (
     <div>
@@ -79,12 +100,11 @@ const StudentList = () => {
       <div className="d-flex">
         <Sidebar />
         <Container fluid className="p-4 bg-light min-vh-100">
-          <div className='sub-container'>
+          <div className="sub-container">
             <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Student List</h2>
               </Col>
-
             </Row>
             <Row className="align-items-center mb-4">
               <Col md={6}>
@@ -97,10 +117,9 @@ const StudentList = () => {
                 </InputGroup>
               </Col>
               <Col md={6} className="d-flex justify-content-end gap-3">
-                <Button variant="outline-secondary" onClick={handleOpenAddStudent}>
+                <Button variant="outline-success" onClick={handleOpenAddStudent}>
                   Add Student
                 </Button>
-
               </Col>
             </Row>
             <div className="table-responsive">
@@ -118,7 +137,6 @@ const StudentList = () => {
                 <tbody>
                   {currentStudents.length > 0 ? (
                     currentStudents.map((student, index) => (
-
                       <tr key={student.id}>
                         <td>{index + 1}</td>
                         <td>{`${student.firstName} ${student.lastName}`}</td>
@@ -126,32 +144,33 @@ const StudentList = () => {
                         <td>{student.dob || 'N/A'}</td>
                         <td>{student.phoneNumber}</td>
                         <td>
-                          <div className="d-flex">
-                            <div className="icon-button-container">
-                              <Button variant="outlined" size="sm" className="icon-button" onClick={() => handleClickEditStudent(student._id)}>
-                                <FaEdit className="icon" />
-                              </Button>
-                              <span className="tooltip-text">Edit</span>
-                            </div>
-                            <div className="icon-button-container">
-                              <Button variant="outlined" size="sm" className="icon-button">
-                                <FaTrash className="icon" />
-                              </Button>
-                              <span className="tooltip-text">Delete</span>
-                            </div>
-                            <div className="icon-button-container">
-                              <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleViewStudent(student._id)}>
-                                <FaEye className="icon" />
-                              </Button>
-                              <span className="tooltip-text">View</span>
-                            </div>
+                        <div className="d-flex">
+                          <div className="icon-button-container">
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenEditStudent(student._id)}>
+                              <FaEdit className="icon" />
+                            </Button>
+                            <span className="tooltip-text">Edit</span>
                           </div>
+                          <div className="icon-button-container">
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenDeleteModal(student._id)}>
+                              <FaTrash className="icon" />
+                            </Button>
+                            <span className="tooltip-text">Delete</span>
+                          </div>
+                          <div className="icon-button-container">
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenViewStudent(student._id)}>
+                              <FaEye className="icon" />
+                            </Button>
+                            <span className="tooltip-text">View</span>
+                          </div>
+                        </div>
+
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="text-center">
+                      <td colSpan="6" className="text-center">
                         No students found.
                       </td>
                     </tr>
@@ -179,10 +198,28 @@ const StudentList = () => {
             </div>
           </div>
         </Container>
-        <AddStudent show={showAddStudent} onClose={handleCloseAddStudent} />
-        <EditStudent show={showEditStudent} onClose={handleCloseEditStudent} />
-        <ViewStudentPanel show={showViewStudent} onClose={() => setShowViewStudent(false)} />
       </div>
+
+      {/* Modals */}
+      <AddStudent show={showAddStudent} onClose={handleCloseAddStudent} />
+      <EditStudent show={showEditStudent} onClose={handleCloseEditStudent} />
+      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
+
+      {/* Delete Confirmation Modal */}
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Action</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this student?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeleteStudent}>
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

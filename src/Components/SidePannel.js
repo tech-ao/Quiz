@@ -13,13 +13,13 @@ const SidePanel = () => {
   return (
     <div className="d-flex">
       <button
-        className="toggle-btn btn btn-primary d-md-none"
+        className="toggle-btn btn btn-success d-md-none"
         onClick={toggleSidePanel}
       >
         {isOpen ? <i className="bi bi-x-lg"></i> : <i className="bi bi-list"></i>}
       </button>
       <div
-        className={`side-panel bg-light ${
+        className={`side-panel bg-green ${
           isOpen ? 'd-block' : 'd-none'
         } d-md-block`}
         style={{ width: '250px', minHeight: '100vh' }}
@@ -47,6 +47,14 @@ const SidePanel = () => {
               className={`nav-link ${location.pathname === '/studentList' ? 'active' : ''}`}
             >
               <i className="bi bi-person"></i> Students
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link
+              to="/enrollmentRequest"
+              className={`nav-link ${location.pathname === '/enrollmentRequest' ? 'active' : ''}`}
+            >
+              <i className="bi bi-book"></i> Enrollment Request
             </Link>
           </li>
           <li className="nav-item">

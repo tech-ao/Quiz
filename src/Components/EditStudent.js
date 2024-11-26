@@ -170,7 +170,7 @@ const EditStudent = ({ show, onClose }) => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit">
+          <Button variant="success" type="submit">
             Save Student
           </Button>
         </Form>

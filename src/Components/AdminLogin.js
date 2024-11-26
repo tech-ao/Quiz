@@ -94,6 +94,7 @@ const AdminLoginPage = () => {
         </form>
       </div>
     </div>
+    
   );
 };
 

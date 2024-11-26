@@ -2,6 +2,8 @@ import React, { useState  } from "react";
 import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
 import { addStudentAction } from "../redux/Action/StudentAction";
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
@@ -24,11 +26,15 @@ const AddStudentPanel = ({ show, onClose }) => {
   };
 
   const dispatch = useDispatch();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addStudentAction(formData)); 
+    try {
+      await dispatch(addStudentAction(formData)); 
+      toast.success("Student added successfully!"); 
+    } catch (error) {
+      toast.error("Failed to add student!"); 
+    }
   };
-
   return (
     <Offcanvas show={show} onHide={onClose} placement="end">
       <Offcanvas.Header closeButton>
@@ -148,7 +154,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             />
           </Form.Group>
 
-          <Button variant="primary" type="submit" disabled={isSubmitting}>
+          <Button variant="success" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Saving..." : "Add Student"}
           </Button>
         </Form>
