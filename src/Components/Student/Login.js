@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../../Style.css'
-import logo from "../../Components/images/Logo.png"; // Update the path as needed
+import '../../Style.css';
+import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
-
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
@@ -12,13 +12,18 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isHuman, setIsHuman] = useState(false);
 
+  const navigate = useNavigate(); // Initialize useNavigate
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!isHuman) {
       alert("Please confirm that you are human.");
       return;
     }
-    console.log("User ID:", userId, "Password:", password ,isHuman);
+    console.log("User ID:", userId, "Password:", password, isHuman);
+    
+    // Navigate to the student dashboard after successful login
+    navigate("/studentDashboard");
   };
 
   return (
@@ -54,12 +59,11 @@ const LoginPage = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="position-absolute top-50 end-0 "
+                  className="position-absolute top-50 end-0"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </Button>
-
               </Form.Group>
               <div className="d-flex justify-content-end mb-3">
                 <a href="#!" className="text-decoration-none">
@@ -67,13 +71,13 @@ const LoginPage = () => {
                 </a>
               </div>
               <Form.Group controlId="formHumanCheck">
-              <Form.Check
-                type="checkbox"
-                label="I am a human"
-                checked={isHuman}
-                onChange={() => setIsHuman(!isHuman)} // Toggle checkbox state
-              />
-            </Form.Group>
+                <Form.Check
+                  type="checkbox"
+                  label="I am a human"
+                  checked={isHuman}
+                  onChange={() => setIsHuman(!isHuman)} // Toggle checkbox state
+                />
+              </Form.Group>
               <Button type="submit" variant="success" className="w-100">
                 Login
               </Button>

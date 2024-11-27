@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Navbar, Container, Row, Col, Button, Nav } from 'react-bootstrap';
+import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
 import { RiLockPasswordLine, RiLogoutCircleRLine, RiAdminLine, RiGlobalLine } from 'react-icons/ri';
+import { useNavigate } from 'react-router-dom';
 import '../../Style.css';
 import logo from "../../Components/images/Logo.png";
 
 const Header = () => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
+  const navigate = useNavigate(); // Use navigate hook for navigation
 
   // Toggle popup visibility
   const togglePopup = () => setShowPopup((prev) => !prev);
@@ -25,7 +27,8 @@ const Header = () => {
 
   // Handle Logout Click
   const handleLogout = () => {
-    alert('Logged out successfully!');
+    alert('are you sure want to logout');
+    navigate('/adminlogin'); // Navigate to AdminLogin page
   };
 
   // Handle Update Password Click
@@ -39,10 +42,10 @@ const Header = () => {
         <Row className="align-items-center w-100">
 
           <Col xs={4} md={3}>
-          <img className="logo1" src={logo} alt="Math Gym Logo" />
+            <img className="logo1" src={logo} alt="Math Gym Logo" />
             <Navbar.Brand className="text-success fw-bold">MATH GYM</Navbar.Brand>
           </Col>
-          
+
           <Col xs={4} md={5} className="text-center">
             <span className="fw-bold">Welcome, Admin</span>{' '}
             <span role="img" aria-label="wave">
@@ -84,7 +87,7 @@ const Header = () => {
                       onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f8f9fa')}
                       onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '')}
                     >
-                      <RiLockPasswordLine size={18} className="me-2" /> Update Password
+                      <RiLockPasswordLine size={18} className="me-2" /> Profile
                     </li>
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center"
