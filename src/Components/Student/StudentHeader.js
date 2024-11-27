@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
 import { RiLockPasswordLine, RiLogoutCircleRLine, RiAdminLine, RiGlobalLine } from 'react-icons/ri';
-import '../Style.css';
-import logo from "../Components/images/Logo.png";
+import '../../Style.css';
 
-const Header = () => {
+const StudentHeader = () => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
 
@@ -34,25 +33,20 @@ const Header = () => {
   };
 
   return (
-    <Navbar expand="lg" className="header">
+    <Navbar expand="lg" className="py-2 bg-custom shadow-sm">
       <Container fluid>
         <Row className="align-items-center w-100">
-
           <Col xs={4} md={3}>
-          <img className="logo1" src={logo} alt="Math Gym Logo" />
-            <Navbar.Brand className="text-success fw-bold">MATH GYM</Navbar.Brand>
+            <Navbar.Brand className="text-success fw-bold">QUIZ</Navbar.Brand>
           </Col>
-          
           <Col xs={4} md={5} className="text-center">
-            <span className="fw-bold">Welcome, Admin</span>{' '}
+            <span className="fw-bold">Welcome, mahendran</span>{' '}
             <span role="img" aria-label="wave">
               👋
             </span>
           </Col>
           <Col xs={4} md={4} className="d-flex justify-content-end align-items-center">
-            <Button variant="outlined" className="me-3 text-decoration-none">
-              <RiGlobalLine size={20} className="me-1" /> Website
-            </Button>
+
             <div className="position-relative" ref={popupRef}>
               <Button
                 variant="link"
@@ -60,7 +54,7 @@ const Header = () => {
                 className="text-decoration-none fw-bold d-flex align-items-center"
                 style={{ color: '#333' }}
               >
-                <RiAdminLine size={20} className="me-1" /> Admin
+                <RiAdminLine size={20} className="me-1" /> mahendran
               </Button>
               {showPopup && (
                 <div
@@ -84,7 +78,7 @@ const Header = () => {
                       onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f8f9fa')}
                       onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '')}
                     >
-                      <RiLockPasswordLine size={18} className="me-2" /> Update Password
+
                     </li>
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center"
@@ -110,4 +104,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default StudentHeader;

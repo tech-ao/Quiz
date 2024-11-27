@@ -1,5 +1,5 @@
 import React, { useState , useEffect } from "react";
-import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 
 const EditStudent = ({ show, onClose }) => {
@@ -52,11 +52,11 @@ const EditStudent = ({ show, onClose }) => {
   };
 
   return (
-    <Offcanvas show={show} onHide={onClose} placement="end">
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Edit Student</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
+    <Modal show={show} onHide={onClose} placement="end">
+      <Modal.Header closeButton>
+        <Modal.Title>Edit Student</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formStudentFirstName">
@@ -147,13 +147,12 @@ const EditStudent = ({ show, onClose }) => {
               onChange={handleInputChange}
               required
             >
-              <option value="">Select Grade</option>
-              <option value="Grade 1">Grade 1</option>
-              <option value="Grade 2">Grade 2</option>
-              <option value="Grade 3">Grade 3</option>
-              <option value="Grade 4">Grade 4</option>
-              <option value="Grade 5">Grade 5</option>
-              {/* Add more grades as needed */}
+               <option value="">Select Grade</option>
+              <option value="1">Abacus Beginner</option>
+              <option value="2">Abacus Explorer</option>
+              <option value="3">Abacus Skilled</option>
+              <option value="4">Abacus Expert</option>
+              <option value="5">Abacus Mastermind</option>
             </Form.Select>
           </Form.Group>
 
@@ -174,8 +173,8 @@ const EditStudent = ({ show, onClose }) => {
             Save Student
           </Button>
         </Form>
-      </Offcanvas.Body>
-    </Offcanvas>
+      </Modal.Body>
+    </Modal>
   );
 };
 

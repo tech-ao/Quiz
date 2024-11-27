@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import Sidebar from './SidePannel';
-import AdminHeader from './AdminHeader'
+import Sidebar from '../Components/Admin/SidePannel';
+import AdminHeader from '../Components/Admin/AdminHeader'
 import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import AddTeacher from './AddTeacher';
 import EditTeacher from './EditTeacher';
-import ViewTeacher from './ViewTeacher';
+import ViewTeacher from '../Components/ViewTeacher';
 
 const ListTeacher = ({ Teachers = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');

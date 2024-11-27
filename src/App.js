@@ -1,14 +1,14 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import AdminDashboard from './Components/AdminDashboard';
-import Login from './Components/Login'
-import AdminLoginPage from './Components/AdminLogin';
-import ListTeacher from './Components/ListTeacher';
+import AdminDashboard from './Components/Admin/AdminDashboard';
+import Login from './Components/Student/Login'
+import AdminLoginPage from './Components/Admin/AdminLogin';
+import ListTeacher from './Teacher/ListTeacher';
 import QuizPage from './Components/QuizTest';
-import StudentList from './Components/StudentList';
-import StudentHeader from './Components/StudentHeader';
-import StudentDashboard from './Components/StudentDashboard';
+import StudentList from './Components/Student/StudentList';
+import StudentHeader from './Components/Student/StudentHeader';
+import StudentDashboard from './Components/Student/StudentDashboard';
 
 
 

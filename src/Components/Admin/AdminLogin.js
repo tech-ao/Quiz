@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // For navigation
-import '../Style.css';
-import logo from '../Components/images/Logo.png';
+import '../../Style.css';
+import logo from '../../Components/images/Logo.png';
 
 const AdminLoginPage = () => {
   const [username, setUserName] = useState("");

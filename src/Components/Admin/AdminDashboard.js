@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
-import '../Style.css'
+import '../../Style.css'
 import Sidebar from './SidePannel';
 import AdminHeader from './AdminHeader'
 

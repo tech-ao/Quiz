@@ -1,11 +1,13 @@
-import React, { useState  } from "react";
-import { Offcanvas, Button, Form, Row, Col } from "react-bootstrap";
-import { addStudentAction } from "../redux/Action/StudentAction";
-import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { addStudentAction } from "../../redux/Action/StudentAction";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddStudentPanel = ({ show, onClose }) => {
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,33 +16,55 @@ const AddStudentPanel = ({ show, onClose }) => {
     dob: "",
     grade: "",
     address: "",
-    countryCode: "+91", 
+    countryCode: "+91",
+    country: "",
+    image: "",
+    role:"user"
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value, 
-    });
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
+      const file = files[0];
+      if (file) {
+        setImage(file);
+        setPreview(URL.createObjectURL(file));
+        setFormData({
+          ...formData,
+          image: file,
+        });
+      }
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
 
   const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
+    console.log(formData);
+    
     e.preventDefault();
     try {
-      await dispatch(addStudentAction(formData)); 
-      toast.success("Student added successfully!"); 
+      await dispatch(addStudentAction(formData));
+      toast.success("Student added successfully!");
+      onClose();
     } catch (error) {
-      toast.error("Failed to add student!"); 
+      toast.error("Failed to add student!");
     }
   };
+
   return (
-    <Offcanvas show={show} onHide={onClose} placement="end">
-      <Offcanvas.Header closeButton>
-        <Offcanvas.Title>Add New Student</Offcanvas.Title>
-      </Offcanvas.Header>
-      <Offcanvas.Body>
+    <Modal show={show} onHide={onClose} placement="end">
+      <Modal.Header closeButton>
+        <Modal.Title>Add New Student</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formStudentFirstName">
@@ -95,7 +119,6 @@ const AddStudentPanel = ({ show, onClose }) => {
                     <option value="+1">+1 (USA)</option>
                     <option value="+44">+44 (UK)</option>
                     <option value="+61">+61 (Australia)</option>
-                    {/* Add more country codes as needed */}
                   </Form.Select>
                 </Col>
                 <Col xs={9}>
@@ -132,14 +155,43 @@ const AddStudentPanel = ({ show, onClose }) => {
               required
             >
               <option value="">Select Grade</option>
-              <option value="1">Grade 1</option>
-              <option value="2">Grade 2</option>
-              <option value="3">Grade 3</option>
-              <option value="4">Grade 4</option>
-              <option value="5">Grade 5</option>
-              {/* Add more grades as needed */}
+              <option value="1">Abacus Beginner</option>
+              <option value="2">Abacus Explorer</option>
+              <option value="3">Abacus Skilled</option>
+              <option value="4">Abacus Expert</option>
+              <option value="5">Abacus Mastermind</option>
             </Form.Select>
           </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCountry">
+            <Form.Label>Country</Form.Label>
+            <Form.Control
+              type="text"
+              name="country"
+              placeholder="Enter country"
+              value={formData.country}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formFile" className="mb-3">
+            <Form.Label>Upload Student Image</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleInputChange}
+            />
+          </Form.Group>
+          {preview && (
+            <div className="mb-3">
+              <img
+                src={preview}
+                alt="Preview"
+                style={{ width: "150px", height: "150px", objectFit: "cover" }}
+              />
+            </div>
+          )}
 
           <Form.Group className="mb-3" controlId="formAddress">
             <Form.Label>Address</Form.Label>
@@ -158,8 +210,8 @@ const AddStudentPanel = ({ show, onClose }) => {
             {isSubmitting ? "Saving..." : "Add Student"}
           </Button>
         </Form>
-      </Offcanvas.Body>
-    </Offcanvas>
+      </Modal.Body>
+    </Modal>
   );
 };
 

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
-import Sidebar from './SidePannel';
+import Sidebar from '../Admin/SidePannel';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
-import AdminHeader from './AdminHeader';
+import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
-import { getStudents, fetchStudent } from "../redux/Action/StudentAction";
+import { getStudents, fetchStudent } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

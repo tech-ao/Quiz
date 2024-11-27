@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import '../Style.css'
-import logo from "../Components/images/Logo.png"; // Update the path as needed
+import '../../Style.css'
+import logo from "../../Components/images/Logo.png"; // Update the path as needed
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
 
