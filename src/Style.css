@@ -49,6 +49,34 @@ button {
 
 }
 
+.side-panel .nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.side-panel .nav-link .icon-with-text {
+  display: flex;
+  align-items: center;
+}
+
+.side-panel .nav-link .nav-text {
+  margin-left: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.side-panel .nav-link:hover .nav-text {
+  opacity: 1;
+  visibility: visible;
+}
+
+.side-panel .nav-link i {
+  font-size: 1.5rem;
+}
+
+
 .side-panel.closed {
   transform: translateX(-100%);
 }

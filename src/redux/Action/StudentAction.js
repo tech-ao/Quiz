@@ -1,10 +1,10 @@
 import { type } from "@testing-library/user-event/dist/type";
 import { fetchStudents, addStudent, editStudent ,getStudent , deleteStudent } from "../Services/api";
 
-export const getStudents = () => async (dispatch) => {
+export const getStudents = (paginationDetail) => async (dispatch) => {
   dispatch({ type: "FETCH_STUDENTS_REQUEST" });
   try {
-    const students = await fetchStudents();
+    const students = await fetchStudents(paginationDetail);
     dispatch({ type: "FETCH_STUDENTS_SUCCESS", payload: students });
   } catch (error) {
     dispatch({ type: "FETCH_STUDENTS_FAILURE", payload: error.message });
@@ -21,16 +21,16 @@ export const fetchStudent = (studentId)=>async (dispatch)=>{
   }
 }
 
-export const addStudentAction = (studentDate) => async (dispatch) => {
-  dispatch({type:"Add_STUDENT_REQUEST"});
-  try{
-    const addedStudent = await addStudent(studentDate);
-    dispatch({type:"ADD_STUDENT_SUCCESS", payload: addedStudent});
+export const addStudentAction = (studentData) => async (dispatch) => {
+  dispatch({ type: "ADD_STUDENT_REQUEST" });
+  try {
+    const addedStudent = await addStudent(studentData); // Call the API
+    dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent }); // Dispatch success
+  } catch (error) {
+    dispatch({ type: "ADD_STUDENT_FAILURE", payload: error.message }); // Dispatch failure
   }
-  catch (error){
-    dispatch({type:"ADD_STUDENT_FAILURE", payload: error.message});
-  }
-}
+};
+
 
 export const editStudentAction = (studentData,studentId) => async (dispatch) =>{
   dispatch({type:"EDIT_STUDENT_REQUEST"});

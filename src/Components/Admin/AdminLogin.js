@@ -15,7 +15,7 @@ const AdminLoginPage = () => {
     setError(""); // Clear any previous errors
 
     try {
-      const response = await fetch("http://localhost:2000/api/login", {
+      const response = await fetch("http://3.87.228.254:2000/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ import { Container, Row, Col, Button, Table, Form, InputGroup, Modal } from 'rea
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
-import { getStudents, fetchStudent } from "../../redux/Action/StudentAction";
+import { getStudents, fetchStudent , deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -27,7 +27,15 @@ const StudentList = () => {
   const studentsPerPage = 10;
 
   useEffect(() => {
-    dispatch(getStudents());
+    dispatch(getStudents(
+      {
+  
+        "paginationDetail": {
+          "pageSize": 15,
+          "pageNumber": 1
+        }
+      }
+    ));
   }, [dispatch]);
 
   const handleSearch = (e) => {
@@ -39,17 +47,17 @@ const StudentList = () => {
     setCurrentPage(selected);
   };
 
-  const filteredStudents = (Array.isArray(students?.users) ? students.users : []).filter((student) =>
+  const filteredStudents = (Array.isArray(students?.data) ? students.data.searchAndListStudentResult : []).filter((student) =>
     [student.firstName, student.email]
       .join(' ')
       .toLowerCase()
       .includes(searchTerm.toLowerCase())
   );
 
-  const currentStudents = filteredStudents.slice(
-    currentPage * studentsPerPage,
-    (currentPage + 1) * studentsPerPage
-  );
+ 
+  
+
+  const currentStudents = (students.data && students.data.searchAndListStudentResult)
 
   const handleOpenAddStudent = () => setShowAddStudent(true);
   const handleCloseAddStudent = () => setShowAddStudent(false);
@@ -78,16 +86,27 @@ const StudentList = () => {
 
   const handleOpenDeleteModal = (studentId) => {
     setSelectedStudentId(studentId);
+
     setShowDeleteModal(true);
   };
+const handleDeleteStudent = () => {
+  console.log("Student deleted!", selectedStudentId);
 
-  const handleDeleteStudent = () => {
-    console.log("Student deleted!", selectedStudentId);
-    setShowDeleteModal(false);
-    setSelectedStudentId(null);
-    // Add dispatch logic to delete the student
-    toast.success("Student deleted successfully!");
-  };
+  // Dispatch the delete action
+  dispatch(deleteStudentAction(selectedStudentId))
+    .then(() => {
+      // Handle success
+      toast.success("Student deleted successfully!");
+    })
+    .catch((error) => {
+      // Handle errors
+      toast.error("Failed to delete the student.");
+      console.error(error);
+    });
+
+  setShowDeleteModal(false);
+  setSelectedStudentId(null);
+};
 
   const handleCloseDeleteModal = () => {
     setShowDeleteModal(false);
@@ -135,7 +154,7 @@ const StudentList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentStudents.length > 0 ? (
+                  {currentStudents ? (
                     currentStudents.map((student, index) => (
                       <tr key={student.id}>
                         <td>{index + 1}</td>
@@ -146,19 +165,19 @@ const StudentList = () => {
                         <td>
                         <div className="d-flex">
                           <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenEditStudent(student._id)}>
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenEditStudent(student.studentId)}>
                               <FaEdit className="icon" />
                             </Button>
                             <span className="tooltip-text">Edit</span>
                           </div>
                           <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenDeleteModal(student._id)}>
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenDeleteModal(student.studentId)}>
                               <FaTrash className="icon" />
                             </Button>
                             <span className="tooltip-text">Delete</span>
                           </div>
                           <div className="icon-button-container">
-                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenViewStudent(student._id)}>
+                            <Button variant="outlined" size="sm" className="icon-button" onClick={()=>handleOpenViewStudent(student.studentId)}>
                               <FaEye className="icon" />
                             </Button>
                             <span className="tooltip-text">View</span>

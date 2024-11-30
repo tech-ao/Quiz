@@ -1,0 +1,93 @@
+/* Admin Dashboard Specific Styling */
+.dashboard-container {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease-in-out;
+  }
+  
+  @media (max-width: 992px) {
+    /* When the screen width is below 992px (tablet/mobile size) */
+    .dashboard-container {
+      margin-left: 0;
+    }
+  }
+  
+  .sub-container {
+    background-color: #f8f9fa;
+    padding: 30px;
+    border-radius: 8px;
+  }
+  
+  .card {
+    border-radius: 8px;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  /* Sidebar and Header styles for responsiveness */
+  @media (max-width: 992px) {
+    /* Sidebar adjusts to a smaller width on mobile */
+    .sidebar {
+      width: 200px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      z-index: 999;
+      transition: width 0.3s ease;
+    }
+  
+    .header {
+      width: 100%;
+    }
+  
+    .logo1 {
+      max-width: 40px;
+    }
+  
+    .navbar-brand {
+      font-size: 1.2rem;
+    }
+  
+    .navbar-toggler {
+      display: block;
+    }
+  
+    /* Adjust sidebar visibility on small screens */
+    .sidebar.hidden {
+      width: 0;
+      visibility: hidden;
+    }
+  
+    /* Add media queries for each breakpoint */
+    .dashboard-container {
+      margin-left: 0;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjust the cards on smaller screens */
+    .card-body h3 {
+      font-size: 1.25rem;
+    }
+  
+    /* Ensure form inputs are full width on mobile */
+    .form-select {
+      width: 100%;
+    }
+  
+    .input-group {
+      flex-wrap: wrap;
+    }
+  
+    .input-group .form-control {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  
+    .input-group .btn {
+      width: 100%;
+    }
+  }
+  

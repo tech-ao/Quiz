@@ -16,10 +16,9 @@ const AddStudentPanel = ({ show, onClose }) => {
     dob: "",
     grade: "",
     address: "",
-    countryCode: "+91",
-    country: "",
-    image: "",
-    role:"user"
+    role:3,
+    statusId:1,
+    createdBy: 1
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 

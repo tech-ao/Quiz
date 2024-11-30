@@ -8,25 +8,32 @@ const studentReducer = (state = initialState, action) => {
       return { ...state, loading: false, students: action.payload };
     case "FETCH_STUDENTS_FAILURE":
       return { ...state, loading: false, error: action.payload };
-      case "FETCH_STUDENT_REQUEST":
+    case "FETCH_STUDENT_REQUEST":
       return { ...state, loading: true };
     case "FETCH_STUDENT_SUCCESS":
       return { ...state, loading: false, selectedStudent: action.payload };
     case "FETCH_STUDENT_FAILURE":
       return { ...state, loading: false, error: action.payload };
-      case "ADD_STUDENT_REQUEST":
-        return { ...state,loading: true,};
-      case "ADD_STUDENT_SUCCESS":
-        return {...state,loading: false, students: [...state.students, action.payload], };
-      case "ADD_STUDENT_FAILURE":
-        return {...state, loading: false, error: action.payload,};
-        case "EDIT_STUDENT_REQUEST":
+    case "ADD_STUDENT_REQUEST":
+      return { ...state, loading: true, };
+    case "ADD_STUDENT_SUCCESS": 
+      return { ...state, loading: false, students: [...state.students, action.payload], };
+    case "ADD_STUDENT_FAILURE":
+      return { ...state, loading: false, error: action.payload, };
+    case "EDIT_STUDENT_REQUEST":
       return { ...state, loading: true };
     case "EDIT_STUDENT_SUCCESS":
-      return {...state,loading: false,students: state.students.map((student) =>student._id === action.payload._id ? action.payload : student),};
+      return { ...state, loading: false, students: state.students.map((student) => student._id === action.payload._id ? action.payload : student), };
     case "EDIT_STUDENT_FAILURE":
       return { ...state, loading: false, error: action.payload };
-      default:
+
+    case "DELETE_STUDENT_REQUEST":
+      return { ...state, loading: true }
+    case "DELETE_STUDENT_SUCCESS":
+      return { ...state, loading: false, deletedStudent: action.payload }
+    case "DELETE_STUDENT_FAILURE":
+      return { ...state, loading: false, error: action.payload }
+    default:
       return state;
   }
 };

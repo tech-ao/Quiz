@@ -1,7 +1,16 @@
-export const fetchStudents = async () => {
+export const fetchStudents = async (paginationDetail) => {
     const response = await fetch(
-      " http://localhost:2000/api/getStudents"
-    );
+      "http://localhost:8012/api/SearchAndList/SearchAndListStudent",{
+
+      method: 'POST',
+      headers: {
+        'Accept': 'text/plain',
+        'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280',
+        'AccessToken': '123',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paginationDetail),
+});
     if (!response.ok) throw new Error("Failed to fetch students");
     console.log(response);
     
@@ -11,11 +20,14 @@ export const fetchStudents = async () => {
 
   export const addStudent = async (studentData)=>{
     const response = await fetch (
-      " http://localhost:2000/api/registerStudent",
+      "http://localhost:8012/api/User/Create",
       {
         method:"POST",
         headers:{
-          "Content-Type": "application/json",
+          'Accept': 'text/plain',
+        'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280',
+        'AccessToken': '123',
+        'Content-Type': 'application/json',
         },
         body: JSON.stringify(studentData), 
       }      
@@ -26,11 +38,14 @@ export const fetchStudents = async () => {
 
   export const editStudent = async (studentData,studentId)=>{
     const response = await fetch (
-      ` http://localhost:2000/api/registerStudent/${studentId}`,
+      `http://3.87.228.254:2000/api/registerStudent/${studentId}`,
       {
         method:"PUT",
         headers:{
-          "Content-Type":"application/json",
+          'Accept': 'text/plain',
+          'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280',
+          'AccessToken': '123',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(studentData)
       }
@@ -40,12 +55,17 @@ export const fetchStudents = async () => {
     }
 
     export const getStudent = async (studentId)=>{
+      console.log(studentId);
+      
       const response = await fetch(
-        ` http://localhost:2000/api/getStudents/${studentId}`,
+        `http://localhost:8012/api/User/GetUserById/${studentId}`,
         {
           method:"GET",
           headers:{
-            "Content-Type":"application/json",            
+            'Accept': 'text/plain',
+          'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280',
+          'AccessToken': '123',
+          'Content-Type': 'application/json',           
           }
         }
       )
@@ -55,7 +75,7 @@ export const fetchStudents = async () => {
 
     export const deleteStudent = async (studentId)=>{
       const response = await fetch (
-        ` http://localhost:2000/api/registerStudent/${studentId}`,
+        ` http://3.87.228.254:2000/api/registerStudent/${studentId}`,
         {
           method:"DELETE",
           headers:{
