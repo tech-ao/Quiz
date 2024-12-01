@@ -16,27 +16,32 @@ export const fetchStudent = (studentId)=>async (dispatch)=>{
   try{
     const student = await getStudent(studentId);
     dispatch ({type:"FETCH_STUDENT_SUCCESS", payload: student})
+   
   }catch(error){
     dispatch({type:"FETCH_STUDENT_FAILURE" , payload:error.message})
   }
 }
 
-export const addStudentAction = (studentData) => async (dispatch) => {
+export const addStudentAction = (studentData , paginationDetail) => async (dispatch) => {
   dispatch({ type: "ADD_STUDENT_REQUEST" });
   try {
     const addedStudent = await addStudent(studentData); // Call the API
     dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent }); // Dispatch success
+    dispatch(fetchStudents(paginationDetail));
   } catch (error) {
     dispatch({ type: "ADD_STUDENT_FAILURE", payload: error.message }); // Dispatch failure
   }
 };
 
 
-export const editStudentAction = (studentData,studentId) => async (dispatch) =>{
+export const editStudentAction = (studentData,paginationDetail) => async (dispatch) =>{
+  console.log(studentData);
+  
   dispatch({type:"EDIT_STUDENT_REQUEST"});
   try{
-    const editedStudent = await editStudent(studentId,studentData);
+    const editedStudent = await editStudent(studentData);
     dispatch({type:"EDIT_STUDENT_SUCCESS", payload:editedStudent});
+    dispatch(fetchStudents(paginationDetail));
     
   }catch(error){
     dispatch({type:"EDIT_STUDENT_FAILURE", payload: error.message});

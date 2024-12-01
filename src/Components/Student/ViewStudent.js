@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 const ViewStudentPanel = ({ show, onClose }) => {
 
   const { selectedStudent } = useSelector((state) => state.students);
- const studentData = selectedStudent && selectedStudent.user
+ const studentData = selectedStudent && selectedStudent.data
+ console.log(studentData);
+ 
   
   return (
     <Offcanvas show={show} onHide={onClose} placement="end">
@@ -46,7 +48,11 @@ const ViewStudentPanel = ({ show, onClose }) => {
         <Row className="mb-3">
           <Col>
             <strong>Grade:</strong>
-            <p>{studentData?.Grade || "N/A"}</p>
+            <p>{studentData?.gradeName || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Status:</strong>
+            <p>{studentData?.statusName || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">

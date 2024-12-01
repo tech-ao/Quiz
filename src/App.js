@@ -9,7 +9,8 @@ import QuizPage from './Components/QuizTest';
 import StudentList from './Components/Student/StudentList';
 import StudentHeader from './Components/Student/StudentHeader';
 import StudentDashboard from './Components/Student/StudentDashboard';
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 // Import Redux Provider and Store
@@ -19,9 +20,12 @@ import store from './redux/Store/store'; // Import your store
 function App() {
   return (
     // Wrap the entire app with Provider and pass the store
+    
     <Provider store={store}>
       <Router>
+      <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
+       
           <Route path='/' element={<Login />} />
           <Route path='/adminDashboard' element={<AdminDashboard />} />
           <Route path='/studentList' element={<StudentList />} />

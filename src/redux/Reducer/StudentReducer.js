@@ -17,13 +17,13 @@ const studentReducer = (state = initialState, action) => {
     case "ADD_STUDENT_REQUEST":
       return { ...state, loading: true, };
     case "ADD_STUDENT_SUCCESS": 
-      return { ...state, loading: false, students: [...state.students, action.payload], };
+      return { ...state, loading: false, students: [ action.payload ,...state.students], };
     case "ADD_STUDENT_FAILURE":
       return { ...state, loading: false, error: action.payload, };
     case "EDIT_STUDENT_REQUEST":
       return { ...state, loading: true };
     case "EDIT_STUDENT_SUCCESS":
-      return { ...state, loading: false, students: state.students.map((student) => student._id === action.payload._id ? action.payload : student), };
+      return { ...state, loading: false, students: state.students.map((student) => student.studentId === action.payload.studentId ? action.payload : student), };
     case "EDIT_STUDENT_FAILURE":
       return { ...state, loading: false, error: action.payload };
 

@@ -36,9 +36,11 @@ export const fetchStudents = async (paginationDetail) => {
       return await response.json();
   };
 
-  export const editStudent = async (studentData,studentId)=>{
+  export const editStudent = async (studentData)=>{
+    console.log(studentData);
+    
     const response = await fetch (
-      `http://3.87.228.254:2000/api/registerStudent/${studentId}`,
+      `http://localhost:8012/api/User/Update`,
       {
         method:"PUT",
         headers:{
@@ -58,7 +60,7 @@ export const fetchStudents = async (paginationDetail) => {
       console.log(studentId);
       
       const response = await fetch(
-        `http://localhost:8012/api/User/GetUserById/${studentId}`,
+        `http://localhost:8012/api/User/GetUserById?UserId=${studentId}`,
         {
           method:"GET",
           headers:{
@@ -75,11 +77,14 @@ export const fetchStudents = async (paginationDetail) => {
 
     export const deleteStudent = async (studentId)=>{
       const response = await fetch (
-        ` http://3.87.228.254:2000/api/registerStudent/${studentId}`,
+        ` http://localhost:8012/api/User/Delete/${studentId}`,
         {
           method:"DELETE",
           headers:{
-            "Content-Type":"application/json"
+            'Accept': 'text/plain',
+            'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280',
+            'AccessToken': '123',
+            'Content-Type': 'application/json', 
           }
         }
       )
