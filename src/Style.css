@@ -1,5 +1,9 @@
 body {
-  background-color: #f8f9fa;
+  background-color: #efeff0;
+}
+
+.maincontainerbg{
+  background-color: #cbd8e6;
 }
 
 h2,
@@ -7,17 +11,41 @@ h5 {
   color: #343a40;
 }
 
+.modalbg{
+  background-color: #e7ffec;
+}
+
+
+.modalbg input,
+.modalbg select,
+.modalbg textarea {
+  background-color: #e7ffec;
+  border: 1px solid #8cdf97;
+  border-radius: 4px;
+  padding: 5px;
+  box-shadow: none;
+  color: #333;
+}
+.modalbg input:focus,
+.modalbg select:focus,
+.modalbg textarea:focus {
+  outline: none;
+  border: 1px solid #289b2b;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);}
+
+.modalbg select:valid,
+.modalbg input:valid {
+  border: 1px solid #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+
 .card {
   border: none;
   background-color: #f3f3f3;
   
 }
 
-/* .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  background-color: #bef3bc;
-} */
 
 .button:hover {
   transform: translateY(-5px);

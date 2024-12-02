@@ -113,7 +113,7 @@ const StudentList = () => {
       <AdminHeader />
       <div className="d-flex">
         <Sidebar />
-        <Container fluid className="p-4 bg-light min-vh-100">
+        <Container fluid className="p-4 maincontainerbg min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
               <Col md={6}>

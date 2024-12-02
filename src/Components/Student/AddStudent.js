@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
-  const [grades, setGrades] = useState([]); // For storing grades
+  const [grades, setGrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
@@ -19,6 +19,8 @@ const AddStudentPanel = ({ show, onClose }) => {
     dob: "",
     grade: null,
     address: "",
+    gender: "",
+    password: "",
     role: 3,
     statusId: 1,
     createdBy: 1,
@@ -149,22 +151,24 @@ const AddStudentPanel = ({ show, onClose }) => {
   }, []);
 
   return (
-    <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
+    <Modal show={show} onHide={onClose} >
+      <Modal.Header closeButton className="modalbg">
         <Modal.Title>Add New Student</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+      <Modal.Body className="modalbg">
+        <Form onSubmit={handleSubmit} >
           <Row className="mb-3">
-            <Form.Group as={Col} controlId="formStudentFirstName">
+            <Form.Group as={Col} controlId="formStudentFirstName"  >
               <Form.Label>First Name</Form.Label>
               <Form.Control
+             
                 type="text"
                 name="firstName"
                 placeholder="Enter first name"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 required
+              
               />
             </Form.Group>
 
@@ -204,7 +208,7 @@ const AddStudentPanel = ({ show, onClose }) => {
                     onChange={handleInputChange}
                     required
                   >
-                    <option value="+91">+91 (India)</option>
+                    <option value="+91">+91 (IND)</option>
                     <option value="+1">+1 (USA)</option>
                     <option value="+44">+44 (UK)</option>
                     <option value="+61">+61 (Australia)</option>
@@ -216,7 +220,16 @@ const AddStudentPanel = ({ show, onClose }) => {
                     name="phoneNumber"
                     placeholder="Enter phone number"
                     value={formData.phoneNumber}
-                    onChange={handleInputChange}
+                    maxLength="10"
+                    onChange={(e) => {
+                      const regex = /^[0-9\b]+$/; // Allow only numbers
+                      if (e.target.value === "" || regex.test(e.target.value)) {
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          phoneNumber: e.target.value,
+                        }));
+                      }
+                    }}
                     required
                   />
                 </Col>
@@ -252,6 +265,32 @@ const AddStudentPanel = ({ show, onClose }) => {
             </Form.Select>
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            <div>
+              <Form.Check
+                inline
+                type="radio"
+                label="Male"
+                name="gender"
+                value="Male"
+                onChange={handleInputChange}
+                checked={formData.gender === "Male"}
+                required
+              />
+              <Form.Check
+                inline
+                type="radio"
+                label="Female"
+                name="gender"
+                value="Female"
+                onChange={handleInputChange}
+                checked={formData.gender === "Female"}
+                required
+              />
+            </div>
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
             {loading ? (
@@ -274,6 +313,19 @@ const AddStudentPanel = ({ show, onClose }) => {
             )}
           </Form.Group>
 
+          <Form.Group className="mb-3" controlId="formStudentAddress">
+            <Form.Label>Address</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={2}
+              name="address"
+              placeholder="Enter address"
+              value={formData.address}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Label>Upload Student Image</Form.Label>
             <Form.Control
@@ -289,24 +341,21 @@ const AddStudentPanel = ({ show, onClose }) => {
                 alt="Preview"
                 style={{ width: "150px", height: "150px", objectFit: "cover" }}
               />
-            </div>
-          )}
-
-          <Form.Group className="mb-3" controlId="formAddress">
-            <Form.Label>Address</Form.Label>
+            </div>  )}      
+          
+          <Form.Group className="mb-3" controlId="formPassword">
+            <Form.Label>Password</Form.Label>
             <Form.Control
-              as="textarea"
-              rows={3}
-              name="address"
-              placeholder="Enter address"
-              value={formData.address}
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              value={formData.password}
               onChange={handleInputChange}
               required
             />
           </Form.Group>
-
           <Button variant="success" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Saving..." : "Add Student"}
+            {isSubmitting ? "Adding..." : "Add Student"}
           </Button>
         </Form>
       </Modal.Body>

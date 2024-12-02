@@ -6,7 +6,7 @@ import StudentSidePannel from "./StudnetSidebar";
 
 const StudentDashboard = () => {
   const studentData = {
-    image: "https://via.placeholder.com/150", // Replace with actual image URL or state
+    image: "https://via.placeholder.com/150", 
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "+91 9876543210",
@@ -18,12 +18,10 @@ const StudentDashboard = () => {
       <StudentHeader />
       <div className="d-flex">
         <StudentSidePannel />
-        <Container fluid className="p-4 bg-light min-vh-100">
+        <Container fluid className="p-4 maincontainerbg min-vh-100">
           <div className="sub-container">
-            {/* Student Details Section */}
             <Card className="mb-4 p-4">
               <Row className="align-items-center">
-                {/* Student Image with Frame */}
                 <Col md={3} className="text-center">
                   <div
                     style={{
