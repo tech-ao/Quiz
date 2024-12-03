@@ -48,11 +48,11 @@ const StudentList = () => {
   });
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult.filter((student) =>
-        [student.firstName, student.email]
-          .join(' ')
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase())
-      )
+      [student.firstName, student.email]
+        .join(' ')
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+    )
     : [];
 
   const currentStudents = filteredStudents.slice(currentPage * studentsPerPage, (currentPage + 1) * studentsPerPage);
@@ -141,11 +141,13 @@ const StudentList = () => {
                 <thead>
                   <tr>
                     <th>S.No</th>
+                    <th>Register Number</th>
                     <th>Student Name</th>
+                    <th>Gender</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Date of Birth</th>
                     <th>Grade</th>
-                    <th>Phone</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -155,12 +157,21 @@ const StudentList = () => {
                     currentStudents.map((student, index) => (
                       <tr key={student.studentId || index}>
                         <td>{index + 1}</td>
+                        <td>{student.registerNumber}</td>
                         <td>{`${student.firstName || ''} ${student.lastName || ''}`}</td>
+                        <td>{student.genderName || 'N/A'}</td>
                         <td>{student.email || 'N/A'}</td>
-                        <td>{student.dob || 'N/A'}</td>
-                        <td>{student.gradeName || 'N/A'}</td>
                         <td>{student.phoneNumber || 'N/A'}</td>
-                        <td>{student.statusName || 'N/A'}</td>
+                        <td>{student.dob ? new Date(student.dob).toLocaleDateString('en-GB') : 'N/A'}</td>
+                        <td>{student.gradeName || 'N/A'}</td>
+                        <td
+                          style={{
+                            backgroundColor: student.statusName === 'Active' ? 'green' : student.statusName === 'Danger' ? 'red' : 'transparent',
+                            color: 'black', 
+                          }}
+                        >
+                          {student.statusName || 'N/A'}
+                        </td>
                         <td>
                           <div className="d-flex gap-2">
                             <Button

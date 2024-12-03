@@ -4,8 +4,8 @@ import '../../Style.css';
 import logo from '../../Components/images/Logo.png';
 
 const AdminLoginPage = () => {
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [Email, setUserName] = useState("");
+  const [Password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(""); // State to display error messages
   const navigate = useNavigate(); // React Router's navigation hook
@@ -15,12 +15,15 @@ const AdminLoginPage = () => {
     setError(""); // Clear any previous errors
 
     try {
-      const response = await fetch("http://3.87.228.254:2000/api/login", {
+      const response = await fetch("http://localhost:8012/api/Login/StudentSignin", {
         method: "POST",
         headers: {
+          Accept: "text/plain",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ Email, Password }),
       });
 
       if (response.ok) {
@@ -56,7 +59,7 @@ const AdminLoginPage = () => {
               className="form-control"
               id="userId"
               placeholder="Enter your User ID"
-              value={username}
+              value={Email}
               onChange={(e) => setUserName(e.target.value)}
               required
             />
@@ -70,7 +73,7 @@ const AdminLoginPage = () => {
               className="form-control"
               id="password"
               placeholder="Enter your password"
-              value={password}
+              value={Password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />

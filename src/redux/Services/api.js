@@ -24,7 +24,7 @@ export const fetchStudents = async (paginationDetail) => {
 
 // Add student
 export const addStudent = async (studentData) => {
-  const response = await fetch(`${API_BASE_URL}/User/Create`, {
+  const response = await fetch(`${API_BASE_URL}/Student/Create`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(studentData),
@@ -35,7 +35,7 @@ export const addStudent = async (studentData) => {
 
 // Edit student
 export const editStudent = async (studentData) => {
-  const response = await fetch(`${API_BASE_URL}/User/Update`, {
+  const response = await fetch(`${API_BASE_URL}/Student/Update`, {
     method: "PUT",
     headers: getHeaders(),
     body: JSON.stringify(studentData),
@@ -46,7 +46,7 @@ export const editStudent = async (studentData) => {
 
 // Get student by ID
 export const getStudent = async (studentId) => {
-  const response = await fetch(`${API_BASE_URL}/User/GetUserById?UserId=${studentId}`, {
+  const response = await fetch(`${API_BASE_URL}/Student/GetUserById?UserId=${studentId}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -56,7 +56,7 @@ export const getStudent = async (studentId) => {
 
 // Delete student
 export const deleteStudent = async (studentId) => {
-  const response = await fetch(`${API_BASE_URL}/User/Delete/${studentId}`, {
+  const response = await fetch(`${API_BASE_URL}/Student/Delete/${studentId}`, {
     method: "DELETE",
     headers: getHeaders(),
   });

@@ -7,8 +7,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
-  const [filteredCountries, setFilteredCountries] = useState([]);
   const [grades, setGrades] = useState([]);
+  const [genders, setGenders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ const AddStudentPanel = ({ show, onClose }) => {
     dob: "",
     grade: null,
     address: "",
-    gender: "",
+    gender: null,
     password: "",
     role: 3,
     statusId: 1,
@@ -61,7 +61,7 @@ const AddStudentPanel = ({ show, onClose }) => {
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: name === "country" || name === "grade" ? parseInt(value, 10) : value,
+        [name]: name === "country" || name === "grade" || name === "gender" ? parseInt(value, 10) : value,
       }));
     }
   };
@@ -71,23 +71,15 @@ const AddStudentPanel = ({ show, onClose }) => {
     pageSize: 15,
   });
 
-  const handleSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    const filtered = countries.filter((country) =>
-      country.name.toLowerCase().includes(searchTerm)
-    );
-    setFilteredCountries(filtered);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      console.log(formData, paginationDetail);
+      console.log(formData);
 
-      await dispatch(addStudentAction(formData, paginationDetail));
-      dispatch(getStudents({ paginationDetail }));
+      await dispatch(addStudentAction(formData , paginationDetail));
+      dispatch(getStudents(paginationDetail));
       toast.success("Student added successfully!");
       onClose();
     } catch (error) {
@@ -116,7 +108,6 @@ const AddStudentPanel = ({ show, onClose }) => {
 
         const data = await response.json();
         setCountries(data);
-        setFilteredCountries(data);
       } catch (error) {
         console.error("Error fetching countries:", error.message);
       } finally {
@@ -146,29 +137,50 @@ const AddStudentPanel = ({ show, onClose }) => {
       }
     };
 
+    const fetchGenders = async () => {
+      try {
+        const response = await fetch("http://localhost:8012/api/Enum/Gender", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            AccessToken: "123",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch genders");
+        }
+
+        const data = await response.json();
+        setGenders(data);
+      } catch (error) {
+        console.error("Error fetching genders:", error.message);
+      }
+    };
+
     fetchCountries();
     fetchGrades();
+    fetchGenders();
   }, []);
 
   return (
-    <Modal show={show} onHide={onClose} >
+    <Modal show={show} onHide={onClose}>
       <Modal.Header closeButton className="modalbg">
         <Modal.Title>Add New Student</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modalbg">
-        <Form onSubmit={handleSubmit} >
+        <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
-            <Form.Group as={Col} controlId="formStudentFirstName"  >
+            <Form.Group as={Col} controlId="formStudentFirstName">
               <Form.Label>First Name</Form.Label>
               <Form.Control
-             
                 type="text"
                 name="firstName"
                 placeholder="Enter first name"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 required
-              
               />
             </Form.Group>
 
@@ -267,58 +279,43 @@ const AddStudentPanel = ({ show, onClose }) => {
 
           <Form.Group className="mb-3" controlId="formGender">
             <Form.Label>Gender</Form.Label>
-            <div>
+            {genders.map((gender, index) => (
               <Form.Check
-                inline
+                key={index}
                 type="radio"
-                label="Male"
+                label={gender.item2}
                 name="gender"
-                value="Male"
+                value={gender.item1}
+                checked={formData.gender === gender.item1}
                 onChange={handleInputChange}
-                checked={formData.gender === "Male"}
                 required
               />
-              <Form.Check
-                inline
-                type="radio"
-                label="Female"
-                name="gender"
-                value="Female"
-                onChange={handleInputChange}
-                checked={formData.gender === "Female"}
-                required
-              />
-            </div>
+            ))}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
-            {loading ? (
-              <p>Loading countries...</p>
-            ) : (
-              <Form.Control
-                as="select"
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select Country</option>
-                {filteredCountries.map((country, index) => (
-                  <option key={index} value={country.item1}>
-                    {country.item2}
-                  </option>
-                ))}
-              </Form.Control>
-            )}
+            <Form.Select
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Country</option>
+              {countries.map((country, index) => (
+                <option key={index} value={country.item1}>
+                  {country.item2}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formStudentAddress">
+          <Form.Group className="mb-3" controlId="formAddress">
             <Form.Label>Address</Form.Label>
             <Form.Control
               as="textarea"
-              rows={2}
               name="address"
+              rows={3}
               placeholder="Enter address"
               value={formData.address}
               onChange={handleInputChange}
@@ -342,7 +339,7 @@ const AddStudentPanel = ({ show, onClose }) => {
                 style={{ width: "150px", height: "150px", objectFit: "cover" }}
               />
             </div>  )}      
-          
+
           <Form.Group className="mb-3" controlId="formPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
@@ -354,6 +351,7 @@ const AddStudentPanel = ({ show, onClose }) => {
               required
             />
           </Form.Group>
+
           <Button variant="success" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Adding..." : "Add Student"}
           </Button>
