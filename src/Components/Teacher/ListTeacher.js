@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import Sidebar from '../Components/Admin/SidePannel';
-import AdminHeader from '../Components/Admin/AdminHeader'
+import Sidebar from '../Admin/SidePannel';
+import AdminHeader from '../Admin/AdminHeader'
 import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-import AddTeacher from './AddTeacher';
 import EditTeacher from './EditTeacher';
-import ViewTeacher from '../Components/ViewTeacher';
+import ViewTeacher from '../ViewTeacher';
 
 const ListTeacher = ({ Teachers = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
-  const [showAddteacher, setShowAddTeacher] = useState(false);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
   const [showViewTeacher, setShowViewTeacher] = useState(false);
   const TeachersPerPage = 5;
@@ -25,8 +23,6 @@ const ListTeacher = ({ Teachers = [] }) => {
     setCurrentPage(selected);
   };
 
-  const handleOpenAddTeacher = () => setShowAddTeacher(true);
-  const handleCloseAddTeacher = () => setShowAddTeacher(false);
   const handleOpenEditTeacher = () => setShowEditTeacher(true);
   const handleCloseEditTeacher = () => setShowEditTeacher(false);
   const handleOpenViewTeacher = () => setShowViewTeacher(true);
@@ -79,7 +75,7 @@ const ListTeacher = ({ Teachers = [] }) => {
               </InputGroup>
             </Col>
             <Col md={6} className="d-flex justify-content-end gap-3">
-              <Button variant="outline-secondary" onClick={handleOpenAddTeacher}>
+              <Button variant="outline-secondary" >
                 Add Teacher
               </Button>
              
@@ -159,7 +155,7 @@ const ListTeacher = ({ Teachers = [] }) => {
             />
           </div>
         </Container>
-        <AddTeacher show={showAddteacher} onClose={handleCloseAddTeacher} />
+      
         <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} />
         <ViewTeacher  show={showViewTeacher} onClose={() => setShowViewTeacher(false)}   TeacherData={TeacherData} />
       </div>

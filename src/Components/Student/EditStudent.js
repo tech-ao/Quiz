@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
+import { fetchCountries, fetchGrades, fetchGenders } from '../../redux/Services/Enum';
 
 const EditStudent = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
 
   const [formData, setFormData] = useState({
-    userId:null,
+    userId: null,
     firstName: "",
     lastName: "",
     email: "",
@@ -19,63 +19,58 @@ const EditStudent = ({ show, onClose }) => {
     address: "",
     role: 3,
     statusId: 1,
-    createdBy: 1,
     country: null,
+    gender: null,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countries, setCountries] = useState([]);
+  const [grades, setGrades] = useState([]);
+  const [genders, setGenders] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchAllData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:8012/api/Enum/Country", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
-          },
-        });
+        const countriesData = await fetchCountries();
+        setCountries(countriesData);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch countries");
-        }
+        const gradesData = await fetchGrades();
+        setGrades(gradesData);
 
-        const data = await response.json();
-        setCountries(data);
-        setFilteredCountries(data);
+        const gendersData = await fetchGenders();
+        setGenders(gendersData);
       } catch (error) {
-        console.error("Error fetching countries:", error.message);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCountries();
+    fetchAllData();
   }, []);
 
   useEffect(() => {
     if (selectedStudent && selectedStudent?.data) {
       setFormData({
+        ...formData,
+        userId: selectedStudent.data.userId,
         firstName: selectedStudent.data.firstName || "",
         lastName: selectedStudent.data.lastName || "",
         email: selectedStudent.data.email || "",
         phoneNumber: selectedStudent.data.phoneNumber || "",
-        dob: selectedStudent.data.dob
-          ? selectedStudent.data.dob.split("T")[0]
-          : "",
+        dob: selectedStudent.data.dob ? selectedStudent.data.dob.split("T")[0] : "",
         grade: selectedStudent.data.grade || "",
         address: selectedStudent.data.address || "",
         country: selectedStudent.data.country || null,
+        gender: selectedStudent.data.gender || null,
       });
     }
-  }, [selectedStudent]);
+  }, [selectedStudent, formData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,9 +78,6 @@ const EditStudent = ({ show, onClose }) => {
     setFormData({
       ...formData,
       [name]: value,
-      userId:selectedStudent.data.userId,
-      statusId: 1,
-      role: 3
     });
 
     if (name === "countrySearch") {
@@ -97,22 +89,17 @@ const EditStudent = ({ show, onClose }) => {
     }
   };
 
-  const [paginationDetail, setPaginationDetail] = useState({
-    pageNumber: 1,
-    pageSize: 15,
-  });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      console.log(formData, paginationDetail);
-      await dispatch(editStudentAction(formData, selectedStudent.studentId,paginationDetail));
-      dispatch(getStudents({ paginationDetail }));
+      await dispatch(editStudentAction(formData, selectedStudent.studentId));
+      dispatch(getStudents());
       toast.success("Student modified successfully!");
       onClose();
     } catch (error) {
-      toast.error("Failed to add student!");
+      console.error("Error submitting form:", error);
+      toast.error("Failed to modify student.");
     } finally {
       setIsSubmitting(false);
     }
@@ -120,10 +107,10 @@ const EditStudent = ({ show, onClose }) => {
 
   return (
     <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="modalbg">
         <Modal.Title>Edit Student</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body className="modalbg">
         <Form onSubmit={handleSubmit}>
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formStudentFirstName">
@@ -195,22 +182,35 @@ const EditStudent = ({ show, onClose }) => {
               required
             >
               <option value="">Select Grade</option>
-              <option value="1">Abacus Beginner</option>
-              <option value="2">Abacus Explorer</option>
-              <option value="3">Abacus Skilled</option>
-              <option value="4">Abacus Expert</option>
-              <option value="5">Abacus Mastermind</option>
+              {grades.map((grade) => (
+                <option key={grade.item1} value={grade.item1}>
+                  {grade.item2}
+                </option>
+              ))}
             </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            {genders.map((gender) => (
+              <Form.Check
+                key={gender.item1}
+                type="radio"
+                label={gender.item2}
+                name="gender"
+                value={gender.item1}
+                checked={formData.gender === gender.item1}
+                onChange={handleInputChange}
+              />
+            ))}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
             <Form.Select
               name="country"
-              value={formData.country || ""} // Numeric country ID
-              onChange={(e) =>
-                setFormData({ ...formData, country: parseInt(e.target.value, 10) })
-              }
+              value={formData.country || ""}
+              onChange={(e) => setFormData({ ...formData, country: parseInt(e.target.value, 10) })}
               required
             >
               <option value="">Select Country</option>
@@ -235,7 +235,7 @@ const EditStudent = ({ show, onClose }) => {
             />
           </Form.Group>
 
-          <Button variant="success" type="submit">
+          <Button variant="success" type="submit" disabled={isSubmitting}>
             Save Student
           </Button>
         </Form>

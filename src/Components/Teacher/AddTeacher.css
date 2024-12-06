@@ -1,0 +1,28 @@
+/* Sidebar Customization */
+.custom-sidebar {
+    background-color: #e7ffec; /* Light background color */
+    border-radius: 10px;
+    padding: 15px;
+  }
+  
+  .custom-tab {
+    margin-bottom: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    color: #495057;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-tab:hover {
+    background-color: #e9ecef;
+    color: #212529;
+  }
+  
+  .custom-tab-active {
+    background-color: #0d7c12;
+    color: #ffffff;
+    font-weight: bold;
+    border: 1px solid #3fbe2e;
+  }
+  

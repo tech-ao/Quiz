@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AdminDashboard from './Components/Admin/AdminDashboard';
 import Login from './Components/Student/Login'
 import AdminLoginPage from './Components/Admin/AdminLogin';
-import ListTeacher from './Teacher/ListTeacher';
+import ListTeacher from './Components/Teacher/ListTeacher';
 import QuizPage from './Components/QuizTest';
 import StudentList from './Components/Student/StudentList';
 import StudentHeader from './Components/Student/StudentHeader';
@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Import Redux Provider and Store
 import { Provider } from 'react-redux';
 import store from './redux/Store/store'; // Import your store
+import AddTeacher from './Components/Teacher/AddTeacher';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path='/quiztest' element={<QuizPage />} />
           <Route path='/StudentHeader' element={<StudentHeader />} />
           <Route path='/StudentDashboard' element={<StudentDashboard />} />
+          <Route path='/addTeacher' element={<AddTeacher />} />
         </Routes>
       </Router>
     </Provider>

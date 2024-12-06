@@ -4,6 +4,7 @@ import { addStudentAction, getStudents } from "../../redux/Action/StudentAction"
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { fetchCountries, fetchGrades, fetchGenders } from '../../redux/Services/Enum'
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
@@ -90,79 +91,27 @@ const AddStudentPanel = ({ show, onClose }) => {
   };
 
   useEffect(() => {
-    const fetchCountries = async () => {
+    const fetchAllData = async () => {
       setLoading(true);
       try {
-        const response = await fetch("http://localhost:8012/api/Enum/Country", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
-          },
-        });
+        const countriesData = await fetchCountries();
+        setCountries(countriesData);
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch countries");
-        }
+        const gradesData = await fetchGrades();
+        setGrades(gradesData);
 
-        const data = await response.json();
-        setCountries(data);
+        const gendersData = await fetchGenders();
+        setGenders(gendersData);
       } catch (error) {
-        console.error("Error fetching countries:", error.message);
+        console.error("Error fetching data:", error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    const fetchGrades = async () => {
-      try {
-        const response = await fetch("http://localhost:8012/api/Enum/Grade", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch grades");
-        }
-
-        const data = await response.json();
-        setGrades(data);
-      } catch (error) {
-        console.error("Error fetching grades:", error.message);
-      }
-    };
-
-    const fetchGenders = async () => {
-      try {
-        const response = await fetch("http://localhost:8012/api/Enum/Gender", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch genders");
-        }
-
-        const data = await response.json();
-        setGenders(data);
-      } catch (error) {
-        console.error("Error fetching genders:", error.message);
-      }
-    };
-
-    fetchCountries();
-    fetchGrades();
-    fetchGenders();
+    fetchAllData();
   }, []);
+
 
   return (
     <Modal show={show} onHide={onClose}>
@@ -212,21 +161,8 @@ const AddStudentPanel = ({ show, onClose }) => {
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
-              <Row>
-                <Col xs={3}>
-                  <Form.Select
-                    name="countryCode"
-                    value={formData.countryCode}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="+91">+91 (IND)</option>
-                    <option value="+1">+1 (USA)</option>
-                    <option value="+44">+44 (UK)</option>
-                    <option value="+61">+61 (Australia)</option>
-                  </Form.Select>
-                </Col>
-                <Col xs={9}>
+              <Row>             
+                <Col>
                   <Form.Control
                     type="text"
                     name="phoneNumber"
