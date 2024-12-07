@@ -79,8 +79,8 @@ const AddStudentPanel = ({ show, onClose }) => {
     try {
       console.log(formData);
 
-      await dispatch(addStudentAction(formData , paginationDetail));
-      dispatch(getStudents(paginationDetail));
+      await dispatch(addStudentAction(formData));
+      dispatch(getStudents({paginationDetail}));
       toast.success("Student added successfully!");
       onClose();
     } catch (error) {
@@ -276,7 +276,7 @@ const AddStudentPanel = ({ show, onClose }) => {
               />
             </div>  )}      
 
-          <Form.Group className="mb-3" controlId="formPassword">
+          {/* <Form.Group className="mb-3" controlId="formPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
               type="password"
@@ -286,7 +286,7 @@ const AddStudentPanel = ({ show, onClose }) => {
               onChange={handleInputChange}
               required
             />
-          </Form.Group>
+          </Form.Group> */}
 
           <Button variant="success" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Adding..." : "Add Student"}

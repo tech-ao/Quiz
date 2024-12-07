@@ -5,7 +5,7 @@ import '../../Style.css';
 import logo from "../../Components/images/Logo.png";
 import { useNavigate } from 'react-router-dom';
 
-const StudentHeader = () => {
+const StudentHeader = ({studentName }) => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const StudentHeader = () => {
                 className="text-decoration-none fw-bold d-flex align-items-center"
                 style={{ color: '#333' }}
               >
-                <RiAdminLine size={20} className="me-1" /> John Doe
+                <RiAdminLine size={20} className="me-1" /> {studentName}
               </Button>
               {showPopup && (
                 <div

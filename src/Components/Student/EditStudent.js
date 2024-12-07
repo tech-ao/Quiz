@@ -16,9 +16,7 @@ const EditStudent = ({ show, onClose }) => {
     phoneNumber: "",
     dob: "",
     grade: "",
-    address: "",
-    role: 3,
-    statusId: 1,
+    address: "",   
     country: null,
     gender: null,
   });
@@ -38,6 +36,7 @@ const EditStudent = ({ show, onClose }) => {
       try {
         const countriesData = await fetchCountries();
         setCountries(countriesData);
+        setFilteredCountries(countriesData);
 
         const gradesData = await fetchGrades();
         setGrades(gradesData);
@@ -57,7 +56,6 @@ const EditStudent = ({ show, onClose }) => {
   useEffect(() => {
     if (selectedStudent && selectedStudent?.data) {
       setFormData({
-        ...formData,
         userId: selectedStudent.data.userId,
         firstName: selectedStudent.data.firstName || "",
         lastName: selectedStudent.data.lastName || "",
@@ -70,7 +68,7 @@ const EditStudent = ({ show, onClose }) => {
         gender: selectedStudent.data.gender || null,
       });
     }
-  }, [selectedStudent, formData]);
+  }, [selectedStudent]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -82,19 +80,28 @@ const EditStudent = ({ show, onClose }) => {
 
     if (name === "countrySearch") {
       const searchValue = value.toLowerCase();
-      const filtered = countries.filter((country) =>
-        country.item2.toLowerCase().includes(searchValue)
-      );
-      setFilteredCountries(filtered);
+      if (searchValue) {
+        const filtered = countries.filter((country) =>
+          country.item2.toLowerCase().includes(searchValue)
+        );
+        setFilteredCountries(filtered);
+      } else {
+        setFilteredCountries(countries);  // Reset to all countries
+      }
     }
   };
+
+  const [paginationDetail, setPaginationDetail] = useState({
+    pageNumber: 1,
+    pageSize: 15,
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
       await dispatch(editStudentAction(formData, selectedStudent.studentId));
-      dispatch(getStudents());
+      dispatch(getStudents({paginationDetail}));
       toast.success("Student modified successfully!");
       onClose();
     } catch (error) {
@@ -204,6 +211,7 @@ const EditStudent = ({ show, onClose }) => {
               />
             ))}
           </Form.Group>
+
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../Style.css";
 import logo from "../../Components/images/Logo.png";
@@ -10,39 +10,44 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isHuman, setIsHuman] = useState(false);
-  const [error, setError] = useState("");
+  const [isHuman, setIsHuman] = useState(false); 
+  const [error, setError] = useState(""); 
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(""); // Clear previous errors
-    setLoading(true); // Show loading state
+    e.preventDefault(); 
+    setError(""); 
+    setLoading(true); 
 
     if (!isHuman) {
-      alert("Please confirm that you are human.");
+      setError("Please confirm that you are human.");
       setLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:8012/api/Login/StudentSignin", {
+      const apiUrl = `http://localhost:8012/api/Login/StudentSignin?Email=${encodeURIComponent(
+        userId
+      )}&Password=${encodeURIComponent(password)}`;
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
-          Accept: "text/plain",
+          Accept: "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Email: userId, Password: password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login Successful:", data);   
-        navigate("/StudentDashboard"); 
+        if (data && data.isSuccess) {
+          console.log("Login Successful:", data);
+          navigate("/StudentDashboard", { state: { userData: data.data } }); 
+        } else {
+          setError(data.message || "Invalid username or password.");
+        }
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Login failed. Please try again.");
@@ -51,7 +56,7 @@ const LoginPage = () => {
       console.error("Error during login:", err);
       setError("An error occurred. Please check your connection.");
     } finally {
-      setLoading(false); // Hide loading state
+      setLoading(false); 
     }
   };
 
@@ -99,21 +104,17 @@ const LoginPage = () => {
                   size="sm"
                   className="position-absolute top-50 end-0"
                   onClick={() => setShowPassword(!showPassword)}
+                  style={{ border: "none", background: "transparent" }}
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </Button>
               </Form.Group>
-              <div className="d-flex justify-content-end mb-3">
-                <a href="#!" className="text-decoration-none">
-                  Forgot Password?
-                </a>
-              </div>
-              <Form.Group controlId="formHumanCheck">
+              <Form.Group controlId="formHumanCheck" className="mb-3">
                 <Form.Check
                   type="checkbox"
                   label="I am a human"
                   checked={isHuman}
-                  onChange={() => setIsHuman(!isHuman)} // Toggle checkbox state
+                  onChange={() => setIsHuman(!isHuman)}
                 />
               </Form.Group>
               <Button

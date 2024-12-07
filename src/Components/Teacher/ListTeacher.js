@@ -6,13 +6,15 @@ import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-boot
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import EditTeacher from './EditTeacher';
 import ViewTeacher from '../ViewTeacher';
+import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
   const [showViewTeacher, setShowViewTeacher] = useState(false);
-  const TeachersPerPage = 5;
+  const TeachersPerPage = 10;
+  const navigate = useNavigate(); 
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -57,7 +59,8 @@ const ListTeacher = ({ Teachers = [] }) => {
       <AdminHeader />
       <div className="d-flex">
         <Sidebar />
-        <Container fluid className="p-4 bg-light min-vh-100">
+        <Container fluid className="p-4 maincontainerbg min-vh-100">
+        <div className="sub-container">
           <Row className="align-items-center mb-4">
             <Col md={6}>
               <h2 className="fw-bold">Teacher List</h2>
@@ -75,7 +78,7 @@ const ListTeacher = ({ Teachers = [] }) => {
               </InputGroup>
             </Col>
             <Col md={6} className="d-flex justify-content-end gap-3">
-              <Button variant="outline-secondary" >
+              <Button variant="outline-secondary"  onClick={() => navigate('/addTeacher')}>
                 Add Teacher
               </Button>
              
@@ -153,6 +156,7 @@ const ListTeacher = ({ Teachers = [] }) => {
               previousLinkClassName="page-link"
               nextLinkClassName="page-link"
             />
+          </div>
           </div>
         </Container>
       

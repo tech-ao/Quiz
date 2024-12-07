@@ -18,7 +18,7 @@ const AdminLoginPage = () => {
       const response = await fetch("http://localhost:8012/api/Login/StudentSignin", {
         method: "POST",
         headers: {
-          Accept: "text/plain",
+          Accept: "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
           "Content-Type": "application/json",
@@ -28,14 +28,18 @@ const AdminLoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Login Successful:", data);   
-        navigate("/adminDashboard"); 
+        if (data && data.success) {
+          console.log("Login Successful:", data);
+          navigate("/adminDashboard"); // Redirect to Admin Dashboard
+        } else {
+          setError(data.message || "Invalid username or password."); // Handle invalid credentials
+        }
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Login failed. Please try again.");
       }
-    } catch (error) {
-      console.error("Error during login:", error);
+    } catch (err) {
+      console.error("Error during login:", err);
       setError("An error occurred. Please check your connection.");
     }
   };
@@ -91,13 +95,12 @@ const AdminLoginPage = () => {
               Forgot Password?
             </a>
           </div>
-          <button onClick = {(e)=> handleSubmit(e)}type="submit" className="btn btn-success w-100">
+          <button type="submit" className="btn btn-success w-100">
             Login
           </button>
         </form>
       </div>
     </div>
-    
   );
 };
 

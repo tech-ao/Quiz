@@ -6,12 +6,10 @@ const COMMON_HEADERS = {
   "Content-Type": "application/json",
 };
 
-// Utility function for headers
 const getHeaders = () => ({
   ...COMMON_HEADERS,
 });
 
-// Fetch students
 export const fetchStudents = async (paginationDetail) => {
   const response = await fetch(`${API_BASE_URL}/SearchAndList/SearchAndListStudent`, {
     method: "POST",
@@ -22,7 +20,7 @@ export const fetchStudents = async (paginationDetail) => {
   return await response.json();
 };
 
-// Add student
+
 export const addStudent = async (studentData) => {
   const response = await fetch(`${API_BASE_URL}/Student/Create`, {
     method: "POST",
@@ -33,7 +31,6 @@ export const addStudent = async (studentData) => {
   return await response.json();
 };
 
-// Edit student
 export const editStudent = async (studentData) => {
   const response = await fetch(`${API_BASE_URL}/Student/Update`, {
     method: "PUT",
@@ -44,7 +41,6 @@ export const editStudent = async (studentData) => {
   return await response.json();
 };
 
-// Get student by ID
 export const getStudent = async (studentId) => {
   const response = await fetch(`${API_BASE_URL}/Student/GetUserById?UserId=${studentId}`, {
     method: "GET",
