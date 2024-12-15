@@ -4,13 +4,38 @@ import Sidebar from '../Admin/SidePannel';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
 import AdminHeader from '../Admin/AdminHeader';
-import { Container, Row, Col, Button, Table, Form, InputGroup, Modal } from 'react-bootstrap';
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown } from 'react-bootstrap';
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
+
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    borderRadius: '12px',
+    minWidth: 'auto',
+    padding: '5px 10px',
+    fontSize: '0.75rem',
+    textTransform: 'capitalize',
+    display: 'inline-block',
+  },
+}));
+
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'Approved':
+      return 'success';
+    case 'Danger':
+      return 'error';
+    case 'Inactive':
+      return 'warning';
+    default:
+      return 'default';
+  }
+};
 
 const StudentList = () => {
   const { students, loading, error } = useSelector((state) => state.students);
@@ -18,10 +43,10 @@ const StudentList = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showAddStudent, setShowAddStudent] = useState(false);
   const [showEditStudent, setShowEditStudent] = useState(false);
   const [showViewStudent, setShowViewStudent] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
 
   const studentsPerPage = 15;
@@ -42,10 +67,7 @@ const StudentList = () => {
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
-  const [paginationDetail, setPaginationDetail] = useState({
-    pageNumber: 1,
-    pageSize: 15,
-  });
+
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult.filter((student) =>
       [student.firstName, student.email]
@@ -55,13 +77,10 @@ const StudentList = () => {
     )
     : [];
 
-  const currentStudents = filteredStudents.slice(currentPage * studentsPerPage, (currentPage + 1) * studentsPerPage);
-
   const handleOpenAddStudent = () => setShowAddStudent(true);
   const handleCloseAddStudent = () => setShowAddStudent(false);
 
   const handleOpenEditStudent = (studentId) => {
-    if (!studentId) return;
     setSelectedStudentId(studentId);
     dispatch(fetchStudent(studentId));
     setShowEditStudent(true);
@@ -73,7 +92,6 @@ const StudentList = () => {
   };
 
   const handleOpenViewStudent = (studentId) => {
-    if (!studentId) return;
     setSelectedStudentId(studentId);
     dispatch(fetchStudent(studentId));
     setShowViewStudent(true);
@@ -89,23 +107,23 @@ const StudentList = () => {
     setShowDeleteModal(true);
   };
 
+  const handleCloseDeleteModal = () => {
+    setShowDeleteModal(false);
+    setSelectedStudentId(null);
+  };
+
   const handleDeleteStudent = () => {
     if (!selectedStudentId) return;
     dispatch(deleteStudentAction(selectedStudentId))
       .then(() => {
         toast.success("Student deleted successfully!");
-        dispatch(getStudents({ paginationDetail }));
+        dispatch(getStudents({ paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
         setShowDeleteModal(false);
         setSelectedStudentId(null);
       })
       .catch(() => {
         toast.error("Failed to delete the student.");
       });
-  };
-
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-    setSelectedStudentId(null);
   };
 
   return (
@@ -132,7 +150,7 @@ const StudentList = () => {
               </Col>
               <Col md={6} className="d-flex justify-content-end gap-3">
                 <Button variant="outline-success" onClick={handleOpenAddStudent}>
-                  Add Student
+                  <i className="bi bi-person-plus me-2"></i> Add Student
                 </Button>
               </Col>
             </Row>
@@ -153,55 +171,46 @@ const StudentList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentStudents.length > 0 ? (
-                    currentStudents.map((student, index) => (
+                  {filteredStudents.length > 0 ? (
+                    filteredStudents.map((student, index) => (
                       <tr key={student.studentId || index}>
                         <td>{index + 1}</td>
                         <td>{student.registerNumber}</td>
-                        <td>{`${student.firstName || ''} ${student.lastName || ''}`}</td>
-                        <td>{student.genderName || 'N/A'}</td>
-                        <td>{student.email || 'N/A'}</td>
-                        <td>{student.phoneNumber || 'N/A'}</td>
-                        <td>{student.dob ? new Date(student.dob).toLocaleDateString('en-GB') : 'N/A'}</td>
-                        <td>{student.gradeName || 'N/A'}</td>
-                        <td
-                          style={{
-                            backgroundColor: student.statusName === 'Active' ? 'green' : student.statusName === 'Danger' ? 'red' : 'transparent',
-                            color: 'black', 
-                          }}
-                        >
-                          {student.statusName || 'N/A'}
+                        <td>{`${student.firstName} ${student.lastName}`}</td>
+                        <td>{student.genderName}</td>
+                        <td>{student.email}</td>
+                        <td>{student.phoneNumber}</td>
+                        <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
+                        <td>{student.gradeName}</td>
+                        <td>
+                          <StyledBadge
+                            badgeContent={student.statusName}
+                            color={getStatusColor(student.statusName)}
+                          />
                         </td>
                         <td>
-                          <div className="d-flex gap-2">
-                            <Button
-                              size="sm"
-                              variant="outline-primary"
-                              onClick={() => handleOpenEditStudent(student.studentId)}
-                            >
-                              <FaEdit />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline-danger"
-                              onClick={() => handleOpenDeleteModal(student.studentId)}
-                            >
-                              <FaTrash />
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline-info"
-                              onClick={() => handleOpenViewStudent(student.studentId)}
-                            >
-                              <FaEye />
-                            </Button>
-                          </div>
+                          <Dropdown>
+                            <Dropdown.Toggle variant="light" size="sm" id={`dropdown-${student.studentId}`}>
+                              Actions
+                            </Dropdown.Toggle>
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={() => handleOpenViewStudent(student.studentId)}>
+                                <i className="bi bi-eye me-2"></i>View
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={() => handleOpenEditStudent(student.studentId)}>
+                                <i className="bi bi-pencil me-2"></i>Edit
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={() => handleOpenDeleteModal(student.studentId)}>
+                                <i className="bi bi-trash me-2"></i>Delete
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="8" className="text-center">
+                      <td colSpan="10" className="text-center">
                         No students found.
                       </td>
                     </tr>
@@ -209,24 +218,14 @@ const StudentList = () => {
                 </tbody>
               </Table>
             </div>
-            <div className="d-flex justify-content-center mt-4">
-              <ReactPaginate
-                pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
-                pageRangeDisplayed={10}
-                marginPagesDisplayed={2}
-                onPageChange={handlePageChange}
-                containerClassName="pagination"
-                activeClassName="active"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousLabel="&laquo;"
-                nextLabel="&raquo;"
-                previousClassName="page-item"
-                nextClassName="page-item"
-                previousLinkClassName="page-link"
-                nextLinkClassName="page-link"
-              />
-            </div>
+            <ReactPaginate
+              pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={2}
+              onPageChange={handlePageChange}
+              containerClassName="pagination"
+              activeClassName="active"
+            />
           </div>
         </Container>
       </div>
@@ -237,15 +236,17 @@ const StudentList = () => {
 
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Confirm Action</Modal.Title>
+          <Modal.Title>Delete Student</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to delete this student?</Modal.Body>
+        <Modal.Body>
+          Are you sure you want to delete this student?
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseDeleteModal}>
             Cancel
           </Button>
           <Button variant="danger" onClick={handleDeleteStudent}>
-            Confirm
+            Delete
           </Button>
         </Modal.Footer>
       </Modal>

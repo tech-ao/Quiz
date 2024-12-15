@@ -6,15 +6,19 @@ import StudentSidePannel from "./StudnetSidebar";
 import { useLocation } from "react-router-dom";
 import { getProfileData } from '../../redux/Action/ProfileAction';
 import { getStudent } from "../../redux/Services/api";
+import { useDispatch, useSelector } from 'react-redux';
 
 const StudentDashboard = () => {
   const location = useLocation();
   const { userData } = location.state || {};
+  const dispatch = useDispatch();
 
   const [studentData, setStudentData] = useState({});
-  const [profileData, setProfileData] = useState({}); // Initialize as an empty object
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const profile = useSelector(state => state.profile);
+  console.log(profile);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -25,13 +29,7 @@ const StudentDashboard = () => {
         const studentResponse = await getStudent(userData.studentId);
         setStudentData(studentResponse.data); // Update studentData with the API response
 
-        // Fetch profile data via getProfileData API
-        const profileResponse = await getProfileData(userData.studentId);
-        if (profileResponse.data) {
-          setProfileData(profileResponse.data); // Update profileData with the API response
-        } else {
-          setProfileData({}); // Handle case where no profile data is returned
-        }
+        dispatch(getProfileData(userData.studentId));
 
       } catch (error) {
         setError(error.message);
@@ -41,13 +39,17 @@ const StudentDashboard = () => {
     };
 
     fetchAllData();
-  }, [userData.studentId]); // Re-run when studentId changes
+  }, [userData.studentId, dispatch]);
 
-  if (loading) return <p>Loading...</p>; 
+  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log(profileData , studentData);
-  
+  console.log(studentData, profile);
+
+  // Check if profile data contains the base64 string correctly
+  const profileImage = profile.data && typeof profile.data === 'string' 
+    ? profile.data 
+    : profile.data?.imageBase64 || null;  // Assuming profile.data.imageBase64 contains the image
 
   return (
     <div>
@@ -67,9 +69,11 @@ const StudentDashboard = () => {
                       display: "inline-block",
                     }}
                   >
-                    {profileData.data ? (
+                    {profileImage ? (
                       <Image
-                        src={`data:image/jpeg;base64,${profileData.data}`} // Display base64 encoded image
+                        src={profileImage.startsWith("data:image")
+                          ? profileImage // If base64 string is already in correct format
+                          : `data:image/jpeg;base64,${profileImage}`} 
                         roundedCircle
                         alt="Student"
                         style={{ width: "150px", height: "150px", objectFit: "cover" }}
@@ -89,7 +93,7 @@ const StudentDashboard = () => {
                   <Row>
                     <Col xs={6}>
                       <p>
-                        <strong>Name:</strong> {studentData.firstName || "N/A"} 
+                        <strong>Name:</strong> {studentData.firstName || "N/A"}
                       </p>
                     </Col>
                     <Col xs={6}>

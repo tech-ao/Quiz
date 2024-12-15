@@ -11,6 +11,8 @@ const getHeaders = () => ({
 });
 
 export const getProfile = async (studentId) => {
+  console.log(studentId);
+  
   try {
     console.log(studentId); // Log the studentId for debugging
 

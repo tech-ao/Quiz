@@ -19,6 +19,7 @@ const EditStudent = ({ show, onClose }) => {
     address: "",   
     country: null,
     gender: null,
+    statusId:null
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,6 +67,9 @@ const EditStudent = ({ show, onClose }) => {
         address: selectedStudent.data.address || "",
         country: selectedStudent.data.country || null,
         gender: selectedStudent.data.gender || null,
+        statusId:selectedStudent.data.statusId ||1
+
+      
       });
     }
   }, [selectedStudent]);
@@ -76,6 +80,7 @@ const EditStudent = ({ show, onClose }) => {
     setFormData({
       ...formData,
       [name]: value,
+ 
     });
 
     if (name === "countrySearch") {

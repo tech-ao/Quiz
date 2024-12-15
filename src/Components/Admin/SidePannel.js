@@ -27,7 +27,7 @@ const SidePanel = () => {
             className={`nav-link ${location.pathname === '/listTeacher' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
-              <i className="bi bi-person"></i>
+              <i className="bi bi-person "></i>
               <span className="nav-text">Teacher</span>
             </div>
           </Link>
@@ -38,7 +38,7 @@ const SidePanel = () => {
             className={`nav-link ${location.pathname === '/studentList' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
-              <i className="bi bi-person"></i>
+              <i className="bi bi-person-bounding-box"></i>
               <span className="nav-text">Students</span>
             </div>
           </Link>

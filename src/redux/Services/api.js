@@ -1,4 +1,8 @@
-const API_BASE_URL = "http://localhost:8012/api";
+import BASE_URL from "./Config";
+
+console.log(BASE_URL);
+
+
 const COMMON_HEADERS = {
   Accept: "text/plain",
   "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
@@ -11,7 +15,7 @@ const getHeaders = () => ({
 });
 
 export const fetchStudents = async (paginationDetail) => {
-  const response = await fetch(`${API_BASE_URL}/SearchAndList/SearchAndListStudent`, {
+  const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListStudent`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(paginationDetail),
@@ -22,7 +26,7 @@ export const fetchStudents = async (paginationDetail) => {
 
 
 export const addStudent = async (studentData) => {
-  const response = await fetch(`${API_BASE_URL}/Student/Create`, {
+  const response = await fetch(`${BASE_URL}/Student/Create`, {
     method: "POST",
     headers: getHeaders(),
     body: JSON.stringify(studentData),
@@ -32,7 +36,7 @@ export const addStudent = async (studentData) => {
 };
 
 export const editStudent = async (studentData) => {
-  const response = await fetch(`${API_BASE_URL}/Student/Update`, {
+  const response = await fetch(`${BASE_URL}/Student/Update`, {
     method: "PUT",
     headers: getHeaders(),
     body: JSON.stringify(studentData),
@@ -42,7 +46,7 @@ export const editStudent = async (studentData) => {
 };
 
 export const getStudent = async (studentId) => {
-  const response = await fetch(`${API_BASE_URL}/Student/GetUserById?UserId=${studentId}`, {
+  const response = await fetch(`${BASE_URL}/Student/GetUserById?UserId=${studentId}`, {
     method: "GET",
     headers: getHeaders(),
   });
@@ -52,7 +56,7 @@ export const getStudent = async (studentId) => {
 
 // Delete student
 export const deleteStudent = async (studentId) => {
-  const response = await fetch(`${API_BASE_URL}/Student/Delete/${studentId}`, {
+  const response = await fetch(`${BASE_URL}/Student/Delete/${studentId}`, {
     method: "DELETE",
     headers: getHeaders(),
   });

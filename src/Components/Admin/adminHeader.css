@@ -1,0 +1,57 @@
+.header {
+    background-color: #e7ffec;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo1 {
+    cursor: pointer;
+    max-width: 100px;
+  }
+  
+  .toggle-btn {
+    display: none;
+  }
+  
+  @media (max-width: 767px) {
+    .toggle-btn {
+      display: block;
+      border: none;
+      background: none;
+      padding: 0;
+      color: #333;
+    }
+  
+    .navbar-brand {
+      display: none;
+    }
+  
+    .header .d-md-block {
+      display: none;
+    }
+  
+    .header .d-md-none {
+      display: block;
+    }
+  }
+  
+  .position-relative {
+    position: relative;
+  }
+  
+  .position-absolute {
+    position: absolute;
+  }
+  
+  .dropdown-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  

@@ -6,6 +6,9 @@ body {
   background-color: #cbd8e6;
 }
 
+
+
+
 h2,
 h5 {
   color: #343a40;
@@ -66,54 +69,6 @@ button {
   padding: 10px;
   border-radius: 20px;
 }
-
-.side-panel {
-  width: 200px;
-  height: 100%;
-  background-color: #e7ffec;
-  padding: 5px;
-  transition: transform 0.3s ease-in-out;
-  border-right: 1px solid #ddd;
-
-}
-
-.side-panel .nav-link {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-}
-
-.side-panel .nav-link .icon-with-text {
-  display: flex;
-  align-items: center;
-}
-
-.side-panel .nav-link .nav-text {
-  margin-left: 10px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-
-.side-panel .nav-link:hover .nav-text {
-  opacity: 1;
-  visibility: visible;
-}
-
-.side-panel .nav-link i {
-  font-size: 1.5rem;
-}
-
-
-.side-panel.closed {
-  transform: translateX(-100%);
-}
-
-.side-panel.open {
-  transform: translateX(0);
-}
-
-
 .toggle-btn {
   position: fixed;
   top: 10px;
@@ -139,14 +94,6 @@ button {
   color: #000;
 }
 
-.nav-link:hover {
-  background-color: #bdfdd9 !important;
-  color: #000 !important;
-}
-
-.nav-link i {
-  font-size: 1.2rem;
-}
 
 
 .displayFlex {
@@ -244,6 +191,14 @@ button {
   background-size: cover;
   background-position: center;
 }
+
+.bg1-image {
+  background-image: url('./Components/images/abacus.jpg');
+  /* Update with your background image path */
+  background-size: cover;
+  background-position: center;
+}
+
 
 /* Container for the button and tooltip */
 .icon-button-container {

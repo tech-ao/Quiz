@@ -22,17 +22,17 @@ const ViewStudentPanel = ({ show, onClose }) => {
     if (studentData?.userId) {
       axios
         .get(`http://localhost:8012/api/Profile/GetContentByUserId?userId=${studentData.userId}`, {
-          responseType: "arraybuffer", 
           headers: {
-            "accept": "text/plain",
+            "accept": "text/plain", // Assuming the response is base64-encoded string
             "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280", // Replace with your actual API key
             "AccessToken": "123" // Replace with the actual access token
           }
         })
         .then((response) => {
-          const imageBlob = new Blob([response.data], { type: "image/jpeg" });
-          const imageUrl = URL.createObjectURL(imageBlob);
-          setProfileImage(imageUrl);
+          const base64Image = response.data; // Assuming the API returns a base64 string
+          setProfileImage(base64Image.data);
+          console.log(base64Image.data);
+          
           setLoading(false);
         })
         .catch((err) => {
@@ -43,31 +43,41 @@ const ViewStudentPanel = ({ show, onClose }) => {
   }, [studentData?.userId]);
 
   return (
-    <Offcanvas show={show} onHide={onClose} placement="end" >
-      <Offcanvas.Header closeButton className="modalbg"> 
+    <Offcanvas show={show} onHide={onClose} placement="end">
+      <Offcanvas.Header closeButton className="modalbg">
         <Offcanvas.Title>View Student Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body className="modalbg">
         {/* Profile Image Section */}
         <Row className="mb-3">
           <Col className="text-center">
-            <strong>Profile Image:</strong>
+           
+          <div
+                    style={{
+                      border: "5px solid #4caf50",
+                      borderRadius: "50%",
+                      padding: "5px",
+                      display: "inline-block",
+                      height:'171px'
+                    }}
+                  >
             {loading ? (
               <p>Loading image...</p>
             ) : error ? (
               <p>{error}</p>
             ) : profileImage ? (
               <Image
-                src={profileImage}
+                src={`data:image/jpeg;base64,${profileImage}`} // Displaying base64 image
                 alt="Profile"
                 roundedCircle
                 width="150"
-                height="150"
-                fluid
+                height="150px" 
+                
               />
             ) : (
               <p>No image available</p>
             )}
+            </div>
           </Col>
         </Row>
 

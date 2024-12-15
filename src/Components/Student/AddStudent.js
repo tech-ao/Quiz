@@ -258,6 +258,21 @@ const AddStudentPanel = ({ show, onClose }) => {
               required
             />
           </Form.Group>
+          <Form.Group className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            {genders.map((gender, index) => (
+              <Form.Check
+                key={index}
+                type="radio"
+                label={gender.item2}
+                name="gender"
+                value={gender.item1}
+                checked={formData.gender === gender.item1}
+                onChange={handleInputChange}
+                required
+              />
+            ))}
+          </Form.Group>
 
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Label>Upload Student Image</Form.Label>

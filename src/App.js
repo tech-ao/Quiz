@@ -9,6 +9,7 @@ import QuizPage from './Components/QuizTest';
 import StudentList from './Components/Student/StudentList';
 import StudentHeader from './Components/Student/StudentHeader';
 import StudentDashboard from './Components/Student/StudentDashboard';
+import Abacus from './Components/Abacus/Abacus';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -36,6 +37,7 @@ function App() {
           <Route path='/StudentHeader' element={<StudentHeader />} />
           <Route path='/StudentDashboard' element={<StudentDashboard />} />
           <Route path='/addTeacher' element={<AddTeacher />} />
+          <Route path='/abacus' element={<Abacus />} />
         </Routes>
       </Router>
     </Provider>

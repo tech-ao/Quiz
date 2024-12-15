@@ -1,38 +1,43 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
-import '../../Style.css';
-import logo from '../../Components/images/Logo.png';
+import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../../Style.css";
+import logo from "../../Components/images/Logo.png";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const AdminLoginPage = () => {
-  const [Email, setUserName] = useState("");
+  const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState(""); // State to display error messages
-  const navigate = useNavigate(); // React Router's navigation hook
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Clear any previous errors
 
     try {
-      const response = await fetch("http://localhost:8012/api/Login/StudentSignin", {
+      const apiUrl = `http://localhost:8012/api/Login/AdminSignin?Email=${encodeURIComponent(
+        Email
+      )}&Password=${encodeURIComponent(Password)}`;
+
+      const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
-          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ Email, Password }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        if (data && data.success) {
+        if (data && data.isSuccess) {
           console.log("Login Successful:", data);
-          navigate("/adminDashboard"); // Redirect to Admin Dashboard
+          navigate("/adminDashboard", { state: { userData: data.data } });
         } else {
-          setError(data.message || "Invalid username or password."); // Handle invalid credentials
+          setError(data.message || "Invalid username or password.");
         }
       } else {
         const errorData = await response.json();
@@ -45,62 +50,70 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100">
-      <div className="login-card border border-success rounded-3 p-4 bg-white shadow">
-        <div className="text-center mb-4">
-          <img className="logo" src={logo} alt="Math Gym Logo" />
-          <h2 className="text-success">WELCOME TO MATH GYM</h2>
-          <small className="text-muted">Admin Login to Quizlab Dashboard</small>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {error && <div className="alert alert-danger">{error}</div>}
-          <div className="mb-3">
-            <label htmlFor="userId" className="form-label">
-              User ID
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              id="userId"
-              placeholder="Enter your User ID"
-              value={Email}
-              onChange={(e) => setUserName(e.target.value)}
-              required
-            />
+    <Container
+      fluid
+      className="vh-100 bg1-image d-flex justify-content-center align-items-center"
+    >
+      <Row>
+        <Col xs={12} md={6} lg={4}>
+          <div className="p-4 bg-white rounded shadow border login-card border-success">
+            <div className="text-center mb-4">
+              <img
+                src={logo}
+                alt="Math Gym Logo"
+                className="img-fluid mb-3"
+                style={{ width: "80px" }}
+              />
+              <h2 className="text-success">MATH GYM</h2>
+              <p className="text-muted">Admin Login to Quizlab Dashboard</p>
+            </div>
+            {error && <Alert variant="danger">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="Email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  placeholder="Enter your Email"
+                  value={Email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </Form.Group>
+              <Form.Group className="mb-3 position-relative" controlId="Password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={Password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="position-absolute top-50 end-0 translate-middle-y"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ border: "none", background: "transparent" }}
+                >
+                  {showPassword ? <FiEyeOff /> : <FiEye />}
+                </Button>
+              </Form.Group>
+              <Button type="submit" variant="success" className="w-100">
+                Login
+              </Button>
+              <div className="text-center mt-3">
+                <small>
+                  Forgot your password?{" "}
+                  <a href="#!" className="text-decoration-none">
+                    Reset Password
+                  </a>
+                </small>
+              </div>
+            </Form>
           </div>
-          <div className="mb-3 position-relative">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control"
-              id="password"
-              placeholder="Enter your password"
-              value={Password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="button"
-              className="btn btn-link position-absolute top-50 end-0 translate-middle-y p-0"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{ textDecoration: "none", color: "gray" }}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
-          </div>
-          <div className="d-flex justify-content-end mb-3">
-            <a href="#!" className="forgot-password text-decoration-none">
-              Forgot Password?
-            </a>
-          </div>
-          <button type="submit" className="btn btn-success w-100">
-            Login
-          </button>
-        </form>
-      </div>
-    </div>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

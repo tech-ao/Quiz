@@ -1,19 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
-import { RiLockPasswordLine, RiLogoutCircleRLine, RiAdminLine, RiGlobalLine } from 'react-icons/ri';
-import { useNavigate } from 'react-router-dom';
+import {
+  RiLockPasswordLine,
+  RiLogoutCircleRLine,
+  RiNotification3Line,
+  RiAdminLine,
+  RiGlobalLine,
+  RiMenu3Line,
+} from 'react-icons/ri';
+import { useNavigate, Link } from 'react-router-dom';
 import '../../Style.css';
+import './adminHeader.css';
 import logo from "../../Components/images/Logo.png";
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
-  const navigate = useNavigate(); // Use navigate hook for navigation
+  const navigate = useNavigate();
 
   // Toggle popup visibility
   const togglePopup = () => setShowPopup((prev) => !prev);
 
-  // Close popup if clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -25,37 +32,79 @@ const Header = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Handle Logout Click
+  // Logout handler
   const handleLogout = () => {
-    alert('are you sure want to logout');
-    navigate('/adminlogin'); // Navigate to AdminLogin page
+    if (window.confirm('Are you sure you want to logout?')) {
+      navigate('/adminlogin');
+    }
   };
 
-  // Handle Update Password Click
+  // Redirect to Update Password
   const handleUpdatePassword = () => {
     alert('Redirecting to update password...');
+    navigate('/update-password'); // Ensure the route exists in your application
   };
 
   return (
-    <Navbar expand="lg" className="header">
+    <Navbar expand="lg" className="header py-2">
       <Container fluid>
         <Row className="align-items-center w-100">
-
-          <Col xs={4} md={3}>
-            <img className="logo1" src={logo} alt="Math Gym Logo" />
-            <Navbar.Brand className="text-success fw-bold">MATH GYM</Navbar.Brand>
+          {/* Logo and Sidebar Toggle */}
+          <Col xs={6} md={3} className="d-flex align-items-center">
+            <Link to="/adminDashboard">
+              <img
+                className="logo1 me-2"
+                src={logo}
+                alt="Math Gym Logo"
+                style={{ cursor: 'pointer', maxWidth: '100px' }}
+              />
+            </Link>
+            <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
+              MATH GYM
+            </Navbar.Brand>
+            <Button
+              variant="link"
+              className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none"
+              onClick={toggleSidebar}
+              style={{ color: '#333' }}
+            >
+              <RiMenu3Line size={24} />
+            </Button>
           </Col>
 
-          <Col xs={4} md={5} className="text-center">
-            <span className="fw-bold">Welcome, Admin</span>{' '}
-            <span role="img" aria-label="wave">
-              👋
+          {/* Welcome Message */}
+          <Col xs={6} md={5} className="text-center d-none d-md-block">
+            <span className="fw-bold">
+              Welcome, Admin{' '}
+              <span role="img" aria-label="wave">
+                👋
+              </span>
             </span>
           </Col>
-          <Col xs={4} md={4} className="d-flex justify-content-end align-items-center">
-            <Button variant="outlined" className="me-3 text-decoration-none" onClick={() => window.location.href = "https://mathgymint.com"}>
-              <RiGlobalLine size={20} className="me-1" /> Website
+
+          {/* Action Buttons */}
+          <Col xs={6} md={4} className="d-flex justify-content-end align-items-center">
+            {/* Notification Button */}
+            <Button
+              variant="outlined"
+              title="Notification"
+              className="me-2 d-none d-sm-block"
+              onClick={() => window.open("https://mathgymint.com", "_blank")}
+            >
+              <RiNotification3Line size={20} />
             </Button>
+
+            {/* Website Link */}
+            <Button
+              variant="outlined"
+              title="Website"
+              className="me-2 d-none d-sm-block"
+              onClick={() => window.open("https://mathgymint.com", "_blank")}
+            >
+              <RiGlobalLine size={20} />
+            </Button>
+
+            {/* Admin Popup Menu */}
             <div className="position-relative" ref={popupRef}>
               <Button
                 variant="link"
@@ -76,29 +125,27 @@ const Header = () => {
                   }}
                 >
                   <ul className="list-unstyled m-0 p-2">
+                    {/* Profile Option */}
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center"
-                      onClick={handleUpdatePassword}
-                      style={{
-                        cursor: 'pointer',
-                        borderRadius: '5px',
-                        transition: 'background-color 0.2s ease',
-                      }}
-                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f8f9fa')}
-                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '')}
+                      onClick={() => alert('Profile feature is coming soon!')}
+                      style={menuItemStyle}
                     >
                       <RiLockPasswordLine size={18} className="me-2" /> Profile
                     </li>
+                    {/* Update Password */}
+                    <li
+                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center"
+                      onClick={handleUpdatePassword}
+                      style={menuItemStyle}
+                    >
+                      <RiLockPasswordLine size={18} className="me-2" /> Update Password
+                    </li>
+                    {/* Logout */}
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center"
                       onClick={handleLogout}
-                      style={{
-                        cursor: 'pointer',
-                        borderRadius: '5px',
-                        transition: 'background-color 0.2s ease',
-                      }}
-                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f8f9fa')}
-                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '')}
+                      style={menuItemStyle}
                     >
                       <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                     </li>
@@ -111,6 +158,13 @@ const Header = () => {
       </Container>
     </Navbar>
   );
+};
+
+// Common menu item styling for hover effects
+const menuItemStyle = {
+  cursor: 'pointer',
+  borderRadius: '5px',
+  transition: 'background-color 0.2s ease',
 };
 
 export default Header;
