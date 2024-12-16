@@ -190,12 +190,14 @@ button {
   /* Update with your background image path */
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .bg1-image {
   background-image: url('./Components/images/abacus.jpg');
   /* Update with your background image path */
   background-size: cover;
+  background-repeat: no-repeat;
   background-position: center;
 }
 
@@ -227,20 +229,36 @@ button {
   transition: opacity 0.2s ease-in-out;
 }
 
-/* Tooltip arrow */
+@media (max-width: 768px) {
+  .login-card {
+    padding: 1rem;
+    margin: 0 1rem;
+  }
+
+  .login-card img {
+    width: 60px;
+  }
+
+  .login-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .login-card p {
+    font-size: 0.9rem;
+  }
+}
+
+
 .tooltip-text::after {
   content: "";
   position: absolute;
   top: 100%;
-  /* Pointing to the button */
   left: 50%;
   transform: translateX(-50%);
   border-width: 5px;
   border-style: solid;
   border-color: #000 transparent transparent transparent;
 }
-
-/* Show tooltip on hover */
 .icon-button-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;

@@ -1,0 +1,94 @@
+/* Ensure full-page container */
+.container-fluid {
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    background: #f4f4f4; /* Optional background color */
+  }
+  
+  /* Style for the login card */
+  .login-card {
+    max-width: 400px; /* Maximum width for larger screens */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #28a745;
+    text-align: center;
+  }
+  .bg1-image {
+    background-image: url('../images/abacus.jpg');
+    /* Update with your background image path */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  .bg-image {
+    background-image: url('../images/StudentLoginBG.jpg');
+    /* Update with your background image path */
+    background-size: cover;
+    background-position: center;
+  }
+  
+  /* Logo styles */
+  .login-card img {
+    width: 80px;
+    margin-bottom: 1rem;
+  }
+  
+  /* Headings */
+  .login-card h2 {
+    font-size: 1.8rem;
+    color: #28a745;
+    margin-bottom: 0.5rem;
+  }
+  
+  .login-card p {
+    font-size: 0.95rem;
+    color: #6c757d;
+  }
+  
+  /* Password toggle button */
+  .position-absolute button {
+    border: none;
+    background: transparent;
+  }
+  
+  /* Media queries for responsive design */
+  @media (max-width: 768px) {
+    .login-card {
+        
+    width: 100%; /* Make it responsive */
+      padding: 1.5rem;
+      max-width: 90%;
+    }
+  
+    .login-card img {
+      width: 60px;
+    }
+  
+    .login-card h2 {
+      font-size: 1.5rem;
+    }
+  
+    .login-card p {
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 1rem;
+      max-width: 95%;
+    }
+  
+    .login-card h2 {
+      font-size: 1.3rem;
+    }
+  
+    .login-card p {
+      font-size: 0.8rem;
+    }
+  }
+  

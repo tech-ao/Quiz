@@ -6,6 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const SidePanel = () => {
   const location = useLocation();
+  
 
   return (
     <div className="side-panel">
@@ -111,12 +112,12 @@ const SidePanel = () => {
         </li>
         <li className="nav-item">
           <Link
-            to="/moreSettings"
-            className={`nav-link ${location.pathname === '/moreSettings' ? 'active' : ''}`}
+            to="/notification"
+            className={`nav-link ${location.pathname === '/notification' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
-              <i className="bi bi-clipboard"></i>
-              <span className="nav-text">More Settings</span>
+              <i className="bi bi-bell"></i>
+              <span className="nav-text">Notification</span>
             </div>
           </Link>
         </li>

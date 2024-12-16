@@ -1,0 +1,43 @@
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .pagination {
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  .pagination .page-item {
+    margin: 0 0.25rem;
+  }
+  
+  .pagination .page-link {
+    border: 1px solid #dee2e6;
+    color: #007bff;
+  }
+  
+  .pagination .page-link:hover {
+    background-color: #e9ecef;
+  }
+  
+  .pagination .active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+  }
+  
+  @media (max-width: 768px) {
+    .main-container {
+      padding: 1rem;
+    }
+  
+    .sub-container {
+      padding: 1rem;
+    }
+  
+    .pagination {
+      margin-top: 1rem;
+    }
+  }
+  

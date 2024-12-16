@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactPaginate from 'react-paginate';
 import Sidebar from '../Admin/SidePannel';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
@@ -9,20 +8,8 @@ import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
+import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
-import Badge from '@mui/material/Badge';
-import { styled } from '@mui/material/styles';
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    borderRadius: '12px',
-    minWidth: 'auto',
-    padding: '5px 10px',
-    fontSize: '0.75rem',
-    textTransform: 'capitalize',
-    display: 'inline-block',
-  },
-}));
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -38,6 +25,9 @@ const getStatusColor = (status) => {
 };
 
 const StudentList = () => {
+   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+   const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
+
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
 
@@ -64,8 +54,8 @@ const StudentList = () => {
     setCurrentPage(0);
   };
 
-  const handlePageChange = ({ selected }) => {
-    setCurrentPage(selected);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber - 1);
   };
 
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
@@ -126,29 +116,27 @@ const StudentList = () => {
       });
   };
 
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+
   return (
     <div>
-      <AdminHeader />
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        <Sidebar />
-        <Container fluid className="p-4 maincontainerbg min-vh-100">
+        {isSidebarVisible && <Sidebar />}
+        <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Student List</h2>
               </Col>
-            </Row>
-            <Row className="align-items-center mb-4">
-              <Col md={6}>
-                <InputGroup>
+              <Col md={6} className="d-flex justify-content-between align-items-center">
+                <InputGroup style={{ width: '70%' }}>
                   <Form.Control
                     placeholder="Search students by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
                   />
                 </InputGroup>
-              </Col>
-              <Col md={6} className="d-flex justify-content-end gap-3">
                 <Button variant="outline-success" onClick={handleOpenAddStudent}>
                   <i className="bi bi-person-plus me-2"></i> Add Student
                 </Button>
@@ -182,12 +170,7 @@ const StudentList = () => {
                         <td>{student.phoneNumber}</td>
                         <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                         <td>{student.gradeName}</td>
-                        <td>
-                          <StyledBadge
-                            badgeContent={student.statusName}
-                            color={getStatusColor(student.statusName)}
-                          />
-                        </td>
+                        <td>{student.statusName}</td>
                         <td>
                           <Dropdown>
                             <Dropdown.Toggle variant="light" size="sm" id={`dropdown-${student.studentId}`}>
@@ -218,14 +201,24 @@ const StudentList = () => {
                 </tbody>
               </Table>
             </div>
-            <ReactPaginate
-              pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
-              pageRangeDisplayed={5}
-              marginPagesDisplayed={2}
-              onPageChange={handlePageChange}
-              containerClassName="pagination"
-              activeClassName="active"
-            />
+            <div className="d-flex justify-content-center mt-4">
+              <ReactPaginate
+                pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
+                pageRangeDisplayed={10}
+                marginPagesDisplayed={2}
+                onPageChange={handlePageChange}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousLabel="&laquo;"
+                nextLabel="&raquo;"
+                previousClassName="page-item"
+                nextClassName="page-item"
+                previousLinkClassName="page-link"
+                nextLinkClassName="page-link"
+              />
+            </div>
           </div>
         </Container>
       </div>

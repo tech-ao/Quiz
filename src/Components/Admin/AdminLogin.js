@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../../Style.css";
+import "./adminLogin.css"; // Import the new CSS file
 import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -15,7 +14,7 @@ const AdminLoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear any previous errors
+    setError("");
 
     try {
       const apiUrl = `http://localhost:8012/api/Login/AdminSignin?Email=${encodeURIComponent(
@@ -50,70 +49,61 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <Container
-      fluid
-      className="vh-100 bg1-image d-flex justify-content-center align-items-center"
-    >
-      <Row>
-        <Col xs={12} md={6} lg={4}>
-          <div className="p-4 bg-white rounded shadow border login-card border-success">
-            <div className="text-center mb-4">
-              <img
-                src={logo}
-                alt="Math Gym Logo"
-                className="img-fluid mb-3"
-                style={{ width: "80px" }}
-              />
-              <h2 className="text-success">MATH GYM</h2>
-              <p className="text-muted">Admin Login to Quizlab Dashboard</p>
-            </div>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-              <Form.Group className="mb-3" controlId="Email">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter your Email"
-                  value={Email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Form.Group>
-              <Form.Group className="mb-3 position-relative" controlId="Password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={Password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="position-absolute top-50 end-0 translate-middle-y"
-                  onClick={() => setShowPassword(!showPassword)}
-                  style={{ border: "none", background: "transparent" }}
-                >
-                  {showPassword ? <FiEyeOff /> : <FiEye />}
-                </Button>
-              </Form.Group>
-              <Button type="submit" variant="success" className="w-100">
-                Login
-              </Button>
-              <div className="text-center mt-3">
-                <small>
-                  Forgot your password?{" "}
-                  <a href="#!" className="text-decoration-none">
-                    Reset Password
-                  </a>
-                </small>
-              </div>
-            </Form>
+    <Container fluid className="bg1-image">
+    <Row className="justify-content-center  align-items-center vh-100">
+      <Col xs={12} sm={10} md={8} lg={5}>
+        <div className="login-card">
+          <div className="text-center mb-4">
+            <img src={logo} alt="Math Gym Logo" className="img-fluid mb-3" />
+            <h2>MATH GYM</h2>
+            <p>Admin Login to Quizlab Dashboard</p>
           </div>
-        </Col>
-      </Row>
-    </Container>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="Email">
+              <Form.Label className="d-flex">Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter your Email"
+                value={Email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3 position-relative" controlId="Password">
+              <Form.Label className="d-flex">Password</Form.Label>
+              <Form.Control
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your password"
+                value={Password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <Button
+                variant="outline"
+                size="sm"
+                className="position-absolute top-50 end-0"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FiEyeOff /> : <FiEye />}
+              </Button>
+            </Form.Group>
+            <Button type="submit" variant="success" className="w-100">
+              Login
+            </Button>
+            <div className="text-center mt-3">
+              <small>
+                Forgot your password?{" "}
+                <a href="#!" className="text-decoration-none">
+                  Reset Password
+                </a>
+              </small>
+            </div>
+          </Form>
+        </div>
+      </Col>
+    </Row>
+  </Container>
   );
 };
 

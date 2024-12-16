@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../Style.css";
 import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 
@@ -10,15 +9,15 @@ const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isHuman, setIsHuman] = useState(false); 
-  const [error, setError] = useState(""); 
+  const [isHuman, setIsHuman] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
-    setError(""); 
-    setLoading(true); 
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     if (!isHuman) {
       setError("Please confirm that you are human.");
@@ -44,7 +43,7 @@ const LoginPage = () => {
         const data = await response.json();
         if (data && data.isSuccess) {
           console.log("Login Successful:", data);
-          navigate("/StudentDashboard", { state: { userData: data.data } }); 
+          navigate("/StudentDashboard", { state: { userData: data.data } });
         } else {
           setError(data.message || "Invalid username or password.");
         }
@@ -56,24 +55,21 @@ const LoginPage = () => {
       console.error("Error during login:", err);
       setError("An error occurred. Please check your connection.");
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
     <Container
-      fluid
-      className="vh-100 bg-image d-flex justify-content-center align-items-center"
-    >
+      fluid className="bg-image" >
       <Row>
         <Col xs={12} md={6} lg={4}>
-          <div className="p-4 bg-white rounded shadow border login-card border-success">
+          <div className="login-card">
             <div className="text-center mb-4">
               <img
                 src={logo}
                 alt="Math Gym Logo"
                 className="img-fluid mb-3"
-                style={{ width: "80px" }}
               />
               <h2 className="text-success">MATH GYM</h2>
               <p className="text-muted">FLEX YOUR BRAIN</p>
@@ -81,7 +77,7 @@ const LoginPage = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="userId">
-                <Form.Label>User ID</Form.Label>
+                <Form.Label className="d-flex">User ID</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Enter your User ID"
@@ -91,7 +87,7 @@ const LoginPage = () => {
                 />
               </Form.Group>
               <Form.Group className="mb-3 position-relative" controlId="password">
-                <Form.Label>Password</Form.Label>
+                <Form.Label className="d-flex">Password</Form.Label>
                 <Form.Control
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"

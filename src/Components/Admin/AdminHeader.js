@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Badge } from '@mui/material';
 import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
 import {
   RiLockPasswordLine,
@@ -9,8 +10,7 @@ import {
   RiMenu3Line,
 } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
-import '../../Style.css';
-import './adminHeader.css';
+import './adminHeader.css'; // Import media query styles
 import logo from "../../Components/images/Logo.png";
 
 const Header = ({ toggleSidebar }) => {
@@ -18,7 +18,6 @@ const Header = ({ toggleSidebar }) => {
   const popupRef = useRef(null);
   const navigate = useNavigate();
 
-  // Toggle popup visibility
   const togglePopup = () => setShowPopup((prev) => !prev);
 
   useEffect(() => {
@@ -32,22 +31,20 @@ const Header = ({ toggleSidebar }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Logout handler
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       navigate('/adminlogin');
     }
   };
 
-  // Redirect to Update Password
   const handleUpdatePassword = () => {
     alert('Redirecting to update password...');
-    navigate('/update-password'); // Ensure the route exists in your application
+    navigate('/update-password');
   };
 
   return (
     <Navbar expand="lg" className="header py-2">
-      <Container fluid>
+     
         <Row className="align-items-center w-100">
           {/* Logo and Sidebar Toggle */}
           <Col xs={6} md={3} className="d-flex align-items-center">
@@ -64,17 +61,16 @@ const Header = ({ toggleSidebar }) => {
             </Navbar.Brand>
             <Button
               variant="link"
-              className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none"
+              className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button"
               onClick={toggleSidebar}
-              style={{ color: '#333' }}
             >
               <RiMenu3Line size={24} />
             </Button>
           </Col>
 
           {/* Welcome Message */}
-          <Col xs={6} md={5} className="text-center d-none d-md-block">
-            <span className="fw-bold">
+          <Col xs={12} md={5} className="text-center d-none d-md-block">
+            <span className="fw-bold welcome-message">
               Welcome, Admin{' '}
               <span role="img" aria-label="wave">
                 👋
@@ -88,17 +84,28 @@ const Header = ({ toggleSidebar }) => {
             <Button
               variant="outlined"
               title="Notification"
-              className="me-2 d-none d-sm-block"
-              onClick={() => window.open("https://mathgymint.com", "_blank")}
+              className="me-2 d-none d-sm-block action-button"
+              onClick={() => navigate('/notification')}
             >
-              <RiNotification3Line size={20} />
+              <Badge
+                badgeContent={10} // Replace with dynamic count if available
+                color="secondary"
+                overlap="circular"
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                className="notification-badge"
+              >
+                <RiNotification3Line size={20} />
+              </Badge>
             </Button>
 
             {/* Website Link */}
             <Button
               variant="outlined"
               title="Website"
-              className="me-2 d-none d-sm-block"
+              className="me-2 d-none d-sm-block action-button"
               onClick={() => window.open("https://mathgymint.com", "_blank")}
             >
               <RiGlobalLine size={20} />
@@ -109,43 +116,31 @@ const Header = ({ toggleSidebar }) => {
               <Button
                 variant="link"
                 onClick={togglePopup}
-                className="text-decoration-none fw-bold d-flex align-items-center"
-                style={{ color: '#333' }}
+                className="text-decoration-none fw-bold d-flex align-items-center admin-menu"
               >
                 <RiAdminLine size={20} className="me-1" /> Admin
               </Button>
               {showPopup && (
-                <div
-                  className="position-absolute bg-white border rounded shadow"
-                  style={{
-                    top: '100%',
-                    right: 0,
-                    zIndex: 1050,
-                    width: '200px',
-                  }}
-                >
+                <div className="admin-popup">
                   <ul className="list-unstyled m-0 p-2">
                     {/* Profile Option */}
                     <li
-                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center"
+                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                       onClick={() => alert('Profile feature is coming soon!')}
-                      style={menuItemStyle}
                     >
                       <RiLockPasswordLine size={18} className="me-2" /> Profile
                     </li>
                     {/* Update Password */}
                     <li
-                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center"
+                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                       onClick={handleUpdatePassword}
-                      style={menuItemStyle}
                     >
                       <RiLockPasswordLine size={18} className="me-2" /> Update Password
                     </li>
                     {/* Logout */}
                     <li
-                      className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center"
+                      className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
                       onClick={handleLogout}
-                      style={menuItemStyle}
                     >
                       <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                     </li>
@@ -155,16 +150,9 @@ const Header = ({ toggleSidebar }) => {
             </div>
           </Col>
         </Row>
-      </Container>
+    
     </Navbar>
   );
-};
-
-// Common menu item styling for hover effects
-const menuItemStyle = {
-  cursor: 'pointer',
-  borderRadius: '5px',
-  transition: 'background-color 0.2s ease',
 };
 
 export default Header;

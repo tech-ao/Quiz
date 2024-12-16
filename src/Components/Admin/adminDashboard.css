@@ -1,93 +1,106 @@
-/* Admin Dashboard Specific Styling */
-.dashboard-container {
-    margin-left: 250px;
-    transition: margin-left 0.3s ease-in-out;
+/* General Styles */
+.main-container {
+  padding-top: 80px;
+  /* Ensures header and content don't overlap */
+}
+
+/* Dashboard Cards */
+.dashboard-card {
+  border: none;
+  width: 380px !important; 
+  height: 150px !important;
+  border-radius: 10px;
+  position: relative;
+  padding: 20px;
+  background-color: #e7ffec !important;
+  color: #021a07;
+  font-size: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card h5 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.dashboard-card h3 {
+  font-size: 24px;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.container-fluid {
+  justify-content: center;
+  align-items: center;
+  background: #f4f4f4;
+}
+
+/* Icon Container */
+.icon-container {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.icon {
+  font-size: 24px;
+  color: #fff;
+}
+
+/* Card Colors */
+.dashboard-card.blue {
+  background-color: #4a90e2;
+}
+
+.dashboard-card.pink {
+  background-color: #ff6f91;
+}
+
+.dashboard-card.green {
+  background-color: #50c878;
+}
+
+.dashboard-card.orange {
+  background-color: #ffa500;
+}
+
+/* Calendar Card */
+.calendar-card {
+  height: 100%;
+  width: 95% !important;
+}
+
+.calendar {
+  border: none;
+}
+
+.calendar-placeholder {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #aaa;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-card {
+    font-size: 14px;
+    height: auto !important;
+    width: auto !important;
   }
-  
-  @media (max-width: 992px) {
-    /* When the screen width is below 992px (tablet/mobile size) */
-    .dashboard-container {
-      margin-left: 0;
-    }
+
+  .dashboard-card h3 {
+    font-size: 20px;
   }
-  
-  .sub-container {
-    background-color: #f8f9fa;
-    padding: 30px;
-    border-radius: 8px;
-  }
-  
-  .card {
-    border-radius: 8px;
-  }
-  
-  .card-body {
-    padding: 15px;
-  }
-  
-  /* Sidebar and Header styles for responsiveness */
-  @media (max-width: 992px) {
-    /* Sidebar adjusts to a smaller width on mobile */
-    .sidebar {
-      width: 200px;
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      z-index: 999;
-      transition: width 0.3s ease;
-    }
-  
-    .header {
-      width: 100%;
-    }
-  
-    .logo1 {
-      max-width: 40px;
-    }
-  
-    .navbar-brand {
-      font-size: 1.2rem;
-    }
-  
-    .navbar-toggler {
-      display: block;
-    }
-  
-    /* Adjust sidebar visibility on small screens */
-    .sidebar.hidden {
-      width: 0;
-      visibility: hidden;
-    }
-  
-    /* Add media queries for each breakpoint */
-    .dashboard-container {
-      margin-left: 0;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    /* Adjust the cards on smaller screens */
-    .card-body h3 {
-      font-size: 1.25rem;
-    }
-  
-    /* Ensure form inputs are full width on mobile */
-    .form-select {
-      width: 100%;
-    }
-  
-    .input-group {
-      flex-wrap: wrap;
-    }
-  
-    .input-group .form-control {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  
-    .input-group .btn {
-      width: 100%;
-    }
-  }
-  
+}

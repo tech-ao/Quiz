@@ -1,76 +1,107 @@
-import React ,{useState}from 'react';
-import { Container, Row, Col, Button, Card, Form, InputGroup } from 'react-bootstrap';
-import '../../Style.css';
-import Sidebar from './SidePannel';
-import AdminHeader from './AdminHeader';
+import React, { useState } from "react";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import Calendar from "react-calendar";
+import 'react-calendar/dist/Calendar.css';
+import './adminDashboard.css';
+import Sidebar from "./SidePannel";
+import AdminHeader from "./AdminHeader";
 
 function AdminDashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+
   return (
     <div>
-     <AdminHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
-      {isSidebarVisible && <Sidebar />} 
-
-        <Container fluid className="p-4 maincontainerbg min-vh-100">
-          <div className="sub-container">
+    <AdminHeader toggleSidebar={toggleSidebar} />
+    <div className="d-flex">
+      {isSidebarVisible && <Sidebar />}
+      <Container className="main-container p-4 min-vh-100">
+        <div className="sub-container">
+            {/* Header Section */}
             <Row className="align-items-center mb-4">
-              <Col md={6} className="d-flex align-items-center">
+              <Col md={6}>
                 <h2 className="fw-bold">Admin Dashboard</h2>
-                {/* <span className="ms-3 text-secondary">12:40 PM</span> */}
               </Col>
             </Row>
 
-           
             {/* Cards Section */}
-            <Row className="mb-4">
-              {[
-                { label: "Total Students", count: "100+", icon: "👥" },
-                { label: "Active Students", count: "10+", icon: "🎯" },
-                { label: "Verified Students", count: "36", icon: "🔍" },
-                { label: "Completed Projects", count: "29", icon: "✅" },
-              ].map((item, index) => (
-                <Col md={3} key={index}>
-                  <Card
-                    className="shadow-sm p-3 mb-3 d-flex align-items-center justify-content-center"
-                    style={{
-                      backgroundColor: 'rgb(231 255 236)', // Default bg color
-                      borderRadius: '10px',
-                      color: 'black',
-                    }}
-                  >
-                    <div
-                      className="icon-outlined"
-                      style={{
-                        fontSize: '30px', // Icon size
-                        display: 'block',
-                        marginBottom: '10px',
-                      }}
-                    >
-                      {item.icon}
-                    </div>
-                    <Card.Body className="text-center">
-                      <h5>{item.label}</h5>
-                      <h3>{item.count}</h3>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
+            <Row>
+              <Col lg={8} sm={12}>
+                <Row>
+                  {[
+                    { label: "Total Students", count: "0", color: "blue", icon: "📦" },
+                    { label: "Sub Categories", count: "0", color: "pink", icon: "📚" },
+                    { label: "Live Contests", count: "0", color: "green", icon: "🏆" },
+                    { label: "Fun 'N' Learn", count: "0", color: "orange", icon: "🎓" },
+                  ].map((item, index) => (
+                    <Col md={6} sm={6} xs={12} key={index} className="mb-4">
+                      <Card className={`dashboard-card shadow-sm`}>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            padding: "10px",
+                          }}
+                        >
+                          {/* Icon Section */}
+                          <div
+                            className="icon-container"
+                            style={{
+                              backgroundColor: item.color,
+                              borderRadius: "8px",
+                              padding: "15px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <span className="icon" style={{ fontSize: "2rem", color: "#fff" }}>
+                              {item.icon}
+                            </span>
+                          </div>
+
+                          {/* Text Section */}
+                          <div 
+                          style={{
+                            marginLeft:'2rem'
+                          }}
+                          >
+                            <h5 className="mt-3">{item.label}</h5>
+                            <h3>{item.count}</h3>
+                          </div>
+                        </div>
+                        
+                      </Card>
+                      
+                    </Col>
+                    
+                  ))}
+                </Row>
+              </Col>
+
+              {/* Calendar Section */}
+              <Col lg={4} sm={12} className="mb-4">
+                <Card className="shadow calendar-card">
+                  <Card.Body>
+                    <h5 className="calendar-heading">Calendar</h5>
+                    <Calendar />
+                  </Card.Body>
+                </Card>
+              </Col>
             </Row>
 
-            {/* Responsive Left-Side Card */}
+            {/* Quiz Section */}
             <Row>
               <Col md={4} sm={12} className="mb-4">
-                <Card className="shadow-sm p-3 bg-white rounded">
+                <Card className="shadow-sm p-3  rounded">
                   <Card.Body>
                     <h5>Quiz</h5>
                     <Row>
                       {[...Array(4)].map((_, i) => (
                         <Col xs={6} key={i} className="mb-3">
-                          <Card className="shadow-sm">
+                          <Card className="shadow-smv bg-white">
                             <Card.Body className="text-center">
                               Total Students<br />
                               <h4>100+</h4>
@@ -83,9 +114,9 @@ function AdminDashboard() {
                 </Card>
               </Col>
 
-              {/* Grade and Top Rank Fields */}
+              {/* Filter Options */}
               <Col md={8} sm={12}>
-                <Card className="shadow-sm p-3 bg-white rounded">
+                <Card className="shadow-sm p-3  rounded">
                   <Card.Body>
                     <h5 className="mb-4">Filter Options</h5>
                     <Row>
