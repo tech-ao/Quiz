@@ -11,6 +11,7 @@ import StudentHeader from './Components/Student/StudentHeader';
 import StudentDashboard from './Components/Student/StudentDashboard';
 import Abacus from './Components/Abacus/Abacus';
 import NotificationPage from './Components/Admin/Notification';
+import RegisterStudent from './Components/Student/RegisterStudent';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -40,6 +41,7 @@ function App() {
           <Route path='/addTeacher' element={<AddTeacher />} />
           <Route path='/abacus' element={<Abacus />} />
           <Route path='/notification' element={<NotificationPage />} />
+          <Route path='/registerStudent' element={<RegisterStudent />} />
         </Routes>
       </Router>
     </Provider>
