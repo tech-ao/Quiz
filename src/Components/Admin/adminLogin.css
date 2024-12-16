@@ -79,8 +79,7 @@
   
   @media (max-width: 480px) {
     .login-card {
-      padding: 1rem;
-      max-width: 95%;
+      padding: 2.5rem;
     }
   
     .login-card h2 {
