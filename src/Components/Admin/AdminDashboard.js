@@ -11,7 +11,7 @@ function AdminDashboard() {
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   }; 
-// admin header
+
   return (
     <div>
     <AdminHeader toggleSidebar={toggleSidebar} />
