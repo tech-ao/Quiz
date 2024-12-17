@@ -10,23 +10,25 @@ import AgreeAndSign from './AgreeandSing';
 import FranchiseRequirementsForm from './Franchies';
 import LegalComplianceForm from './LegalCompliance';
 import ReferencesAndResumeForm from './Reference';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const AddTeacher = () => {
   const [activeTab, setActiveTab] = useState('personalDetails');
   const [preferredCountry, setPreferredCountry] = useState('India');
 
   const tabs = [
-    { id: 'personalDetails', title: 'Personal Detail' },
-    { id: 'education', title: 'Educational Qualification' },
-    { id: 'franchies', title: 'Franchise Specific Requirement' },
+    { id: 'personalDetails', title: 'Personal Detail', icon: 'fas fa-info-circle' },
+    { id: 'education', title: 'Educational Qualification', icon: 'fas fa-user-graduate' },
+    { id: 'franchies', title: 'Franchise Requirement', icon: 'fas fa-handshake' },
     ...(preferredCountry === 'Other'
       ? [
-          { id: 'legalcompliance', title: 'Legal and Compliance' },
-          { id: 'reference', title: 'References And Resume' },
-        ]
+        { id: 'legalcompliance', title: 'Legal and Compliance', icon: 'fas fa-balance-scale' },
+        { id: 'reference', title: 'References And Resume', icon: 'fas fa-file-alt' },
+      ]
       : []),
-    { id: 'agreeSign', title: 'Agree and Sign' },
+    { id: 'agreeSign', title: 'Agree and Sign', icon: 'fas fa-check-circle' },
   ];
+
 
   const renderContent = () => {
     switch (activeTab) {
@@ -52,25 +54,32 @@ const AddTeacher = () => {
       <AdminHeader />
       <div className="d-flex">
         <Sidebar />
-        <Container fluid className="p-4 maincontainerbg min-vh-100">
-          <div className="row">
-            {/* Sidebar Tabs */}
-            <div className="col-md-3">
-              <div className="list-group custom-sidebar">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab.id}
-                    className={`list-group-item list-group-item-action custom-tab ${activeTab === tab.id ? 'custom-tab-active' : ''}`}
-                    onClick={() => setActiveTab(tab.id)}
-                  >
-                    {tab.title}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="col-md-9">
-              <div className="card shadow-sm">
-                <div className="card-body custom-card">{renderContent()}</div>
+
+        <Container className="main-container p-4 min-vh-100">
+          <div className="sub-container">
+            <div className="row">
+              {/* Sidebar Tabs */}
+
+              <div className="col-md-9">
+                <div className="card shadow-sm">
+                  <div className="card-body custom-card">
+                    <div className="col-md-3">
+                      <div className="custom-sidebar">
+                        {tabs.map((tab) => (
+                          <button
+                            key={tab.id}
+                            className={`custom-tab ${activeTab === tab.id ? 'custom-tab-active' : ''}`}
+                            onClick={() => setActiveTab(tab.id)}
+                          >
+                            <i className={`${tab.icon}`}></i>
+                            <span>{tab.title}</span>
+                          </button>
+                        ))}
+                      </div>
+
+                    </div>
+                    {renderContent()}</div>
+                </div>
               </div>
             </div>
           </div>

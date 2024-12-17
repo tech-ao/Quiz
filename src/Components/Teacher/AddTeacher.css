@@ -1,28 +1,64 @@
-/* Sidebar Customization */
+/* Sidebar Container */
 .custom-sidebar {
-    background-color: #e7ffec; /* Light background color */
-    border-radius: 10px;
-    padding: 15px;
+  background-color: #fff;
+  border-radius: 12px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+  width: 250px; /* Fixed sidebar width */
+  padding: 10px 0; /* Space inside sidebar */
+}
+
+/* Sidebar Buttons */
+.custom-tab {
+  display: flex; /* Flex layout for icon and text */
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px 7px; /* Vertical and horizontal padding */
+  font-size: 16px; /* Adjust text size */
+  color: #555; /* Default text color */
+  border: none; /* Remove borders */
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+.custom-tab i {
+  margin-right: 10px; /* Space between icon and text */
+  color: #888; /* Default icon color */
+  font-size: 18px; /* Adjust icon size */
+}
+
+/* Hover Effect */
+.custom-tab:hover {
+  background-color: #ede7e7;
+  color: #6c6868ed;
+}
+
+.custom-tab:hover i {
+  color: #6c6868ed; /* Icon color on hover */
+}
+
+/* Active Tab */
+.custom-tab-active {
+  background-color: #f0e8ff; /* Light purple for active tab */
+  color: #6a5acd; /* Purple text */
+  font-weight: bold;
+  border-left: 4px solid #6a5acd; /* Highlight active tab */
+}
+
+.custom-tab-active i {
+  color: #6a5acd; /* Icon color for active tab */
+}
+
+
+@media (min-width: 1024px) and (max-width: 1440px) {
+  /* Styles for laptop screens only */
+  .card-body.custom-card {
+    display: flex;
   }
-  
-  .custom-tab {
-    margin-bottom: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
-    color: #495057;
-    background-color: #ffffff;
-    transition: all 0.3s ease;
-  }
-  
-  .custom-tab:hover {
-    background-color: #e9ecef;
-    color: #212529;
-  }
-  
-  .custom-tab-active {
-    background-color: #0d7c12;
-    color: #ffffff;
-    font-weight: bold;
-    border: 1px solid #3fbe2e;
-  }
-  
+}
+
+
+.col-md-9 {
+  width: 100%;
+}

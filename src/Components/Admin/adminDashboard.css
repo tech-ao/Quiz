@@ -7,8 +7,8 @@
 /* Dashboard Cards */
 .dashboard-card {
   border: none;
-  width: 380px !important; 
-  height: 150px !important;
+  /* width: 380px !important; 
+  height: 150px !important; */
   border-radius: 10px;
   position: relative;
   padding: 20px;
