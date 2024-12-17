@@ -37,7 +37,7 @@ function AdminDashboard() {
                     { label: "Fun 'N' Learn", count: "0", color: "orange", icon: "🎓" },
                   ].map((item, index) => (
                     <Col md={6} sm={6} xs={12} key={index} className="mb-4">
-                      <Card className={`dashboard-card shadow-sm`}>
+                      <Card className="dashboard-card shadow-sm">
                         <div
                           style={{
                             display: "flex",

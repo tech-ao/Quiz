@@ -46,6 +46,10 @@
   transition: background-color 0.2s ease;
 }
 
+img.logo1.me-2 {
+  padding: 5px;
+}
+
 .menu-item:hover {
   background-color: #f8f8f8;
 }
