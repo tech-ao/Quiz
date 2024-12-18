@@ -10,19 +10,25 @@ function AdminDashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
-  }; 
+  };
 
   return (
     <div>
-    <AdminHeader toggleSidebar={toggleSidebar} />
-    <div className="d-flex">
-      {isSidebarVisible && <Sidebar />}
-      <Container className="main-container p-4 min-vh-100">
-        <div className="sub-container">
+      {/* Admin Header with Toggle Sidebar */}
+      <AdminHeader toggleSidebar={toggleSidebar} />
+      <div className="d-flex">
+        {isSidebarVisible && <Sidebar />}
+        <Container className="main-container p-4 min-vh-100">
+          <div className="sub-container">
             {/* Header Section */}
             <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Admin Dashboard</h2>
+              </Col>
+              <Col xs={12} className="text-center d-block d-md-none mt-2">
+                <span className="fw-bold welcome-message">
+                  Welcome, Admin 👋
+                </span>
               </Col>
             </Row>
 
@@ -63,20 +69,13 @@ function AdminDashboard() {
                           </div>
 
                           {/* Text Section */}
-                          <div 
-                          style={{
-                            marginLeft:'2rem'
-                          }}
-                          >
+                          <div style={{ marginLeft: "2rem" }}>
                             <h5 className="mt-3">{item.label}</h5>
                             <h3>{item.count}</h3>
                           </div>
                         </div>
-                        
                       </Card>
-                      
                     </Col>
-                    
                   ))}
                 </Row>
               </Col>
@@ -95,13 +94,13 @@ function AdminDashboard() {
             {/* Quiz Section */}
             <Row>
               <Col md={4} sm={12} className="mb-4">
-                <Card className="shadow-sm p-3  rounded">
+                <Card className="shadow-sm p-3 rounded">
                   <Card.Body>
                     <h5>Quiz</h5>
                     <Row>
                       {[...Array(4)].map((_, i) => (
                         <Col xs={6} key={i} className="mb-3">
-                          <Card className="shadow-smv bg-white">
+                          <Card className="shadow-sm bg-white">
                             <Card.Body className="text-center">
                               Total Students<br />
                               <h4>100+</h4>
@@ -116,7 +115,7 @@ function AdminDashboard() {
 
               {/* Filter Options */}
               <Col md={8} sm={12}>
-                <Card className="shadow-sm p-3  rounded">
+                <Card className="shadow-sm p-3 rounded">
                   <Card.Body>
                     <h5 className="mb-4">Filter Options</h5>
                     <Row>

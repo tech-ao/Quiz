@@ -4,6 +4,7 @@
   border-bottom: 1px solid #ddd;
 }
 
+
 .logo1 {
   max-width: 80px;
 }
@@ -71,16 +72,32 @@ img.logo1.me-2 {
   .welcome-message {
     display: none;
   }
+  .admin-text {
+    display: none; /* Hide the Admin text */
+  }
+
+  .admin-menu {
+    justify-content: center; /* Center the icon */
+  }
+  .header-icon-group{
+    position: relative;
+    left: 40px;
+  }
 }
 
 @media (max-width: 576px) {
   .action-button {
     font-size: 12px;
   }
-  .admin-popup {
-    width: 150px;
-  }
+  
+    .admin-popup {
+      position: absolute;
+      width: 127px;
+      right: 5px; 
+    }
+
   .menu-item {
     font-size: 12px;
   }
 }
+

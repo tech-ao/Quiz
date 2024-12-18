@@ -20,6 +20,9 @@ body {
   padding: 1rem 2rem;
   background-color: #e7ffec;
   height:100px;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
 }
 .modalbg input:focus,
 .modalbg select:focus,
@@ -123,6 +126,11 @@ body {
 .auth-buttons .subscribe-btn {
   margin-left: 10px;
   padding: 5px 10px;
+}
+
+.main-container {
+  position: relative;
+  top: 100px;
 }
 
 
