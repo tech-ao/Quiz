@@ -84,7 +84,7 @@ const Header = ({ toggleSidebar }) => {
             <Button
               variant="outlined"
               title="Notification"
-              className="me-2 d-none d-sm-block action-button"
+              className="me-2  d-sm-block action-button"
               onClick={() => navigate('/notification')}
             >
               <Badge
@@ -105,7 +105,7 @@ const Header = ({ toggleSidebar }) => {
             <Button
               variant="outlined"
               title="Website"
-              className="me-2 d-none d-sm-block action-button"
+              className="me-2  d-sm-block action-button"
               onClick={() => window.open("https://mathgymint.com", "_blank")}
             >
               <RiGlobalLine size={20} />

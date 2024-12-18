@@ -101,8 +101,8 @@ const SidePanel = () => {
         </li>
         <li className="nav-item">
           <Link
-            to="/settings"
-            className={`nav-link ${location.pathname === '/settings' ? 'active' : ''}`}
+            to="/adminSettings"
+            className={`nav-link ${location.pathname === '/adminSettings' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-gear"></i>

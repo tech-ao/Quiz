@@ -12,6 +12,8 @@ import StudentDashboard from './Components/Student/StudentDashboard';
 import Abacus from './Components/Abacus/Abacus';
 import NotificationPage from './Components/Admin/Notification';
 import RegisterStudent from './Components/Student/RegisterStudent';
+import EnrollmentRequestList from './Components/Admin/EnrollmentRequest';
+import AdminSettings from './Components/Admin/AdminSetting';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -42,6 +44,8 @@ function App() {
           <Route path='/abacus' element={<Abacus />} />
           <Route path='/notification' element={<NotificationPage />} />
           <Route path='/registerStudent' element={<RegisterStudent />} />
+          <Route path='/enrollmentRequest' element={<EnrollmentRequestList />} />
+          <Route path='/adminSettings' element={<AdminSettings />} />
         </Routes>
       </Router>
     </Provider>
