@@ -62,3 +62,10 @@
 .col-md-9 {
   width: 100%;
 }
+
+@media only screen and (max-width: 768px) { /* Adjust the max-width as needed for your design */
+  .col-sm-3 {
+      position: absolute;
+      display: -webkit-inline-box;
+  }
+}
