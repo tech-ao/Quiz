@@ -71,7 +71,6 @@
         
     width: 100%;
       padding: 1.5rem;
-      max-width: 90%; /* Take most of the screen width */
     }
   
     .login-card h2 {
@@ -91,7 +90,6 @@
   @media (max-width: 768px) {
     .login-card {
       padding: 2rem;
-      max-width: 85%; /* Slightly reduce width */
     }
   
     .login-card h2 {

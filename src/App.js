@@ -14,6 +14,7 @@ import NotificationPage from './Components/Admin/Notification';
 import RegisterStudent from './Components/Student/RegisterStudent';
 import EnrollmentRequestList from './Components/Admin/EnrollmentRequest';
 import AdminSettings from './Components/Admin/AdminSetting';
+import Students from './Components/Teacher/Student';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -22,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from 'react-redux';
 import store from './redux/Store/store'; // Import your store
 import AddTeacher from './Components/Teacher/AddTeacher';
+import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 
 function App() {
   return (
@@ -46,6 +48,10 @@ function App() {
           <Route path='/registerStudent' element={<RegisterStudent />} />
           <Route path='/enrollmentRequest' element={<EnrollmentRequestList />} />
           <Route path='/adminSettings' element={<AdminSettings />} />
+          <Route path='/teacherDashboard' element={<TeacherDashboard />} />
+          <Route path='/myStudents' element={<Students />} />
+
+      
         </Routes>
       </Router>
     </Provider>

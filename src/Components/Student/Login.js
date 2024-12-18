@@ -4,10 +4,12 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import './Login.css'
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("Student"); // Default role is Student
   const [showPassword, setShowPassword] = useState(false);
   const [isHuman, setIsHuman] = useState(false);
   const [error, setError] = useState("");
@@ -26,9 +28,15 @@ const LoginPage = () => {
     }
 
     try {
-      const apiUrl = `http://localhost:8012/api/Login/StudentSignin?Email=${encodeURIComponent(
-        userId
-      )}&Password=${encodeURIComponent(password)}`;
+      // Define the API URL based on the selected role
+      const apiUrl =
+        role === "Student"
+          ? `http://localhost:8012/api/Login/StudentSignin?Email=${encodeURIComponent(
+              userId
+            )}&Password=${encodeURIComponent(password)}`
+          : `http://localhost:8012/api/Login/TeacherSignin?Email=${encodeURIComponent(
+              userId
+            )}&Password=${encodeURIComponent(password)}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -43,7 +51,9 @@ const LoginPage = () => {
         const data = await response.json();
         if (data && data.isSuccess) {
           console.log("Login Successful:", data);
-          navigate("/StudentDashboard", { state: { userData: data.data } });
+          const dashboardPath =
+            role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
+          navigate(dashboardPath, { state: { userData: data.data } });
         } else {
           setError(data.message || "Invalid username or password.");
         }
@@ -60,8 +70,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Container
-      fluid className="bg-image" >
+    <Container fluid className="bg-image">
       <Row>
         <Col xs={12} md={6} lg={4}>
           <div className="login-card">
@@ -76,6 +85,17 @@ const LoginPage = () => {
             </div>
             {error && <div className="alert alert-danger">{error}</div>}
             <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="userRole">
+                <Form.Label className="d-flex">Select Role</Form.Label>
+                <Form.Select
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  required
+                >
+                  <option value="Student">Student</option>
+                  <option value="Teacher">Teacher</option>
+                </Form.Select>
+              </Form.Group>
               <Form.Group className="mb-3" controlId="userId">
                 <Form.Label className="d-flex">User ID</Form.Label>
                 <Form.Control
