@@ -60,3 +60,6 @@
     background-color: #f1f1f1;
   }
   
+  .Admin-Name-row {
+    display: inline;
+}

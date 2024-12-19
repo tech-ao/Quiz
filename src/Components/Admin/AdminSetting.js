@@ -17,8 +17,8 @@ const AdminSettings = () => {
                 <h2 className="fw-bold">Admin Settings</h2>
               </Col>
             </Row>
-            <Row>
-              <Col md={6}>
+            <Row className='Admin-Name-row'>
+              <Col md={6} className='Admin-Name-row'>
                 <Card className="admin-card">
                   <Card.Header className="card-header">Admin Details</Card.Header>
                   <Card.Body>
@@ -36,7 +36,7 @@ const AdminSettings = () => {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={6}>
+              <Col md={6} className='Admin-Name-row'>
                 <Card className="admin-card">
                   <Card.Header className="card-header">Change Password</Card.Header>
                   <Card.Body>
