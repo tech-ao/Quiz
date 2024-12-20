@@ -116,7 +116,7 @@ const Header = ({ toggleSidebar }) => {
             <Button
               variant="link"
               onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex align-items-center admin-menu"
+              className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
               <RiAdminLine size={20} className="me-1" />
               <span className="admin-text">Admin</span>

@@ -5,7 +5,7 @@ body {
 .modalbg input,
 .modalbg select,
 .modalbg textarea {
-  background-color: #e7ffec;
+  /* background-color: #e7ffec; */
   border: 1px solid #8cdf97;
   border-radius: 4px;
   padding: 5px;
@@ -174,4 +174,10 @@ body {
 .icon-button-container:hover .tooltip-text {
   visibility: visible;
   opacity: 1;
+}
+
+/* Search Button Background CSS */
+button.ml-2.btn.btn-primary {
+  background-color: #ffff;
+  color: black;
 }
