@@ -4,29 +4,34 @@ import { addStudentAction, getStudents } from "../../redux/Action/StudentAction"
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchCountries, fetchGrades, fetchGenders } from '../../redux/Services/Enum'
+import { fetchCountries, fetchGrades, fetchGenders } from "../../redux/Services/Enum";
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
   const [grades, setGrades] = useState([]);
   const [genders, setGenders] = useState([]);
+  const [classModes, setClassModes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
+  const [birthCertificatePreview, setBirthCertificatePreview] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
+    parentName:"",
     phoneNumber: "",
     dob: "",
     grade: null,
     address: "",
     gender: null,
-    password: "",
-    role: 3,
-    statusId: 1,
-    createdBy: 1,
+    classMode: null,
     country: null,
     profile: {
+      name: "",
+      extension: "",
+      base64Content: "",
+    },
+    birthCertificate: {
       name: "",
       extension: "",
       base64Content: "",
@@ -47,9 +52,11 @@ const AddStudentPanel = ({ show, onClose }) => {
           const base64Content = reader.result.split(",")[1];
           const extension = file.name.split(".").pop();
 
+          const field = name === "profile" ? "profile" : "birthCertificate";
+
           setFormData((prevData) => ({
             ...prevData,
-            profile: {
+            [field]: {
               name: file.name,
               extension: extension,
               base64Content: base64Content,
@@ -57,12 +64,20 @@ const AddStudentPanel = ({ show, onClose }) => {
           }));
         };
         reader.readAsDataURL(file);
-        setPreview(URL.createObjectURL(file));
+        const previewURL = URL.createObjectURL(file);
+
+        if (name === "profile") {
+          setPreview(previewURL);
+        } else if (name === "birthCertificate") {
+          setBirthCertificatePreview(previewURL);
+        }
       }
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: name === "country" || name === "grade" || name === "gender" ? parseInt(value, 10) : value,
+        [name]: ["country", "grade", "gender", "classMode"].includes(name)
+          ? parseInt(value, 10)
+          : value,
       }));
     }
   };
@@ -80,7 +95,7 @@ const AddStudentPanel = ({ show, onClose }) => {
       console.log(formData);
 
       await dispatch(addStudentAction(formData));
-      dispatch(getStudents({paginationDetail}));
+      dispatch(getStudents({ paginationDetail }));
       toast.success("Student added successfully!");
       onClose();
     } catch (error) {
@@ -102,6 +117,9 @@ const AddStudentPanel = ({ show, onClose }) => {
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
+
+        // const classModesData = await fetchClassModes();
+        // setClassModes(classModesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -111,7 +129,6 @@ const AddStudentPanel = ({ show, onClose }) => {
 
     fetchAllData();
   }, []);
-
 
   return (
     <Modal show={show} onHide={onClose}>
@@ -146,6 +163,18 @@ const AddStudentPanel = ({ show, onClose }) => {
             </Form.Group>
           </Row>
 
+          <Form.Group className="mb-3" controlId="formParentName">
+            <Form.Label>Parent Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="parentName"
+              placeholder="Enter parent's name"
+              value={formData.parentName || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
           <Form.Group className="mb-3" controlId="formStudentEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -161,40 +190,36 @@ const AddStudentPanel = ({ show, onClose }) => {
           <Row className="mb-3">
             <Form.Group as={Col} controlId="formPhoneNumber">
               <Form.Label>Phone Number</Form.Label>
-              <Row>             
-                <Col>
-                  <Form.Control
-                    type="text"
-                    name="phoneNumber"
-                    placeholder="Enter phone number"
-                    value={formData.phoneNumber}
-                    maxLength="10"
-                    onChange={(e) => {
-                      const regex = /^[0-9\b]+$/; // Allow only numbers
-                      if (e.target.value === "" || regex.test(e.target.value)) {
-                        setFormData((prevData) => ({
-                          ...prevData,
-                          phoneNumber: e.target.value,
-                        }));
-                      }
-                    }}
-                    required
-                  />
-                </Col>
-              </Row>
+              <Form.Control
+                type="text"
+                name="phoneNumber"
+                placeholder="Enter phone number"
+                value={formData.phoneNumber}
+                maxLength="10"
+                onChange={(e) => {
+                  const regex = /^[0-9\b]+$/;
+                  if (e.target.value === "" || regex.test(e.target.value)) {
+                    setFormData((prevData) => ({
+                      ...prevData,
+                      phoneNumber: e.target.value,
+                    }));
+                  }
+                }}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formDob">
+              <Form.Label>Date of Birth</Form.Label>
+              <Form.Control
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
+              />
             </Form.Group>
           </Row>
-
-          <Form.Group className="mb-3" controlId="formDob">
-            <Form.Label>Date of Birth</Form.Label>
-            <Form.Control
-              type="date"
-              name="dob"
-              value={formData.dob}
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGrade">
             <Form.Label>Grade</Form.Label>
@@ -213,21 +238,41 @@ const AddStudentPanel = ({ show, onClose }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formGender">
-            <Form.Label>Gender</Form.Label>
-            {genders.map((gender, index) => (
-              <Form.Check
-                key={index}
-                type="radio"
-                label={gender.item2}
-                name="gender"
-                value={gender.item1}
-                checked={formData.gender === gender.item1}
-                onChange={handleInputChange}
-                required
-              />
-            ))}
-          </Form.Group>
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formGender">
+              <Form.Label>Gender</Form.Label>
+              {genders.map((gender, index) => (
+                <Form.Check
+                  key={index}
+                  type="radio"
+                  label={gender.item2}
+                  name="gender"
+                  value={gender.item1}
+                  checked={formData.gender === gender.item1}
+                  onChange={handleInputChange}
+                  inline
+                  required
+                />
+              ))}
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formClassMode">
+              <Form.Label>Class Mode</Form.Label>
+              {classModes.map((mode, index) => (
+                <Form.Check
+                  key={index}
+                  type="radio"
+                  label={mode.item2}
+                  name="classMode"
+                  value={mode.item1}
+                  checked={formData.classMode === mode.item1}
+                  onChange={handleInputChange}
+                  inline
+                  required
+                />
+              ))}
+            </Form.Group>
+          </Row>
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
@@ -258,26 +303,12 @@ const AddStudentPanel = ({ show, onClose }) => {
               required
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formGender">
-            <Form.Label>Gender</Form.Label>
-            {genders.map((gender, index) => (
-              <Form.Check
-                key={index}
-                type="radio"
-                label={gender.item2}
-                name="gender"
-                value={gender.item1}
-                checked={formData.gender === gender.item1}
-                onChange={handleInputChange}
-                required
-              />
-            ))}
-          </Form.Group>
 
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Label>Upload Student Image</Form.Label>
             <Form.Control
               type="file"
+              name="profile"
               accept="image/*"
               onChange={handleInputChange}
             />
@@ -289,19 +320,27 @@ const AddStudentPanel = ({ show, onClose }) => {
                 alt="Preview"
                 style={{ width: "150px", height: "150px", objectFit: "cover" }}
               />
-            </div>  )}      
+            </div>
+          )}
 
-          {/* <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>Password</Form.Label>
+          <Form.Group controlId="formBirthCertificate" className="mb-3">
+            <Form.Label>Upload Birth Certificate</Form.Label>
             <Form.Control
-              type="password"
-              name="password"
-              placeholder="Enter password"
-              value={formData.password}
+              type="file"
+              name="birthCertificate"
+              accept="image/*"
               onChange={handleInputChange}
-              required
             />
-          </Form.Group> */}
+          </Form.Group>
+          {birthCertificatePreview && (
+            <div className="mb-3">
+              <img
+                src={birthCertificatePreview}
+                alt="Birth Certificate Preview"
+                style={{ width: "150px", height: "150px", objectFit: "cover" }}
+              />
+            </div>
+          )}
 
           <Button variant="success" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Adding..." : "Add Student"}

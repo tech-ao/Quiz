@@ -62,7 +62,6 @@
 
 @media (max-width: 767px) {
     .side-panel {
-       width: 50px;
         position: fixed;
         left: 0;
         transition: width 0.3s ease;

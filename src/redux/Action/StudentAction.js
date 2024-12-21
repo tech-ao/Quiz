@@ -11,6 +11,8 @@ export const getStudents = (paginationDetail) => async (dispatch) => {
   }
 };
 
+
+
 export const fetchStudent = (studentId)=>async (dispatch)=>{
   dispatch({type:"FETCH_STUDENT_REQUEST"});
   try{
