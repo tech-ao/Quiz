@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';  // Import useNavigate
 import { Link } from 'react-router-dom';
+import './StudentSidebar.css'
  
 import 'bootstrap-icons/font/bootstrap-icons.css';
 

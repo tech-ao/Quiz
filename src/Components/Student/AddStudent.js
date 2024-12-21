@@ -4,7 +4,7 @@ import { addStudentAction, getStudents } from "../../redux/Action/StudentAction"
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchCountries, fetchGrades, fetchGenders , fetchStudentMode } from "../../redux/Services/Enum";
+import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../../redux/Services/Enum";
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
@@ -18,7 +18,7 @@ const AddStudentPanel = ({ show, onClose }) => {
     firstName: "",
     lastName: "",
     email: "",
-    parentName:"",
+    parentName: "",
     phoneNumber: "",
     dob: "",
     grade: null,
@@ -221,7 +221,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             </Form.Group>
           </Row>
 
-          <Form.Group className="mb-3"  controlId="formGrade">
+          <Form.Group className="mb-3" controlId="formGrade">
             <Form.Label>Grade</Form.Label>
             <Form.Select
               name="grade"
@@ -237,40 +237,48 @@ const AddStudentPanel = ({ show, onClose }) => {
               ))}
             </Form.Select>
           </Form.Group>
-            <Form.Group as={Col} className="mb-3" controlId="formGender">
-              <Form.Label>Gender</Form.Label>
-              {genders.map((gender, index) => (
-                <Form.Check
-                  key={index}
-                  type="radio"
-                  label={gender.item2}
-                  name="gender"
-                  value={gender.item1}
-                  checked={formData.gender === gender.item1}
-                  onChange={handleInputChange}
-                  inline
-                  required
-                />
-              ))}
-            </Form.Group>
 
-            <Form.Group as={Col} className="mb-3" controlId="formClassMode">
-              <Form.Label>Class Mode</Form.Label>
-              {classModes.map((mode, index) => (
-                <Form.Check
-                  key={index}
-                  type="radio"
-                  label={mode.item2}
-                  name="classMode"
-                  value={mode.item1}
-                  checked={formData.classMode === mode.item1}
-                  onChange={handleInputChange}
-                  inline
-                  required
-                />
+          <Form.Group as={Col} className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            <Row>
+              {genders.map((gender, index) => (
+                <Col key={index} md={4}>  {/* Adjust the width of each radio button */}
+                  <Form.Check
+                    type="radio"
+                    label={gender.item2}
+                    name="gender"
+                    value={gender.item1}
+                    checked={formData.gender === gender.item1}
+                    onChange={handleInputChange}
+                    inline
+                    required
+                  />
+                </Col>
               ))}
-            </Form.Group>
-          
+            </Row>
+          </Form.Group>
+
+          <Form.Group as={Col} className="mb-3" controlId="formClassMode">
+            <Form.Label>Class Mode</Form.Label>
+            <Row>
+              {classModes.map((mode, index) => (
+                <Col key={index} md={4}>  {/* Adjust the width of each radio button */}
+                  <Form.Check
+                    type="radio"
+                    label={mode.item2}
+                    name="classMode"
+                    value={mode.item1}
+                    checked={formData.classMode === mode.item1}
+                    onChange={handleInputChange}
+                    inline
+                    required
+                  />
+                </Col>
+              ))}
+            </Row>
+          </Form.Group>
+
+
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
