@@ -9,11 +9,11 @@
     top: 100px;
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
     .side-panel {
         position: relative;
     }
-}
+} */
 
 /* .side-panel:hover {
     width: 250px;
