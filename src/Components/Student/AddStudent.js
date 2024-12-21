@@ -4,7 +4,7 @@ import { addStudentAction, getStudents } from "../../redux/Action/StudentAction"
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchCountries, fetchGrades, fetchGenders } from "../../redux/Services/Enum";
+import { fetchCountries, fetchGrades, fetchGenders , fetchStudentMode } from "../../redux/Services/Enum";
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
@@ -118,8 +118,8 @@ const AddStudentPanel = ({ show, onClose }) => {
         const gendersData = await fetchGenders();
         setGenders(gendersData);
 
-        // const classModesData = await fetchClassModes();
-        // setClassModes(classModesData);
+        const classModesData = await fetchStudentMode();
+        setClassModes(classModesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -221,7 +221,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             </Form.Group>
           </Row>
 
-          <Form.Group className="mb-3" controlId="formGrade">
+          <Form.Group className="mb-3"  controlId="formGrade">
             <Form.Label>Grade</Form.Label>
             <Form.Select
               name="grade"
@@ -237,9 +237,7 @@ const AddStudentPanel = ({ show, onClose }) => {
               ))}
             </Form.Select>
           </Form.Group>
-
-          <Row className="mb-3">
-            <Form.Group as={Col} controlId="formGender">
+            <Form.Group as={Col} className="mb-3" controlId="formGender">
               <Form.Label>Gender</Form.Label>
               {genders.map((gender, index) => (
                 <Form.Check
@@ -256,7 +254,7 @@ const AddStudentPanel = ({ show, onClose }) => {
               ))}
             </Form.Group>
 
-            <Form.Group as={Col} controlId="formClassMode">
+            <Form.Group as={Col} className="mb-3" controlId="formClassMode">
               <Form.Label>Class Mode</Form.Label>
               {classModes.map((mode, index) => (
                 <Form.Check
@@ -272,7 +270,7 @@ const AddStudentPanel = ({ show, onClose }) => {
                 />
               ))}
             </Form.Group>
-          </Row>
+          
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>

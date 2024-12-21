@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8012/api";
+import BASE_URL from "./Config";
 const COMMON_HEADERS = {
   Accept: "application/json",
   "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
@@ -12,7 +12,7 @@ const getHeaders = () => ({
 
 export const fetchCountries = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Enum/Country`, {
+    const response = await fetch(`${BASE_URL}/Enum/Country`, {
       method: "GET",
       headers: getHeaders(),
     });
@@ -31,7 +31,7 @@ export const fetchCountries = async () => {
 
 export const fetchGrades = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Enum/Grade`, {
+    const response = await fetch(`${BASE_URL}/Enum/Grade`, {
       method: "GET",
       headers: getHeaders(),
     });
@@ -50,7 +50,47 @@ export const fetchGrades = async () => {
 
 export const fetchGenders = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/Enum/Gender`, {
+    const response = await fetch(`${BASE_URL}/Enum/Gender`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};
+
+
+
+export const fetchStudentMode = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/Enum/StudentStudyMode`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};
+
+export const fetchTeacherMode = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/Enum/TeacherTeachingMode`, {
       method: "GET",
       headers: getHeaders(),
     });

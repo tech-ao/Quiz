@@ -14,6 +14,10 @@ const getHeaders = () => ({
   ...COMMON_HEADERS,
 });
 
+console.log(BASE_URL);
+
+
+
 export const fetchStudents = async (paginationDetail) => {
   const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListStudent`, {
     method: "POST",
