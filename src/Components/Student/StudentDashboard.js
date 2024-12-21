@@ -52,11 +52,13 @@ const StudentDashboard = () => {
     : profile.data?.imageBase64 || null;  // Assuming profile.data.imageBase64 contains the image
 
   return (
-    <div>
-      <StudentHeader studentName={studentData.firstName || 'N/A'} />
+ 
+
+          <div>
+          <StudentHeader studentName={studentData.firstName || 'N/A'} />
       <div className="d-flex">
-        <StudentSidePannel />
-        <Container fluid className="p-4 maincontainerbg min-vh-100">
+      <StudentSidePannel />
+        <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Card className="mb-4 p-4">
               <Row className="align-items-center">

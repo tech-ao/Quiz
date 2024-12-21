@@ -1,48 +1,67 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { RiLogoutCircleRLine, RiAdminLine, RiGlobalLine } from 'react-icons/ri';
 import '../../Style.css';
 import logo from "../../Components/images/Logo.png";
-import { useNavigate } from 'react-router-dom';
 
-const StudentHeader = ({studentName }) => {
+const StudentHeader = ({ studentName }) => {
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
   const navigate = useNavigate();
+
   const togglePopup = () => setShowPopup((prev) => !prev);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setShowPopup(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
   const handleLogout = () => {
-    alert('are you sure want to logout');
-    navigate("/")
+    if (window.confirm('Are you sure you want to logout?')) {
+      navigate("/");
+    }
   };
 
-
   return (
-    <Navbar expand="lg" className="header">
-      <Container fluid>
+    <Navbar expand="lg" className="header py-2">
+      <Container>
         <Row className="align-items-center w-100">
+          {/* Logo Section */}
           <Col xs={6} md={3} className="d-flex align-items-center">
-            <img className="logo1 me-2" src={logo} alt="Math Gym Logo" style={{ width: '50px', height: '50px' }} />
-            <Navbar.Brand className="text-success fw-bold">MATH GYM</Navbar.Brand>
+            <Link to="/adminDashboard">
+              <img
+                className="logo1 me-2"
+                src={logo}
+                alt="Math Gym Logo"
+                style={{ cursor: 'pointer', maxWidth: '100px' }}
+              />
+            </Link>
+            <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
+              MATH GYM
+            </Navbar.Brand>
           </Col>
+
+          {/* Centered Empty Space */}
           <Col md={5} className="d-none d-md-block text-center"></Col>
+
+          {/* Action Buttons and User Info */}
           <Col xs={6} md={4} className="d-flex justify-content-end align-items-center">
+            {/* Website Button */}
             <Button
               variant="outline-success"
               className="me-3 text-decoration-none"
-              onClick={() => window.location.href = "https://mathgymint.com"}
+              onClick={() => window.open("https://mathgymint.com", "_blank")}
             >
               <RiGlobalLine size={20} className="me-1" /> Website
             </Button>
+
+            {/* User Info Dropdown */}
             <div className="position-relative" ref={popupRef}>
               <Button
                 variant="link"
@@ -71,8 +90,12 @@ const StudentHeader = ({studentName }) => {
                         borderRadius: '5px',
                         transition: 'background-color 0.2s ease',
                       }}
-                      onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f8f9fa')}
-                      onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '')}
+                      onMouseOver={(e) =>
+                        (e.currentTarget.style.backgroundColor = '#f8f9fa')
+                      }
+                      onMouseOut={(e) =>
+                        (e.currentTarget.style.backgroundColor = '')
+                      }
                     >
                       <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                     </li>
