@@ -30,7 +30,7 @@ const StudentHeader = ({ studentName }) => {
 
   return (
     <Navbar expand="lg" className="header py-2">
-      <Container>
+      
         <Row className="align-items-center w-100">
           {/* Logo Section */}
           <Col xs={6} md={3} className="d-flex align-items-center">
@@ -39,7 +39,7 @@ const StudentHeader = ({ studentName }) => {
                 className="logo1 me-2"
                 src={logo}
                 alt="Math Gym Logo"
-                style={{ cursor: 'pointer', maxWidth: '100px' }}
+                style={{ cursor: 'pointer', maxWidth: '80px' }}
               />
             </Link>
             <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
@@ -105,7 +105,7 @@ const StudentHeader = ({ studentName }) => {
             </div>
           </Col>
         </Row>
-      </Container>
+      
     </Navbar>
   );
 };

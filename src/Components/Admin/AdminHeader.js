@@ -53,7 +53,7 @@ const Header = ({ toggleSidebar }) => {
               className="logo1 me-2"
               src={logo}
               alt="Math Gym Logo"
-              style={{ cursor: 'pointer', maxWidth: '100px' }}
+              style={{ cursor: 'pointer', maxWidth: '80px' }}
             />
           </Link>
           <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
