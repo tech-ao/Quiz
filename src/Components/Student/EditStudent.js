@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
-import { fetchCountries, fetchGrades, fetchGenders } from '../../redux/Services/Enum';
+import { fetchCountries, fetchGrades, fetchGenders ,fetchStudentMode} from '../../redux/Services/Enum';
 
 const EditStudent = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
@@ -12,6 +12,8 @@ const EditStudent = ({ show, onClose }) => {
     userId: null,
     firstName: "",
     lastName: "",
+    parentName: "",
+    studyModeId: null,
     email: "",
     phoneNumber: "",
     dob: "",
@@ -25,6 +27,7 @@ const EditStudent = ({ show, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countries, setCountries] = useState([]);
   const [grades, setGrades] = useState([]);
+   const [classModes, setClassModes] = useState([]);
   const [genders, setGenders] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +47,8 @@ const EditStudent = ({ show, onClose }) => {
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
+         const classModesData = await fetchStudentMode();
+                setClassModes(classModesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -200,6 +205,21 @@ const EditStudent = ({ show, onClose }) => {
                 </option>
               ))}
             </Form.Select>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            {genders.map((gender) => (
+              <Form.Check
+                key={gender.item1}
+                type="radio"
+                label={gender.item2}
+                name="gender"
+                value={gender.item1}
+                checked={formData.gender === gender.item1}
+                onChange={handleInputChange}
+              />
+            ))}
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formGender">

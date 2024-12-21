@@ -3,7 +3,7 @@ import Sidebar from '../Admin/SidePannel';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
 import AdminHeader from '../Admin/AdminHeader';
-import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown,Badge} from 'react-bootstrap';
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
@@ -170,10 +170,12 @@ const StudentList = () => {
                         <td>{student.phoneNumber}</td>
                         <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                         <td>{student.gradeName}</td>
-                        <td>{student.statusName}</td>
+                        <td>
+                          <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>{student.statusName}</Badge>
+                        </td>
                         <td>
                           <Dropdown>
-                            <Dropdown.Toggle variant="light" size="sm" id={`dropdown-${student.studentId}`}>
+                            <Dropdown.Toggle  size="sm" id={`dropdown-${student.studentId}`}>
                               Actions
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
