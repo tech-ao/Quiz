@@ -94,7 +94,7 @@ img.logo1.me-2 {
   
     .admin-popup {
       position: absolute;
-      width: 127px;
+      width: 135px;
       right: 5px; 
     }
 
@@ -107,3 +107,9 @@ img.logo1.me-2 {
 .admin-text{
   color: #198754;;
 }
+
+.taggleAdminbut{
+  position: absolute;
+  left: 0px;
+}
+

@@ -60,7 +60,7 @@ body {
 
 .toggle-btn {
   position: fixed;
-  top: 10px;
+  top: 30px;
   left: 10px;
   z-index: 1000;
   padding: 10px 15px;
@@ -132,7 +132,7 @@ body {
   position: fixed;
   top: 100px;
   margin-right: inherit;
-  margin-left: 18.5%;
+  margin-left: 18%;
   overflow-y: scroll;
   height: 100%;
 }

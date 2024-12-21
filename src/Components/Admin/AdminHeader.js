@@ -8,6 +8,7 @@ import {
   RiAdminLine,
   RiGlobalLine,
   RiMenu3Line,
+  RiRestartLine,
 } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
 import './adminHeader.css'; // Import media query styles
@@ -61,7 +62,7 @@ const Header = ({ toggleSidebar }) => {
           </Navbar.Brand>
           <Button
             variant="link"
-            className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button header-icon"
+            className="text-decoration-none fw-bold d-flex align-items-center taggleAdminbut ms-2 d-md-none toggle-button header-icon"
             onClick={toggleSidebar}
           >
             <RiMenu3Line size={24} />
@@ -137,9 +138,9 @@ const Header = ({ toggleSidebar }) => {
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={handleUpdatePassword}
                   >
-                    <i className="bi bi-arrow-clockwise ms-auto"></i> {/* Reset Icon */}
-                    <RiLockPasswordLine size={18} className="me-2" />
-                    <span className="me-2">Password</span>
+                    {/* <i className="bi bi-arrow-clockwise ms-auto"></i> Reset Icon */}
+                    <RiRestartLine size={18} className="me-2"/> Password
+                    {/* <span className="me-2">Password</span> */}
                   </li>
                   {/* Logout */}
                   <li

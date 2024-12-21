@@ -38,7 +38,10 @@ const StudentSidePannel = () => {
               to="/studentDashboard"
               className={`nav-link ${location.pathname === '/studentDashboard' ? 'active' : ''}`}
             >
-              <i className="bi bi-grid"></i> Dashboard
+              <div className="icon-with-text">
+              <i className="bi bi-grid"></i> 
+              <span className="nav-text">Dashboard</span>
+              </div>
             </Link>
           </li>
           <li className="nav-item">
@@ -46,7 +49,10 @@ const StudentSidePannel = () => {
               to="/studentTest"
               className={`nav-link ${location.pathname === '/studentTest' ? 'active' : ''}`}
             >
-              <i className="bi bi-patch-question"></i> Test
+              <div className="icon-with-text">
+              <i className="bi bi-patch-question"></i> 
+              <span className="nav-text">Test</span>
+              </div>
             </Link>
           </li>
           <li className="nav-item">
@@ -54,7 +60,10 @@ const StudentSidePannel = () => {
               to="/studentCertificate"
               className={`nav-link ${location.pathname === '/studentCertificate' ? 'active' : ''}`}
             >
-              <i className="bi bi-award"></i> Certificate
+              <div className="icon-with-text">
+              <i className="bi bi-award"></i>
+              <span className="nav-text">Certificate</span>
+              </div>
             </Link>
           </li>
           <li className="nav-item">
@@ -62,7 +71,10 @@ const StudentSidePannel = () => {
               to="/studentSettings"
               className={`nav-link ${location.pathname === '/studentSettings' ? 'active' : ''}`}
             >
-              <i className="bi bi-gear"></i> Settings
+              <div className="icon-with-text">
+              <i className="bi bi-gear"></i> 
+              <span className="nav-text">Settings</span>
+            </div>
             </Link>
           </li>
           <li className="nav-item">
@@ -71,7 +83,10 @@ const StudentSidePannel = () => {
               onClick={handleLogout}  // Trigger logout confirmation
               className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
             >
-              <i className="bi bi-box-arrow-right"></i> Logout
+              <div className="icon-with-text">
+              <i className="bi bi-box-arrow-right"></i> 
+              <span className="nav-text">Logout</span>
+            </div>
             </Link>
           </li>
         </ul>

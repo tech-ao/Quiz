@@ -54,22 +54,24 @@ const StudentHeader = ({ studentName }) => {
           <Col xs={6} md={4} className="d-flex justify-content-end align-items-center">
             {/* Website Button */}
             <Button
-              variant="outline-success"
-              className="me-3 text-decoration-none"
+              variant="outlined"
+              className="me-2 text-decoration-none"
               onClick={() => window.open("https://mathgymint.com", "_blank")}
             >
-              <RiGlobalLine size={20} className="me-1" /> Website
+              <RiGlobalLine size={20} className="me-1" />              
             </Button>
 
             {/* User Info Dropdown */}
             <div className="position-relative" ref={popupRef}>
               <Button
                 variant="link"
+                
                 onClick={togglePopup}
                 className="text-decoration-none fw-bold d-flex align-items-center"
                 style={{ color: '#333' }}
               >
-                <RiAdminLine size={20} className="me-1" /> {studentName}
+                <RiAdminLine size={20} className="me-1" /> 
+                <span className="admin-text">{studentName}</span>
               </Button>
               {showPopup && (
                 <div
