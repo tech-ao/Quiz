@@ -10,6 +10,7 @@ const TeacherDashboard = () => {
       <div className="d-flex">
         <TeacherSidePanel />
         <Container className="main-container p-4 min-vh-100">
+        <div className="sub-container">
           <h2 className="fw-bold mb-4">Teacher Dashboard</h2>
           <Row className="g-4">
             {/* Summary Cards */}
@@ -52,6 +53,7 @@ const TeacherDashboard = () => {
               </Card>
             </Col>
           </Row>
+          </div>
         </Container>
       </div>
     </div>
