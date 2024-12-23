@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
@@ -7,10 +7,22 @@ import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
 function AdminDashboard() {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Image, Button } from "react-bootstrap";
 import "../../Style.css";
 import StudentHeader from "./StudentHeader";
+import Header from "../Admin/AdminHeader";
 import StudentSidePannel from "./StudnetSidebar";
 import { useLocation } from "react-router-dom";
 import { getProfileData } from '../../redux/Action/ProfileAction';
@@ -19,6 +20,23 @@ const StudentDashboard = () => {
 
   const profile = useSelector(state => state.profile);
   console.log(profile);
+
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  
+    const toggleSidebar = () => {
+      setIsSidebarVisible((prev) => !prev);
+    };
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          setIsSidebarVisible(true); // Show sidebar by default on desktop
+        } else {
+          setIsSidebarVisible(false); // Hide sidebar by default on mobile
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   // useEffect(() => {
   //   const fetchAllData = async () => {
@@ -53,13 +71,13 @@ const StudentDashboard = () => {
 
   return (
  
-
-          <div>
-          <StudentHeader studentName={studentData.firstName || 'N/A'} />
-      <div className="d-flex">
-      <StudentSidePannel />
-        <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+    <div>
+    {/* Admin Header with Toggle Sidebar */}
+    <StudentHeader toggleSidebar={toggleSidebar} />
+    <div className="d-flex">
+      {isSidebarVisible && <StudentSidePannel />}
+      <Container className="main-container p-4 min-vh-100">
+        <div className="sub-container">
             <Card className="mb-4 p-4">
               <Row className="align-items-center">
                 <Col md={3} className="text-center">
