@@ -1,5 +1,5 @@
 body {
-  background-color: #efeff0;
+  background-color: #95b0a7;
 }
 
 .modalbg input,
@@ -135,6 +135,7 @@ body {
   margin-left: 18%;
   overflow-y: scroll;
   height: 100%;
+  scrollbar-width: none;
 }
 
 
@@ -190,4 +191,15 @@ body {
 button.ml-2.btn.btn-primary {
   background-color: #ffff;
   color: black;
+}
+
+/* header Profile Icon Color */
+.me-1 {
+  margin-right: .25rem !important;
+  color: #198754;
+}
+
+svg {
+  vertical-align: middle;
+  color: #198754;
 }
