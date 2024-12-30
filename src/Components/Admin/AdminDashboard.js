@@ -5,9 +5,15 @@ import 'react-calendar/dist/Calendar.css';
 import './adminDashboard.css';
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import { fetchDashboardContent } from "../../redux/Services/Enum";
 
 function AdminDashboard() {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [dashboardData , setDashboardData] = useState([])
+  const [loading, setLoading] = useState(true);
+
+  console.log(dashboardData);
+  
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -24,6 +30,26 @@ function AdminDashboard() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+   useEffect(() => {
+      const fetchAllData = async () => {
+        setLoading(true);
+        try {
+          const dashboardData = await fetchDashboardContent();
+          setDashboardData(dashboardData);
+  
+        } catch (error) {
+          console.error("Error fetching data:", error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchAllData();
+    }, []);
+
+    const dashboardDatas = dashboardData?.data || {};
+    console.log(dashboardDatas);
+    
   return (
     <div>
       {/* Admin Header with Toggle Sidebar */}
@@ -49,10 +75,10 @@ function AdminDashboard() {
               <Col lg={8} sm={12}>
                 <Row>
                   {[
-                    { label: "Total Students", count: "0", color: "blue", icon: "📦" },
-                    { label: "Sub Categories", count: "0", color: "pink", icon: "📚" },
-                    { label: "Live Contests", count: "0", color: "green", icon: "🏆" },
-                    { label: "Fun 'N' Learn", count: "0", color: "orange", icon: "🎓" },
+                    { label: "Total Students", count: dashboardDatas.activeCount, color: "blue", icon: "📦" },
+                    { label: "Total Teacher", count: "0", color: "pink", icon: "📚" },
+                    { label: "Total EnrollmentRequest", count: "0", color: "green", icon: "🏆" },
+                    { label: "Total Question", count: "0", color: "orange", icon: "🎓" },
                   ].map((item, index) => (
                     <Col md={6} sm={6} xs={12} key={index} className="mb-4">
                       <Card className="dashboard-card shadow-sm">

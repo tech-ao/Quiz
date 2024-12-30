@@ -123,7 +123,6 @@ const RegisterStudent = () => {
 
     try {
       await dispatch(addStudentAction(formData));
-      dispatch(getStudents({ pageNumber: 1, pageSize: 15 }));
       toast.success("Student registered successfully!");
       // Reset form
       setFormData({

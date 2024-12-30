@@ -28,6 +28,16 @@ export const fetchStudents = async (paginationDetail) => {
   return await response.json();
 };
 
+export const fetchStudentEnrollmentRequest = async (paginationDetail) => {
+  const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListStudentEnrollment`, {
+    method: "POST",
+    headers: getHeaders(),
+    body: JSON.stringify(paginationDetail),
+  });
+  if (!response.ok) throw new Error("Failed to fetch students");
+  return await response.json();
+};
+
 
 export const addStudent = async (studentData) => {
   const response = await fetch(`${BASE_URL}/Student/Create`, {
