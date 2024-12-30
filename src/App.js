@@ -12,7 +12,7 @@ import StudentDashboard from './Components/Student/StudentDashboard';
 import Abacus from './Components/Abacus/Abacus';
 import NotificationPage from './Components/Admin/Notification';
 import RegisterStudent from './Components/Student/RegisterStudent';
-import RegisterTeacher from './Components/Teacher/RegisterTeacher'
+import RegisterTeacher from './Components/Teacher/RegisterTeacher';
 import EnrollmentRequestList from './Components/Admin/EnrollmentRequest';
 import AdminSettings from './Components/Admin/AdminSetting';
 import Students from './Components/Teacher/Student';
@@ -20,42 +20,47 @@ import QuestionListPage from './Components/Admin/Question';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 // Import Redux Provider and Store
 import { Provider } from 'react-redux';
 import store from './redux/Store/store'; // Import your store
 import AddTeacher from './Components/Teacher/AddTeacher';
 import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 
+// ProtectedRoute component to check login status
+import { Navigate } from 'react-router-dom';
+
+const ProtectedRoute = ({ element, ...rest }) => {
+  const isLoggedIn = sessionStorage.getItem('isLoggedIn'); // Check login status
+
+  return isLoggedIn ? element : <Navigate to="/" />;
+};
+
 function App() {
   return (
-    // Wrap the entire app with Provider and pass the store
-    
     <Provider store={store}>
       <Router>
-      <ToastContainer position="top-right" autoClose={3000} />
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
-       
           <Route path='/' element={<Login />} />
-          <Route path='/adminDashboard' element={<AdminDashboard />} />
-          <Route path='/studentList' element={<StudentList />} />
           <Route path='/adminLogin' element={<AdminLoginPage />} />
-          <Route path='/listTeacher' element={<ListTeacher />} />
-          <Route path='/quiztest' element={<QuizPage />} />
-          <Route path='/StudentHeader' element={<StudentHeader />} />
-          <Route path='/StudentDashboard' element={<StudentDashboard />} />
-          <Route path='/addTeacher' element={<AddTeacher />} />
-          <Route path='/abacus' element={<Abacus />} />
-          <Route path='/notification' element={<NotificationPage />} />
-          <Route path='/registerStudent' element={<RegisterStudent />} />
-          <Route path='/enrollmentRequest' element={<EnrollmentRequestList />} />
-          <Route path='/adminSettings' element={<AdminSettings />} />
-          <Route path='/teacherDashboard' element={<TeacherDashboard />} />
-          <Route path='/questionListPage' element={<QuestionListPage />} />
-          <Route path='/myStudents' element={<Students />} />
-          <Route path='/registerTeacher' element={<RegisterTeacher />} />
 
-      
+          {/* Protected Routes */}
+          <Route path='/adminDashboard' element={<ProtectedRoute element={<AdminDashboard />} />} />
+          <Route path='/studentList' element={<ProtectedRoute element={<StudentList />} />} />
+          <Route path='/listTeacher' element={<ProtectedRoute element={<ListTeacher />} />} />
+          <Route path='/quiztest' element={<ProtectedRoute element={<QuizPage />} />} />
+          <Route path='/StudentHeader' element={<ProtectedRoute element={<StudentHeader />} />} />
+          <Route path='/StudentDashboard' element={<ProtectedRoute element={<StudentDashboard />} />} />
+          <Route path='/addTeacher' element={<ProtectedRoute element={<AddTeacher />} />} />
+          <Route path='/abacus' element={<ProtectedRoute element={<Abacus />} />} />
+          <Route path='/notification' element={<ProtectedRoute element={<NotificationPage />} />} />
+          <Route path='/registerStudent' element={<ProtectedRoute element={<RegisterStudent />} />} />
+          <Route path='/enrollmentRequest' element={<ProtectedRoute element={<EnrollmentRequestList />} />} />
+          <Route path='/adminSettings' element={<ProtectedRoute element={<AdminSettings />} />} />
+          <Route path='/teacherDashboard' element={<ProtectedRoute element={<TeacherDashboard />} />} />
+          <Route path='/questionListPage' element={<ProtectedRoute element={<QuestionListPage />} />} />
+          <Route path='/myStudents' element={<ProtectedRoute element={<Students />} />} />
+          <Route path='/registerTeacher' element={<ProtectedRoute element={<RegisterTeacher />} />} />
         </Routes>
       </Router>
     </Provider>

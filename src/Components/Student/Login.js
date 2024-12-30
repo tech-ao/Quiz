@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
@@ -20,13 +21,13 @@ const LoginPage = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
+  
     if (!isHuman) {
       setError("Please confirm that you are human.");
       setLoading(false);
       return;
     }
-
+  
     try {
       // Define the API URL based on the selected role
       const apiUrl =
@@ -37,7 +38,7 @@ const LoginPage = () => {
           : `http://localhost:8012/api/Login/TeacherSignin?Email=${encodeURIComponent(
               userId
             )}&Password=${encodeURIComponent(password)}`;
-
+  
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -46,11 +47,17 @@ const LoginPage = () => {
           AccessToken: "123",
         },
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         if (data && data.isSuccess) {
           console.log("Login Successful:", data);
+  
+          // Save session details
+          sessionStorage.setItem('isLoggedIn', 'true');
+          sessionStorage.setItem('userRole', role); // Optional: Save role
+  
+          // Redirect to the appropriate dashboard
           const dashboardPath =
             role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
           navigate(dashboardPath, { state: { userData: data.data } });

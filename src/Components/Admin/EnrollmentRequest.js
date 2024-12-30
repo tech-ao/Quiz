@@ -1,52 +1,84 @@
-import React, { useState ,useEffect } from 'react';
-import { Container, Row, Col, Table, Form, Button, Badge } from 'react-bootstrap';
-import './EnrollmentRequest.css';
-import Sidebar from '../Admin/SidePannel';
-import AdminHeader from '../Admin/AdminHeader';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Form, Button, Badge, Spinner } from "react-bootstrap";
+import "./EnrollmentRequest.css";
+import Sidebar from "../Admin/SidePannel";
+import AdminHeader from "../Admin/AdminHeader";
+import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 
 const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
- 
-   const toggleSidebar = () => {
-     setIsSidebarVisible((prev) => !prev);
-   };
-   useEffect(() => {
-     const handleResize = () => {
-       if (window.innerWidth >= 768) {
-         setIsSidebarVisible(true); // Show sidebar by default on desktop
-       } else {
-         setIsSidebarVisible(false); // Hide sidebar by default on mobile
-       }
-     };
-     window.addEventListener("resize", handleResize);
-     return () => window.removeEventListener("resize", handleResize);
-   }, []);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+   const [currentPage, setCurrentPage] = useState(0);
   const [selectedRequests, setSelectedRequests] = useState([]);
-  const [requests, setRequests] = useState([
-    { id: 1, sNumber: '001', regNumber: 'REG123', name: 'John Doe', email: 'john@example.com', phone: '123-456-7890', gender: 'Male', status: 'Pending' },
-    { id: 2, sNumber: '002', regNumber: 'REG124', name: 'Jane Smith', email: 'jane@example.com', phone: '987-654-3210', gender: 'Female', status: 'Pending' },
-    // More mock data...
-  ]);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  const studentsPerPage = 15;
+  useEffect(() => {
+    const paginationDetail = {
+      pageSize: studentsPerPage,
+      pageNumber: currentPage + 1,
+    };
+    const fetchRequests = async () => {
+      try {
+        setLoading(true);
+        const response = await fetchStudentEnrollmentRequest({ paginationDetail });
+        if (response && response.data) {
+          setRequests(response.data);
+        } else {
+          setError("Failed to fetch enrollment requests.");
+        }
+      } catch (err) {
+        setError("An error occurred while fetching data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchRequests();
+  }, []);
+
+  console.log(requests.searchAndListStudentResult);
+  
   const handleSearch = () => {
-    // Implement search functionality here
+    // Filter requests based on the search term
+    const filteredRequests = requests.searchAndListStudentResult.filter(
+      (request) =>
+        request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setRequests(filteredRequests);
   };
 
   const handleSelectRequest = (id) => {
-    setSelectedRequests((prevSelected) => 
-      prevSelected.includes(id) ? prevSelected.filter((requestId) => requestId !== id) : [...prevSelected, id]
+    setSelectedRequests((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((requestId) => requestId !== id)
+        : [...prevSelected, id]
     );
   };
 
   const handleApproveSelected = () => {
-    // Implement approve logic here
-    alert('Approved selected requests: ' + selectedRequests.join(', '));
+    alert("Approved selected requests: " + selectedRequests.join(", "));
   };
 
   const handleRejectSelected = () => {
-    // Implement reject logic here
-    alert('Rejected selected requests: ' + selectedRequests.join(', '));
+    alert("Rejected selected requests: " + selectedRequests.join(", "));
   };
 
   return (
@@ -77,52 +109,63 @@ const EnrollmentRequestList = () => {
                 </Button>
               </Col>
             </Row>
-            <Row>
-              <Col>
-                <Table striped bordered hover responsive>
-                  <thead>
-                    <tr>
-                      <th>
-                        <Form.Check
-                          type="checkbox"
-                          onChange={(e) => handleSelectRequest('all')}
-                          checked={selectedRequests.length === requests.length}
-                        />
-                      </th>
-                      <th>S.Number</th>
-                      <th>Reg Number</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Gender</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {requests.map((request) => (
-                      <tr key={request.id}>
-                        <td>
+            {loading ? (
+              <div className="text-center">
+                <Spinner animation="border" />
+              </div>
+            ) : error ? (
+              <div className="alert alert-danger">{error}</div>
+            ) : (
+              <Row>
+                <Col>
+                  <Table striped bordered hover responsive>
+                    <thead>
+                      <tr>
+                        <th>
                           <Form.Check
                             type="checkbox"
-                            checked={selectedRequests.includes(request.id)}
-                            onChange={() => handleSelectRequest(request.id)}
+                            onChange={(e) => handleSelectRequest("all")}
+                            checked={selectedRequests.length === requests.length}
                           />
-                        </td>
-                        <td>{request.sNumber}</td>
-                        <td>{request.regNumber}</td>
-                        <td>{request.name}</td>
-                        <td>{request.email}</td>
-                        <td>{request.phone}</td>
-                        <td>{request.gender}</td>
-                        <td>
-                          <Badge bg={request.status === 'Pending' ? 'warning' : 'success'}>{request.status}</Badge>
-                        </td>
+                        </th>
+                        <th>S.Number</th>
+                        <th>Reg Number</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Status</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
+                    </thead>
+                    <tbody>
+                      {requests.searchAndListStudentResult.map((request , index) => (
+                        <tr key={request.id || index}>
+                          <td>
+                            <Form.Check
+                              type="checkbox"
+                              checked={selectedRequests.includes(request.id)}
+                              onChange={() => handleSelectRequest(request.id)}
+                            />
+                          </td>
+                        
+                          <td>{index + 1}</td>
+                          <td>{request.studentId}</td>
+                          <td>{request.firstName}</td>
+                          <td>{request.email}</td>
+                          <td>{request.phoneNumber}</td>
+                          <td>{request.genderName}</td>
+                          <td>
+                            <Badge bg={request.statusName === "Pending" ? "warning" : "success"}>
+                              {request.statusName}
+                            </Badge>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            )}
           </div>
         </Container>
       </div>
