@@ -73,3 +73,11 @@
     display: none !important;
   }
 }
+
+.card-body {
+  background-color: #aeb9b673;
+}
+
+.react-calendar {
+  background: #95b0a787 !important;
+}

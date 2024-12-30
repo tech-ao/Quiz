@@ -71,12 +71,12 @@ const Header = ({ toggleSidebar }) => {
 
         {/* Welcome Message */}
         <Col xs={12} md={5} className="text-center d-none d-md-block">
-          <span className="fw-bold welcome-message">
-            Welcome, Admin{' '}
+          {/* <span className="fw-bold welcome-message">
+            Admin{' '}
             <span role="img" aria-label="wave">
               👋
             </span>
-          </span>
+          </span> */}
         </Col>
 
         {/* Action Buttons */}
