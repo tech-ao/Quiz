@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
-import { fetchCountries, fetchGrades, fetchGenders } from '../../redux/Services/Enum';
+import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from '../../redux/Services/Enum';
 
 const EditStudent = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
@@ -12,19 +12,22 @@ const EditStudent = ({ show, onClose }) => {
     userId: null,
     firstName: "",
     lastName: "",
+    parentName: "",
+    studyModeId: null,
     email: "",
     phoneNumber: "",
     dob: "",
     grade: "",
-    address: "",   
+    address: "",
     country: null,
     gender: null,
-    statusId:null
+    statusId: null
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [countries, setCountries] = useState([]);
   const [grades, setGrades] = useState([]);
+  const [classModes, setClassModes] = useState([]);
   const [genders, setGenders] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -44,6 +47,9 @@ const EditStudent = ({ show, onClose }) => {
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
+
+        const classModesData = await fetchStudentMode();
+        setClassModes(classModesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -60,6 +66,8 @@ const EditStudent = ({ show, onClose }) => {
         userId: selectedStudent.data.userId,
         firstName: selectedStudent.data.firstName || "",
         lastName: selectedStudent.data.lastName || "",
+        parentName: selectedStudent.data.parentName || "",
+        studyModeId: selectedStudent.data.studyModeId || null,
         email: selectedStudent.data.email || "",
         phoneNumber: selectedStudent.data.phoneNumber || "",
         dob: selectedStudent.data.dob ? selectedStudent.data.dob.split("T")[0] : "",
@@ -67,9 +75,7 @@ const EditStudent = ({ show, onClose }) => {
         address: selectedStudent.data.address || "",
         country: selectedStudent.data.country || null,
         gender: selectedStudent.data.gender || null,
-        statusId:selectedStudent.data.statusId ||1
-
-      
+        statusId: selectedStudent.data.statusId || 1
       });
     }
   }, [selectedStudent]);
@@ -80,7 +86,6 @@ const EditStudent = ({ show, onClose }) => {
     setFormData({
       ...formData,
       [name]: value,
- 
     });
 
     if (name === "countrySearch") {
@@ -91,7 +96,7 @@ const EditStudent = ({ show, onClose }) => {
         );
         setFilteredCountries(filtered);
       } else {
-        setFilteredCountries(countries);  // Reset to all countries
+        setFilteredCountries(countries);
       }
     }
   };
@@ -101,12 +106,15 @@ const EditStudent = ({ show, onClose }) => {
     pageSize: 15,
   });
 
+  console.log(formData);
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
       await dispatch(editStudentAction(formData, selectedStudent.studentId));
-      dispatch(getStudents({paginationDetail}));
+      dispatch(getStudents({ paginationDetail }));
       toast.success("Student modified successfully!");
       onClose();
     } catch (error) {
@@ -149,6 +157,18 @@ const EditStudent = ({ show, onClose }) => {
               />
             </Form.Group>
           </Row>
+
+          <Form.Group className="mb-3" controlId="formParentName">
+            <Form.Label>Parent Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="parentName"
+              placeholder="Enter parent name"
+              value={formData.parentName}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
 
           <Form.Group className="mb-3" controlId="formStudentEmail">
             <Form.Label>Email</Form.Label>
@@ -202,21 +222,50 @@ const EditStudent = ({ show, onClose }) => {
             </Form.Select>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formGender">
-            <Form.Label>Gender</Form.Label>
-            {genders.map((gender) => (
-              <Form.Check
-                key={gender.item1}
-                type="radio"
-                label={gender.item2}
-                name="gender"
-                value={gender.item1}
-                checked={formData.gender === gender.item1}
-                onChange={handleInputChange}
-              />
-            ))}
-          </Form.Group>
+          
+          <Row className="mb-3">
+            <Col>
+              <Form.Group controlId="formGender">
+                <Form.Label>Gender</Form.Label>
+                <div className="d-flex">
+                  {genders.map((gender) => (
+                    <Form.Check
+                      key={gender.item1}
+                      type="radio"
+                      label={gender.item2}
+                      name="gender"
+                      value={gender.item1}
+                      checked={formData.gender?.toString() === gender.item1.toString()}
+                      onChange={handleInputChange}
+                      className="me-3"
+                    />
+                  ))}
+                </div>
+              </Form.Group>
+              </Col>
 
+              <Col>
+
+              <Form.Group controlId="formStudyMode">
+                <Form.Label>Study Mode</Form.Label>
+                <div className="d-flex">
+                  {classModes.map((mode) => (
+                    <Form.Check
+                      key={mode.item1}
+                      type="radio"
+                      label={mode.item2}
+                      name="studyModeId"
+                      value={mode.item1}
+                      checked={formData.studyModeId?.toString() === mode.item1.toString()}
+                      onChange={handleInputChange}
+                      className="me-3"
+                    />
+                  ))}
+                </div>
+              </Form.Group>
+
+            </Col>
+          </Row>
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>

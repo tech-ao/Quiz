@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Image, Button } from "react-bootstrap";
 import "../../Style.css";
 import StudentHeader from "./StudentHeader";
+import Header from "../Admin/AdminHeader";
 import StudentSidePannel from "./StudnetSidebar";
 import { useLocation } from "react-router-dom";
 import { getProfileData } from '../../redux/Action/ProfileAction';
@@ -20,31 +21,48 @@ const StudentDashboard = () => {
   const profile = useSelector(state => state.profile);
   console.log(profile);
 
-  // useEffect(() => {
-  //   const fetchAllData = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-  //       // Fetch student data via getStudent API
-  //       const studentResponse = await getStudent(userData.studentId);
-  //       setStudentData(studentResponse.data); // Update studentData with the API response
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  
+    const toggleSidebar = () => {
+      setIsSidebarVisible((prev) => !prev);
+    };
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          setIsSidebarVisible(true); // Show sidebar by default on desktop
+        } else {
+          setIsSidebarVisible(false); // Hide sidebar by default on mobile
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
-  //       dispatch(getProfileData(userData.studentId));
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Fetch student data via getStudent API
+        const studentResponse = await getStudent(userData.studentId);
+        setStudentData(studentResponse.data); // Update studentData with the API response
 
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+        dispatch(getProfileData(userData.studentId));
 
-  //   fetchAllData();
-  // }, [userData.studentId, dispatch]);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
+    fetchAllData();
+  }, [userData.studentId, dispatch]);
 
-  // console.log(studentData, profile);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  console.log(studentData, profile);
 
   // Check if profile data contains the base64 string correctly
   const profileImage = profile.data && typeof profile.data === 'string' 
@@ -53,13 +71,13 @@ const StudentDashboard = () => {
 
   return (
  
-
-          <div>
-          <StudentHeader studentName={studentData.firstName || 'N/A'} />
-      <div className="d-flex">
-      <StudentSidePannel />
-        <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+    <div>
+    {/* Admin Header with Toggle Sidebar */}
+    <StudentHeader toggleSidebar={toggleSidebar} />
+    <div className="d-flex">
+      {isSidebarVisible &&  <StudentSidePannel studyModeId={studentData?.studyModeId} />}
+      <Container className="main-container p-4 min-vh-100">
+        <div className="sub-container">
             <Card className="mb-4 p-4">
               <Row className="align-items-center">
                 <Col md={3} className="text-center">

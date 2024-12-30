@@ -1,17 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Form, Row, Col, Button, Container, Card } from "react-bootstrap";
+import { Button, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import StudentHeader from "./StudentHeader";
 import "react-toastify/dist/ReactToastify.css";
-import { addStudentAction, getStudents } from "../../redux/Action/StudentAction";
-import { fetchCountries, fetchGrades, fetchGenders } from "../../redux/Services/Enum";
-import "./RegisterStudent.css";
+import {
+  addStudentAction,
+  getStudents,
+} from "../../redux/Action/StudentAction";
+import {
+  fetchCountries,
+  fetchGrades,
+  fetchGenders,
+  fetchStudentMode,
+} from "../../redux/Services/Enum";
+import "./RegisterStudent.css"; // Import the CSS file
 
 const RegisterStudent = () => {
   const [countries, setCountries] = useState([]);
   const [grades, setGrades] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [genders, setGenders] = useState([]);
+  const [classModes, setClassModes] = useState([]);
+  const [preview, setPreview] = useState(null);
+  const [birthCertificatePreview, setBirthCertificatePreview] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,47 +29,119 @@ const RegisterStudent = () => {
     phoneNumber: "",
     dob: "",
     grade: "",
+    address: "",
+    gender: "",
+    studyModeId: "",
     country: "",
+    statusId: 1,
+    createdBy: 1,
+    profile: {
+      name: "",
+      extension: "",
+      base64Content: "",
+    },
+    birthCertificate: {
+      name: "",
+      extension: "",
+      base64Content: "",
+    },
   });
-
-  const dispatch = useDispatch();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const [countriesData, gradesData] = await Promise.all([
-          fetchCountries(),
-          fetchGrades(),
-        ]);
-        setCountries(countriesData);
-        setGrades(gradesData);
-      } catch (error) {
-        toast.error("Error fetching data!");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const dispatch = useDispatch();
 
+  // Handle input changes
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    const { name, value, type, files } = e.target;
+
+    if (type === "file") {
+      const file = files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64Content = reader.result.split(",")[1];
+          const extension = file.name.split(".").pop();
+
+          const field = name === "profile" ? "profile" : "birthCertificate";
+
+          setFormData((prevData) => ({
+            ...prevData,
+            [field]: {
+              name: file.name,
+              extension: extension,
+              base64Content: base64Content,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+        const previewURL = URL.createObjectURL(file);
+
+        if (name === "profile") {
+          setPreview(previewURL);
+        } else if (name === "birthCertificate") {
+          setBirthCertificatePreview(previewURL);
+        }
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: ["country", "grade", "gender", "studyModeId"].includes(name)
+          ? parseInt(value, 10)
+          : value,
+      }));
+    }
   };
 
+  // Fetch dropdown data on component mount
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        const countriesData = await fetchCountries();
+        setCountries(countriesData);
+
+        const gradesData = await fetchGrades();
+        setGrades(gradesData);
+
+        const gendersData = await fetchGenders();
+        setGenders(gendersData);
+
+        const classModesData = await fetchStudentMode();
+        setClassModes(classModesData);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+        toast.error("Failed to load form data.");
+      }
+    };
+
+    fetchAllData();
+  }, []);
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+
     try {
       await dispatch(addStudentAction(formData));
-      dispatch(getStudents({ pageNumber: 1, pageSize: 15 }));
       toast.success("Student registered successfully!");
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        dob: "",
+        grade: "",
+        gender: "",
+        studyModeId: "",
+        country: "",
+        statusId: 1,
+        createdBy: 1
+      });
+      setPreview(null);
+      setBirthCertificatePreview(null);
     } catch (error) {
+      console.error("Error registering student:", error);
       toast.error("Failed to register student!");
     } finally {
       setIsSubmitting(false);
@@ -67,145 +149,173 @@ const RegisterStudent = () => {
   };
 
   return (
-    <div>
-    {/* <StudentHeader studentName={"Ram" || 'N/A'} /> */}
-    <div className="d-flex bg-image">
-      <Container className="register-container">
-      
-        <Card className="register-card shadow">
-          <Card.Header className="text-center bg-success text-white">
-            <h2>Register New Student</h2>
-          </Card.Header>
-          <Card.Body>
-            {loading ? (
-              <p className="text-center">Loading...</p>
-            ) : (
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col md={6}>
-                    <Form.Group controlId="firstName" className="mb-3">
-                      <Form.Label>First Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter first name"
-                        name="firstName"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="lastName" className="mb-3">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        placeholder="Enter last name"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+    <div className="register-student-page">
+      <div className="register-student-container">
+        <h2 className="form-title">Register New Student</h2>
+        <Form onSubmit={handleSubmit}>
+          {/* Personal Information */}
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formStudentFirstName">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="firstName"
+                placeholder="Enter first name"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
 
-                <Form.Group controlId="email" className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    name="email"
-                    value={formData.email}
+            <Form.Group as={Col} controlId="formStudentLastName">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                name="lastName"
+                placeholder="Enter last name"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Row>
+
+          <Form.Group className="mb-3" controlId="formStudentEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="Enter email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          {/* Contact Information */}
+          <Row className="mb-3">
+            <Form.Group as={Col} controlId="formPhoneNumber">
+              <Form.Label>Phone Number</Form.Label>
+              <Form.Control
+                type="text"
+                name="phoneNumber"
+                placeholder="Enter phone number"
+                value={formData.phoneNumber}
+                onChange={(e) => {
+                  const regex = /^[0-9\b]+$/;
+                  if (e.target.value === "" || regex.test(e.target.value)) {
+                    setFormData((prevData) => ({
+                      ...prevData,
+                      phoneNumber: e.target.value,
+                    }));
+                  }
+                }}
+                maxLength={10}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group as={Col} controlId="formDob">
+              <Form.Label>Date of Birth</Form.Label>
+              <Form.Control
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+          </Row>
+
+          {/* Academic Information */}
+          <Form.Group className="mb-3" controlId="formGrade">
+            <Form.Label>Grade</Form.Label>
+            <Form.Select
+              name="grade"
+              value={formData.grade}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Grade</option>
+              {grades.map((grade) => (
+                <option key={grade.item1} value={grade.item1}>
+                  {grade.item2}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+
+          {/* Gender */}
+          <Form.Group className="mb-3" controlId="formGender">
+            <Form.Label>Gender</Form.Label>
+            <Row>
+              {genders.map((gender) => (
+                <Col key={gender.item1} xs={6} md={4}>
+                  <Form.Check
+                    type="radio"
+                    label={gender.item2}
+                    name="gender"
+                    value={gender.item1}
+                    checked={formData.gender === gender.item1}
                     onChange={handleInputChange}
                     required
                   />
-                </Form.Group>
+                </Col>
+              ))}
+            </Row>
+          </Form.Group>
 
-                <Form.Group controlId="phoneNumber" className="mb-3">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter phone number"
-                    name="phoneNumber"
-                    maxLength="10"
-                    value={formData.phoneNumber}
+          {/* Class Mode */}
+          <Form.Group className="mb-3" controlId="formClassMode">
+            <Form.Label>Class Mode</Form.Label>
+            <Row>
+              {classModes.map((mode) => (
+                <Col key={mode.item1} xs={6} md={4}>
+                  <Form.Check
+                    type="radio"
+                    label={mode.item2}
+                    name="studyModeId"
+                    value={mode.item1}
+                    checked={formData.studyModeId === mode.item1}
                     onChange={handleInputChange}
                     required
                   />
-                </Form.Group>
+                </Col>
+              ))}
+            </Row>
+          </Form.Group>
 
-                <Row>
-                  <Col md={6}>
-                    <Form.Group controlId="dob" className="mb-3">
-                      <Form.Label>Date of Birth</Form.Label>
-                      <Form.Control
-                        type="date"
-                        name="dob"
-                        value={formData.dob}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="country" className="mb-3">
-                      <Form.Label>Country</Form.Label>
-                      <Form.Select
-                        name="country"
-                        value={formData.country}
-                        onChange={handleInputChange}
-                        required
-                      >
-                        <option value="">Select Country</option>
-                        {countries.map((country) => (
-                          <option key={country.item1} value={country.item1}>
-                            {country.item2}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                </Row>
+          {/* Country */}
+          <Form.Group className="mb-3" controlId="formCountry">
+            <Form.Label>Country</Form.Label>
+            <Form.Select
+              name="country"
+              value={formData.country}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Select Country</option>
+              {countries.map((country) => (
+                <option key={country.item1} value={country.item1}>
+                  {country.item2}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
 
-                <Form.Group controlId="grade" className="mb-3">
-                  <Form.Label>Grade</Form.Label>
-                  <Form.Select
-                    name="grade"
-                    value={formData.grade}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="">Select Grade</option>
-                    {grades.map((grade) => (
-                      <option key={grade.item1} value={grade.item1}>
-                        {grade.item2}
-                      </option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
 
-                <div className="d-grid">
-                  <Button
-                    variant="success"
-                    type="submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Submitting..." : "Register Student"}
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Card.Body>
-        </Card>
-      
-      </Container>
-      
-      
+          {/* Submit Button */}
+          <Button
+            variant="success"
+            type="submit"
+            disabled={isSubmitting}
+            className="w-100"
+          >
+            {isSubmitting ? "Registering..." : "Register Student"}
+          </Button>
+        </Form>
       </div>
-   
     </div>
-   
   );
 };
 

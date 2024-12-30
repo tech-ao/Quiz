@@ -1,15 +1,32 @@
-import React from 'react';
+import React , {useState, useEffect}from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import Sidebar from '../Admin/SidePannel';
 import AdminHeader from '../Admin/AdminHeader';
 import './AdminSettings.css';
 
 const AdminSettings = () => {
+
+   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  
+    const toggleSidebar = () => {
+      setIsSidebarVisible((prev) => !prev);
+    };
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          setIsSidebarVisible(true); // Show sidebar by default on desktop
+        } else {
+          setIsSidebarVisible(false); // Hide sidebar by default on mobile
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
   return (
     <div>
-      <AdminHeader />
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        <Sidebar />
+        {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="mb-4">

@@ -24,8 +24,10 @@ const AddStudentPanel = ({ show, onClose }) => {
     grade: null,
     address: "",
     gender: null,
-    classMode: null,
+    studyModeId: null,
     country: null,
+    statusId: 1,
+    createdBy:1,
     profile: {
       name: "",
       extension: "",
@@ -75,7 +77,7 @@ const AddStudentPanel = ({ show, onClose }) => {
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: ["country", "grade", "gender", "classMode"].includes(name)
+        [name]: ["country", "grade", "gender", "studyModeId"].includes(name)
           ? parseInt(value, 10)
           : value,
       }));
@@ -266,9 +268,9 @@ const AddStudentPanel = ({ show, onClose }) => {
                   <Form.Check
                     type="radio"
                     label={mode.item2}
-                    name="classMode"
+                    name="studyModeId"
                     value={mode.item1}
-                    checked={formData.classMode === mode.item1}
+                    checked={formData.studyModeId === mode.item1}
                     onChange={handleInputChange}
                     inline
                     required

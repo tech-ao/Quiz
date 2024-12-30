@@ -25,8 +25,22 @@ const getStatusColor = (status) => {
 };
 
 const Students = () => {
-   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-   const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  
+    const toggleSidebar = () => {
+      setIsSidebarVisible((prev) => !prev);
+    };
+    useEffect(() => {
+      const handleResize = () => {
+        if (window.innerWidth >= 768) {
+          setIsSidebarVisible(true); // Show sidebar by default on desktop
+        } else {
+          setIsSidebarVisible(false); // Hide sidebar by default on mobile
+        }
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();

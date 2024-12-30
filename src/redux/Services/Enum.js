@@ -106,3 +106,23 @@ export const fetchTeacherMode = async () => {
     return [];
   }
 };
+
+
+export const fetchDashboardContent = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/Student/GetStudentDashBoard`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};

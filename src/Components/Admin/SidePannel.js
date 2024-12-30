@@ -86,8 +86,8 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
         </li>
         <li className="nav-item">
           <Link
-            to="/questions"
-            className={`nav-link ${location.pathname === '/questions' ? 'active' : ''}`}
+            to="/questionListPage"
+            className={`nav-link ${location.pathname === '/questionListPage' ? 'active' : ''}`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">

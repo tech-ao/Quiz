@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 
 const EducationAndExperienceForm = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const EducationAndExperienceForm = () => {
     experiencePhoto: null,
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -25,16 +28,47 @@ const EducationAndExperienceForm = () => {
     setFormData({ ...formData, [name]: files[0] });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Data:', formData);
-    alert('Form submitted successfully!');
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.highestEducation.trim()) newErrors.highestEducation = 'Highest Education is required.';
+    if (!formData.institution.trim()) newErrors.institution = 'Institution is required.';
+    if (!formData.degree.trim()) newErrors.degree = 'Degree is required.';
+    if (!formData.specialization.trim()) newErrors.specialization = 'Specialization is required.';
+    if (!formData.graduationYear.match(/^\d{4}$/)) newErrors.graduationYear = 'Graduation Year must be a valid year.';
+    if (!formData.graduationPhoto) newErrors.graduationPhoto = 'Graduation Photo is required.';
+    if (!formData.employer.trim()) newErrors.employer = 'Employer is required.';
+    if (!formData.jobTitle.trim()) newErrors.jobTitle = 'Job Title is required.';
+    if (!formData.experienceYears.match(/^\d+$/)) newErrors.experienceYears = 'Years of Experience must be a valid number.';
+    if (!formData.experiencePhoto) newErrors.experiencePhoto = 'Experience Photo is required.';
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = () => {
+    if (validateForm()) {
+      console.log('Saving Data:', formData);
+      toast.success('Form saved successfully!');
+    } else {
+      toast.error('Please fix the errors before saving.');
+    }
+  };
+
+  const handleNext = () => {
+    if (validateForm()) {
+      console.log('Proceeding with Data:', formData);
+      alert('Proceeding to the next step!');
+    } else {
+      toast.error('Please fix the errors before proceeding.');
+    }
   };
 
   return (
     <Container className="p-4 bg-light">
       <h3 className="mb-4">Educational Qualifications & Professional Experience</h3>
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <h5 className="mb-3">2. Educational Qualifications</h5>
         <Row className="mb-3">
           <Col md={6}>
@@ -45,8 +79,9 @@ const EducationAndExperienceForm = () => {
                 name="highestEducation"
                 value={formData.highestEducation}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.highestEducation}
               />
+              <Form.Control.Feedback type="invalid">{errors.highestEducation}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -57,8 +92,9 @@ const EducationAndExperienceForm = () => {
                 name="institution"
                 value={formData.institution}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.institution}
               />
+              <Form.Control.Feedback type="invalid">{errors.institution}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -71,8 +107,9 @@ const EducationAndExperienceForm = () => {
                 name="degree"
                 value={formData.degree}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.degree}
               />
+              <Form.Control.Feedback type="invalid">{errors.degree}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -83,8 +120,9 @@ const EducationAndExperienceForm = () => {
                 name="specialization"
                 value={formData.specialization}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.specialization}
               />
+              <Form.Control.Feedback type="invalid">{errors.specialization}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -97,8 +135,9 @@ const EducationAndExperienceForm = () => {
                 name="graduationYear"
                 value={formData.graduationYear}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.graduationYear}
               />
+              <Form.Control.Feedback type="invalid">{errors.graduationYear}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -109,8 +148,9 @@ const EducationAndExperienceForm = () => {
                 name="graduationPhoto"
                 accept="image/*"
                 onChange={handleFileChange}
-                required
+                isInvalid={!!errors.graduationPhoto}
               />
+              <Form.Control.Feedback type="invalid">{errors.graduationPhoto}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -125,8 +165,9 @@ const EducationAndExperienceForm = () => {
                 name="employer"
                 value={formData.employer}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.employer}
               />
+              <Form.Control.Feedback type="invalid">{errors.employer}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -137,8 +178,9 @@ const EducationAndExperienceForm = () => {
                 name="jobTitle"
                 value={formData.jobTitle}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.jobTitle}
               />
+              <Form.Control.Feedback type="invalid">{errors.jobTitle}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
@@ -151,8 +193,9 @@ const EducationAndExperienceForm = () => {
                 name="experienceYears"
                 value={formData.experienceYears}
                 onChange={handleInputChange}
-                required
+                isInvalid={!!errors.experienceYears}
               />
+              <Form.Control.Feedback type="invalid">{errors.experienceYears}</Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -163,13 +206,13 @@ const EducationAndExperienceForm = () => {
                 name="experiencePhoto"
                 accept="image/*"
                 onChange={handleFileChange}
-                required
+                isInvalid={!!errors.experiencePhoto}
               />
+              <Form.Control.Feedback type="invalid">{errors.experiencePhoto}</Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
 
-        {/* Buttons: Back, Save, and Next */}
         <Row className="mt-4">
           <Col sm={3}>
             <Button variant="secondary" className="w-100">
@@ -177,10 +220,10 @@ const EducationAndExperienceForm = () => {
             </Button>
           </Col>
           <Col sm={{ span: 6, offset: 3 }} className="d-flex justify-content-end">
-            <Button variant="primary" className="me-2">
+            <Button variant="primary" className="me-2" onClick={handleSave}>
               Save
             </Button>
-            <Button variant="success">
+            <Button variant="success" onClick={handleNext}>
               Next
             </Button>
           </Col>

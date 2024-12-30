@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import ReactPaginate from 'react-paginate';
 import Sidebar from '../Admin/SidePannel';
 import AdminHeader from '../Admin/AdminHeader'
@@ -9,10 +9,22 @@ import ViewTeacher from '../ViewTeacher';
 import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
+ const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
-  const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
-
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);

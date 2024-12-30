@@ -1,5 +1,5 @@
 import { type } from "@testing-library/user-event/dist/type";
-import { fetchTeachers, addTeacher, editTeacher ,getTeacher , deleteTeacher } from "../Services/api";
+import { fetchTeachers, addTeacher, editTeacher ,getTeacher , deleteTeacher } from "../Services/Teacher";
 
 export const getTeachers = (paginationDetail) => async (dispatch) => {
   dispatch({ type: "FETCH_TeacherS_REQUEST" });
