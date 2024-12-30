@@ -129,6 +129,7 @@ body {
 }
 
 .main-container {
+  margin-top: 1rem;
   position: fixed;
   top: 100px;
   margin-right: inherit;

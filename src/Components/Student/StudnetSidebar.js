@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './StudentSidebar.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const StudentSidePannel = () => {
+const StudentSidePannel = ({ studyModeId }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -40,6 +40,19 @@ const StudentSidePannel = () => {
             </div>
           </Link>
         </li>
+        {studyModeId === 1 && (
+          <li className="nav-item">
+            <Link
+              to="/onlineClass"
+              className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
+            >
+              <div className="icon-with-text">
+                <i className="bi bi-laptop"></i>
+                <span className="nav-text">Online Class</span>
+              </div>
+            </Link>
+          </li>
+        )}
         <li className="nav-item">
           <Link
             to="/studentCertificate"

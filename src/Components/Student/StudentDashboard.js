@@ -38,31 +38,31 @@ const StudentDashboard = () => {
       return () => window.removeEventListener("resize", handleResize);
     }, []);
 
-  // useEffect(() => {
-  //   const fetchAllData = async () => {
-  //     setLoading(true);
-  //     setError(null);
-  //     try {
-  //       // Fetch student data via getStudent API
-  //       const studentResponse = await getStudent(userData.studentId);
-  //       setStudentData(studentResponse.data); // Update studentData with the API response
+  useEffect(() => {
+    const fetchAllData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Fetch student data via getStudent API
+        const studentResponse = await getStudent(userData.studentId);
+        setStudentData(studentResponse.data); // Update studentData with the API response
 
-  //       dispatch(getProfileData(userData.studentId));
+        dispatch(getProfileData(userData.studentId));
 
-  //     } catch (error) {
-  //       setError(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   fetchAllData();
-  // }, [userData.studentId, dispatch]);
+    fetchAllData();
+  }, [userData.studentId, dispatch]);
 
-  // if (loading) return <p>Loading...</p>;
-  // if (error) return <p>Error: {error}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
-  // console.log(studentData, profile);
+  console.log(studentData, profile);
 
   // Check if profile data contains the base64 string correctly
   const profileImage = profile.data && typeof profile.data === 'string' 
@@ -75,7 +75,7 @@ const StudentDashboard = () => {
     {/* Admin Header with Toggle Sidebar */}
     <StudentHeader toggleSidebar={toggleSidebar} />
     <div className="d-flex">
-      {isSidebarVisible && <StudentSidePannel />}
+      {isSidebarVisible &&  <StudentSidePannel studyModeId={studentData?.studyModeId} />}
       <Container className="main-container p-4 min-vh-100">
         <div className="sub-container">
             <Card className="mb-4 p-4">

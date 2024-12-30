@@ -69,6 +69,11 @@ const LoginPage = () => {
     }
   };
 
+  // Determine the sign-up URL based on the selected role
+  const getSignUpLink = () => {
+    return role === "Student" ? "/registerStudent" : "/registerTeacher";
+  };
+
   return (
     <Container fluid className="bg-image">
       <Row>
@@ -144,7 +149,7 @@ const LoginPage = () => {
               <div className="text-center mt-3">
                 <small>
                   Don’t have an account?{" "}
-                  <a href="#!" className="text-decoration-none">
+                  <a href={getSignUpLink()} className="text-decoration-none">
                     Sign Up
                   </a>
                 </small>
