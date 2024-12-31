@@ -1,15 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import '../Admin/sidepannel.css'
+import './TeacherSidepannel.css'; // Make sure this has your updated styles
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const TeacherSidePanel = () => {
   const location = useLocation();
+  const [isAttendanceOpen, setAttendanceOpen] = useState(false);
+
+  const toggleAttendanceMenu = () => {
+    setAttendanceOpen(!isAttendanceOpen);
+  };
 
   return (
     <div className="side-panel">
       <ul className="nav flex-column">
+        {/* Dashboard */}
         <li className="nav-item">
           <Link
             to="/teacherDashboard"
@@ -21,6 +27,8 @@ const TeacherSidePanel = () => {
             </div>
           </Link>
         </li>
+
+        {/* My Students */}
         <li className="nav-item">
           <Link
             to="/myStudents"
@@ -32,28 +40,83 @@ const TeacherSidePanel = () => {
             </div>
           </Link>
         </li>
+
+        {/* Attendance Menu */}
         <li className="nav-item">
-          <Link
-            to="/assignments"
-            className={`nav-link ${location.pathname === '/assignments' ? 'active' : ''}`}
+          <div
+            className={`nav-link ${isAttendanceOpen ? 'active' : ''}`}
+            onClick={toggleAttendanceMenu}
+            style={{ cursor: 'pointer' }}
           >
             <div className="icon-with-text">
-              <i className="bi bi-file-earmark-text"></i>
-              <span className="nav-text">Assignments</span>
+              <i className="bi bi-calendar2-check"></i>
+              <span className="nav-text">Attendance</span>
+              <i
+                className={`bi ${
+                  isAttendanceOpen ? 'bi-chevron-down' : 'bi-chevron-right'
+                } dropdown-icon`}
+              ></i>
             </div>
-          </Link>
+          </div>
+          {isAttendanceOpen && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <Link
+                  to="/attendance"
+                  className={`nav-link ${
+                    location.pathname === '/attendance' ? 'active' : ''
+                  }`}
+                >
+                  <div className="icon-with-text">
+                    <i className="bi bi-clipboard-data"></i>
+                    <span className="sub-nav-text">Student Attendance</span>
+                  </div>
+                </Link>
+              </li>
+            
+              <li className="nav-item">
+                <Link
+                  to="/attendanceData"
+                  className={`nav-link ${
+                    location.pathname === '/attendanceData' ? 'active' : ''
+                  }`}
+                >
+                  <div className="icon-with-text">
+                    <i className="bi bi-calendar-event"></i>
+                    <span className="sub-nav-text">Attendance By Date</span>
+                  </div>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
+
         <li className="nav-item">
           <Link
-            to="/quizzes"
-            className={`nav-link ${location.pathname === '/quizzes' ? 'active' : ''}`}
+            to="/onlineClassShedule"
+            className={`nav-link ${location.pathname === '/onlineClassShedule' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-patch-question"></i>
-              <span className="nav-text">Quizzes</span>
+              <span className="nav-text">Online Class</span>
             </div>
           </Link>
         </li>
+
+        {/* Quizzes */}
+        <li className="nav-item">
+          <Link
+            to="/paymentHistory"
+            className={`nav-link ${location.pathname === '/paymentHistory' ? 'active' : ''}`}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-patch-question"></i>
+              <span className="nav-text">Payment History</span>
+            </div>
+          </Link>
+        </li>
+
+        {/* Announcements */}
         <li className="nav-item">
           <Link
             to="/announcements"
@@ -62,39 +125,6 @@ const TeacherSidePanel = () => {
             <div className="icon-with-text">
               <i className="bi bi-megaphone"></i>
               <span className="nav-text">Announcements</span>
-            </div>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link
-            to="/studentReports"
-            className={`nav-link ${location.pathname === '/studentReports' ? 'active' : ''}`}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-file-earmark-bar-graph"></i>
-              <span className="nav-text">Student Reports</span>
-            </div>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link
-            to="/settings"
-            className={`nav-link ${location.pathname === '/settings' ? 'active' : ''}`}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-gear"></i>
-              <span className="nav-text">Settings</span>
-            </div>
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link
-            to="/notifications"
-            className={`nav-link ${location.pathname === '/notifications' ? 'active' : ''}`}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-bell"></i>
-              <span className="nav-text">Notifications</span>
             </div>
           </Link>
         </li>

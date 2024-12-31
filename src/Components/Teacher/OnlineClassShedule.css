@@ -1,0 +1,25 @@
+/* ClassSchedule.css */
+.schedule-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .schedule-card .card-body {
+    padding: 20px;
+  }
+  
+  .schedule-card .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .schedule-card .card-text {
+    font-size: 1rem;
+    color: #555;
+  }
+  
+  .schedule-card .btn {
+    width: 100%;
+    margin-top: 10px;
+  }
+  

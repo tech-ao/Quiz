@@ -1,0 +1,50 @@
+.side-panel {
+    width: 250px;
+    background-color: #e7ffec;
+    color: #fff;
+    height: 100vh;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: #fff;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+  
+ 
+  
+  .nav-link.active,
+  .nav-link:hover {
+    background-color: #d3f3da;
+    color: #f39c12;
+  }
+  
+  .icon-with-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .sub-nav {
+    padding-left: 30px;
+  }
+  
+  .sub-nav .nav-link {
+    color: #aaa;
+    font-size: 14px;
+  }
+  
+  .sub-nav .nav-link.active,
+  .sub-nav .nav-link:hover {
+    color: #f39c12;
+  }
+  
+  .dropdown-icon {
+    margin-left: auto;
+    font-size: 12px;
+    color: #ccc;
+  }
+  

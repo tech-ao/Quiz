@@ -1,0 +1,31 @@
+/* PaymentHistory.css */
+.payment-history-table {
+    font-size: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .payment-history-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .payment-history-table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .main-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .sub-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  

@@ -17,6 +17,10 @@ import EnrollmentRequestList from './Components/Admin/EnrollmentRequest';
 import AdminSettings from './Components/Admin/AdminSetting';
 import Students from './Components/Teacher/Student';
 import QuestionListPage from './Components/Admin/Question';
+import StudentAttendanceList from './Components/Teacher/Attendance';
+import AttendanceDataPage from './Components/Teacher/AttendanceByDate';
+import OnlineClassShedule from './Components/Teacher/OnlineClassShedule'
+import PaymentHistory from './Components/Teacher/PaymentHistory';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -54,13 +58,17 @@ function App() {
           <Route path='/addTeacher' element={<ProtectedRoute element={<AddTeacher />} />} />
           <Route path='/abacus' element={<ProtectedRoute element={<Abacus />} />} />
           <Route path='/notification' element={<ProtectedRoute element={<NotificationPage />} />} />
-          <Route path='/registerStudent' element={<ProtectedRoute element={<RegisterStudent />} />} />
           <Route path='/enrollmentRequest' element={<ProtectedRoute element={<EnrollmentRequestList />} />} />
           <Route path='/adminSettings' element={<ProtectedRoute element={<AdminSettings />} />} />
           <Route path='/teacherDashboard' element={<ProtectedRoute element={<TeacherDashboard />} />} />
           <Route path='/questionListPage' element={<ProtectedRoute element={<QuestionListPage />} />} />
           <Route path='/myStudents' element={<ProtectedRoute element={<Students />} />} />
-          <Route path='/registerTeacher' element={<ProtectedRoute element={<RegisterTeacher />} />} />
+          <Route path='/registerTeacher' element={<RegisterTeacher />} />
+          <Route path='/registerStudent' element={<RegisterStudent />} />
+          <Route path='/attendance' element={<ProtectedRoute element={<StudentAttendanceList />} />} />
+          <Route path='/attendanceData' element={<ProtectedRoute element={<AttendanceDataPage />} />} />
+          <Route path='/paymentHistory' element={<ProtectedRoute element={<PaymentHistory />} />} />
+          <Route path='/onlineClassShedule' element={<ProtectedRoute element={<OnlineClassShedule />} />} />
         </Routes>
       </Router>
     </Provider>

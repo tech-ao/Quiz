@@ -59,7 +59,7 @@ const LoginPage = () => {
   
           // Redirect to the appropriate dashboard
           const dashboardPath =
-            role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
+            role === "Student" ? "/studentDashboard" : "/TeacherDashboard";
           navigate(dashboardPath, { state: { userData: data.data } });
         } else {
           setError(data.message || "Invalid username or password.");
