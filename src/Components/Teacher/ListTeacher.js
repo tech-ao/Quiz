@@ -78,14 +78,8 @@ const ListTeacher = ({ Teachers = [] }) => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
-              <Col md={6}>
-                <h2 className="fw-bold">Teacher List</h2>
-              </Col>
-
-            </Row>
-            <Row className="align-items-center mb-4">
-              <Col md={6}>
-                <InputGroup>
+              <Col md={6} className="d-flex justify-content-between align-items-center">
+                <InputGroup style={{ width: '70%' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
@@ -100,6 +94,7 @@ const ListTeacher = ({ Teachers = [] }) => {
 
               </Col>
             </Row>
+
             <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
