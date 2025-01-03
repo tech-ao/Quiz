@@ -17,6 +17,7 @@ import EnrollmentRequestList from './Components/Admin/EnrollmentRequest';
 import AdminSettings from './Components/Admin/AdminSetting';
 import Students from './Components/Teacher/Student';
 import QuestionListPage from './Components/Admin/Question';
+import OnlineClass from './Components/Admin/OnlineClass';
 import StudentAttendanceList from './Components/Teacher/Attendance';
 import AttendanceDataPage from './Components/Teacher/AttendanceByDate';
 import OnlineClassShedule from './Components/Teacher/OnlineClassShedule'
@@ -53,6 +54,7 @@ function App() {
           <Route path='/studentList' element={<ProtectedRoute element={<StudentList />} />} />
           <Route path='/listTeacher' element={<ProtectedRoute element={<ListTeacher />} />} />
           <Route path='/quiztest' element={<ProtectedRoute element={<QuizPage />} />} />
+          <Route path='/onlineClass' element={<ProtectedRoute element={<OnlineClass />} />} />
           <Route path='/StudentHeader' element={<ProtectedRoute element={<StudentHeader />} />} />
           <Route path='/StudentDashboard' element={<ProtectedRoute element={<StudentDashboard />} />} />
           <Route path='/addTeacher' element={<ProtectedRoute element={<AddTeacher />} />} />

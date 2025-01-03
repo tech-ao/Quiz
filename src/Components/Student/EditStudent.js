@@ -107,7 +107,7 @@ const EditStudent = ({ show, onClose }) => {
   });
 
   console.log(formData);
-  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -222,7 +222,7 @@ const EditStudent = ({ show, onClose }) => {
             </Form.Select>
           </Form.Group>
 
-          
+
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="formGender">
@@ -242,10 +242,9 @@ const EditStudent = ({ show, onClose }) => {
                   ))}
                 </div>
               </Form.Group>
-              </Col>
+            </Col>
 
-              <Col>
-
+            <Col>
               <Form.Group controlId="formStudyMode">
                 <Form.Label>Study Mode</Form.Label>
                 <div className="d-flex">
@@ -256,13 +255,21 @@ const EditStudent = ({ show, onClose }) => {
                       label={mode.item2}
                       name="studyModeId"
                       value={mode.item1}
-                      checked={formData.studyModeId?.toString() === mode.item1.toString()}
-                      onChange={handleInputChange}
+                      checked={formData.studyModeId === mode.item1} // Compare integers directly
+                      onChange={(e) =>
+                        handleInputChange({
+                          target: {
+                            name: e.target.name,
+                            value: parseInt(e.target.value, 10), // Convert the value to an integer
+                          },
+                        })
+                      }
                       className="me-3"
                     />
                   ))}
                 </div>
               </Form.Group>
+
 
             </Col>
           </Row>

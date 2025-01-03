@@ -17,18 +17,23 @@ const QuestionListPage = () => {
     window.innerWidth >= 768
   );
   const [questions, setQuestions] = useState([
-    { id: 1, level: 1, details: [1, -4, 3, 7, -3, 2] },
-    { id: 2, level: 2, details: [2, -5, 6, 8, -2, 4] },
-    { id: 3, level: 3, details: [3, -6, 7, 9, -1, 5] },
-    { id: 4, level: 4, details: [4, -7, 8, 10, 0, 6] },
-    { id: 5, level: 5, details: [5, -8, 9, 11, 1, 7] },
+    { id: 1, level: 1, details: [{ question: "1 + 5 + 3", options: ["7", "12", "9", "10"], answer: "9" }] },
+    { id: 2, level: 2, details: [] },
+    { id: 3, level: 3, details: [] },
   ]);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [showDetailsContainer, setShowDetailsContainer] = useState(false);
-  const [newDetail, setNewDetail] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showAddQuestionModal, setShowAddQuestionModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showSingleQuestionModal, setShowSingleQuestionModal] = useState(false);
+  const [currentDetail, setCurrentDetail] = useState({
+    question: "",
+    options: ["", "", "", ""],
+    answer: "",
+  });
   const [selectedLevel, setSelectedLevel] = useState(1);
-  const [uploadError, setUploadError] = useState("");
+  const [file, setFile] = useState(null);
+  const [editIndex, setEditIndex] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,15 +49,39 @@ const QuestionListPage = () => {
   };
 
   const handleAddDetail = () => {
-    if (!newDetail.trim()) {
-      alert("Please enter a valid detail!");
+    if (
+      !currentDetail.question.trim() ||
+      currentDetail.options.some((opt) => !opt.trim()) ||
+      !currentDetail.answer.trim()
+    ) {
+      alert("All fields are required!");
       return;
     }
+
     setSelectedQuestion((prev) => ({
       ...prev,
-      details: [...prev.details, newDetail],
+      details: editIndex !== null
+        ? prev.details.map((detail, idx) =>
+            idx === editIndex ? currentDetail : detail
+          )
+        : [...prev.details, currentDetail],
     }));
-    setNewDetail("");
+    setCurrentDetail({ question: "", options: ["", "", "", ""], answer: "" });
+    setEditIndex(null);
+    setShowEditModal(false);
+  };
+
+  const handleDeleteDetail = (index) => {
+    setSelectedQuestion((prev) => ({
+      ...prev,
+      details: prev.details.filter((_, i) => i !== index),
+    }));
+  };
+
+  const handleEditDetail = (detail, index) => {
+    setCurrentDetail(detail);
+    setEditIndex(index);
+    setShowEditModal(true);
   };
 
   const handleSaveChanges = () => {
@@ -62,9 +91,11 @@ const QuestionListPage = () => {
     setShowDetailsContainer(false);
   };
 
-  const handleModalUpload = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  const handleAddQuestion = () => {
+    if (!file) {
+      alert("Please upload a file!");
+      return;
+    }
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -81,13 +112,34 @@ const QuestionListPage = () => {
             details: q.details || [],
           })),
         ]);
-        setUploadError("");
-        setShowModal(false);
       } catch (error) {
-        setUploadError("Error reading file: Invalid JSON format.");
+        alert("Error reading file: Invalid JSON format.");
       }
     };
     reader.readAsText(file);
+    setFile(null);
+    setShowAddQuestionModal(false);
+  };
+
+  const handleAddSingleQuestion = () => {
+    if (
+      !currentDetail.question.trim() ||
+      currentDetail.options.some((opt) => !opt.trim()) ||
+      !currentDetail.answer.trim()
+    ) {
+      alert("All fields are required!");
+      return;
+    }
+    setQuestions((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        level: selectedLevel,
+        details: [currentDetail],
+      },
+    ]);
+    setCurrentDetail({ question: "", options: ["", "", "", ""], answer: "" });
+    setShowSingleQuestionModal(false);
   };
 
   return (
@@ -99,13 +151,14 @@ const QuestionListPage = () => {
           {!showDetailsContainer ? (
             <div>
               <Row className="align-items-center mb-4">
-                <Col>
+                <Col xs={6}>
                   <h2>Question List</h2>
                 </Col>
-                <Col className="text-end">
+                <Col xs={6} className="text-end">
                   <Button
-                    variant="primary"
-                    onClick={() => setShowModal(true)}
+                    variant="success"
+                    className="me-2"
+                    onClick={() => setShowAddQuestionModal(true)}
                   >
                     Add Question
                   </Button>
@@ -116,6 +169,7 @@ const QuestionListPage = () => {
                   <tr>
                     <th>#</th>
                     <th>Level</th>
+                    <th>Total Questions</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -124,6 +178,7 @@ const QuestionListPage = () => {
                     <tr key={question.id}>
                       <td>{question.id}</td>
                       <td>Level {question.level}</td>
+                      <td>{question.details.length}</td>
                       <td>
                         <Button
                           variant="info"
@@ -140,10 +195,16 @@ const QuestionListPage = () => {
           ) : (
             <div>
               <Row className="align-items-center mb-4">
-                <Col>
+                <Col xs={6}>
                   <h3>Details for Level {selectedQuestion.level}</h3>
                 </Col>
-                <Col className="text-end">
+                <Col xs={6} className="text-end">
+                  <Button
+                    variant="success"
+                    onClick={() => setShowSingleQuestionModal(true)}
+                  >
+                    Add Single Question
+                  </Button>
                   <Button
                     variant="secondary"
                     onClick={() => setShowDetailsContainer(false)}
@@ -155,48 +216,42 @@ const QuestionListPage = () => {
               <Table bordered hover>
                 <thead>
                   <tr>
-                    <th>Details</th>
+                    <th>Question</th>
+                    <th>Options</th>
+                    <th>Answer</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>{selectedQuestion.details.join(", ")}</td>
-                    <td>
-                      <Button
-                        variant="danger"
-                        onClick={() =>
-                          setSelectedQuestion((prev) => ({
-                            ...prev,
-                            details: [],
-                          }))
-                        }
-                      >
-                        Clear All
-                      </Button>
-                    </td>
-                  </tr>
+                  {selectedQuestion.details.map((detail, index) => (
+                    <tr key={index}>
+                      <td>{detail.question}</td>
+                      <td>{detail.options.join(", ")}</td>
+                      <td>{detail.answer}</td>
+                      <td>
+                        <Button
+                          variant="warning"
+                          className="me-2"
+                          onClick={() => handleEditDetail(detail, index)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          onClick={() => handleDeleteDetail(index)}
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
-              <Form className="mt-4">
-                <Row>
-                  <Col>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter new detail"
-                      value={newDetail}
-                      onChange={(e) => setNewDetail(e.target.value)}
-                    />
-                  </Col>
-                  <Col className="text-end">
-                    <Button variant="success" onClick={handleAddDetail}>
-                      Add Detail
-                    </Button>
-                  </Col>
-                </Row>
-              </Form>
-              <div className="text-end mt-4">
-                <Button variant="success" onClick={handleSaveChanges}>
+              <div className="text-end">
+                <Button
+                  variant="success"
+                  onClick={handleSaveChanges}
+                >
                   Save Changes
                 </Button>
               </div>
@@ -205,10 +260,10 @@ const QuestionListPage = () => {
         </Container>
       </div>
 
-      {/* Modal for Adding Questions */}
-      <Modal show={showModal} onHide={() => setShowModal(false)}>
+      {/* Add Question Modal */}
+      <Modal show={showAddQuestionModal} onHide={() => setShowAddQuestionModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Question</Modal.Title>
+          <Modal.Title>Add Questions (File)</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -225,20 +280,151 @@ const QuestionListPage = () => {
                 ))}
               </Form.Select>
             </Form.Group>
-            <Form.Group>
+            <Form.Group className="mb-3">
               <Form.Label>Upload Questions (JSON)</Form.Label>
               <Form.Control
                 type="file"
                 accept=".json"
-                onChange={handleModalUpload}
+                onChange={(e) => setFile(e.target.files[0])}
               />
             </Form.Group>
-            {uploadError && <div className="text-danger mt-2">{uploadError}</div>}
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowAddQuestionModal(false)}
+          >
             Close
+          </Button>
+          <Button variant="success" onClick={handleAddQuestion}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Add Single Question Modal */}
+      <Modal show={showSingleQuestionModal} onHide={() => setShowSingleQuestionModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add Single Question</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Question</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter question"
+                value={currentDetail.question}
+                onChange={(e) =>
+                  setCurrentDetail((prev) => ({ ...prev, question: e.target.value }))
+                }
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Options</Form.Label>
+              {currentDetail.options.map((option, idx) => (
+                <Form.Control
+                  key={idx}
+                  type="text"
+                  placeholder={`Option ${idx + 1}`}
+                  className="mb-2"
+                  value={option}
+                  onChange={(e) =>
+                    setCurrentDetail((prev) => {
+                      const newOptions = [...prev.options];
+                      newOptions[idx] = e.target.value;
+                      return { ...prev, options: newOptions };
+                    })
+                  }
+                />
+              ))}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Answer</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter answer"
+                value={currentDetail.answer}
+                onChange={(e) =>
+                  setCurrentDetail((prev) => ({ ...prev, answer: e.target.value }))
+                }
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowSingleQuestionModal(false)}
+          >
+            Close
+          </Button>
+          <Button variant="success" onClick={handleAddSingleQuestion}>
+            Save
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Edit Question Modal */}
+      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Edit Question</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Question</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter question"
+                value={currentDetail.question}
+                onChange={(e) =>
+                  setCurrentDetail((prev) => ({ ...prev, question: e.target.value }))
+                }
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Options</Form.Label>
+              {currentDetail.options.map((option, idx) => (
+                <Form.Control
+                  key={idx}
+                  type="text"
+                  placeholder={`Option ${idx + 1}`}
+                  className="mb-2"
+                  value={option}
+                  onChange={(e) =>
+                    setCurrentDetail((prev) => {
+                      const newOptions = [...prev.options];
+                      newOptions[idx] = e.target.value;
+                      return { ...prev, options: newOptions };
+                    })
+                  }
+                />
+              ))}
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Answer</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter answer"
+                value={currentDetail.answer}
+                onChange={(e) =>
+                  setCurrentDetail((prev) => ({ ...prev, answer: e.target.value }))
+                }
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowEditModal(false)}
+          >
+            Close
+          </Button>
+          <Button variant="success" onClick={handleAddDetail}>
+            Save
           </Button>
         </Modal.Footer>
       </Modal>
