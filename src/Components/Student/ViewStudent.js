@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Offcanvas, Row, Col, Image } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import BASE_URL from "../../redux/Services/Config";
 
 const ViewStudentPanel = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
@@ -21,7 +22,7 @@ const ViewStudentPanel = ({ show, onClose }) => {
   useEffect(() => {
     if (studentData?.userId) {
       axios
-        .get(`http://localhost:8012/api/Profile/GetContentByUserId?userId=${studentData.userId}`, {
+        .get(`${BASE_URL}/Profile/GetContentByUserId?userId=${studentData.userId}`, {
           headers: {
             "accept": "text/plain", // Assuming the response is base64-encoded string
             "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280", // Replace with your actual API key

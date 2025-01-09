@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
-import {fetchGenders ,fetchCountries} from "../../redux/Services/Enum";
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import { fetchGenders, fetchCountries, fetchDocumentType } from "../../redux/Services/Enum";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -8,64 +8,106 @@ import { addTeacherAction } from "../../redux/Action/TeacherAction";
 
 const PersonalInformationForm = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
-    dob: '',
-    gender: '',
-    phoneNumber: '',
-    email: '',
-    permanentAddress: '',
-    currentResidentialAddress: '',
-    nationalityId: '',
-    photo: null,
-    photoID: null,
+    fullName: "",
+    dob: "",
+    gender: "",
+    phoneNumber: "",
+    email: "",
+    permanentAddress: "",
+    currentResidentialAddress: "",
+    nationalityId: "",
   });
-  const [genders, setGenders] = useState([]);
-    const [countries, setCountries] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [errors, setErrors] = useState({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-      const dispatch = useDispatch();
 
+  const [genders, setGenders] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [documentType, setDocumentType] = useState([]);
+  const [teacherDocumentFileModels, setTeacherDocumentFileModels] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
+
+  // Fetch enums for dropdowns
+  useEffect(() => {
+    const fetchEnums = async () => {
+      try {
+        const genderData = await fetchGenders();
+        setGenders(genderData);
+        const countryData = await fetchCountries();
+        setCountries(countryData);
+        const documentTypeData = await fetchDocumentType();
+        setDocumentType(documentTypeData);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+
+    fetchEnums();
+  }, []);
+
+  // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
+  // Handle file uploads
+  const handleFileChange = async (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+    const file = files[0];
+    if (file) {
+      const base64Content = await convertToBase64(file);
+      const documentTypeId =
+        name === "photo"
+          ? documentType.find((doc) => doc.item2 === "Candidate Photo")?.item1
+          : documentType.find((doc) => doc.item2 === "Photo ID")?.item1;
+
+      const fileModel = {
+        teacherDocumentFileId: 0,
+        teacherId: 0,
+        documentTypeId,
+        extension: file.name.split(".").pop(),
+        name: file.name,
+        base64Content,
+      };
+
+      setTeacherDocumentFileModels((prev) => [
+        ...prev.filter((doc) => doc.documentTypeId !== documentTypeId),
+        fileModel,
+      ]);
+
+      setFormData({ ...formData, [name]: file });
+    }
   };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      setLoading(true);
-      try {
-         const countriesData = await fetchCountries();
-                setCountries(countriesData);
-        const gendersData = await fetchGenders();
-        setGenders(gendersData);
-      } catch (error) {
-        console.error("Error fetching data:", error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
-    fetchAllData();
-  }, []);
-
+  // Form validation
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = 'Full Name is required.';
-    if (!formData.dob) newErrors.dob = 'Date of Birth is required.';
-    if (!formData.gender) newErrors.gender = 'Gender is required.';
-    if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = 'Phone Number must be 10 digits.';
-    if (!formData.email.match(/^\S+@\S+\.\S+$/)) newErrors.email = 'Invalid Email Address.';
-    if (!formData.permanentAddress.trim()) newErrors.permanentAddress = 'Permanent Address is required.';
-    if (!formData.nationalityId.trim()) newErrors.nationalityId = 'Nationality is required.';
-    if (!formData.photo) newErrors.photo = 'Candidate Photo is required.';
-    if (!formData.photoID) newErrors.photoID = 'Photo ID is required.';
+    if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required.";
+    if (!formData.dob) newErrors.dob = "Date of Birth is required.";
+    if (!formData.gender) newErrors.gender = "Gender is required.";
+    if (!formData.phoneNumber.match(/^\d{10}$/))
+      newErrors.phoneNumber = "Phone Number must be 10 digits.";
+    if (!formData.email.match(/^\S+@\S+\.\S+$/))
+      newErrors.email = "Invalid Email Address.";
+    if (!formData.permanentAddress.trim())
+      newErrors.permanentAddress = "Permanent Address is required.";
+    if (!formData.currentResidentialAddress.trim())
+      newErrors.currentResidentialAddress =
+        "Current Residential Address is required.";
+    if (!formData.nationalityId)
+      newErrors.nationalityId = "Nationality is required.";
+    if (!formData.photo) newErrors.photo = "Candidate Photo is required.";
+    if (!formData.photoID) newErrors.photoID = "Photo ID is required.";
 
     setErrors(newErrors);
 
@@ -74,35 +116,31 @@ const PersonalInformationForm = () => {
 
   const handleSave = () => {
     if (validateForm()) {
-      console.log('Saved Data:', formData);
-      alert('Form saved successfully!');
+      console.log("Saved Data:", { ...formData, teacherDocumentFileModels });
+      toast.success("Form saved successfully!");
     } else {
-      alert('Please fix the errors before saving.');
+      toast.error("Please fix the errors before saving.");
     }
   };
 
   const handleNext = async () => {
     if (validateForm()) {
       try {
-        console.log('Proceeding with Data:', formData);
         setIsSubmitting(true);
-        await dispatch(addTeacherAction(formData));
-        toast.success("Personal Information saved !");
-        alert('Proceeding to the next step!');
-        
+        await dispatch(addTeacherAction({ ...formData, teacherDocumentFileModels }));
+        toast.success("Personal Information submitted!");
       } catch (error) {
-        toast.error("Failed to add student!");
+        toast.error("Submission failed!");
       } finally {
         setIsSubmitting(false);
       }
-    } else {
-      alert('Please fix the errors before proceeding.');
     }
   };
+
   return (
-    <Container className="p-4 bg-light">
-      <h3 className="mb-4">Personal Information</h3>
-      <Form noValidate>
+    <Container>
+      <h4 className="mb-4">Personal Information</h4>
+      <Form>
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="fullName">
@@ -113,7 +151,6 @@ const PersonalInformationForm = () => {
                 value={formData.fullName}
                 onChange={handleInputChange}
                 isInvalid={!!errors.fullName}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.fullName}
@@ -129,7 +166,6 @@ const PersonalInformationForm = () => {
                 value={formData.dob}
                 onChange={handleInputChange}
                 isInvalid={!!errors.dob}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.dob}
@@ -146,11 +182,10 @@ const PersonalInformationForm = () => {
                 value={formData.gender}
                 onChange={handleInputChange}
                 isInvalid={!!errors.gender}
-                required
               >
                 <option value="">Select Gender</option>
-                {genders.map((gender, index) => (
-                  <option key={index} value={gender.item1}>
+                {genders.map((gender) => (
+                  <option key={gender.item1} value={gender.item1}>
                     {gender.item2}
                   </option>
                 ))}
@@ -164,12 +199,11 @@ const PersonalInformationForm = () => {
             <Form.Group controlId="phoneNumber">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
-                type="tel"
+                type="text"
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleInputChange}
                 isInvalid={!!errors.phoneNumber}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.phoneNumber}
@@ -180,14 +214,13 @@ const PersonalInformationForm = () => {
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="email">
-              <Form.Label>Email Address</Form.Label>
+              <Form.Label>Email</Form.Label>
               <Form.Control
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
                 isInvalid={!!errors.email}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.email}
@@ -195,68 +228,68 @@ const PersonalInformationForm = () => {
             </Form.Group>
           </Col>
           <Col md={6}>
-               <Form.Group className="mb-3" controlId="formCountry">
-                       <Form.Label>Nationality/Residency Status</Form.Label>
-                       <Form.Select
-                         name="nationalityId"
-                         value={formData.nationalityId}
-                         onChange={handleInputChange}
-                         required
-                       >
-                         <option value="">Select Country</option>
-                         {countries.map((country, index) => (
-                           <option key={index} value={country.item1}>
-                             {country.item2}
-                           </option>
-                         ))}
-                       </Form.Select>
-                     </Form.Group>
+            <Form.Group controlId="nationalityId">
+              <Form.Label>Nationality</Form.Label>
+              <Form.Select
+                name="nationalityId"
+                value={formData.nationalityId}
+                onChange={handleInputChange}
+                isInvalid={!!errors.nationalityId}
+              >
+                <option value="">Select Nationality</option>
+                {countries.map((country) => (
+                  <option key={country.item1} value={country.item1}>
+                    {country.item2}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                {errors.nationalityId}
+              </Form.Control.Feedback>
+            </Form.Group>
           </Col>
         </Row>
         <Row className="mb-3">
-          <Col>
+          <Col md={6}>
             <Form.Group controlId="permanentAddress">
               <Form.Label>Permanent Address</Form.Label>
               <Form.Control
-                as="textarea"
+                type="text"
                 name="permanentAddress"
-                rows={2}
                 value={formData.permanentAddress}
                 onChange={handleInputChange}
                 isInvalid={!!errors.permanentAddress}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.permanentAddress}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
+          <Col md={6}>
             <Form.Group controlId="currentResidentialAddress">
               <Form.Label>Current Residential Address</Form.Label>
               <Form.Control
-                as="textarea"
+                type="text"
                 name="currentResidentialAddress"
-                rows={2}
                 value={formData.currentResidentialAddress}
                 onChange={handleInputChange}
+                isInvalid={!!errors.currentResidentialAddress}
               />
+              <Form.Control.Feedback type="invalid">
+                {errors.currentResidentialAddress}
+              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
-        <Row className="mb-3">
+        <Row>
           <Col md={6}>
             <Form.Group controlId="photo">
               <Form.Label>Candidate Photo</Form.Label>
               <Form.Control
                 type="file"
                 name="photo"
-                accept="image/*"
                 onChange={handleFileChange}
                 isInvalid={!!errors.photo}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.photo}
@@ -269,10 +302,8 @@ const PersonalInformationForm = () => {
               <Form.Control
                 type="file"
                 name="photoID"
-                accept="image/*,application/pdf"
                 onChange={handleFileChange}
                 isInvalid={!!errors.photoID}
-                required
               />
               <Form.Control.Feedback type="invalid">
                 {errors.photoID}
@@ -280,22 +311,12 @@ const PersonalInformationForm = () => {
             </Form.Group>
           </Col>
         </Row>
-        {/* Buttons: Back, Save, and Next */}
-        <Row className="mt-4">
-          <Col sm={3}>
-            <Button variant="secondary" className="w-100">
-              Back
-            </Button>
-          </Col>
-          <Col sm={{ span: 6, offset: 3 }} className="d-flex justify-content-end">
-            <Button variant="primary" className="me-2" onClick={handleSave}>
-              Save
-            </Button>
-            <Button variant="success" onClick={handleNext}>
-              Next
-            </Button>
-          </Col>
-        </Row>
+        <Button variant="primary" className="mt-4" onClick={handleSave}>
+          Save
+        </Button>
+        <Button variant="success" className="mt-4 ms-3" onClick={handleNext}>
+          Next
+        </Button>
       </Form>
     </Container>
   );

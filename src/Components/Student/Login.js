@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import BASE_URL from "../../redux/Services/Config";
 import './Login.css'
 
 const LoginPage = () => {
@@ -32,10 +33,10 @@ const LoginPage = () => {
       // Define the API URL based on the selected role
       const apiUrl =
         role === "Student"
-          ? `http://localhost:8012/api/Login/StudentSignin?Email=${encodeURIComponent(
+          ? `${BASE_URL}/Login/StudentSignin?Email=${encodeURIComponent(
               userId
             )}&Password=${encodeURIComponent(password)}`
-          : `http://localhost:8012/api/Login/TeacherSignin?Email=${encodeURIComponent(
+          : `${BASE_URL}/Login/TeacherSignin?Email=${encodeURIComponent(
               userId
             )}&Password=${encodeURIComponent(password)}`;
   

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import BASE_URL from "../../redux/Services/Config";
 import { Container, Row, Col, Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "./adminLogin.css"; // Import the new CSS file
@@ -17,7 +18,7 @@ const AdminLoginPage = () => {
     setError("");
 
     try {
-      const apiUrl = `http://localhost:8012/api/Login/AdminSignin?Email=${encodeURIComponent(
+      const apiUrl = `${BASE_URL}/Login/AdminSignin?Email=${encodeURIComponent(
         Email
       )}&Password=${encodeURIComponent(Password)}`;
 
@@ -34,6 +35,7 @@ const AdminLoginPage = () => {
         const data = await response.json();
         if (data && data.isSuccess) {
           console.log("Login Successful:", data);
+          sessionStorage.setItem('isLoggedIn', 'true');
           navigate("/adminDashboard", { state: { userData: data.data } });
         } else {
           setError(data.message || "Invalid username or password.");
