@@ -73,11 +73,11 @@ const LoginPage = () => {
             navigate(dashboardPath, { state: { userData: data.data } });
           }
         } else {
-          setError(data.message || "Invalid username or password.");
+          setError("Invalid username or password.");
         }
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "Login failed. Please try again.");
+        setError( "Login failed. Please try again.");
       }
     } catch (err) {
       console.error("Error during login:", err);
@@ -89,7 +89,9 @@ const LoginPage = () => {
 
   const handlePasswordChange = async () => {
     try {
-      const changePasswordUrl = `${BASE_URL}/Login/ChangePassword`;
+      const changePasswordUrl = `${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${studentId}&Password=${encodeURIComponent(
+        Password
+      )}&OldPassword=${encodeURIComponent(OldPassword)}`;
       const response = await fetch(changePasswordUrl, {
         method: "POST",
         headers: {
@@ -98,18 +100,13 @@ const LoginPage = () => {
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
         },
-        body: JSON.stringify({
-          studentId,
-          OldPassword,
-          Password,
-        }),
-      });
+          });
 
       const data = await response.json();
       if (response.ok && data.isSuccess) {
         setShowPopup(false);
         alert("Password changed successfully! Please log in again.");
-        navigate("/login"); // Redirect to login page after password change
+        navigate("/"); // Redirect to login page after password change
       } else {
         setError(data.message || "Failed to change password.");
       }
@@ -200,6 +197,14 @@ const LoginPage = () => {
                   Don’t have an account?{" "}
                   <a href={getSignUpLink()} className="text-decoration-none">
                     Sign Up
+                  </a>
+                </small>
+              </div>
+              <div className="text-center mt-3">
+                <small>
+                  Do you forgot your password?{" "}
+                  <a href= '/forgotPassword' className="text-decoration-none">
+                    Forgot Password
                   </a>
                 </small>
               </div>
