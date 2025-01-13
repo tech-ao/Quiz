@@ -146,3 +146,22 @@ export const fetchDocumentType  = async () => {
     return [];
   }
 };
+
+export const fetchProfileById  = async (userId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/Profile/GetContentByUserId?userId=${userId}`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};

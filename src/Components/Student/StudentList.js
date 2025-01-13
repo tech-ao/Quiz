@@ -155,7 +155,7 @@ const StudentList = () => {
                 </Button>
               </Col>
             </Row>
-            <div className="table-responsive">
+            <div>
               <Table hover className="mb-0">
                 <thead>
                   <tr>

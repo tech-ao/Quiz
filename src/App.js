@@ -22,6 +22,7 @@ import StudentAttendanceList from './Components/Teacher/Attendance';
 import AttendanceDataPage from './Components/Teacher/AttendanceByDate';
 import OnlineClassShedule from './Components/Teacher/OnlineClassShedule';
 import PaymentHistory from './Components/Teacher/PaymentHistory';
+import ForgotPassword from './Components/Student/ForgotPassword';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -46,6 +47,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/adminLogin" element={<AdminLoginPage />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
+          <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
 
           {/* Protected Routes */}

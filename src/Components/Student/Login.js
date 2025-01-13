@@ -1,36 +1,38 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { useHistory } from 'react-router-dom';
-import "bootstrap/dist/css/bootstrap.min.css";
-import logo from "../../Components/images/Logo.png";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
-import './Login.css'
+import "./Login.css";
+import logo from "../../Components/images/Logo.png";
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Student"); // Default role is Student
+  const [role, setRole] = useState("Student");
   const [showPassword, setShowPassword] = useState(false);
   const [isHuman, setIsHuman] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Popup state
+  const [OldPassword, setOldPassword] = useState(""); // Old password
+  const [Password, setNewPassword] = useState(""); // New password
+  const [userData, setUserData] = useState(null); // To store user data when login is successful
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-  
+
     if (!isHuman) {
       setError("Please confirm that you are human.");
       setLoading(false);
       return;
     }
-  
+
     try {
-      // Define the API URL based on the selected role
       const apiUrl =
         role === "Student"
           ? `${BASE_URL}/Login/StudentSignin?Email=${encodeURIComponent(
@@ -39,7 +41,7 @@ const LoginPage = () => {
           : `${BASE_URL}/Login/TeacherSignin?Email=${encodeURIComponent(
               userId
             )}&Password=${encodeURIComponent(password)}`;
-  
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -48,20 +50,28 @@ const LoginPage = () => {
           AccessToken: "123",
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
+       
+
         if (data && data.isSuccess) {
-          console.log("Login Successful:", data);
-  
-          // Save session details
-          sessionStorage.setItem('isLoggedIn', 'true');
-          sessionStorage.setItem('userRole', role); // Optional: Save role
-  
-          // Redirect to the appropriate dashboard
-          const dashboardPath =
-            role === "Student" ? "/studentDashboard" : "/TeacherDashboard";
-          navigate(dashboardPath, { state: { userData: data.data } });
+          if (data.data.isFirstLogin) {
+            setStudentId(data.data.studentId);
+            // Show popup for first login, no navigation
+            setShowPopup(true);
+            setUserData(data.data); // Store user data for password change flow
+          } else {
+            console.log("Login Successful:", data);
+
+            sessionStorage.setItem("isLoggedIn", "true");
+            sessionStorage.setItem("userRole", role);
+
+            const dashboardPath =
+              role === "Student" ? "/studentDashboard" : "/TeacherDashboard";
+            navigate(dashboardPath, { state: { userData: data.data } });
+          }
         } else {
           setError(data.message || "Invalid username or password.");
         }
@@ -77,7 +87,38 @@ const LoginPage = () => {
     }
   };
 
-  // Determine the sign-up URL based on the selected role
+  const handlePasswordChange = async () => {
+    try {
+      const changePasswordUrl = `${BASE_URL}/Login/ChangePassword`;
+      const response = await fetch(changePasswordUrl, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+        },
+        body: JSON.stringify({
+          studentId,
+          OldPassword,
+          Password,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.isSuccess) {
+        setShowPopup(false);
+        alert("Password changed successfully! Please log in again.");
+        navigate("/login"); // Redirect to login page after password change
+      } else {
+        setError(data.message || "Failed to change password.");
+      }
+    } catch (error) {
+      console.error("Error changing password:", error);
+      setError("An error occurred. Please try again.");
+    }
+  };
+
   const getSignUpLink = () => {
     return role === "Student" ? "/registerStudent" : "/registerTeacher";
   };
@@ -166,6 +207,45 @@ const LoginPage = () => {
           </div>
         </Col>
       </Row>
+
+      {/* Password Change Popup */}
+      <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="OldPassword">
+              <Form.Label>Old Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter old password"
+                value={OldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="Password">
+              <Form.Label>New Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Enter new password"
+                value={Password}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPopup(false)}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={handlePasswordChange}>
+            Submit
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };

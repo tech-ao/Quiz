@@ -133,7 +133,7 @@ body {
   position: fixed;
   top: 100px;
   margin-right: inherit;
-  margin-left: 18%;
+  margin-left: 17% !important;
   overflow-y: scroll;
   height: 100%;
   scrollbar-width: none;

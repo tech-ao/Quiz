@@ -64,10 +64,9 @@ const StudentDashboard = () => {
 
   console.log(studentData, profile);
 
-  // Check if profile data contains the base64 string correctly
   const profileImage = profile.data && typeof profile.data === 'string' 
     ? profile.data 
-    : profile.data?.imageBase64 || null;  // Assuming profile.data.imageBase64 contains the image
+    : profile.data?.imageBase64 || null; 
 
   return (
  
