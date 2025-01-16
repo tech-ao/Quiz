@@ -1,0 +1,31 @@
+.sub-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+h1 {
+  color: #22790c; /* Example color for the heading */
+}
+
+.form-control {
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  border: none;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+.table thead th {
+  background-color: #0a6912;
+  color: #fff;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}

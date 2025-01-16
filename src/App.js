@@ -32,6 +32,11 @@ import store from './redux/Store/store';
 import AddTeacher from './Components/Teacher/AddTeacher';
 import TeacherDashboard from './Components/Teacher/TeacherDashboard';
 import AdminAttendance from './Components/Admin/AdminAttendance';
+import Quiz from './Components/Admin/Quiz';
+import Test from './Components/Student/Test';
+import StudentCertificate from './Components/Student/StudentCertificate';
+import StudentOnlineClass from './Components/Student/StudentOnlineClass';
+import StudentSettings from './Components/Student/StudentSettings';
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -72,6 +77,16 @@ function App() {
           <Route path="/attendanceData" element={<ProtectedRoute element={<AttendanceDataPage />} />} />
           <Route path="/paymentHistory" element={<ProtectedRoute element={<PaymentHistory />} />} />
           <Route path="/onlineClassShedule" element={<ProtectedRoute element={<OnlineClassShedule />} />} />
+          <Route path="/quiz" element={<ProtectedRoute element={<Quiz />} />} />
+          <Route path="/test" element={<ProtectedRoute element={<Test />} />} />
+          <Route path="/studentcertificate" element={<ProtectedRoute element={<StudentCertificate />} />} />
+          <Route path="/studentOnlineClass" element={<ProtectedRoute element={<StudentOnlineClass />} />} />
+          <Route path="/studentSettings" element={<ProtectedRoute element={<StudentSettings />} />} />
+
+
+
+
+
         </Routes>
       </Router>
     </Provider>

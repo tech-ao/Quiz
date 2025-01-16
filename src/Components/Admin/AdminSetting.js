@@ -1,27 +1,53 @@
-import React , {useState, useEffect}from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import Sidebar from '../Admin/SidePannel';
 import AdminHeader from '../Admin/AdminHeader';
 import './AdminSettings.css';
+import { getStudent } from '../../redux/Services/api'; // Import the getStudent function
 
 const AdminSettings = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [adminData, setAdminData] = useState(null); // State for admin data
+  const [loading, setLoading] = useState(true); // State for loading status
+  const [error, setError] = useState(null); // State for error handling
 
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  
-    const toggleSidebar = () => {
-      setIsSidebarVisible((prev) => !prev);
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
     };
-    useEffect(() => {
-      const handleResize = () => {
-        if (window.innerWidth >= 768) {
-          setIsSidebarVisible(true); // Show sidebar by default on desktop
-        } else {
-          setIsSidebarVisible(false); // Hide sidebar by default on mobile
-        }
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchAdminData = async () => {
+      setLoading(true);
+      setError(null); // Reset error state before fetching
+      try {
+        // Fetch admin data via getStudent API
+        const adminResponse = await getStudent(1); // Adjust this if you need to pass an ID
+        setAdminData(adminResponse.data); // Update state with fetched data
+      } catch (error) {
+        setError(error.message); // Handle error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAdminData();
+  }, []);
+
+  if (loading) return <p>Loading...</p>; // Loading state
+  if (error) return <p>Error: {error}</p>; // Error state
+
   return (
     <div>
       <AdminHeader toggleSidebar={toggleSidebar} />
@@ -41,41 +67,19 @@ const AdminSettings = () => {
                   <Card.Body>
                     <Card.Title>Admin Name</Card.Title>
                     <Card.Text>
-                      Email: admin@example.com
+                      Email: {adminData?.email || "N/A"} {/* Display fetched email */}
                     </Card.Text>
                     <Card.Text>
-                      Phone: 123-456-7890
+                      Phone: {adminData?.phone || "N/A"} {/* Display fetched phone */}
                     </Card.Text>
                     <Card.Text>
-                      Role: Administrator
+                      Role: {adminData?.role || "N/A"} {/* Display fetched role */}
                     </Card.Text>
                     <Button variant="success" className="mt-3">Edit Details</Button>
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={6} className='Admin-Name-row'>
-                <Card className="admin-card">
-                  <Card.Header className="card-header">Change Password</Card.Header>
-                  <Card.Body>
-                    <Card.Title>Update your password</Card.Title>
-                    <form>
-                      <div className="mb-3">
-                        <label htmlFor="currentPassword" className="form-label">Current Password</label>
-                        <input type="password" className="form-control" id="currentPassword" required />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="newPassword" className="form-label">New Password</label>
-                        <input type="password" className="form-control" id="newPassword" required />
-                      </div>
-                      <div className="mb-3">
-                        <label htmlFor="confirmPassword" className="form-label">Confirm New Password</label>
-                        <input type="password" className="form-control" id="confirmPassword" required />
-                      </div>
-                      <Button variant="success" type="submit">Change Password</Button>
-                    </form>
-                  </Card.Body>
-                </Card>
-              </Col>
+             
             </Row>
           </div>
         </Container>

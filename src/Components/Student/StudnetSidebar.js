@@ -31,7 +31,7 @@ const StudentSidePannel = ({ studyModeId }) => {
         </li>
         <li className="nav-item">
           <Link
-            to="/studentTest"
+            to="/Test"
             className={`nav-link ${location.pathname === '/studentTest' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
@@ -40,10 +40,10 @@ const StudentSidePannel = ({ studyModeId }) => {
             </div>
           </Link>
         </li>
-        {studyModeId === 1 && (
+        
           <li className="nav-item">
             <Link
-              to="/onlineClass"
+              to="/StudentOnlineClass"
               className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
             >
               <div className="icon-with-text">
@@ -52,7 +52,7 @@ const StudentSidePannel = ({ studyModeId }) => {
               </div>
             </Link>
           </li>
-        )}
+      
         <li className="nav-item">
           <Link
             to="/studentCertificate"

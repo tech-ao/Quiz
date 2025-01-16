@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card, Image, Button } from "react-bootstrap";
 import "../../Style.css";
 import StudentHeader from "./StudentHeader";
-import Header from "../Admin/AdminHeader";
+
 import StudentSidePannel from "./StudnetSidebar";
 import { useLocation } from "react-router-dom";
 import { getProfileData } from '../../redux/Action/ProfileAction';
