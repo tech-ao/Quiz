@@ -1,44 +1,45 @@
+.dashboard-card {
+  font-size: 14px;
+  padding: 10px;
+}
 
-  
-  .dashboard-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: none;
-    background-color: #ffffff;
-  }
-  
-  .card-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-  }
-  
-  button {
-    font-size: 0.9rem;
-    margin-top: 1rem;
-  }
-  
-  button.btn-primary {
-    background-color: #007bff;
-    border: none;
-  }
-  
-  button.btn-warning {
-    background-color: #ffc107;
-    border: none;
-    color: #fff;
-  }
-  
-  button.btn-success {
-    background-color: #28a745;
-    border: none;
-  }
-  
-  button.btn-info {
-    background-color: #17a2b8;
-    border: none;
-    color: #fff;
-  }
-  
-  button:hover {
-    opacity: 0.9;
-  }
-  
+.card-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+button {
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+button.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+button.btn-warning {
+  background-color: #ffc107;
+  border: none;
+  color: #fff;
+}
+
+button.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+button.btn-info {
+  background-color: #17a2b8;
+  border: none;
+  color: #fff;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* New class for white background card */
+.white-bg-card {
+  background-color: #ffffff !important;
+}

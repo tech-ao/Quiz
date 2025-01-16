@@ -110,13 +110,13 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
         </li>
         <li className="nav-item">
           <Link
-            to="/topStudentReport"
-            className={`nav-link ${location.pathname === '/topStudentReport' ? 'active' : ''}`}
+            to="/adminAttendance"
+            className={`nav-link ${location.pathname === '/adminAttendance' ? 'active' : ''}`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
               <i className="bi bi-file-earmark-bar-graph"></i>
-              <span className="nav-text">Top Student Report</span>
+              <span className="nav-text">Attendance</span>
             </div>
           </Link>
         </li>

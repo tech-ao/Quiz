@@ -75,10 +75,10 @@ function AdminDashboard() {
               <Col lg={8} sm={12}>
                 <Row>
                   {[
-                    { label: "Total Students", count: dashboardDatas.activeCount, color: "blue", icon: "📦" },
-                    { label: "Total Teacher", count: "0", color: "pink", icon: "📚" },
+                    { label: "Total Students", count: dashboardDatas.activeCount || 0, color: "blue", icon: "📦" },
+                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, color: "pink", icon: "📚" },
                     { label: "Total EnrollmentRequest", count: "0", color: "green", icon: "🏆" },
-                    { label: "Total Question", count: "0", color: "orange", icon: "🎓" },
+                    { label: "Total Question", count: dashboardDatas.questionsCount|| 0, color: "orange", icon: "🎓" },
                   ].map((item, index) => (
                     <Col md={6} sm={6} xs={12} key={index} className="mb-4">
                       <Card className="dashboard-card shadow-sm">

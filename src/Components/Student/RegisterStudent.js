@@ -33,7 +33,7 @@ const RegisterStudent = () => {
     gender: "",
     studyModeId: "",
     country: "",
-    statusId: 1,
+    statusId: 3,
     createdBy: 1,
     profile: {
       name: "",
@@ -135,7 +135,7 @@ const RegisterStudent = () => {
         gender: "",
         studyModeId: "",
         country: "",
-        statusId: 1,
+        statusId: 3,
         createdBy: 1
       });
       setPreview(null);

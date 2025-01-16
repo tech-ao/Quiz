@@ -31,6 +31,7 @@ import { Provider } from 'react-redux';
 import store from './redux/Store/store';
 import AddTeacher from './Components/Teacher/AddTeacher';
 import TeacherDashboard from './Components/Teacher/TeacherDashboard';
+import AdminAttendance from './Components/Admin/AdminAttendance';
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -49,6 +50,7 @@ function App() {
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
+          <Route path ="/adminAttendance" element={<AdminAttendance/>}/>
 
           {/* Protected Routes */}
           <Route path="/adminDashboard" element={<ProtectedRoute element={<AdminDashboard />} />} />

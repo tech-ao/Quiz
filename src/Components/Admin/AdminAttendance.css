@@ -1,0 +1,131 @@
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.yearly-calendar {
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header button {
+  
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.header button:hover {
+  background-color: #0056b3;
+}
+
+.calendar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.month-container {
+  flex: 1 1 calc(25% - 10px);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 10px;
+  text-align: center;
+}
+
+.month-name {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day {
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.day:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.highlighted {
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+}
+
+.yearly-calendar .header {
+  position: sticky; /* Keeps it fixed during scroll */
+  top: 0; /* Fixed at the top */
+  background-color: #fff; /* Matches background */
+  z-index: 10; /* Ensures it's above other elements */
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.yearly-calendar .year-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Adds spacing between the buttons and year */
+}
+
+.yearly-calendar .year-selector button {
+  background-color: #007bff; /* Primary color */
+  color: white;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.yearly-calendar .year-selector button:hover {
+  background-color: #0056b3; /* Darker shade for hover effect */
+}
+
+.yearly-calendar .year-selector .year-display {
+  font-size: 14px; /* Makes the year text smaller */
+  font-weight: bold;
+  padding: 2px 5px;
+  background-color: #f8f9fa; /* Light gray background */
+  border: 1px solid #ddd; /* Subtle border */
+  border-radius: 4px;
+}
+
+.yearly-calendar .header h5 {
+  margin: 0;
+  font-size: 16px;
+}
+
+
+@media (max-width: 768px) {
+  .month-container {
+    flex: 1 1 calc(50% - 10px);
+  }
+}
+
+@media (max-width: 576px) {
+  .month-container {
+    flex: 1 1 100%;
+  }
+}
