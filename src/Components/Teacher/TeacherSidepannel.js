@@ -116,10 +116,22 @@ const TeacherSidePanel = () => {
           </Link>
         </li>
 
+        <li className="nav-item">
+          <Link
+            to="/TeacherSettings"
+            className={`nav-link ${location.pathname === '/TeacherSettings' ? 'active' : ''}`}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-gear"></i>
+              <span className="nav-text">Seetings</span>
+            </div>
+          </Link>
+        </li>
+
         {/* Announcements */}
         <li className="nav-item">
           <Link
-            to="/announcements"
+            to="/Announcements"
             className={`nav-link ${location.pathname === '/announcements' ? 'active' : ''}`}
           >
             <div className="icon-with-text">

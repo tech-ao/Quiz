@@ -37,6 +37,8 @@ import Test from './Components/Student/Test';
 import StudentCertificate from './Components/Student/StudentCertificate';
 import StudentOnlineClass from './Components/Student/StudentOnlineClass';
 import StudentSettings from './Components/Student/StudentSettings';
+import Announcements from './Components/Teacher/Announcements';
+import TeacherSettings from './Components/Teacher/TeacherSettings';
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -82,6 +84,9 @@ function App() {
           <Route path="/studentcertificate" element={<ProtectedRoute element={<StudentCertificate />} />} />
           <Route path="/studentOnlineClass" element={<ProtectedRoute element={<StudentOnlineClass />} />} />
           <Route path="/studentSettings" element={<ProtectedRoute element={<StudentSettings />} />} />
+          <Route path="/Announcements" element={<ProtectedRoute element={<Announcements />} />} />
+          <Route path="/TeacherSettings" element={<ProtectedRoute element={<TeacherSettings />} />} />
+
 
 
 
