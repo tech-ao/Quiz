@@ -109,7 +109,7 @@ const Abacus = () => {
 
       {/* Reset Button */}
       <Button className="mt-4" variant="danger" onClick={resetBeads}>
-        Reset Abacus
+        Reset 
       </Button>
     </Container>
   );

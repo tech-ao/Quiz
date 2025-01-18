@@ -134,6 +134,18 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
         </li>
         <li className="nav-item">
           <Link
+            to="/AbacusMath"
+            className={`nav-link ${location.pathname === '/AbacusMath' ? 'active' : ''}`}
+            onClick={closeSidePanel}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-controller"></i>
+              <span className="nav-text">Abacus</span>
+            </div>
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link
             to="/notification"
             className={`nav-link ${location.pathname === '/notification' ? 'active' : ''}`}
             onClick={closeSidePanel}

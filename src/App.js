@@ -39,6 +39,7 @@ import StudentOnlineClass from './Components/Student/StudentOnlineClass';
 import StudentSettings from './Components/Student/StudentSettings';
 import Announcements from './Components/Teacher/Announcements';
 import TeacherSettings from './Components/Teacher/TeacherSettings';
+import AbacusMath from './Components/Admin/Abacus';
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -86,6 +87,8 @@ function App() {
           <Route path="/studentSettings" element={<ProtectedRoute element={<StudentSettings />} />} />
           <Route path="/Announcements" element={<ProtectedRoute element={<Announcements />} />} />
           <Route path="/TeacherSettings" element={<ProtectedRoute element={<TeacherSettings />} />} />
+          <Route path="/AbacusMath" element={<ProtectedRoute element={<AbacusMath />} />} />
+
 
 
 

@@ -1,0 +1,46 @@
+.abacus-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .abacus-top,
+  .abacus-bottom {
+    display: flex;
+  }
+  
+  .abacus-column {
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  .bead {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #007bff;
+    margin: 5px;
+  }
+  
+  .top {
+    background-color: #ff6347; /* You can change this color for the top beads */
+  }
+  
+  .bottom {
+    background-color: #32cd32; /* You can change this color for the bottom beads */
+  }
+  
+  button {
+    margin-top: 20px;
+  }
+  
+  .value-display {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
