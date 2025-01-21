@@ -6,7 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const TeacherSidePanel = () => {
   const location = useLocation();
-  const [isAttendanceOpen, setAttendanceOpen] = useState(false);
+  const [isAttendanceOpen, setAttendanceOpen] = useState(true);
 
   const toggleAttendanceMenu = () => {
     setAttendanceOpen(!isAttendanceOpen);

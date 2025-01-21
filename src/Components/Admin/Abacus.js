@@ -5,6 +5,7 @@ import "./abacus.css";
 
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import AbacusSidePanel from "./AbacusSidePannel";
 
 const AbacusMath = () => {
   const columns = 17; // Total number of rods
@@ -103,7 +104,7 @@ const AbacusMath = () => {
     <div>
       <AdminHeader />
       <div className="d-flex ">
-        <Sidebar />
+        <AbacusSidePanel selectedLevel={selectedLevel} />
         <Container className="main-container p-4 min-vh-100">
           <div className="d-flex justify-content-between ">
             {/* Dropdown for Level Selection */}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './sidepannel.css';
@@ -6,6 +6,11 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const SidePanel = ({ isOpen, closeSidePanel }) => {
   const location = useLocation();
+  const [isOnlineOpen, setOnlineOpen] = useState(true);
+
+  const toggleOnlineMenu = () => {
+    setOnlineOpen(!isOnlineOpen);
+  };
 
   // Close the panel when clicking outside
   const handleOutsideClick = (event) => {
@@ -96,18 +101,57 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
-        <li className="nav-item">
+
+       {/* Online Menu */}
+       <li className="nav-item">
+          <div
+            className={`nav-link ${isOnlineOpen ? 'active' : ''}`}
+            onClick={toggleOnlineMenu}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-calendar2-check"></i>
+              <span className="nav-text">Online</span>
+              <i
+                className={`bi ${
+                  isOnlineOpen ? 'bi-chevron-down' : 'bi-chevron-right'
+                } dropdown-icon`}
+              ></i>
+            </div>
+          </div>
+          {isOnlineOpen && (
+            <ul className="nav flex-column sub-nav">
+               <li className="nav-item">
+                <Link
+                  to="/onlineClass"
+                  className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
+                  onClick={closeSidePanel}
+                >
+                  <div className="icon-with-text">
+                    <i className="bi bi-file-earmark-person"></i>
+                    <span className="nav-text">Online Class</span>
+                  </div>
+                </Link>
+              </li>
+            
+              <li className="nav-item">
           <Link
-            to="/onlineClass"
-            className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
+            to="/AbacusMath"
+            className={`nav-link ${location.pathname === '/AbacusMath' ? 'active' : ''}`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
-              <i className="bi bi-file-earmark-person"></i>
-              <span className="nav-text">Online Class</span>
+              <i className="bi bi-controller"></i>
+              <span className="nav-text">Abacus</span>
             </div>
           </Link>
         </li>
+            </ul>
+          )}
+        </li>
+
+
+        
         <li className="nav-item">
           <Link
             to="/adminAttendance"
@@ -132,18 +176,7 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
-        <li className="nav-item">
-          <Link
-            to="/AbacusMath"
-            className={`nav-link ${location.pathname === '/AbacusMath' ? 'active' : ''}`}
-            onClick={closeSidePanel}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-controller"></i>
-              <span className="nav-text">Abacus</span>
-            </div>
-          </Link>
-        </li>
+        
         <li className="nav-item">
           <Link
             to="/notification"
