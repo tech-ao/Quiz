@@ -1,100 +1,88 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect } from "react";
+import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
-import { Container } from "react-bootstrap";
+import { fetchGenders, fetchCountries, fetchDocumentType } from "../../redux/Services/Enum";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import "./AddTeacher.css";
-import PersonalInformationForm from "./PersonalInformation";
-import EducationAndExperienceForm from "./Education";
-import AgreeAndSign from "./AgreeandSing";
-import FranchiseRequirementsForm from "./Franchies";
-import LegalComplianceForm from "./LegalCompliance";
-import ReferencesAndResumeForm from "./Reference";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const AddTeacher = () => {
-  const [activeTab, setActiveTab] = useState("personalDetails");
-  const [preferredCountry, setPreferredCountry] = useState("India");
-
-  // Track the validity of each tab
-  const [formValidity, setFormValidity] = useState({
-    personalDetails: false,
-    education: false,
-    franchies: false,
-    legalcompliance: false,
-    reference: false,
-    agreeSign: false,
+  const [formData, setFormData] = useState({
+    fullName: "",
+    dob: "",
+    gender: "",
+    phoneNumber: "",
+    email: "",
+    permanentAddress: "",
+    currentResidentialAddress: "",
+    nationalityId: "",
+    photo: null,
+    photoID: null,
   });
 
-  const tabs = [
-    { id: "personalDetails", title: "Personal Detail", icon: "fas fa-info-circle" },
-    { id: "education", title: "Educational Qualification", icon: "fas fa-user-graduate" },
-    { id: "franchies", title: "Franchise Requirement", icon: "fas fa-handshake" },
-    ...(preferredCountry === "Other"
-      ? [
-          { id: "legalcompliance", title: "Legal and Compliance", icon: "fas fa-balance-scale" },
-          { id: "reference", title: "References And Resume", icon: "fas fa-file-alt" },
-        ]
-      : []),
-    { id: "agreeSign", title: "Agree and Sign", icon: "fas fa-check-circle" },
-  ];
+  const [genders, setGenders] = useState([]);
+  const [countries, setCountries] = useState([]);
+  const [documentType, setDocumentType] = useState([]);
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const dispatch = useDispatch();
 
-  const handleTabChange = (tabId) => {
-    if (!formValidity[activeTab]) {
-      alert(`Please complete the ${tabs.find((tab) => tab.id === activeTab).title} section before proceeding.`);
-      return;
+  useEffect(() => {
+    const fetchEnums = async () => {
+      try {
+        setGenders(await fetchGenders());
+        setCountries(await fetchCountries());
+        setDocumentType(await fetchDocumentType());
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      }
+    };
+    fetchEnums();
+  }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = async (e) => {
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      setFormData({ ...formData, [name]: files[0] });
     }
-    setActiveTab(tabId);
   };
 
-  const updateTabValidity = (tabId, isValid) => {
-    setFormValidity((prevValidity) => ({
-      ...prevValidity,
-      [tabId]: isValid,
-    }));
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required.";
+    if (!formData.dob) newErrors.dob = "Date of Birth is required.";
+    if (!formData.gender) newErrors.gender = "Gender is required.";
+    if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = "Phone Number must be 10 digits.";
+    if (!formData.email.match(/^\S+@\S+\.\S+$/)) newErrors.email = "Invalid Email Address.";
+    if (!formData.permanentAddress.trim()) newErrors.permanentAddress = "Permanent Address is required.";
+    if (!formData.currentResidentialAddress.trim()) newErrors.currentResidentialAddress = "Current Residential Address is required.";
+    if (!formData.nationalityId) newErrors.nationalityId = "Nationality is required.";
+    if (!formData.photo) newErrors.photo = "Candidate Photo is required.";
+    if (!formData.photoID) newErrors.photoID = "Photo ID is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const renderContent = () => {
-    switch (activeTab) {
-      case "personalDetails":
-        return (
-          <PersonalInformationForm
-            updateValidity={(isValid) => updateTabValidity("personalDetails", isValid)}
-          />
-        );
-      case "education":
-        return (
-          <EducationAndExperienceForm
-            updateValidity={(isValid) => updateTabValidity("education", isValid)}
-            setPreferredCountry={setPreferredCountry}
-          />
-        );
-      case "franchies":
-        return (
-          <FranchiseRequirementsForm
-            updateValidity={(isValid) => updateTabValidity("franchies", isValid)}
-          />
-        );
-      case "legalcompliance":
-        return (
-          <LegalComplianceForm
-            updateValidity={(isValid) => updateTabValidity("legalcompliance", isValid)}
-          />
-        );
-      case "reference":
-        return (
-          <ReferencesAndResumeForm
-            updateValidity={(isValid) => updateTabValidity("reference", isValid)}
-          />
-        );
-      case "agreeSign":
-        return (
-          <AgreeAndSign
-            updateValidity={(isValid) => updateTabValidity("agreeSign", isValid)}
-          />
-        );
-      default:
-        return <div>Select a tab to view content.</div>;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        setIsSubmitting(true);
+        await dispatch(addTeacherAction(formData));
+        toast.success("Teacher added successfully!");
+      } catch (error) {
+        toast.error("Failed to submit form.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -104,28 +92,347 @@ const AddTeacher = () => {
       <div className="d-flex">
         <Sidebar />
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
-            <div className="row">
-              <div className="col-md-3">
-                <div className="custom-sidebar">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      className={`custom-tab ${activeTab === tab.id ? "custom-tab-active" : ""}`}
-                      onClick={() => handleTabChange(tab.id)}
-                    >
-                      <i className={`${tab.icon}`}></i>
-                      <span>{tab.title}</span>
-                    </button>
-                  ))}
-                </div>
+        <div className="sub-container">
+          <Form onSubmit={handleSubmit}>
+            <h4 className="mb-4">Add Teacher</h4>
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="fullName">
+                  <Form.Label>Full Name</Form.Label>
+                  <Form.Control type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} isInvalid={!!errors.fullName} />
+                  <Form.Control.Feedback type="invalid">{errors.fullName}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="dob">
+                  <Form.Label>Date of Birth</Form.Label>
+                  <Form.Control type="date" name="dob" value={formData.dob} onChange={handleInputChange} isInvalid={!!errors.dob} />
+                  <Form.Control.Feedback type="invalid">{errors.dob}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="gender">
+                  <Form.Label>Gender</Form.Label>
+                  <Form.Select name="gender" value={formData.gender} onChange={handleInputChange} isInvalid={!!errors.gender}>
+                    <option value="">Select Gender</option>
+                    {genders.map((gender) => (
+                      <option key={gender.item1} value={gender.item1}>{gender.item2}</option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">{errors.gender}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="phoneNumber">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} isInvalid={!!errors.phoneNumber} />
+                  <Form.Control.Feedback type="invalid">{errors.phoneNumber}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="email">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" name="email" value={formData.email} onChange={handleInputChange} isInvalid={!!errors.email} />
+                  <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="nationalityId">
+                  <Form.Label>Nationality</Form.Label>
+                  <Form.Select name="nationalityId" value={formData.nationalityId} onChange={handleInputChange} isInvalid={!!errors.nationalityId}>
+                    <option value="">Select Nationality</option>
+                    {countries.map((country) => (
+                      <option key={country.item1} value={country.item1}>{country.item2}</option>
+                    ))}
+                  </Form.Select>
+                  <Form.Control.Feedback type="invalid">{errors.nationalityId}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <Row className="mb-3">
+              <Col md={6}>
+                <Form.Group controlId="photo">
+                  <Form.Label>Candidate Photo</Form.Label>
+                  <Form.Control type="file" name="photo" onChange={handleFileChange} isInvalid={!!errors.photo} />
+                  <Form.Control.Feedback type="invalid">{errors.photo}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+              <Col md={6}>
+                <Form.Group controlId="photoID">
+                  <Form.Label>Photo ID</Form.Label>
+                  <Form.Control type="file" name="photoID" onChange={handleFileChange} isInvalid={!!errors.photoID} />
+                  <Form.Control.Feedback type="invalid">{errors.photoID}</Form.Control.Feedback>
+                </Form.Group>
+              </Col>
+            </Row>
+
+           
+
+            <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="highestEducation">
+              <Form.Label>Highest Level of Education</Form.Label>
+              <Form.Control
+                type="text"
+                name="highestEducation"
+                value={formData.highestEducation}
+                onChange={handleInputChange}
+                isInvalid={!!errors.highestEducation}
+              />
+              <Form.Control.Feedback type="invalid">{errors.highestEducation}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="institution">
+              <Form.Label>Institution(s) Attended</Form.Label>
+              <Form.Control
+                type="text"
+                name="institution"
+                value={formData.institution}
+                onChange={handleInputChange}
+                isInvalid={!!errors.institution}
+              />
+              <Form.Control.Feedback type="invalid">{errors.institution}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="degree">
+              <Form.Label>Degrees/Certifications</Form.Label>
+              <Form.Control
+                type="text"
+                name="degree"
+                value={formData.degree}
+                onChange={handleInputChange}
+                isInvalid={!!errors.degree}
+              />
+              <Form.Control.Feedback type="invalid">{errors.degree}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="specialization">
+              <Form.Label>Subject Specialization</Form.Label>
+              <Form.Control
+                type="text"
+                name="specialization"
+                value={formData.specialization}
+                onChange={handleInputChange}
+                isInvalid={!!errors.specialization}
+              />
+              <Form.Control.Feedback type="invalid">{errors.specialization}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="graduationYear">
+              <Form.Label>Year of Graduation</Form.Label>
+              <Form.Control
+                type="text"
+                name="graduationYear"
+                value={formData.graduationYear}
+                onChange={handleInputChange}
+                isInvalid={!!errors.graduationYear}
+              />
+              <Form.Control.Feedback type="invalid">{errors.graduationYear}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="graduationPhoto">
+              <Form.Label>Graduation Photo</Form.Label>
+              <Form.Control
+                type="file"
+                name="graduationPhoto"
+                accept="image/*"
+                onChange={handleFileChange}
+                isInvalid={!!errors.graduationPhoto}
+              />
+              <Form.Control.Feedback type="invalid">{errors.graduationPhoto}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <h5 className="mb-3">3. Professional Experience</h5>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="employer">
+              <Form.Label>Current/Previous Employer</Form.Label>
+              <Form.Control
+                type="text"
+                name="employer"
+                value={formData.employer}
+                onChange={handleInputChange}
+                isInvalid={!!errors.employer}
+              />
+              <Form.Control.Feedback type="invalid">{errors.employer}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="jobTitle">
+              <Form.Label>Job Title(s)</Form.Label>
+              <Form.Control
+                type="text"
+                name="jobTitle"
+                value={formData.jobTitle}
+                onChange={handleInputChange}
+                isInvalid={!!errors.jobTitle}
+              />
+              <Form.Control.Feedback type="invalid">{errors.jobTitle}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="experienceYears">
+              <Form.Label>Years of Experience</Form.Label>
+              <Form.Control
+                type="text"
+                name="experienceYears"
+                value={formData.experienceYears}
+                onChange={handleInputChange}
+                isInvalid={!!errors.experienceYears}
+              />
+              <Form.Control.Feedback type="invalid">{errors.experienceYears}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="experiencePhoto">
+              <Form.Label>Experience Photo</Form.Label>
+              <Form.Control
+                type="file"
+                name="experiencePhoto"
+                accept="image/*"
+                onChange={handleFileChange}
+                isInvalid={!!errors.experiencePhoto}
+              />
+              <Form.Control.Feedback type="invalid">{errors.experiencePhoto}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-4">
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label className="fw-bold">Availability</Form.Label>
+              <div>
+                {['Full-time', 'Part-time', 'Temporary'].map((option) => (
+                  <Form.Check
+                    key={option}
+                    type="radio"
+                    name="availability"
+                    label={option}
+                    value={option}
+                    checked={formData.availability === option}
+                    onChange={handleInputChange}
+                    inline
+                  />
+                ))}
               </div>
-              <div className="col-md-9">
-                <div className="card shadow-sm">
-                  <div className="card-body custom-card">{renderContent()}</div>
-                </div>
+              {errors.availability && <div className="text-danger">{errors.availability}</div>}
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label className="fw-bold">Preferred Work Schedule</Form.Label>
+              <Form.Control
+                type="text"
+                name="workSchedule"
+                placeholder="Enter preferred days/times"
+                value={formData.workSchedule}
+                onChange={handleInputChange}
+                isInvalid={!!errors.workSchedule}
+              />
+              <Form.Control.Feedback type="invalid">{errors.workSchedule}</Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Row 2: Preferred Country */}
+        <Row className="mb-4">
+          <Col md={6}>
+            <Form.Group>
+              <Form.Label className="fw-bold">Preferred Country</Form.Label>
+              <div>
+                {['India', 'Other'].map((option) => (
+                  <Form.Check
+                    key={option}
+                    type="radio"
+                    name="preferredCountry"
+                    label={option}
+                    value={option}
+                    checked={formData.preferredCountry === option}
+                    onChange={handleInputChange}
+                    inline
+                  />
+                ))}
               </div>
+              {errors.preferredCountry && <div className="text-danger">{errors.preferredCountry}</div>}
+            </Form.Group>
+          </Col>
+        </Row>
+         <Row className="mb-3">
+                  <Col sm={6}>
+                    <Form.Group>
+                      <Form.Label>Criminal Background Check</Form.Label>
+                      <Form.Select>
+                        <option value="done">Done</option>
+                        <option value="not-done">Not Done</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Group>
+                      <Form.Label>Work Authorization (L2 / L1 visa)</Form.Label>
+                      <Form.Control type="file" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+        
+                {/* Row 2: Health and Medical Fitness and NDA */}
+                <Row className="mb-3">
+                  <Col sm={6}>
+                    <Form.Group>
+                      <Form.Label>Health and Medical Fitness (TB test)</Form.Label>
+                      <Form.Control type="file" />
+                    </Form.Group>
+                  </Col>
+                  <Col sm={6}>
+                    <Form.Group>
+                      <Form.Label>Non-Disclosure Agreement (NDA)</Form.Label>
+                      <Form.Select>
+                        <option value="signed">Signed</option>
+                        <option value="not-signed">Not Signed</option>
+                      </Form.Select>
+                      <Form.Control type="file" className="mt-2" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+        
+                {/* Row 3: Proof of Address */}
+                <Row className="mb-3">
+                  <Col sm={6}>
+                    <Form.Group>
+                      <Form.Label>Proof of Address (e.g., utility bill, lease agreement)</Form.Label>
+                      <Form.Control type="file" />
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                <div className="text-center">
+              <Button type="submit" variant="success" className="px-5" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
+           
             </div>
+          </Form>
           </div>
         </Container>
       </div>

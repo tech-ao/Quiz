@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
+import { editTeacherAction } from "../../redux/Action/TeacherAction";
+import { useDispatch } from 'react-redux';
+
 
 const EducationAndExperienceForm = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +18,7 @@ const EducationAndExperienceForm = () => {
     experienceYears: '',
     experiencePhoto: null,
   });
-
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -49,7 +52,11 @@ const EducationAndExperienceForm = () => {
 
   const handleSave = () => {
     if (validateForm()) {
-      console.log('Saving Data:', formData);
+      const formDataToSend = new FormData();
+      Object.keys(formData).forEach((key) => {
+        formDataToSend.append(key, formData[key]);
+      });
+      dispatch(editTeacherAction(formDataToSend));
       toast.success('Form saved successfully!');
     } else {
       toast.error('Please fix the errors before saving.');
