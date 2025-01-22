@@ -91,7 +91,7 @@ function App() {
           <Route path="/TeacherSettings" element={<ProtectedRoute element={<TeacherSettings />} />} />
           <Route path="/AbacusMath" element={<ProtectedRoute element={<AbacusMath />} />} />
           <Route path="/AbacusSidePanel" element={<ProtectedRoute element={<AbacusSidePanel />} />} />
-          <Route path="/EditTeacher" element={<ProtectedRoute element={<EditTeacher />} />} />
+          {/* <Route path="/EditTeacher" element={<ProtectedRoute element={<EditTeacher />} />} /> */}
 
 
 
