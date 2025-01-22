@@ -41,6 +41,7 @@ import Announcements from './Components/Teacher/Announcements';
 import TeacherSettings from './Components/Teacher/TeacherSettings';
 import AbacusMath from './Components/Admin/Abacus';
 import AbacusSidePanel from './Components/Admin/AbacusSidePannel';
+import EditTeacher from './Components/Teacher/EditTeacher';
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -90,6 +91,8 @@ function App() {
           <Route path="/TeacherSettings" element={<ProtectedRoute element={<TeacherSettings />} />} />
           <Route path="/AbacusMath" element={<ProtectedRoute element={<AbacusMath />} />} />
           <Route path="/AbacusSidePanel" element={<ProtectedRoute element={<AbacusSidePanel />} />} />
+          <Route path="/EditTeacher" element={<ProtectedRoute element={<EditTeacher />} />} />
+
 
 
 

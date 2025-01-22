@@ -91,8 +91,19 @@ const AddTeacher = () => {
       <AdminHeader />
       <div className="d-flex">
         <Sidebar />
-        <Container className="main-container p-4 min-vh-100">
-        <div className="sub-container">
+        <Container
+          className="main-container p-2 d-flex justify-content-center align-items-center"
+          style={{ height: "85vh" }}
+        >
+          <div
+            className="sub-container p-4 bg-white rounded shadow-sm"
+            style={{
+              border: "1px solid #ddd",
+              width: "100%",
+              height: "80vh",
+              overflowY: "auto",
+            }}
+          >
           <Form onSubmit={handleSubmit}>
             <h4 className="mb-4">Add Teacher</h4>
             <Row className="mb-3">
@@ -426,13 +437,12 @@ const AddTeacher = () => {
                   </Col>
                 </Row>
 
-                <div className="text-center">
-              <Button type="submit" variant="success" className="px-5" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Submit"}
-              </Button>
-           
-            </div>
-          </Form>
+              <div className="text-center">
+                <Button type="submit" variant="success" className="px-5" disabled={isSubmitting}>
+                  {isSubmitting ? "Submitting..." : "Submit"}
+                </Button>
+              </div>
+            </Form>
           </div>
         </Container>
       </div>

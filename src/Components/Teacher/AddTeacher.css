@@ -1,4 +1,4 @@
-/* Sidebar Container */
+Sidebar Container
 .custom-sidebar {
   background-color: #fff;
   border-radius: 12px;
@@ -21,6 +21,8 @@
   text-align: left;
   transition: background-color 0.3s ease;
 }
+
+
 
 .custom-tab i {
   margin-right: 10px; /* Space between icon and text */
