@@ -7,6 +7,13 @@
   padding: 20px;
 }
 
+.registerbg-image {
+  background-image: url('../images/RegisterBc.jpg');
+  /* Update with your background image path */
+  background-size: cover;
+  background-position: center;
+}
+
 .register-student-container {
   background: #fff;
   padding: 20px;

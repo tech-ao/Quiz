@@ -38,8 +38,7 @@ export const addStudentAction = (studentData , paginationDetail) => async (dispa
   dispatch({ type: "ADD_STUDENT_REQUEST" });
   try {
     const addedStudent = await addStudent(studentData); // Call the API
-    dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent }); // Dispatch success
-    dispatch(fetchStudents(paginationDetail));
+    dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent }); 
   } catch (error) {
     dispatch({ type: "ADD_STUDENT_FAILURE", payload: error.message }); // Dispatch failure
   }

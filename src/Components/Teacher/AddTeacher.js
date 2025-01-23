@@ -66,6 +66,16 @@ const AddTeacher = () => {
     if (!formData.nationalityId) newErrors.nationalityId = "Nationality is required.";
     if (!formData.photo) newErrors.photo = "Candidate Photo is required.";
     if (!formData.photoID) newErrors.photoID = "Photo ID is required.";
+    if (!formData.highestEducation.trim()) newErrors.highestEducation = 'Highest Education is required.';
+    if (!formData.institution.trim()) newErrors.institution = 'Institution is required.';
+    if (!formData.degree.trim()) newErrors.degree = 'Degree is required.';
+    if (!formData.specialization.trim()) newErrors.specialization = 'Specialization is required.';
+    if (!formData.graduationYear.match(/^\d{4}$/)) newErrors.graduationYear = 'Graduation Year must be a valid year.';
+    if (!formData.graduationPhoto) newErrors.graduationPhoto = 'Graduation Photo is required.';
+    if (!formData.employer.trim()) newErrors.employer = 'Employer is required.';
+    if (!formData.jobTitle.trim()) newErrors.jobTitle = 'Job Title is required.';
+    if (!formData.experienceYears.match(/^\d+$/)) newErrors.experienceYears = 'Years of Experience must be a valid number.';
+    if (!formData.experiencePhoto) newErrors.experiencePhoto = 'Experience Photo is required.';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;

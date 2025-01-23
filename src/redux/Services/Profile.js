@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8012/api";
+import BASE_URL from "./Config";
 const COMMON_HEADERS = {
   Accept: "text/plain",
   "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
@@ -16,7 +16,7 @@ export const getProfile = async (studentId) => {
   try {
     console.log(studentId); // Log the studentId for debugging
 
-    const response = await fetch(`${API_BASE_URL}/Profile/GetContentByUserId?UserId=${studentId}`, {
+    const response = await fetch(`${BASE_URL}/Profile/GetContentByUserId?UserId=${studentId}`, {
       method: "GET",
       headers: getHeaders(),
     });

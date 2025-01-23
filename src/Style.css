@@ -52,8 +52,12 @@ body {
 }
 
 
+
+
 .sub-container {
+
   background-color: white;
+  width: 100% !important;
   padding: 10px;
   border-radius: 20px;
 }

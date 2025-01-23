@@ -93,14 +93,7 @@ const AdminLoginPage = () => {
             <Button type="submit" variant="success" className="w-100">
               Login
             </Button>
-            <div className="text-center mt-3">
-              <small>
-                Forgot your password?{" "}
-                <a href="#!" className="text-decoration-none">
-                  Reset Password
-                </a>
-              </small>
-            </div>
+            
           </Form>
         </div>
       </Col>
