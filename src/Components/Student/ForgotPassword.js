@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Form, Container, Row, Col } from "react-bootstrap";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Button, Form, Container, Row, Col, Card } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../redux/Services/Config";
 
 const ForgotPassword = () => {
@@ -9,7 +9,7 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleVerifyEmail = async () => {
     setLoading(true);
@@ -18,9 +18,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await fetch(
-        `${BASE_URL}/PasswordManager/StudentForgotPassword?email=${encodeURIComponent(
-          email
-        )}`,
+        `${BASE_URL}/PasswordManager/StudentForgotPassword?email=${encodeURIComponent(email)}`,
         {
           method: "POST",
           headers: {
@@ -33,9 +31,9 @@ const ForgotPassword = () => {
 
       const data = await response.json();
 
-      if (response.ok && data) {
+      if (response.ok && data.isSuccess) {
         setIsVerified(true);
-        setSuccess("Please check your email.");
+        setSuccess("Mail sent successfully. Please check your email.");
       } else {
         setError(data.message || "Failed to verify email.");
       }
@@ -48,47 +46,49 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col xs={12} md={6}>
-          <h3 className="text-center">Forgot Password</h3>
-          {error && <div className="alert alert-danger">{error}</div>}
-          {success && <div className="alert alert-success">{success}</div>}
-          <Form>
-            {/* Email Field */}
-            <Form.Group className="mb-3" controlId="email">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                readOnly={isVerified} // Lock the email field if verified
-                required
-              />
-            </Form.Group>
+    <Container className="d-flex justify-content-center align-items-center vh-100">
+      <Row className="w-100">
+        <Col xs={12} md={6} lg={5} className="mx-auto">
+          <Card className="shadow-lg border-0 p-4">
+            <Card.Body>
+              <h3 className="text-center mb-4">Forgot Password</h3>
+              {error && <div className="alert alert-danger">{error}</div>}
+              {success && <div className="alert alert-success">{success}</div>}
 
-            {/* Verify Button */}
-            {!isVerified && (
-              <Button
-                variant="success"
-                className="w-100 mb-2"
-                onClick={handleVerifyEmail}
-                disabled={loading}
-              >
-                {loading ? "Verifying..." : "Verify Email"}
-              </Button>
-            )}
+              <Form>
+                <Form.Group className="mb-3" controlId="email">
+                  <Form.Label>Email Address</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    readOnly={isVerified}
+                    required
+                  />
+                </Form.Group>
 
-            {/* Close Button */}
-            <Button
-              variant="secondary"
-              className="w-100"
-              onClick={() => navigate("/")} // Navigate to the login page
-            >
-              Close
-            </Button>
-          </Form>
+                {!isVerified && (
+                  <Button
+                    variant="success"
+                    className="w-100 mb-2"
+                    onClick={handleVerifyEmail}
+                    disabled={loading}
+                  >
+                    {loading ? "Verifying..." : "Verify Email"}
+                  </Button>
+                )}
+
+                <Button
+                  variant="secondary"
+                  className="w-100"
+                  onClick={() => navigate("/")}
+                >
+                  Close
+                </Button>
+              </Form>
+            </Card.Body>
+          </Card>
         </Col>
       </Row>
     </Container>

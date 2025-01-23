@@ -124,9 +124,6 @@ const RegisterStudent = () => {
 
     try {
       const response = await dispatch(addStudentAction(formData));
-      console.log(response?.message);
-
-
       if (response?.isSuccess) { // Check if the request was successful
         toast.success("Student registered successfully!");
 

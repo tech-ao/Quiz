@@ -12,15 +12,26 @@ import {
 } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from "../../Components/images/Logo.png";
-import '../Admin/adminHeader.css'
+import '../Admin/adminHeader.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStudent } from '../../redux/Action/StudentAction';
+
 const StudentHeader = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [studentName, setStudentName] = useState(''); // State to store student's name
   const popupRef = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const studentData = useSelector(state => state.studentData); // Assuming the student data is stored in Redux
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
   useEffect(() => {
+    const storedStudentId = localStorage.getItem('studentId');
+    if (storedStudentId) {
+      dispatch(fetchStudent(storedStudentId)); // Fetch student data if required
+    }
+
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setShowPopup(false);
@@ -29,11 +40,22 @@ const StudentHeader = ({ toggleSidebar }) => {
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    // When student data is fetched, update the student name
+    if (studentData && studentData.name) {
+      setStudentName(studentData.name);
+      localStorage.setItem('studentName', studentData.name); // Optionally store in localStorage
+    }
+  }, [studentData]);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
-      navigate('/');
+      // Remove student data from localStorage
+      localStorage.removeItem('studentName');
+      localStorage.removeItem('studentId');
+      navigate('/'); // Redirect to home page
     }
   };
 
@@ -44,7 +66,6 @@ const StudentHeader = ({ toggleSidebar }) => {
 
   return (
     <Navbar expand="lg" className="header py-2">
-
       <Row className="align-items-center w-100">
         {/* Logo and Sidebar Toggle */}
         <Col xs={6} md={3} className="d-flex align-items-center">
@@ -71,7 +92,7 @@ const StudentHeader = ({ toggleSidebar }) => {
         {/* Welcome Message */}
         <Col xs={12} md={5} className="text-center d-none d-md-block">
           <span className="fw-bold welcome-message">
-            Welcome, Student{' '}
+            Welcome, {studentName || 'Student'}{' '}
             <span role="img" aria-label="wave">
               👋
             </span>
@@ -119,7 +140,7 @@ const StudentHeader = ({ toggleSidebar }) => {
               className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
               <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">Abinash</span>
+              <span className="admin-text">{studentName || 'Student'}</span>
             </Button>
 
             {showPopup && (
@@ -137,9 +158,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={handleUpdatePassword}
                   >
-                    {/* <i className="bi bi-arrow-clockwise ms-auto"></i> Reset Icon */}
                     <RiRestartLine size={18} className="me-2"/> Password
-                    {/* <span className="me-2">Password</span> */}
                   </li>
                   {/* Logout */}
                   <li
@@ -154,7 +173,6 @@ const StudentHeader = ({ toggleSidebar }) => {
           </div>
         </Col>
       </Row>
-
     </Navbar>
   );
 };
