@@ -10,9 +10,11 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
+    
     if (confirmLogout) {
+      console.log("Logging out...");
       navigate("/"); // Redirect to home or login page
-    }
+    } 
   };
 
   return (
@@ -32,7 +34,7 @@ const StudentSidePannel = ({ studyModeId }) => {
         <li className="nav-item">
           <Link
             to="/Test"
-            className={`nav-link ${location.pathname === '/studentTest' ? 'active' : ''}`}
+            className={`nav-link ${location.pathname === '/Test' ? 'active' : ''}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-patch-question"></i>
@@ -44,7 +46,7 @@ const StudentSidePannel = ({ studyModeId }) => {
           <li className="nav-item">
             <Link
               to="/StudentOnlineClass"
-              className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
+              className={`nav-link ${location.pathname === '/StudentOnlineClass' ? 'active' : ''}`}
             >
               <div className="icon-with-text">
                 <i className="bi bi-laptop"></i>
@@ -76,17 +78,20 @@ const StudentSidePannel = ({ studyModeId }) => {
           </Link>
         </li>
         <li className="nav-item">
-          <Link
-            to="/"
-            onClick={handleLogout}
-            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-box-arrow-right"></i>
-              <span className="nav-text">Logout</span>
-            </div>
-          </Link>
-        </li>
+  <a
+    href="#"
+    onClick={(e) => {
+      e.preventDefault(); // Prevents unintended navigation
+      handleLogout();
+    }}
+    className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+  >
+    <div className="icon-with-text">
+      <i className="bi bi-box-arrow-right"></i>
+      <span className="nav-text">Logout</span>
+    </div>
+  </a>
+</li>
       </ul>
     </div>
   );

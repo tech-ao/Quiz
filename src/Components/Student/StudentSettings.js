@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Container, Card, Image, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import Sidebar from "./StudnetSidebar"; // Ensure correct import
-import StudentHeader from "./StudentHeader"; // Ensure correct import
-import { FaEdit } from "react-icons/fa"; // Edit icon
+import Sidebar from "./StudnetSidebar";
+import StudentHeader from "./StudentHeader";
+import { FaEdit } from "react-icons/fa";
 import BASE_URL from "../../redux/Services/Config";
-import { editStudentAction, fetchStudent } from "../../redux/Action/StudentAction"; // Updated API calls
-import EditStudent from "./EditStudent"; // Import EditStudent component
+import { editStudentAction, fetchStudent } from "../../redux/Action/StudentAction";
+import SettingEdit from "./SettingEdit";
 import "./StudentSettings.css";
 
 const StudentSettings = () => {
@@ -23,23 +23,41 @@ const StudentSettings = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [studentId, setStudentId] = useState(null);
 
+  // Sidebar toggle state
+  const [isSidebarVisible, setSidebarVisible] = useState(window.innerWidth >= 768);
+
+  // Handle screen resizing
+  useEffect(() => {
+    const handleResize = () => {
+      setSidebarVisible(window.innerWidth >= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+    setSidebarVisible((prev) => !prev);
+  };
+
+  const handleCloseEditStudent = () => {
+    setShowEditStudent(false);
+    setSelectedStudentId(null);
+  };
   // Retrieve Student ID from Redux or LocalStorage
   useEffect(() => {
     let storedStudentId = localStorage.getItem("studentId");
 
     if (studentData?.userId) {
       setStudentId(storedStudentId);
-      localStorage.setItem("studentId", storedStudentId); // Store if not already saved
+      localStorage.setItem("studentId", storedStudentId);
     } else if (storedStudentId) {
       setStudentId(storedStudentId);
-      dispatch(fetchStudent(storedStudentId)); // Fetch student details
+      dispatch(fetchStudent(storedStudentId));
     } else {
       setError("Student ID is missing!");
     }
   }, [dispatch, studentData?.userId]);
-
-  // Format Date of Birth
-  const formatDate = (dob) => (dob ? new Date(dob).toISOString().split("T")[0] : "N/A");
 
   // Fetch student profile image
   useEffect(() => {
@@ -48,8 +66,8 @@ const StudentSettings = () => {
         .get(`${BASE_URL}/Profile/GetContentByUserId?userId=${studentId}`, {
           headers: {
             accept: "text/plain",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280", // Replace with actual API key
-            AccessToken: "123", // Replace with actual access token
+            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            AccessToken: "123",
           },
         })
         .then((response) => {
@@ -68,25 +86,21 @@ const StudentSettings = () => {
   const handleOpenEditStudent = () => {
     if (studentId) {
       setSelectedStudentId(studentId);
-      dispatch(editStudentAction(studentId)); // Fetch student details for editing
+      dispatch(editStudentAction(studentId));
       setShowEditStudent(true);
     }
   };
 
-  // Close EditStudent component & refresh student list
-  const handleCloseEditStudent = () => {
-    setShowEditStudent(false);
-    setSelectedStudentId(null);
-    // dispatch(fetchStudent()); // Refresh student list after editing
-  };
-
+  // Close EditStudent component
   if (!studentId) return <p className="text-danger text-center">Error: Student ID is missing!</p>;
 
   return (
     <div>
-      <StudentHeader />
+      {/* Header with Sidebar Toggle */}
+      <StudentHeader toggleSidebar={toggleSidebar} />
+
       <div className="d-flex">
-        <Sidebar />
+        {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             {/* Header with Edit Icon */}
@@ -118,7 +132,7 @@ const StudentSettings = () => {
                     <p>{error}</p>
                   ) : profileImage ? (
                     <Image
-                      src={`data:image/jpeg;base64,${profileImage}`} // Display base64 image
+                      src={`data:image/jpeg;base64,${profileImage}`}
                       alt="Profile"
                       roundedCircle
                       width="150"
@@ -138,7 +152,7 @@ const StudentSettings = () => {
 
                 <Row className="mt-3 w-100">
                   <Col md={4}><strong>Phone:</strong><p>{studentData?.countryCode} {studentData?.phoneNumber || "N/A"}</p></Col>
-                  <Col md={4}><strong>Date of Birth:</strong><p>{formatDate(studentData?.dob)}</p></Col>
+                  <Col md={4}><strong>Date of Birth:</strong><p>{studentData?.dob || "N/A"}</p></Col>
                   <Col md={4}><strong>Gender:</strong><p>{studentData?.genderName || "N/A"}</p></Col>
                 </Row>
 
@@ -159,9 +173,9 @@ const StudentSettings = () => {
 
       {/* EditStudent Component */}
       {showEditStudent && (
-        <EditStudent
+        <SettingEdit
           show={showEditStudent}
-          handleClose={handleCloseEditStudent}
+          onClose={handleCloseEditStudent} 
           studentId={selectedStudentId}
         />
       )}
