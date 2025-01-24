@@ -45,7 +45,6 @@ const Header = ({ toggleSidebar }) => {
 
   return (
     <Navbar expand="lg" className="header py-2">
-
       <Row className="align-items-center w-100">
         {/* Logo and Sidebar Toggle */}
         <Col xs={6} md={3} className="d-flex align-items-center">
@@ -155,7 +154,6 @@ const Header = ({ toggleSidebar }) => {
           </div>
         </Col>
       </Row>
-
     </Navbar>
   );
 };

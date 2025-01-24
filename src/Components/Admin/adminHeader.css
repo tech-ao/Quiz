@@ -4,7 +4,6 @@
   border-bottom: 1px solid #ddd;
 }
 
-
 .logo1 {
   max-width: 80px;
 }
@@ -81,9 +80,9 @@ img.logo1.me-2 {
   .admin-menu {
     justify-content: center; /* Center the icon */
   }
-  .header-icon-group{
-    position: relative;
-    left: 40px;
+  .header-icon-group {
+    position: static; /* Fix alignment issues */
+    margin-left: auto;
   }
 }
 
@@ -91,12 +90,12 @@ img.logo1.me-2 {
   .action-button {
     font-size: 12px;
   }
-  
-    .admin-popup {
-      position: absolute;
-      width: 135px;
-      right: 5px; 
-    }
+
+  .admin-popup {
+    position: absolute;
+    width: 150px;
+    right: 5px;
+  }
 
   .menu-item {
     font-size: 12px;
@@ -104,13 +103,13 @@ img.logo1.me-2 {
 }
 
 /* Header Profile Color */
-.admin-text{
-  color: #198754;;
+.admin-text {
+  color: #198754;
 }
 
-.taggleAdminbut{
+.taggleAdminbut {
   position: absolute;
-  left: 0px;
+  left: 0;
 }
 
 .admin-popup {
