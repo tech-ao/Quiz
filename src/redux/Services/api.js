@@ -46,6 +46,8 @@ export const addStudent = async (studentData) => {
     body: JSON.stringify(studentData),
   });
   if (!response.ok) throw new Error("Failed to add student");
+  console.log(response);
+  
   return await response.json();
 };
 

@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Form, Button, Badge, Spinner } from "react-bootstrap";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
+import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
 
 const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState("");
-   const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const [selectedRequests, setSelectedRequests] = useState([]);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -20,15 +24,12 @@ const EnrollmentRequestList = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setIsSidebarVisible(false); // Hide sidebar by default on mobile
-      }
+      setIsSidebarVisible(window.innerWidth >= 768);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const studentsPerPage = 15;
   useEffect(() => {
     const paginationDetail = {
@@ -51,12 +52,9 @@ const EnrollmentRequestList = () => {
       }
     };
     fetchRequests();
-  }, []);
+  }, [currentPage]);
 
-  console.log(requests.searchAndListStudentResult);
-  
   const handleSearch = () => {
-    // Filter requests based on the search term
     const filteredRequests = requests.searchAndListStudentResult.filter(
       (request) =>
         request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -66,19 +64,28 @@ const EnrollmentRequestList = () => {
   };
 
   const handleSelectRequest = (id) => {
-    setSelectedRequests((prevSelected) =>
-      prevSelected.includes(id)
-        ? prevSelected.filter((requestId) => requestId !== id)
-        : [...prevSelected, id]
-    );
+    setSelectedRequests(selectedRequests.includes(id) ? [] : [id]);
   };
 
-  const handleApproveSelected = () => {
-    alert("Approved selected requests: " + selectedRequests.join(", "));
+  const handleApprove = async () => {
+    await updateStatus(1);
   };
 
-  const handleRejectSelected = () => {
-    alert("Rejected selected requests: " + selectedRequests.join(", "));
+  const handleDeny = async () => {
+    await updateStatus(3);
+  };
+
+  const updateStatus = async (statusId) => {
+    try {
+      await Promise.all(
+        selectedRequests.map((studentId) => dispatch(editStudentAction({ statusId }, studentId)))
+      );
+      dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
+      toast.success(`Status updated successfully!`);
+      setSelectedRequests([]);
+    } catch (error) {
+      toast.error("Failed to update status. Please try again.");
+    }
   };
 
   return (
@@ -101,10 +108,10 @@ const EnrollmentRequestList = () => {
                 </Button>
               </Col>
               <Col md={4} className="d-flex justify-content-end">
-                <Button variant="success" onClick={handleApproveSelected} className="ml-2">
+                <Button variant="success" onClick={handleApprove} className="ml-2" disabled={selectedRequests.length === 0}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleRejectSelected} className="ml-2">
+                <Button variant="danger" onClick={handleDeny} className="ml-2" disabled={selectedRequests.length === 0}>
                   Reject
                 </Button>
               </Col>
@@ -121,13 +128,7 @@ const EnrollmentRequestList = () => {
                   <Table striped bordered hover responsive>
                     <thead>
                       <tr>
-                        <th>
-                          <Form.Check
-                            type="checkbox"
-                            onChange={(e) => handleSelectRequest("all")}
-                            checked={selectedRequests.length === requests.length}
-                          />
-                        </th>
+                        <th>Select</th>
                         <th>S.Number</th>
                         <th>Reg Number</th>
                         <th>Name</th>
@@ -138,7 +139,7 @@ const EnrollmentRequestList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {requests.searchAndListStudentResult.map((request , index) => (
+                      {requests.searchAndListStudentResult.map((request, index) => (
                         <tr key={request.id || index}>
                           <td>
                             <Form.Check
@@ -147,7 +148,6 @@ const EnrollmentRequestList = () => {
                               onChange={() => handleSelectRequest(request.id)}
                             />
                           </td>
-                        
                           <td>{index + 1}</td>
                           <td>{request.studentId}</td>
                           <td>{request.firstName}</td>

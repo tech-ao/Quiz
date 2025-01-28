@@ -123,11 +123,14 @@ const RegisterStudent = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await dispatch(addStudentAction(formData));
-      if (response?.isSuccess) { // Check if the request was successful
-        toast.success("Student registered successfully!");
+      console.log("Submitting Form Data:", formData); // Debugging
 
-        // Reset form
+      const response = await dispatch(addStudentAction(formData));
+
+      console.log("Response from Action:", response); // Debugging
+
+      if (response?.isSuccess) {
+        toast.success("Student registered successfully!");
         setFormData({
           firstName: "",
           lastName: "",
@@ -147,8 +150,7 @@ const RegisterStudent = () => {
         throw new Error(response?.message || "Failed to register student!");
       }
     } catch (error) {
-      console.error("Error registering student:", error);
-
+      console.error("Error Response:", error); // Debugging
       toast.error(error?.response?.message || error.message || "Failed to register student!");
     } finally {
       setIsSubmitting(false);
@@ -315,15 +317,13 @@ const RegisterStudent = () => {
             </Form.Group>
 
             <div className="d-flex align-items-center justify-content-between">
-  <Link to="/" className="text-decoration-none text-success me-2">
-   Go to Login
-  </Link>
-  <Button variant="success" type="submit" disabled={isSubmitting}>
-    {isSubmitting ? "Registering..." : "Register Student"}
-  </Button>
-</div>
-
-
+              <Link to="/" className="text-decoration-none text-success me-2">
+                Go to Login
+              </Link>
+              <Button variant="success" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Registering..." : "Register Student"}
+              </Button>
+            </div>
           </Form>
         </div>
       </div>

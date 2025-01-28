@@ -35,14 +35,36 @@ export const getStudentEnrollmentRequest = (paginationDetail) => async (dispatch
 
 
 export const addStudentAction = (studentData , paginationDetail) => async (dispatch) => {
+  console.log(studentData);
+  
   dispatch({ type: "ADD_STUDENT_REQUEST" });
   try {
     const addedStudent = await addStudent(studentData); // Call the API
     dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent }); 
+    return addedStudent;
   } catch (error) {
     dispatch({ type: "ADD_STUDENT_FAILURE", payload: error.message }); // Dispatch failure
   }
 };
+
+// export const addStudentAction = (studentData, paginationDetail) => async (dispatch) => {
+//   console.log("Student Data Sent:", studentData); // Debugging
+  
+//   dispatch({ type: "ADD_STUDENT_REQUEST" });
+
+//   try {
+//     const addedStudent = await addStudent(studentData); // Call the API
+//     console.log("API Response:", addedStudent); // Debugging
+
+//     dispatch({ type: "ADD_STUDENT_SUCCESS", payload: addedStudent });
+
+//     return addedStudent; // Return the API response correctly
+//   } catch (error) {
+//     console.error("Error from API:", error); // Debugging
+//     dispatch({ type: "ADD_STUDENT_FAILURE", payload: error.message });
+//     throw error; // Ensure the error is thrown so it can be caught in handleSubmit
+//   }
+// };
 
 
 export const editStudentAction = (studentData,paginationDetail) => async (dispatch) =>{
