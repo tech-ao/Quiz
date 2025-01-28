@@ -6,7 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const SidePanel = ({ isOpen, closeSidePanel }) => {
   const location = useLocation();
-  const [isOnlineOpen, setOnlineOpen] = useState(true);
+  const [isOnlineOpen, setOnlineOpen] = useState(false);
 
   const toggleOnlineMenu = () => {
     setOnlineOpen(!isOnlineOpen);
@@ -123,7 +123,8 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
             <ul className="nav flex-column sub-nav">
                <li className="nav-item">
                 <Link
-                  to="/onlineClass"
+                  // to="/onlineClass"
+                  to="/AbacusKit"
                   className={`nav-link ${location.pathname === '/onlineClass' ? 'active' : ''}`}
                   onClick={closeSidePanel}
                 >
