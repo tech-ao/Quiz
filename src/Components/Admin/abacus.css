@@ -1,0 +1,106 @@
+.abacus-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: -20px;
+  }
+  
+  .abacus-top,
+  .abacus-bottom {
+    display: flex;
+  }
+  
+  .abacus-column {
+    width: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+  
+  .bead {
+    width: 20px;
+    height: 20px;
+    border-radius: 0%;
+    background-color: #007bff;
+    margin: 5px;
+  }
+  
+  .top {
+    background-color: #ff6347; /* You can change this color for the top beads */
+  }
+  
+  .bottom {
+    background-color: #32cd32; /* You can change this color for the bottom beads */
+  }
+  
+  button {
+    margin-top: 20px;
+  }
+  
+  .value-display {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  /* Add this new class for icon and text styling */
+  .abacus-kit {
+    display: flex;
+    align-items: center; /* Aligns icon and text vertically */
+  }
+  
+  .abacus-kit i {
+    margin-right: 8px; /* Space between icon and text */
+    font-size: 1.2rem; /* Increase icon size */
+    color: #f31383; /* Set icon color to rose */
+  }
+  
+  .abacus-kit span {
+    
+    font-size: 1.2rem; /* Increase text size */
+  }
+  
+  /* Style for the list items */
+  
+  .rounded-green {
+    background-color: #32cd32; /* Green background color */
+    color: white; /* Text color */
+    border-radius: 20px; /* Rounded corners for the list item */
+    padding: 5px 15px; /* Padding for better appearance */
+    margin: 15px 0; /* Increased margin between list items */
+    list-style-type: none; /* Remove default list styling */
+    display: block; /* Change to block to stack items vertically */
+    width: 600px; /* Set a fixed width */
+    position: relative; /* Position relative for pseudo-element */
+    counter-increment: list-counter; /* Increment the counter for each list item */
+    font-weight: bold;
+  }
+  
+  ul {
+    counter-reset: list-counter; /* Reset the counter for the list */
+  }
+  
+  .rounded-green::before {
+    background-color: #32cd32; /* Green background for the counter */
+    padding: 5px 10px; /* Padding for the counter */
+    border-radius: 50%; /* Fully rounded corners for the counter */
+    content: counter(list-counter) ". "; /* Use the counter value followed by a dot */
+    position: absolute; /* Position it absolutely */
+    left: -25px; /* Adjust position to the left */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Adjust for vertical centering */
+    color: white; /* Text color for the number */
+    font-weight: bold; /* Make the number bold */
+  }
+  
+  .abacus-bead {
+    /* Existing styles */
+    /* Add 3D effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+    transition: transform 0.2s; /* Smooth transition for hover effect */
+  }
+  
+  .abacus-bead:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+  }

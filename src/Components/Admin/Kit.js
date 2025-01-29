@@ -1,170 +1,81 @@
 import React, { useState } from "react";
-import { Container, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./kit.css";
 
 const AbacusKit = () => {
-  const columns = 17; // Total number of rods
-  const topBeads = 1; // Top section: 1 bead per rod
-  const bottomBeads = 4; // Bottom section: 4 beads per rod
+  const columns = 17; // 17 rods
+  const topBeads = 1; // 1 top bead per rod
+  const bottomBeads = 4; // 4 bottom beads per rod
 
-  // Function to create the initial bead state
+  // Initialize bead state
   const createInitialBeadState = () => ({
-    top: Array(columns).fill(false), // Top beads: false = inactive
-    bottom: Array(columns).fill(Array(bottomBeads).fill(false)), // Bottom beads
+    top: Array(columns).fill(false),
+    bottom: Array(columns).fill(Array(bottomBeads).fill(false)),
   });
 
   const [beadState, setBeadState] = useState(createInitialBeadState());
 
-  // General facts for each level
-  
-
-  // Toggle a bead's state
+  // Toggle bead state
   const toggleBead = (section, colIndex, beadIndex = null) => {
     setBeadState((prevState) => {
-      const newState = { ...prevState };
+      const newState = JSON.parse(JSON.stringify(prevState));
 
       if (section === "top") {
-        // Toggle the clicked bead's state
-        newState.top[colIndex] = true; // Set the clicked bead to active
-        // eslint-disable-next-line no-self-assign
-        // Set the color based on the new state
-        newState.topColor = newState.top[colIndex] ? "#FFD700" : "#e0e0e0";
+        newState.top[colIndex] = !newState.top[colIndex];
       } else if (section === "bottom") {
-        newState.bottom = newState.bottom.map((column, idx) =>
-          idx === colIndex
-            ? column.map((state, index) =>
-                index === beadIndex ? !state : state
-              )
-            : column
-        );
+        // Toggle the clicked bottom bead
+        newState.bottom[colIndex][beadIndex] = !newState.bottom[colIndex][beadIndex];
+        
+        // No changes to previous beads
       }
       return newState;
     });
   };
 
-  // Reset all beads to their inactive state
+  // Reset all beads
   const resetBeads = () => {
     setBeadState(createInitialBeadState());
   };
 
   return (
-    <div>
-      <div className="d-flex ">
-         <Container className="main-container p-4 min-vh-100">
-            <div className="sub-container">
-              <Container
-                className="p-4 d-flex flex-column align-items-center"
-                style={{ maxWidth: "900px" }}
-              >
-                <h2 className="text-center mb-4">Interactive Abacus</h2>
-
-                {/* Abacus Frame */}
-                <div
-                  className="abacus-frame border border-dark rounded shadow"
-                  style={{
-                    width: "100%",
-                    background: "linear-gradient(#fceabb )",
-                    padding: "20px 10px",
-                    position: "relative",
-                    borderRadius: "12px",
-                  }}
-                >
-                  {/* Rods */}
-                  <div className="d-flex justify-content-between">
-                    {Array.from({ length: columns }).map((_, colIndex) => (
-                      <div
-                        key={colIndex}
-                        className="abacus-rod d-flex flex-column align-items-center"
-                      >
-                        {/* Top Beads */}
-                        {Array.from({ length: topBeads }).map((_, beadIndex) => (
-                          <div
-                            key={beadIndex}
-                            className={`abacus-bead`}
-                            onClick={() => toggleBead("top", colIndex)}
-                            style={{
-                              width: "30px",
-                              height: "30px",
-                              backgroundColor: beadState.top[colIndex]
-                                ? "#007bff"
-                                : "#FFD700",
-                              borderRadius: "50%",
-                              marginBottom: "15px",
-                              cursor: "pointer",
-                              transition:
-                                "transform 0.3s, background-color 0.3s",
-                              transform: beadState.top[colIndex]
-                                ? "translateY(20px)"
-                                : "translateY(0)",
-                            }}
-                          ></div>
-                        ))}
-
-                        {/* Center Bar */}
-                        <div
-                          className="abacus-center-bar"
-                          style={{
-                            width: "4px",
-                            height: "140px",
-                            backgroundColor: "#000",
-                            margin: "5px 0",
-                            borderRadius: "2px",
-                          }}
-                        ></div>
-
-                        {/* Bottom Beads */}
-                        {Array.from({ length: bottomBeads }).map(
-                          (_, beadIndex) => (
-                            <div
-                              key={beadIndex}
-                              className="abacus-bead"
-                              onClick={() =>
-                                toggleBead("bottom", colIndex, beadIndex)
-                              }
-                              style={{
-                                width: "30px",
-                                height: "30px",
-                                backgroundColor: beadState.bottom[colIndex][
-                                  beadIndex
-                                ]
-                                  ? "#007bff"
-                                  : "#00C853",
-                                borderRadius: "50%",
-                                marginBottom: "5px",
-                                cursor: "pointer",
-                                transition:
-                                  "transform 0.3s, background-color 0.3s",
-                                transform: beadState.bottom[colIndex][beadIndex]
-                                  ? "translateY(-20px)"
-                                  : "translateY(0)",
-                              }}
-                            ></div>
-                          )
-                        )}
-                      </div>
-                    ))}
-                  </div>
+    <div className="abacus-container">
+      <h2 className="title">Interactive Abacus</h2>
+      <div className="abacus-frame">
+       <div className="horizontal-line"></div> {/* Added horizontal line for spacing */}
+        <div className="aba-frame">
+          {Array.from({ length: columns }).map((_, colIndex) => (
+            <div key={colIndex} className="abacus-rod">
+              <div className="abacus-center-bar">
+                {/* Top Bead */}
+                <div className="tb">
+                  <div
+                    className={`abacus-bead top ${
+                      beadState.top[colIndex] ? "active" : ""
+                    }`}
+                    onClick={() => toggleBead("top", colIndex)}
+                  ></div>
                 </div>
 
-                {/* Reset Button */}
-                <Button
-                  className="mt-4"
-                  variant="danger"
-                  onClick={resetBeads}
-                  style={{
-                    fontWeight: "bold",
-                    padding: "10px 20px",
-                    borderRadius: "8px",
-                  }}
-                >
-                  Reset
-                </Button>
-              </Container>
+                {/* Bottom Beads */}
+                <div className="bb">
+                  {Array.from({ length: bottomBeads }).map((_, beadIndex) => (
+                    <div
+                      key={beadIndex}
+                      className={`abacus-bead bottom ${
+                        beadState.bottom[colIndex][beadIndex] ? "active" : ""
+                      }`}
+                      onClick={() => toggleBead("bottom", colIndex, beadIndex)}
+                    ></div>
+                  ))}
+                </div>
+              </div>
             </div>
-      
-        </Container>
+          ))}
+        </div>
       </div>
+      <button className="reset-button" onClick={resetBeads}>
+        Reset
+      </button>
     </div>
   );
 };

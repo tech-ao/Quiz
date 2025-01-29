@@ -1,0 +1,124 @@
+/* Abacus Container */
+.abacus-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+/* Abacus Frame */
+.abacus-frame {
+  background: linear-gradient(145deg, #99501b, #ae682f);
+  border: 16px solid #8b5a2b;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3),
+    inset 0 -4px 8px rgba(255, 255, 255, 0.2);
+  width: 80%;
+  max-width: 900px;
+}
+
+.aba-frame {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+/* Rods */
+.abacus-rod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Center Bar */
+.abacus-center-bar {
+  position: relative;
+  width: 5px;
+  height: 320px;
+  background-color: #000;
+  margin: 10px 0;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #fff;
+}
+
+/* Beads */
+.abacus-bead {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s;
+}
+.tb {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 70px;
+}
+
+.abacus-bead.top {
+  background-color: #ffd700;
+}
+.abacus-bead.top.active {
+  background-color: #007bff;
+  transform: translateY(20px);
+}
+
+.bb {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 40px;
+}
+
+.abacus-bead.bottom {
+  background-color: #00c853;
+}
+.abacus-bead.bottom.active {
+  background-color: #007bff;
+  transform: translateY(-20px);
+}
+
+/* Reset Button */
+.reset-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  background-color: #d9534f;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.reset-button:hover {
+  background-color: #c9302c;
+}
+
+/* Horizontal line for spacing */
+.horizontal-line {
+  position: absolute;
+  width: 80%;
+  max-width: 870px;
+  height: 8px;
+  background-color: #000;
+  margin-top: 130px;
+  border-top: 3px solid #fff;
+  border-bottom: 3px solid #fff;
+
+}
