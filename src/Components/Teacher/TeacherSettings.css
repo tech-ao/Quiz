@@ -4,6 +4,7 @@
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
+    max-width:1200px;
   }
   
   .card-header {

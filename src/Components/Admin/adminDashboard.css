@@ -1,77 +1,102 @@
-
-/* Cards Section */
-.dashboard-card {
-  font-size: 14px;
-  padding: 10px;
-}
-
-.icon-container {
-  width: 60px;
-  height: 60px;
-  padding: 10px;
-}
-
-/* Adjust cards for smaller screens */
-@media (max-width: 768px) {
-  .dashboard-card {
-    text-align: center;
-    margin: 0 auto;
-  }
-  
-  .dashboard-card h3 {
-    font-size: 1.5rem;
-  }
-  
-  .icon-container {
-    width: 50px;
-    height: 50px;
-    padding: 8px;
-  }
-  
-  .calendar-card {
-    margin-top: 20px;
-  }
-}
-
-/* Header */
+/* General Header Styles */
 .header {
-  padding: 10px 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
 }
 
-.toggle-button {
-  font-size: 1.5rem;
+.logo1 {
+  max-width: 80px;
 }
 
-.welcome-message {
-  font-size: 1rem;
-}
-
-/* Popup Menu Adjustments */
-.admin-popup {
-  width: 200px;
-  right: 0;
-}
-
-@media (max-width: 576px) {
-  .admin-popup ul li {
-    font-size: 0.9rem;
-    padding: 10px !important;
-  }
-}
-
-/* adminHeader.css */
-
-/* Hide the logo on small screens */
-@media (max-width: 767px) {
-  .logo1 {
-    display: none !important;
-  }
+button {
+  height: auto;
 }
 
 .card-body {
-  background-color: #aeb9b673;
+  background-color: #bdfdd9;
 }
 
-.react-calendar {
-  background: #95b0a787 !important;
+.calender-note {
+  background-color: #e7ffec;
+}
+
+/* Popup Menu Styling */
+.admin-popup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1050;
+  width: 200px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item {
+  transition: none !important; /* Remove any hover effect transitions */
+  cursor: pointer;
+}
+
+/* Media Queries */
+
+/* Tablet View - 992px or Below */
+@media (max-width: 992px) {
+  .welcome-message {
+    font-size: 1rem;
+  }
+
+  .action-button {
+    font-size: 14px;
+  }
+}
+
+/* Mobile View - 768px or Below */
+@media (max-width: 768px) {
+  .logo1 {
+    max-width: 60px;
+  }
+
+  .welcome-message {
+    display: none; /* Hide the welcome message on smaller screens */
+  }
+
+  .admin-text {
+    display: none; /* Hide the Admin text on smaller screens */
+  }
+
+  .admin-menu {
+    justify-content: center; /* Center the icon */
+  }
+
+  .header-icon-group {
+    position: static; /* Fix alignment issues */
+    margin-left: auto;
+  }
+}
+
+/* Very Small Mobile View - 576px or Below */
+@media (max-width: 576px) {
+  .action-button {
+    font-size: 12px;
+  }
+
+  .admin-popup {
+    width: 150px;
+    right: 5px;
+  }
+
+  .menu-item {
+    font-size: 12px;
+  }
+}
+
+/* Header Profile Color */
+.admin-text {
+  color: #198754;
+}
+
+.taggleAdminbut {
+  position: absolute;
+  left: 0;
 }

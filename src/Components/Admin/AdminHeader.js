@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Badge } from '@mui/material';
-import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
+import { Navbar, Row, Col, Button } from 'react-bootstrap';
 import {
   RiLockPasswordLine,
   RiLogoutCircleRLine,
@@ -21,6 +21,7 @@ const Header = ({ toggleSidebar }) => {
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
+  // Close popup if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
@@ -32,12 +33,14 @@ const Header = ({ toggleSidebar }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Logout handler
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to logout?')) {
       navigate('/adminlogin');
     }
   };
 
+  // Update password handler
   const handleUpdatePassword = () => {
     alert('Redirecting to update password...');
     navigate('/update-password');
@@ -59,98 +62,92 @@ const Header = ({ toggleSidebar }) => {
           <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
             MATH GYM
           </Navbar.Brand>
+          {/* Hamburger Icon Button for Mobile/Tablets */}
           <Button
             variant="link"
-            className="text-decoration-none fw-bold d-flex align-items-center taggleAdminbut ms-2 d-md-none toggle-button header-icon"
-            onClick={toggleSidebar}
+            className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button"
+            onClick={toggleSidebar} // Toggle Sidebar Visibility on Small Screens
           >
-            <RiMenu3Line size={24} />
+            <RiMenu3Line className="admin-text" size={24} />
           </Button>
         </Col>
 
-        {/* Welcome Message */}
+        {/* Welcome Message - Hidden on Mobile */}
         <Col xs={12} md={5} className="text-center d-none d-md-block">
-          {/* <span className="fw-bold welcome-message">
-            Admin{' '}
-            <span role="img" aria-label="wave">
-              👋
-            </span>
-          </span> */}
+          {/* Add any welcome message or info here */}
         </Col>
 
         {/* Action Buttons */}
-        <Col xs={6} md={4} className="d-flex justify-content-end align-items-center header-icon-group">
-          {/* Notification Button */}
-          <Button
-            variant="outlined"
-            title="Notification"
-            className="me-2 d-sm-block action-button"
-            onClick={() => navigate('/notification')}
-          >
-            <Badge
-              badgeContent={10} // Replace with dynamic count if available
-              color="secondary"
-              overlap="circular"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              className="notification-badge"
+        <Col xs={6} md={4} className="d-flex justify-content-end align-items-center" style={{ paddingLeft: '250px' }}>
+          {/* Wrapper div to contain the buttons in a horizontal row */}
+          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+
+            {/* Notification Button */}
+            <button
+              variant="outlined"
+              title="Notification"
+              className="d-sm-block action-button"
+              onClick={() => navigate('/notification')}
             >
-              <RiNotification3Line size={20} />
-            </Badge>
-          </Button>
+              <Badge
+                badgeContent={10} // Replace with dynamic count if available
+                color="secondary"
+                overlap="circular"
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                className="notification-badge"
+              >
+                <RiNotification3Line className="admin-text" size={20} />
+              </Badge>
+            </button>
 
-          {/* Website Link */}
-          <Button
-            variant="outlined"
-            title="Website"
-            className="me-2 d-sm-block action-button"
-            onClick={() => window.open("https://mathgymint.com", "_blank")}
-          >
-            <RiGlobalLine size={20} />
-          </Button>
-
-          {/* Admin Popup Menu */}
-          <div className="position-relative" ref={popupRef}>
+            {/* Website Link */}
             <Button
-              variant="link"
-              onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
+              variant="outlined"
+              title="Website"
+              className="me-2 d-sm-block action-button"
+              onClick={() => window.open('https://mathgymint.com', '_blank')}
             >
-              <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">Admin</span>
+              <RiGlobalLine className="admin-text" size={20} />
             </Button>
 
-            {showPopup && (
-              <div className="admin-popup">
-                <ul className="list-unstyled m-0 p-2">
-                  {/* Profile Option */}
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => alert('Profile feature is coming soon!')}
-                  >
-                    <RiLockPasswordLine size={18} className="me-2" /> Profile
-                  </li>
-                  {/* Update Password */}
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
-                  >
-                    {/* <i className="bi bi-arrow-clockwise ms-auto"></i> Reset Icon */}
-                    <RiRestartLine size={18} className="me-2"/> Password
-                    {/* <span className="me-2">Password</span> */}
-                  </li>
-                  {/* Logout */}
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogout}
-                  >
-                    <RiLogoutCircleRLine size={18} className="me-2" /> Logout
-                  </li>
-                </ul>
-              </div>
-            )}
+            {/* Admin Popup Menu */}
+            <div className="position-relative" ref={popupRef}>
+              <button variant="link" onClick={togglePopup}>
+                <RiAdminLine size={20} className="me-1 admin-text" />
+                <span className="admin-text">Admin</span>
+              </button>
+
+              {showPopup && (
+                <div className="admin-popup">
+                  <ul className="list-unstyled m-0 p-2">
+                    {/* Profile Option */}
+                    <li
+                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                      onClick={() => alert('Profile feature is coming soon!')}
+                    >
+                      <RiLockPasswordLine size={18} className="me-2" /> Profile
+                    </li>
+                    {/* Update Password */}
+                    <li
+                      className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                      onClick={handleUpdatePassword}
+                    >
+                      <RiRestartLine size={18} className="me-2" /> Password
+                    </li>
+                    {/* Logout */}
+                    <li
+                      className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
+                      onClick={handleLogout}
+                    >
+                      <RiLogoutCircleRLine size={18} className="me-2" /> Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </Col>
       </Row>
