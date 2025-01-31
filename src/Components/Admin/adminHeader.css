@@ -16,7 +16,7 @@ button {
 .admin-popup {
   top: 100%;
   right: 0;
-  z-index: 1050;
+  z-index:10;
   width: 200px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -38,7 +38,7 @@ button {
 /* Hide the hamburger icon on desktop */
 @media (min-width: 768px) {
   .toggle-button {
-    display: none;
+    display: block;
   }
 }
 

@@ -11,6 +11,10 @@
 button {
   height: auto;
 }
+.main-container-p-4{
+  height:850px;
+}
+
 
 .card-body {
   background-color: #bdfdd9;
@@ -82,7 +86,7 @@ button {
   }
 
   .admin-popup {
-    width: 150px;
+    width: 120px;
     right: 5px;
   }
 

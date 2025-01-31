@@ -1,80 +1,99 @@
+/* Default styles for the side panel */
 .side-panel {
-    background-color: #e7ffec;
-    width: 250px;
-    min-height: 100vh;
-    overflow: hidden;
-    transition: width 0.3s ease;
-    z-index: 100;
-    position: fixed;
-    top: 100px;
+  background-color: #e7ffec;
+  width: 250px;
+  min-height: 100vh;
+  overflow: hidden;
+  position: fixed;
+  top: 100px;
+  left: -250px; /* Hide sidebar by default on mobile */
+  transition: left 0.3s ease;
+  z-index: 100;
 }
 
-/* @media (min-width: 768px) {
-    .side-panel {
-        position: relative;
-    }
-} */
+.side-panel.open {
+  left: 0; /* Slide in when open */
+}
 
-/* .side-panel:hover {
-    width: 250px;
-} */
-
+/* Styling for navigation links inside the side panel */
 .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    color: #fff;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
 }
 
 .nav-link:hover {
-    background-color: #e7ffec;
+  background-color: #e7ffec;
 }
 
 .nav-link.active {
-    background-color: #155724;
-    font-weight: bold;
-}
-
-.nav-dropdown.active {
-    background-color: #155724;
-    font-weight: bold;
+  background-color: #155724;
+  font-weight: bold;
 }
 
 .icon-with-text {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .icon-with-text i {
-    font-size: 1.5rem;
-    margin-right: 10px;
+  font-size: 1.5rem;
+  margin-right: 10px;
 }
 
 .nav-text {
-    opacity: 0;
-    visibility: hidden;
-    white-space: nowrap;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .nav-text {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
 }
 
+/* Hamburger button styling */
+.hamburger-button {
+  display: block;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 200;
+}
 
+.hamburger-button i {
+  font-size: 2rem;
+  color: #333;
+}
+
+/* Mobile view adjustments */
 @media (max-width: 767px) {
-    .side-panel {
-        position: fixed;
-        left: 0;
-        transition: width 0.3s ease;
-    }
+  .side-panel {
+      left: -250px; /* Hide the side panel off-screen initially */
+  }
 
-    .side-panel:hover {
-        width: 250px;
-    }
+  .side-panel.open {
+      left: 0; /* Show the side panel when open */
+  }
 
-  
+  .hamburger-button {
+      display: block; /* Show hamburger on mobile */
+  }
+}
+
+/* On larger screens, keep the sidebar static */
+@media (min-width: 768px) {
+  .side-panel {
+      position: relative;
+      left: 0;
+  }
+
+  .hamburger-button {
+      display: block; /* Hide hamburger on larger screens */
+  }
 }

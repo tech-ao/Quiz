@@ -11,29 +11,25 @@ import enrolImg from "../images/Enrolment Requet Icon.png";
 import AdminHeader from "./AdminHeader";
 import { fetchDashboardContent } from "../../redux/Services/Enum";
 import { useNavigate } from "react-router-dom";
+import HamBurger from "../Admin/HamBurger";
 
 function AdminDashboard() {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 700);
   const [dashboardData, setDashboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // Initialize useNavigate
 
-  // Toggle sidebar visibility
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  // Update sidebar visibility on window resize
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setIsSidebarVisible(false); // Hide sidebar on mobile
-      }
+      setIsMobile(window.innerWidth <= 768);
     };
+
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   // Fetch dashboard data on mount
@@ -77,14 +73,14 @@ function AdminDashboard() {
   return (
     <div>
       {/* Admin Header with Toggle Sidebar */}
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <AdminHeader />
 
       <div className="d-flex">
-        {/* Sidebar */}
-        {isSidebarVisible && <Sidebar />}
-
+        {/* Sidebar is always visible */}
+        <Sidebar />
+        
         {/* Main Container */}
-        <Container className="main-container p-4">
+        <Container className="main-container-p-4">
           <div className="sub-container">
             {/* Header Section */}
             <Row className="align-items-center mb-4">
@@ -205,6 +201,9 @@ function AdminDashboard() {
             </Row>
           </div>
         </Container>
+
+        {/* Conditional rendering of HamBurger */}
+        {isMobile && <HamBurger />}
       </div>
     </div>
   );

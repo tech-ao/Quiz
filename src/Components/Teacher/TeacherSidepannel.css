@@ -1,50 +1,57 @@
+/* Default desktop styles */
 .side-panel {
+  background-color: #e7ffec;
+  width: 250px;
+  min-height: 100vh;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  z-index: 100;
+  position: sticky;
+  top: 100px;
+}
+
+/* Mobile styles */
+@media (max-width: 767px) {
+  /* Make the sidebar full screen or a smaller width on mobile */
+  .side-panel {
+    position: fixed;
+    left: -250px; /* Start hidden */
     width: 250px;
-    background-color: #e7ffec;
-    color: #fff;
-    height: 100vh;
+    top: 0;
+    bottom: 0;
+    transition: left 0.3s ease; /* Transition effect for sliding in */
   }
 
+  /* When sidebar is open, slide it in */
+  .side-panel.open {
+    left: 0; /* Sidebar visible */
+  }
+
+  /* Adjust icon and text on mobile to fit properly */
+  .nav-text {
+    visibility: hidden; /* Hide text when space is tight on mobile */
+  }
+
+  .side-panel.open .nav-text {
+    visibility: visible; /* Show text when the sidebar is open */
+  }
+
+  /* Style for links and icons on mobile */
   .nav-link {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    color: #fff;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+    font-size: 0.9rem; /* Smaller font size */
+  }
+  
+  /* Dropdown styles for Online menu */
+  .nav-item .sub-nav {
+    display: none;
+  }
+
+  .nav-item.active .sub-nav {
+    display: block; /* Show dropdown when active */
+  }
 }
-  
- 
-  
-  .nav-link.active,
-  .nav-link:hover {
-    background-color: #d3f3da;
-    color: #f39c12;
-  }
-  
-  .icon-with-text {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  
-  .sub-nav {
-    padding-left: 30px;
-  }
-  
-  .sub-nav .nav-link {
-    color: #aaa;
-    font-size: 14px;
-  }
-  
-  .sub-nav .nav-link.active,
-  .sub-nav .nav-link:hover {
-    color: #f39c12;
-  }
-  
-  .dropdown-icon {
-    margin-left: auto;
-    font-size: 12px;
-    color: #ccc;
-  }
-  
+
+/* Sidebar hover effect on desktop */
+.side-panel:hover {
+  width: 250px;
+}

@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import './sidepannel.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const SidePanel = ({ isOpen, closeSidePanel }) => {
+const SidePannel = ({ isOpen, closeSidePanel }) => {
+  
   const location = useLocation();
   const [isOnlineOpen, setOnlineOpen] = useState(false);
 
@@ -195,4 +196,4 @@ const SidePanel = ({ isOpen, closeSidePanel }) => {
   );
 };
 
-export default SidePanel;
+export default SidePannel;

@@ -78,9 +78,9 @@ const Header = ({ toggleSidebar }) => {
         </Col>
 
         {/* Action Buttons */}
-        <Col xs={6} md={4} className="d-flex justify-content-end align-items-center" style={{ paddingLeft: '250px' }}>
+        <Col xs={6} md={4} className="d-flex justify-content-end align-items-center" style={{ paddingLeft: '270px' }}>
           {/* Wrapper div to contain the buttons in a horizontal row */}
-          <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <div className="admin-icon" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
 
             {/* Notification Button */}
             <button
