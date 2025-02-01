@@ -73,8 +73,9 @@ function AdminDashboard() {
   return (
     <div>
       {/* Admin Header with Toggle Sidebar */}
+     <div className="admin-bar">
       <AdminHeader />
-
+      </div>
       <div className="d-flex">
         {/* Sidebar is always visible */}
         <Sidebar />

@@ -13,8 +13,17 @@ button {
 }
 .main-container-p-4{
   height:850px;
+  padding-top: 3%;
 }
 
+.admin-bar{
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  z-index: 1000;
+  background-color: #bdfdd9; /* Adjust based on your theme */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
 .card-body {
   background-color: #bdfdd9;

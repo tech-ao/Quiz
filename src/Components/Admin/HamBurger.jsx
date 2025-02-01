@@ -25,25 +25,26 @@ const HamBurger = () => {
   const toggleOnlineDropdown = () => {
     setIsOnlineOpen(!isOnlineOpen); // Toggle the visibility of the "Online" dropdown
   };
-
+  console.log(isOpen, "isOpen")
   return (
     <>
       {/* Sidebar Toggle Button (Hamburger or Close icon) */}
-      <button className="custom-sidebar-toggle" onClick={toggleSidebar}>
-        {isOpen ? <IoMdClose /> : <RiMenu2Line />} {/* Show close or hamburger icon */}
-      </button>
+
 
       {/* Sidebar */}
-      <div className={`custom-sidebar ${isOpen ? "open" : ""}`}>
+      <button className="custom-sidebar-toggle  left-toggles" style={{position: "fixed", marginRight: "25px"}} onClick={toggleSidebar}>
+        {isOpen ? <IoMdClose /> : <RiMenu2Line />} {/* Show close or hamburger icon */}
+      </button>
+{ isOpen && (<div className="custom-sidebar" style={{ position: "absolute"}}>
         <div className="custom-sidebar-header">
           {/* Close icon inside the sidebar */}
-          <button className="custom-sidebar-close" onClick={toggleSidebar}>
+          {/* <button className="custom-sidebar-close" onClick={toggleSidebar}>
             <IoMdClose />
-          </button>
+          </button> */}
         </div>
 
         {/* Sidebar Content */}
-        <div className="custom-sidebar-content">
+        <div className="custom-sidebar-content" style={{ marginTop: "25px"}}>
           <ul>
             {/* Main Menu Items */}
             <li onClick={() => handleNavigation("/adminDashboard")}>Dashboard</li>
@@ -98,7 +99,7 @@ const HamBurger = () => {
             <li onClick={() => handleNavigation("/notification")}>Notification</li>
           </ul>
         </div>
-      </div>
+      </div>)}
     </>
   );
 };
