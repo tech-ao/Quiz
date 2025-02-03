@@ -13,10 +13,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
 }
 
 .attendance-box {
-  position: static;
   width: 60%;
   overflow: hidden; /* Prevent overflow */
   padding-bottom: 20px;

@@ -106,7 +106,8 @@ const AdminAttendance = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container pe-10 min-vh-100 attendance-box">
+        <Container className="main-container p-4 min-vh-100">
+          <div className="sub-container">
           <Row className="mb-3">
             <Col xs={12} className="d-flex justify-content-between align-items-center">
               <h3><b>Attendance Management</b></h3>
@@ -202,8 +203,10 @@ const AdminAttendance = () => {
               </Col>
             </Row>
           )}
+          </div>
         </Container>
       </div>
+      
     </div>
   );
 };

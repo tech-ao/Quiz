@@ -17,20 +17,22 @@ function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate(); // Initialize useNavigate
-
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const toggleSidebar = () => {
+        setIsSidebarVisible((prev) => !prev);
+      };
+      useEffect(() => {
+        const handleResize = () => {
+          if (window.innerWidth >= 768) {
+            setIsSidebarVisible(true); // Show sidebar by default on desktop
+          } else {
+            setIsSidebarVisible(false); // Hide sidebar by default on mobile
+          }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
+  
 
   // Fetch dashboard data on mount
   useEffect(() => {
@@ -72,18 +74,11 @@ function AdminDashboard() {
 
   return (
     <div>
-      {/* Admin Header with Toggle Sidebar */}
-     <div className="admin-bar">
-      <AdminHeader />
-      </div>
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {/* Sidebar is always visible */}
-        <Sidebar />
-        
-        {/* Main Container */}
-        <Container className="main-container-p-4">
+        {isSidebarVisible && <Sidebar />}
+        <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            {/* Header Section */}
             <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Admin Dashboard</h2>
@@ -203,8 +198,7 @@ function AdminDashboard() {
           </div>
         </Container>
 
-        {/* Conditional rendering of HamBurger */}
-        {isMobile && <HamBurger />}
+       
       </div>
     </div>
   );
