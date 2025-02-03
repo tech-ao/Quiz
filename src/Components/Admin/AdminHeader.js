@@ -42,8 +42,8 @@ const Header = ({ toggleSidebar }) => {
 
   // Update password handler
   const handleUpdatePassword = () => {
-    alert('Redirecting to update password...');
-    navigate('/update-password');
+    alert('Redirecting to change password...');
+    navigate('/reset-password');
   };
 
   return (
