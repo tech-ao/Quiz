@@ -45,6 +45,11 @@ const Header = ({ toggleSidebar }) => {
     alert('Redirecting to change password...');
     navigate('/reset-password');
   };
+  
+  const handleProfile = () => {
+    alert('Redirecting to ProfilePage...');
+    navigate('/profilepage');
+  };
 
   return (
     <Navbar expand="lg" className="header py-2">
@@ -116,8 +121,8 @@ const Header = ({ toggleSidebar }) => {
             {/* Admin Popup Menu */}
             <div className="position-relative" ref={popupRef}>
               <button variant="link" onClick={togglePopup}>
-                <RiAdminLine size={20} className="me-1 admin-text" />
-                <span className="admin-text">Admin</span>
+                
+                <span className="admin-text"><RiAdminLine size={20} className="me-1 admin-text" /><br/>Admin</span>
               </button>
 
               {showPopup && (
@@ -126,7 +131,7 @@ const Header = ({ toggleSidebar }) => {
                     {/* Profile Option */}
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                      onClick={() => alert('Profile feature is coming soon!')}
+                      onClick={handleProfile}
                     >
                       <RiLockPasswordLine size={18} className="me-2" /> Profile
                     </li>
