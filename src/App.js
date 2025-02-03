@@ -25,6 +25,7 @@ import PaymentHistory from './Components/Teacher/PaymentHistory';
 import ForgotPassword from './Components/Student/ForgotPassword';
 import { ToastContainer } from 'react-toastify';
 import ResetPassword from './Components/Admin/ResetPassword';
+import ProfilePage from './Components/Admin/ProfilePage';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Import Redux Provider and Store
@@ -64,7 +65,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/registerStudent" element={<RegisterStudent />} />
           <Route path ="/adminAttendance" element={<AdminAttendance/>}/>
-
+          <Route path="/profilepage" element={<ProfilePage/>}/>
           {/* Protected Routes */}
           <Route path="/adminDashboard" element={<ProtectedRoute element={<AdminDashboard />} />} />
           <Route path="/studentList" element={<ProtectedRoute element={<StudentList />} />} />
