@@ -80,7 +80,7 @@ const StudentDashboard = () => {
 
   return (
     <div>
-      <StudentHeader toggleSidebar={toggleSidebar} />
+      <StudentHeader toggleSidebar={toggleSidebar} studentName={studentData.firstName} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
         <Container className="main-container p-4 min-vh-100">
@@ -108,8 +108,7 @@ const StudentDashboard = () => {
                 <Col md={7}>
                   <Row>
                     <Col xs={6}><p><strong>Name:</strong> {studentData.firstName || "N/A"}</p></Col>
-                    <Col xs={6}><p><strong>Date of Birth:</strong> {studentData.dob || "N/A"}</p></Col>
-                  </Row>
+                    <Col xs={6}><p><strong>Date of Birth:</strong> {studentData.dob ? new Date(studentData.dob).toLocaleDateString('en-GB') : "N/A"}</p></Col>                  </Row>
                   <Row>
                     <Col xs={6}><p><strong>Email:</strong> {studentData.email || "N/A"}</p></Col>
                     <Col xs={6}><p><strong>Phone:</strong> {studentData.phoneNumber || "N/A"}</p></Col>

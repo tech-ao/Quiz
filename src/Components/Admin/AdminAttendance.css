@@ -13,7 +13,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  
+  position: fixed;
 }
 
 .header button {
@@ -23,7 +23,7 @@
   border-radius: 5px;
   cursor: pointer;
   position: relative; /* Required to position the horizontal line */
-  margin-top: -10px; /* Move the button slightly upwards (Adjust value as needed) */
+
 }
 
 .header button::after {

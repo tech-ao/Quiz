@@ -1,35 +1,29 @@
 import React from 'react';
-import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
-import { RiMenu3Line } from 'react-icons/ri';
+import { Navbar, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { FaGlobe } from 'react-icons/fa';
 import logo from "../../Components/images/Logo.png";
 import '../Admin/adminHeader.css';
 
-const RegisterHeader = ({ toggleSidebar }) => {
+const RegisterHeader = () => {
   return (
-    <Navbar expand="lg" className="header py-2">
-    
-        <Row className="align-items-center w-100">
-          {/* Logo and Sidebar Toggle */}
-          <Col xs={6} md={3} className="d-flex align-items-center">
-            <Link to="/">
-              <img
-                className="logo1 me-2"
-                src={logo}
-                alt="Logo"
-                style={{ cursor: 'pointer', maxWidth: '80px' }}
-              />
-            </Link>
-            <Button
-              variant="link"
-              className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button header-icon"
-              onClick={toggleSidebar}
-            >
-              <RiMenu3Line size={24} />
-            </Button>
-          </Col>
-        </Row>
-    
+    <Navbar expand="lg" className="header py-2 fixed-header">
+      <Container className="d-flex justify-content-between align-items-center w-100">
+        {/* Logo with Dark Green Border */}
+        <Link to="/" className="d-flex align-items-center">
+          <img
+            className="logo1 me-2 border-dark-green"
+            src={logo}
+            alt="Logo"
+            style={{ cursor: 'pointer', maxWidth: '80px' }}
+          />
+        </Link>
+        
+        {/* Web Icon properly aligned to the top right */}
+        <a href="https://mathgymint.com/" target="_blank" rel="noopener noreferrer" className="web-icon">
+          <FaGlobe size={24} color="#000" />
+        </a>
+      </Container>
     </Navbar>
   );
 };

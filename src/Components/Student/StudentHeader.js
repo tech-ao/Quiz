@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Badge } from '@mui/material';
-import { Navbar, Container, Row, Col, Button } from 'react-bootstrap';
+import { Navbar, Row, Col, Button } from 'react-bootstrap';
 import {
   RiLockPasswordLine,
   RiLogoutCircleRLine,
@@ -16,13 +16,15 @@ import '../Admin/adminHeader.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudent } from '../../redux/Action/StudentAction';
 
-const StudentHeader = ({ toggleSidebar }) => {
-  const [showPopup, setShowPopup] = useState(false);
-  const [studentName, setStudentName] = useState(''); // State to store student's name
+const StudentHeader = ({ toggleSidebar , studentName }) => {
+  const [showPopup, setShowPopup] = useState(false); 
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // State for logout confirmation popup
   const popupRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const studentData = useSelector(state => state.studentData); // Assuming the student data is stored in Redux
+ 
+  
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
@@ -42,21 +44,21 @@ const StudentHeader = ({ toggleSidebar }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dispatch]);
 
-  useEffect(() => {
-    // When student data is fetched, update the student name
-    if (studentData && studentData.name) {
-      setStudentName(studentData.name);
-      localStorage.setItem('studentName', studentData.name); // Optionally store in localStorage
-    }
-  }, [studentData]);
+
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true); // Show the logout confirmation popup
+  };
 
   const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      // Remove student data from localStorage
-      localStorage.removeItem('studentName');
-      localStorage.removeItem('studentId');
-      navigate('/'); // Redirect to home page
-    }
+    // Remove student data from localStorage
+    localStorage.removeItem('studentName');
+    localStorage.removeItem('studentId');
+    navigate('/'); // Redirect to home page
+    setShowLogoutConfirm(false); // Close the confirmation popup
+  };
+
+  const handleCancelLogout = () => {
+    setShowLogoutConfirm(false); // Close the confirmation popup without logging out
   };
 
   const handleUpdatePassword = () => {
@@ -163,7 +165,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                   {/* Logout */}
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogout}
+                    onClick={handleLogoutClick}
                   >
                     <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                   </li>
@@ -173,6 +175,17 @@ const StudentHeader = ({ toggleSidebar }) => {
           </div>
         </Col>
       </Row>
+
+      {/* Logout Confirmation Popup */}
+      {showLogoutConfirm && (
+        <div className="logout-confirmation-popup">
+          <div className="popup-content">
+            <h5>Are you sure you want to logout?</h5>
+            <Button variant="danger" onClick={handleLogout}>Yes</Button>
+            <Button variant="secondary" onClick={handleCancelLogout}>No</Button>
+          </div>
+        </div>
+      )}
     </Navbar>
   );
 };
