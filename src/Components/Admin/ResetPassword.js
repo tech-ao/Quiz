@@ -33,13 +33,13 @@ const ResetPassword = () => {
     <div className="reset-password-layout">
       {/* Pass toggleSidebar function to AdminHeader */}
       <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
-      
+
       <div className="d-flex">
         {/* Sidebar visibility controlled by state */}
         {isSidebarVisible && <SidePannel />}
 
         {/* Main content */}
-        <div className="reset-password-container  min-vh-100">
+        <div className="reset-password-container min-vh-100">
           <div className="reset-password-box">
             <h2 className="reset-password-title">Reset Password</h2>
             <form onSubmit={handleSubmit} className="reset-password-form">
@@ -54,6 +54,7 @@ const ResetPassword = () => {
                   required
                 />
               </div>
+
               <div className="reset-password-field">
                 <label className="reset-password-label">New Password:</label>
                 <input
@@ -65,6 +66,7 @@ const ResetPassword = () => {
                   required
                 />
               </div>
+
               <div className="reset-password-field">
                 <label className="reset-password-label">Confirm Password:</label>
                 <input
@@ -76,6 +78,7 @@ const ResetPassword = () => {
                   required
                 />
               </div>
+
               <button type="submit" className="reset-password-button">
                 Submit
               </button>

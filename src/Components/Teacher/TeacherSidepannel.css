@@ -2,12 +2,12 @@
 .side-panel {
   background-color: #e7ffec;
   width: 250px;
-  min-height: 100vh;
-  overflow: hidden;
+  max-height: 90%;
+  overflow:auto;
   transition: width 0.3s ease;
   z-index: 100;
   position: sticky;
-  top: 100px;
+  top: 120px;
 }
 
 /* Mobile styles */
