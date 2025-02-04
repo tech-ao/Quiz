@@ -1,10 +1,4 @@
-/* General Styles */
-.sub-container {
-  padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden;
-}
+
 
 .profile-Container {
   display: flex;

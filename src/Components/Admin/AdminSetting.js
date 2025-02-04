@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Image, Button, Form } from 'react-bootstrap';
+import { Row, Col, Card, Image, Button,Container, Form } from 'react-bootstrap';
 import profilePic from '../images/dummmy_profile.jpg'; // Replace with actual profile image path
 import './AdminSettings.css';
-import SidePannel from './SidePannel'; // Assuming this handles the sidebar component
+import Sidebar from "./SidePannel";
 import AdminHeader from './AdminHeader'; // Assuming this contains the header with the toggle button
 
 const AdminSetting = () => { 
@@ -71,15 +71,12 @@ const AdminSetting = () => {
 
   return (
     <div>
-      {/* Header that contains the button to toggle sidebar */}
-      <div>
-        <AdminHeader toggleSidebar={toggleSidebar} />
-      </div>
-
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        <div className="flex-shrink-0">
-          {isSidebarVisible && <SidePannel />}
-        </div>
+        {isSidebarVisible && <Sidebar />}
+        <Container className="main-container p-4 min-vh-100">
+          <div className="sub-container">
+          
 
         <div className="flex-grow-1">
           <Card className="p-4 shadow-lg profile-card">
@@ -305,7 +302,10 @@ const AdminSetting = () => {
               </Col>
             </Row>
           </Card>
+          </div>
+          
         </div>
+        </Container>
       </div>
     </div>
   );

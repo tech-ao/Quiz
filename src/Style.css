@@ -93,8 +93,6 @@ body {
   color: #000;
 }
 
-
-
 .form-control:focus {
   border-color: #28a745;
   box-shadow: none;
@@ -127,40 +125,46 @@ body {
   overflow-y: auto;
 }
 
-@media only screen and (max-width: 768px) {
+
+@media only screen and (max-width: 1024px) {
   .side-panel {
-      width: 180px !important;
-      position: fixed !important;
-      left: 0 !important;
-      transition: transform 0.3s ease-in-out;
-  }
-  .side-panel.hidden {
-      transform: translateX(-100%);
+    width: 200px;
   }
   .main-container {
-      width: 100%;
-      margin-left: 0;
+    margin-left: 200px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .side-panel {
+    width: 180px;
+  }
+  .main-container {
+    margin-left: 180px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .side-panel {
+    width: 100px;
+  }
+  .main-container {
+    margin-left: 100px;
+  }
+  .header {
+    padding: 1rem;
   }
 }
 
 @media only screen and (max-width: 480px) {
   .side-panel {
-      display: none;
+    display: none;
   }
   .main-container {
-      width: 100%;
-      margin-left: 0;
+    margin-left: 0;
+    width: 100%;
   }
 }
-
-@media only screen and (max-width: 600px) {
-  .calendar-card {
-      width: 100%;
-      text-align: center;
-  }
-}
-
-
 
 .icon-button-container {
   position: relative;
