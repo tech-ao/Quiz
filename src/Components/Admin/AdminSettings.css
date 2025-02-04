@@ -57,9 +57,13 @@ button {
   border-radius: 12px;
   background: #fff;
   transition: 0.3s;
-  width: 80%;
-  margin: auto;
-  margin-top: 29px;
+  width: 95%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 30px;  /* Increase inner left padding */
+  padding-right: 30px;
+  margin-top: 8px;
   border: none;  /* Optional: remove default card border */
   position: relative; /* Ensure relative positioning for absolute elements like the edit button */
 }
@@ -102,6 +106,32 @@ button {
 .Admin-Name-row {
   display: inline;
 }
+
+button.edit-btn {
+  background-color: #218838; /* Green */
+  border: none;  
+  color: white; 
+  font-weight: bold;
+  padding: 8px 16px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+button.edit-btn:hover {
+  background-color: #196c2d; 
+  border-color: #1e7e34; 
+}
+
+button.edit-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}
+
+
+button {
+  margin-left: 10px;
+}
+
 
 /* Mobile Responsive Design */
 @media (max-width: 768px) {
