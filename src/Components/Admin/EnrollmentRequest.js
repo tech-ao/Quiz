@@ -12,7 +12,7 @@ const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedRequests, setSelectedRequests] = useState([]);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);  // Track selected student ID
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -55,7 +55,7 @@ const EnrollmentRequestList = () => {
   }, [currentPage]);
 
   const handleSearch = () => {
-    const filteredRequests = requests.searchAndListStudentResult.filter(
+    const filteredRequests = requests?.searchAndListStudentResult?.filter(
       (request) =>
         request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -63,26 +63,31 @@ const EnrollmentRequestList = () => {
     setRequests(filteredRequests);
   };
 
-  const handleSelectRequest = (id) => {
-    setSelectedRequests(selectedRequests.includes(id) ? [] : [id]);
+  const handleSelectRequest = (studentId) => {
+    // Toggle the checkbox selection for the clicked student ID
+    setSelectedRequestId(selectedRequestId === studentId ? null : studentId); // If already selected, deselect; otherwise, select
   };
 
   const handleApprove = async () => {
-    await updateStatus(1);
+    if (selectedRequestId) {
+      await updateStatus(1);
+    }
   };
 
   const handleDeny = async () => {
-    await updateStatus(3);
+    if (selectedRequestId) {
+      await updateStatus(3);
+    }
   };
 
   const updateStatus = async (statusId) => {
     try {
-      await Promise.all(
-        selectedRequests.map((studentId) => dispatch(editStudentAction({ statusId }, studentId)))
-      );
-      dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
-      toast.success(`Status updated successfully!`);
-      setSelectedRequests([]);
+      if (selectedRequestId) {
+        await dispatch(editStudentAction({ statusId }, selectedRequestId)); // Pass the selected student ID for updating
+        dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
+        toast.success("Status updated successfully!");
+        setSelectedRequestId(null); // Reset the selection after update
+      }
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
     }
@@ -108,10 +113,10 @@ const EnrollmentRequestList = () => {
                 </Button>
               </Col>
               <Col md={4} className="d-flex justify-content-end">
-                <Button variant="success" onClick={handleApprove} className="ml-2" disabled={selectedRequests.length === 0}>
+                <Button variant="success" onClick={handleApprove} className="ml-2" disabled={selectedRequestId === null}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny} className="ml-2" disabled={selectedRequests.length === 0}>
+                <Button variant="danger" onClick={handleDeny} className="ml-2" disabled={selectedRequestId === null}>
                   Reject
                 </Button>
               </Col>
@@ -139,13 +144,13 @@ const EnrollmentRequestList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {requests.searchAndListStudentResult.map((request, index) => (
+                      {requests?.searchAndListStudentResult?.map((request, index) => (
                         <tr key={request.id || index}>
                           <td>
                             <Form.Check
                               type="checkbox"
-                              checked={selectedRequests.includes(request.id)}
-                              onChange={() => handleSelectRequest(request.id)}
+                              checked={selectedRequestId === request.studentId}  // Check if the current student ID is selected
+                              onChange={() => handleSelectRequest(request.studentId)} // Toggle selection for the current student ID
                             />
                           </td>
                           <td>{index + 1}</td>

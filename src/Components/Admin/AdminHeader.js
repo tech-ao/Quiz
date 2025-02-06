@@ -16,6 +16,7 @@ import logo from "../../Components/images/Logo.png";
 
 const Header = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // Logout confirmation popup
   const popupRef = useRef(null);
   const navigate = useNavigate();
 
@@ -33,11 +34,20 @@ const Header = ({ toggleSidebar }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Show logout confirmation popup
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
   // Logout handler
   const handleLogout = () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      navigate('/adminlogin');
-    }
+    navigate('/adminlogin'); // Redirect to admin login page
+    setShowLogoutConfirm(false); // Close the confirmation popup
+  };
+
+  // Cancel logout
+  const handleCancelLogout = () => {
+    setShowLogoutConfirm(false); // Close popup without logging out
   };
 
   // Update password handler
@@ -45,10 +55,10 @@ const Header = ({ toggleSidebar }) => {
     alert('Redirecting to change password...');
     navigate('/reset-password');
   };
-  
+
+  // Profile handler (without alert)
   const handleProfile = () => {
-    alert('Redirecting to ProfilePage...');
-    navigate('/profilepage');
+    navigate('/adminSettings');
   };
 
   return (
@@ -67,24 +77,22 @@ const Header = ({ toggleSidebar }) => {
           <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
             MATH GYM
           </Navbar.Brand>
-          {/* Hamburger Icon Button for Mobile/Tablets */}
           <Button
             variant="link"
             className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button"
-            onClick={toggleSidebar} // Toggle Sidebar Visibility on Small Screens
+            onClick={toggleSidebar}
           >
             <RiMenu3Line className="admin-text" size={24} />
           </Button>
         </Col>
 
-        {/* Welcome Message - Hidden on Mobile */}
+        {/* Welcome Message */}
         <Col xs={12} md={5} className="text-center d-none d-md-block">
-          {/* Add any welcome message or info here */}
+          {/* Optional welcome message */}
         </Col>
 
         {/* Action Buttons */}
         <Col xs={6} md={4} className="d-flex justify-content-end align-items-center" style={{ paddingLeft: '270px' }}>
-          {/* Wrapper div to contain the buttons in a horizontal row */}
           <div className="admin-icon" style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
 
             {/* Notification Button */}
@@ -95,13 +103,10 @@ const Header = ({ toggleSidebar }) => {
               onClick={() => navigate('/notification')}
             >
               <Badge
-                badgeContent={10} // Replace with dynamic count if available
+                badgeContent={10}
                 color="secondary"
                 overlap="circular"
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 className="notification-badge"
               >
                 <RiNotification3Line className="admin-text" size={20} />
@@ -121,8 +126,9 @@ const Header = ({ toggleSidebar }) => {
             {/* Admin Popup Menu */}
             <div className="position-relative" ref={popupRef}>
               <button variant="link" onClick={togglePopup}>
-                
-                <span className="admin-text"><RiAdminLine size={20} className="me-1 admin-text" /><br/>Admin</span>
+                <span className="admin-text">
+                  <RiAdminLine size={20} className="me-1 admin-text" /><br/>Admin
+                </span>
               </button>
 
               {showPopup && (
@@ -145,7 +151,7 @@ const Header = ({ toggleSidebar }) => {
                     {/* Logout */}
                     <li
                       className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                      onClick={handleLogout}
+                      onClick={handleLogoutClick}
                     >
                       <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                     </li>
@@ -156,6 +162,17 @@ const Header = ({ toggleSidebar }) => {
           </div>
         </Col>
       </Row>
+
+      {/* Logout Confirmation Popup */}
+      {showLogoutConfirm && (
+        <div className="logout-confirmation-popup">
+          <div className="popup-content">
+            <h5>Are you sure you want to logout?</h5>
+            <Button variant="danger" onClick={handleLogout}>Yes</Button>
+            <Button variant="secondary" onClick={handleCancelLogout}>No</Button>
+          </div>
+        </div>
+      )}
     </Navbar>
   );
 };
