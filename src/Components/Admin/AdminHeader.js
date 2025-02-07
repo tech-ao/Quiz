@@ -7,14 +7,13 @@ import {
   RiNotification3Line,
   RiAdminLine,
   RiGlobalLine,
-  RiMenu3Line,
   RiRestartLine,
 } from 'react-icons/ri';
 import { useNavigate, Link } from 'react-router-dom';
 import './adminHeader.css'; // Import media query styles
 import logo from "../../Components/images/Logo.png";
 
-const Header = ({ toggleSidebar }) => {
+const Header = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // Logout confirmation popup
   const popupRef = useRef(null);
@@ -64,7 +63,7 @@ const Header = ({ toggleSidebar }) => {
   return (
     <Navbar expand="lg" className="header py-2">
       <Row className="align-items-center w-100">
-        {/* Logo and Sidebar Toggle */}
+        {/* Logo */}
         <Col xs={6} md={3} className="d-flex align-items-center">
           <Link to="/adminDashboard">
             <img
@@ -77,13 +76,6 @@ const Header = ({ toggleSidebar }) => {
           <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
             MATH GYM
           </Navbar.Brand>
-          <Button
-            variant="link"
-            className="text-decoration-none fw-bold d-flex align-items-center ms-2 d-md-none toggle-button"
-            onClick={toggleSidebar}
-          >
-            <RiMenu3Line className="admin-text" size={24} />
-          </Button>
         </Col>
 
         {/* Welcome Message */}
