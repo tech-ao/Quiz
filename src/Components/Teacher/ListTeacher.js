@@ -10,13 +10,11 @@ import AddTeacher from './AddTeacher';
 import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const [showEditTeacher, setShowEditTeacher] = useState(false);
-  const [showViewTeacher, setShowViewTeacher] = useState(false);
-  const [showAddTeacher, setShowAddTeacher] = useState(false);
+ const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
   useEffect(() => {
     const handleResize = () => {
       setIsSidebarVisible(window.innerWidth >= 768);
@@ -24,7 +22,10 @@ const ListTeacher = ({ Teachers = [] }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
+  const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [showEditTeacher, setShowEditTeacher] = useState(false);
+  const [showViewTeacher, setShowViewTeacher] = useState(false);
   const TeachersPerPage = 10;
   const navigate = useNavigate();
 
@@ -75,7 +76,7 @@ const ListTeacher = ({ Teachers = [] }) => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
-              <Col md={6}>
+              <Col md={6} className="d-flex justify-content-between align-items-center">
                 <InputGroup style={{ width: '70%' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
@@ -85,7 +86,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                 </InputGroup>
               </Col>
               <Col md={6} className="d-flex justify-content-end gap-3">
-                <Button variant="outline-secondary" onClick={handleOpenAddTeacher}>
+                <Button variant="outline-secondary" onClick={() => navigate('/addTeacher')}>
                   Add Teacher
                 </Button>
               </Col>
