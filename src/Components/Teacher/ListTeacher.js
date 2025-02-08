@@ -6,22 +6,27 @@ import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-boot
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import EditTeacher from './EditTeacher';
 import ViewTeacher from '../ViewTeacher';
-import AddTeacher from './AddTeacher';
 import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
@@ -31,7 +36,7 @@ const ListTeacher = ({ Teachers = [] }) => {
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(0);
+    setCurrentPage(0); // Reset pagination on search
   };
 
   const handlePageChange = ({ selected }) => {
@@ -42,8 +47,6 @@ const ListTeacher = ({ Teachers = [] }) => {
   const handleCloseEditTeacher = () => setShowEditTeacher(false);
   const handleOpenViewTeacher = () => setShowViewTeacher(true);
   const handleCloseViewTeacher = () => setShowViewTeacher(false);
-  const handleOpenAddTeacher = () => setShowAddTeacher(true);
-  const handleCloseAddTeacher = () => setShowAddTeacher(false);
 
   const TeacherData = {
     firstName: "John",
@@ -70,12 +73,15 @@ const ListTeacher = ({ Teachers = [] }) => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <h2 className="fw-bold">Teacher List</h2>
+              </Col>
               <Col md={6} className="d-flex justify-content-between align-items-center">
                 <InputGroup style={{ width: '70%' }}>
                   <Form.Control
@@ -84,10 +90,8 @@ const ListTeacher = ({ Teachers = [] }) => {
                     onChange={handleSearch}
                   />
                 </InputGroup>
-              </Col>
-              <Col md={6} className="d-flex justify-content-end gap-3">
-                <Button variant="outline-secondary" onClick={() => navigate('/addTeacher')}>
-                  Add Teacher
+                <Button variant="outline-success" onClick={() => navigate('/addTeacher')}>
+                  <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>
             </Row>
@@ -139,7 +143,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="6" className="text-center">
+                      <td colSpan="5" className="text-center">
                         No Teachers found.
                       </td>
                     </tr>
@@ -168,10 +172,8 @@ const ListTeacher = ({ Teachers = [] }) => {
           </div>
         </Container>
 
-        {/* Modals */}
         <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} />
-        <ViewTeacher show={showViewTeacher} onClose={handleCloseViewTeacher} TeacherData={TeacherData} />
-        <AddTeacher show={showAddTeacher} handleClose={handleCloseAddTeacher} />
+        <ViewTeacher show={showViewTeacher} onClose={() => setShowViewTeacher(false)} TeacherData={TeacherData} />
       </div>
     </div>
   );
