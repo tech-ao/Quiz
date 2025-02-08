@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
-import "./sidepannel.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {

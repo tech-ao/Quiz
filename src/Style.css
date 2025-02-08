@@ -1,128 +1,116 @@
 body {
-  background-color: #95b0a7;
-}
+  background-color: #e7ffec !important;}
 
 .modalbg input,
 .modalbg select,
 .modalbg textarea {
-  border: 1px solid #8cdf97;
-  border-radius: 4px;
-  padding: 5px;
-  box-shadow: none;
-  color: #333;
+  border: 1px solid #8cdf97 !important;
+  border-radius: 4px !important;
+  padding: 5px !important;
+  box-shadow: none !important;
+  color: #333 !important;
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background-color: #e7ffec;
-  height: 100px;
-  position: fixed;
-  width: 100%;
-  z-index: 1000;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 1rem 2rem !important;
+  background-color: #e7ffec !important;
+  height: 100px !important;
+  position: fixed !important;
+  width: 100% !important;
+  z-index: 1000 !important;
 }
 
-.modalbg input:focus,
-.modalbg select:focus,
-.modalbg textarea:focus {
-  outline: none;
-  border: 1px solid #289b2b;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.modalbg select:valid,
-.modalbg input:valid {
-  border: 1px solid #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  background-color: #bef3bc;
-}
-
-.chipButton {
-  border-radius: 20px;
-}
-
+/* Side Panel */
 .side-panel {
-  background-color: #e7ffec;
-  width: 250px;
-  min-height: 100vh;
-  overflow: hidden;
-  transition: width 0.3s ease;
-  z-index: 100;
-  position: fixed;
-  top: 100px;
+  background-color: #e7ffec !important;
+  width: 250px !important;
+  min-height: 100vh !important;
+  overflow: hidden !important;
+  transition: width 0.3s ease !important;
+  z-index: 100 !important;
+  position: fixed !important;
+  top: 100px !important;
+}
+
+/* Add spacing between nav items */
+.nav-item {
+  margin: 5px 0 !important; /* Adds gap between list items */
+}
+
+/* Add spacing between icon and text */
+.icon-with-text {
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important; /* Space between icon and text */
 }
 
 .sub-container {
-  background-color: white;
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  max-height: 90%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  word-wrap: break-word;
+  background-color: white !important;
+  width: 100% !important;
+  padding: 10px !important;
+  border-radius: 20px !important;
+  max-height: 90% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  word-wrap: break-word !important;
 }
 
 .toggle-btn {
-  position: fixed;
-  top: 30px;
-  left: 10px;
-  z-index: 1000;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
+  position: fixed !important;
+  top: 30px !important;
+  left: 10px !important;
+  z-index: 1000 !important;
+  padding: 10px 15px !important;
+  border: none !important;
+  cursor: pointer !important;
 }
 
 .nav-link {
   color: #09690c !important;
-  font-weight: 500;
-  padding: 12px 16px;
-  transition: background-color 0.2s ease;
+  font-weight: 500 !important;
+  padding: 12px 16px !important;
+  transition: background-color 0.2s ease !important;
 }
 
 .nav-link.active {
   background-color: #bdfdd9 !important;
-  border-left: 4px solid green;
-  color: #000;
+  border-left: 4px solid green !important;
+  color: #000 !important;
 }
 
 .form-control:focus {
-  border-color: #28a745;
-  box-shadow: none;
+  border-color: #28a745 !important;
+  box-shadow: none !important;
 }
 
 .forgot-password,
 .signup-link {
-  font-size: 14px;
-  color: #007bff;
+  font-size: 14px !important;
+  color: #007bff !important;
 }
 
 .forgot-password:hover,
 .signup-link:hover {
-  text-decoration: underline;
+  text-decoration: underline !important;
 }
 
 .auth-buttons .login-btn,
 .auth-buttons .subscribe-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
+  margin-left: 10px !important;
+  padding: 5px 10px !important;
 }
 
 .main-container {
-  margin-top: 1rem;
-  position: fixed;
-  top: 100px;
-  left: 250px; /* Adjust this based on your .side-panel width */
-  width: calc(100% - 250px); /* Make sure it doesn't overlap */
-  height: calc(100vh - 100px);
-  overflow-y: auto;
+  margin-top: 1rem !important;
+  position: fixed !important;
+  top: 100px !important;
+  left: 250px !important;
+  width: calc(100% - 250px) !important;
+  height: calc(100vh - 100px) !important;
+  overflow-y: auto !important;
 }
 
 @media only screen and (max-width: 768px) {
@@ -130,87 +118,85 @@ body {
       width: 180px !important;
       position: fixed !important;
       left: 0 !important;
-      transition: transform 0.3s ease-in-out;
+      transition: transform 0.3s ease-in-out !important;
   }
   .side-panel.hidden {
-      transform: translateX(-100%);
+      transform: translateX(-100%) !important;
   }
   .main-container {
-      width: 100%;
-      margin-left: 0;
+      width: 100% !important;
+      margin-left: 0 !important;
   }
 }
 
 @media only screen and (max-width: 480px) {
   .side-panel {
-      display: none;
+      display: none !important;
   }
   .main-container {
-      width: 100%;
-      margin-left: 0;
+      width: 100% !important;
+      margin-left: 0 !important;
   }
 }
 
 @media only screen and (max-width: 600px) {
   .calendar-card {
-      width: 100%;
-      text-align: center;
+      width: 100% !important;
+      text-align: center !important;
   }
 }
 
-
-
 .icon-button-container {
-  position: relative;
-  display: inline-block;
-  margin-right: 10px;
+  position: relative !important;
+  display: inline-block !important;
+  margin-right: 10px !important;
 }
 
 .tooltip-text {
-  visibility: hidden;
-  position: absolute;
-  bottom: 120%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out;
+  visibility: hidden !important;
+  position: absolute !important;
+  bottom: 120% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background-color: #000 !important;
+  color: #fff !important;
+  text-align: center !important;
+  padding: 5px 8px !important;
+  border-radius: 4px !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  transition: opacity 0.2s ease-in-out !important;
 }
 
 .tooltip-text::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 5px;
-  border-style: solid;
-  border-color: #000 transparent transparent transparent;
+  content: "" !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  border-width: 5px !important;
+  border-style: solid !important;
+  border-color: #000 transparent transparent transparent !important;
 }
 
 .icon-button-container:hover .tooltip-text {
-  visibility: visible;
-  opacity: 1;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 button.ml-2.btn.btn-primary {
-  background-color: #ffff;
-  color: black;
+  background-color: #ffff !important;
+  color: black !important;
 }
 
 .me-1 {
   margin-right: .25rem !important;
-  color: #198754;
+  color: #198754 !important;
 }
 
 svg {
-  vertical-align: middle;
-  color: #198754;
+  vertical-align: middle !important;
+  color: #198754 !important;
 }
