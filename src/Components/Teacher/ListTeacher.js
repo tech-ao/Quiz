@@ -1,40 +1,36 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Sidebar from '../Admin/SidePannel';
-import AdminHeader from '../Admin/AdminHeader'
+import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import EditTeacher from './EditTeacher';
 import ViewTeacher from '../ViewTeacher';
+import AddTeacher from './AddTeacher';
 import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setIsSidebarVisible(false); // Hide sidebar by default on mobile
-      }
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
   const [showViewTeacher, setShowViewTeacher] = useState(false);
+  const [showAddTeacher, setShowAddTeacher] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarVisible(window.innerWidth >= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const TeachersPerPage = 10;
   const navigate = useNavigate();
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(0); // Reset pagination on search
+    setCurrentPage(0);
   };
 
   const handlePageChange = ({ selected }) => {
@@ -45,6 +41,8 @@ const ListTeacher = ({ Teachers = [] }) => {
   const handleCloseEditTeacher = () => setShowEditTeacher(false);
   const handleOpenViewTeacher = () => setShowViewTeacher(true);
   const handleCloseViewTeacher = () => setShowViewTeacher(false);
+  const handleOpenAddTeacher = () => setShowAddTeacher(true);
+  const handleCloseAddTeacher = () => setShowAddTeacher(false);
 
   const TeacherData = {
     firstName: "John",
@@ -56,7 +54,6 @@ const ListTeacher = ({ Teachers = [] }) => {
     grade: "Grade 3",
     address: "123 Street, City",
   };
-
 
   const filteredTeachers = Teachers.filter((Teacher) =>
     [Teacher.username, Teacher.email]
@@ -72,13 +69,13 @@ const ListTeacher = ({ Teachers = [] }) => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
-              <Col md={6} className="d-flex justify-content-between align-items-center">
+              <Col md={6}>
                 <InputGroup style={{ width: '70%' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
@@ -88,10 +85,9 @@ const ListTeacher = ({ Teachers = [] }) => {
                 </InputGroup>
               </Col>
               <Col md={6} className="d-flex justify-content-end gap-3">
-                <Button variant="outline-secondary" onClick={() => navigate('/addTeacher')}>
+                <Button variant="outline-secondary" onClick={handleOpenAddTeacher}>
                   Add Teacher
                 </Button>
-
               </Col>
             </Row>
 
@@ -142,7 +138,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="text-center">
+                      <td colSpan="6" className="text-center">
                         No Teachers found.
                       </td>
                     </tr>
@@ -171,8 +167,10 @@ const ListTeacher = ({ Teachers = [] }) => {
           </div>
         </Container>
 
+        {/* Modals */}
         <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} />
-        <ViewTeacher show={showViewTeacher} onClose={() => setShowViewTeacher(false)} TeacherData={TeacherData} />
+        <ViewTeacher show={showViewTeacher} onClose={handleCloseViewTeacher} TeacherData={TeacherData} />
+        <AddTeacher show={showAddTeacher} handleClose={handleCloseAddTeacher} />
       </div>
     </div>
   );
