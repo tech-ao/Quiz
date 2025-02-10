@@ -2,164 +2,152 @@ import React, { useState } from 'react';
 import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
 import AdminHeader from '../Admin/AdminHeader';
-import './Attendance.css'; // Import the CSS file
+import './Attendance.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const AttendancePage = () => {
   const [isSidebarVisible, setSidebarVisible] = useState(true);
-  const [attendance, setAttendance] = useState(
-    Array(6).fill({ status: 'Present', note: '' }) // Mock data for 6 students
-  );
-  const [bulkStatus, setBulkStatus] = useState('Present');
+  const [selectedClass, setSelectedClass] = useState('');
+  const [selectedSection, setSelectedSection] = useState('');
+  const [attendanceDate, setAttendanceDate] = useState('2024-12-04');
+  const [studentName, setStudentName] = useState('');
+  const [registerNumber, setRegisterNumber] = useState('');
+  const [attendanceStatus, setAttendanceStatus] = useState('Present');
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [previousRecords, setPreviousRecords] = useState([]);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
-  const handleStatusChange = (index, status) => {
-    const updatedAttendance = [...attendance];
-    updatedAttendance[index].status = status;
-    if (status === 'Present') {
-      updatedAttendance[index].note = ''; // Clear the note when the status is set to Present
+  const handleSubmit = () => {
+    if (studentName && registerNumber && selectedClass && selectedSection && attendanceDate) {
+      setPreviousRecords([...attendanceRecords]);
+      const newRecord = {
+        id: attendanceRecords.length + 1,
+        name: studentName,
+        registerNumber: registerNumber,
+        class: selectedClass,
+        section: selectedSection,
+        date: attendanceDate,
+        status: attendanceStatus,
+      };
+      setAttendanceRecords([...attendanceRecords, newRecord]);
+      setStudentName('');
+      setRegisterNumber('');
+      setAttendanceStatus('Present');
     }
-    setAttendance(updatedAttendance);
   };
 
-  const handleNoteChange = (index, note) => {
-    const updatedAttendance = [...attendance];
-    updatedAttendance[index].note = note;
-    setAttendance(updatedAttendance);
-  };
-
-  const applyBulkStatus = () => {
-    if (bulkStatus) {
-      const updatedAttendance = attendance.map((record) => ({
-        ...record,
-        status: bulkStatus,
-      }));
-      setAttendance(updatedAttendance);
+  const handleUndo = () => {
+    if (attendanceRecords.length > 0) {
+      setAttendanceRecords(attendanceRecords.slice(0, -1));
     }
   };
 
   return (
     <div>
-      {/* Admin Header with Toggle Sidebar */}
       <AdminHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
+      <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            {/* Class, Section, and Attendance Date on Same Row */}
-            <Row className="filter-section mb-4">
-              <Col md={4}>
+            <Row className="align-items-center mb-4 text-center">
+              <Col xs={12}>
+                <h2 className="fw-bold">Attendance</h2>
+              </Col>
+            </Row>
+
+            <Row className="filter-section mb-3 text-center">
+              <Col xs={12} sm={6} md={4} className="mb-3">
                 <Form.Group>
                   <Form.Label>Class *</Form.Label>
-                  <Form.Control as="select">
-                    <option>Class 1</option>
-                    <option>Class 2</option>
+                  <Form.Control as="select" value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)}>
+                    <option value="">Select Class</option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col xs={12} sm={6} md={4} className="mb-3">
                 <Form.Group>
                   <Form.Label>Section *</Form.Label>
-                  <Form.Control as="select">
-                    <option>A</option>
-                    <option>B</option>
+                  <Form.Control as="select" value={selectedSection} onChange={(e) => setSelectedSection(e.target.value)}>
+                    <option value="">Select Section</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
                   </Form.Control>
                 </Form.Group>
               </Col>
-              <Col md={4}>
+              <Col xs={12} md={4} className="mb-3">
                 <Form.Group>
                   <Form.Label>Attendance Date *</Form.Label>
-                  <Form.Control type="date" defaultValue="2024-12-04" />
+                  <Form.Control type="date" value={attendanceDate} onChange={(e) => setAttendanceDate(e.target.value)} />
                 </Form.Group>
               </Col>
             </Row>
 
-            {/* Search Button */}
-            <div className="filter-actions d-flex justify-content-end mb-4">
-              <Button className="btn-search">Search</Button>
-            </div>
+            <Row className="mb-4 justify-content-center text-center">
+              <Col xs={12} sm={6} md={4} className="mb-3">
+                <Form.Group>
+                  <Form.Label>Student Name *</Form.Label>
+                  <Form.Control type="text" placeholder="Enter student name" value={studentName} onChange={(e) => setStudentName(e.target.value)} />
+                </Form.Group>
+              </Col>
+              <Col xs={12} sm={6} md={4} className="mb-3">
+                <Form.Group>
+                  <Form.Label>Register Number *</Form.Label>
+                  <Form.Control type="text" placeholder="Enter register number" value={registerNumber} onChange={(e) => setRegisterNumber(e.target.value)} />
+                </Form.Group>
+              </Col>
+              <Col xs={12} sm={6} md={4} className="mb-3">
+                <Form.Group>
+                  <Form.Label>Attendance Status *</Form.Label>
+                  <Form.Control as="select" value={attendanceStatus} onChange={(e) => setAttendanceStatus(e.target.value)}>
+                    <option value="Present">Present</option>
+                    <option value="Absent">Absent</option>
+                  </Form.Control>
+                </Form.Group>
+              </Col>
+              <Col xs={12} className="d-flex justify-content-center mt-3">
+                <Button variant="success" className="btn-submit px-3 py-1 me-2" onClick={handleSubmit}>Submit</Button>
+                <Button variant="secondary" className="px-3 py-1" onClick={handleUndo} disabled={attendanceRecords.length === 0}>Undo</Button>
+              </Col>
+            </Row>
 
-            {/* Bulk Attendance Actions */}
-            <div className="attendance-actions mb-4">
-              <div className="set-all-attendance">
-                <span>Set attendance for all students as:</span>
-                {/* Bulk attendance dropdown */}
-                <Form.Control
-                  as="select"
-                  value={bulkStatus}
-                  onChange={(e) => setBulkStatus(e.target.value)}
-                >
-                  {['Present', 'Late', 'Absent', 'Holiday', 'Half Day'].map((status) => (
-                    <option key={status} value={status}>
-                      {status}
-                    </option>
-                  ))}
-                </Form.Control>
-              </div>
-              <Button className="btn-save-top" onClick={applyBulkStatus}>
-                Apply Bulk Status
-              </Button>
-            </div>
-
-            {/* Attendance Table */}
             <div className="attendance-list">
-              <Table responsive>
+              <Table responsive striped bordered hover>
                 <thead>
                   <tr>
                     <th>#</th>
-                    <th>Admission No</th>
-                    <th>Roll Number</th>
                     <th>Name</th>
+                    <th>Register Number</th>
+                    <th>Class</th>
+                    <th>Section</th>
+                    <th>Date</th>
                     <th>Attendance</th>
-                    <th>Source</th>
-                    <th>Note</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    { id: 1, admission: '1001', roll: '0201', name: 'Hudson' },
-                    { id: 2, admission: '1020', roll: '0204', name: 'Marlie' },
-                    { id: 3, admission: '120036', roll: '23620', name: 'Ayan Desai' },
-                    { id: 4, admission: '2152', roll: '0205', name: 'Kaylen' },
-                    { id: 5, admission: '7663', roll: '6230', name: 'Paul S. Bealer' },
-                    { id: 6, admission: '96302', roll: '221002', name: 'Jacob Bethell' },
-                  ].map((student, index) => (
-                    <tr key={student.id}>
-                      <td>{student.id}</td>
-                      <td>{student.admission}</td>
-                      <td>{student.roll}</td>
-                      <td>{student.name}</td>
-                      <td>
-                        {/* Select field for Attendance */}
-                        <Form.Control
-                          as="select"
-                          value={attendance[index].status}
-                          onChange={(e) => handleStatusChange(index, e.target.value)}
-                        >
-                          {['Present', 'Late', 'Absent', 'Holiday', 'Half Day'].map((status) => (
-                            <option key={status} value={status}>
-                              {status}
-                            </option>
-                          ))}
-                        </Form.Control>
-                      </td>
-                      <td>Manual</td>
-                      <td>
-                        <Form.Control
-                          type="text"
-                          value={attendance[index].note}
-                          onChange={(e) => handleNoteChange(index, e.target.value)}
-                          disabled={attendance[index].status === 'Present'} // Disable the note field for "Present" status
-                        />
-                      </td>
+                  {attendanceRecords.length > 0 ? (
+                    attendanceRecords.map((record, index) => (
+                      <tr key={index}>
+                        <td>{record.id}</td>
+                        <td>{record.name}</td>
+                        <td>{record.registerNumber}</td>
+                        <td>{record.class}</td>
+                        <td>{record.section}</td>
+                        <td>{record.date}</td>
+                        <td>{record.status}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="7" className="text-center">No records found.</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </Table>
-              <Button className="btn-save">Save Attendance</Button>
             </div>
           </div>
         </Container>
