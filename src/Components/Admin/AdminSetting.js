@@ -178,7 +178,7 @@ const AdminSetting = () => {
                   {editMode ? (
                     <Button variant="success" onClick={handleSave}>Save</Button>
                   ) : (
-                    <Button variant="primary" onClick={toggleEditMode}>Edit</Button>
+                    <Button className="edit-btn" onClick={toggleEditMode}>Edit</Button>
                   )}
                 </div>
 
