@@ -109,14 +109,17 @@ const AdminAttendance = () => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
           <Row className="mb-3">
-            <Col xs={12} className="d-flex justify-content-between align-items-center">
-              <h3><b>Attendance Management</b></h3>
-              <Form.Select value={selectedType} onChange={handleTypeChange} style={{ width: '110px'}}>
-                <option value="Student">Student</option>
-                <option value="Teacher">Teacher</option>
-              </Form.Select>
-            </Col>
-          </Row>
+  <Col xs={6}>
+    <h3><b>Attendance Management</b></h3>
+  </Col>
+  <Col xs={6} className="text-right">
+    <Form.Select value={selectedType} onChange={handleTypeChange} className="align-right">
+      <option value="Student">Student</option>
+      <option value="Teacher">Teacher</option>
+    </Form.Select>
+  </Col>
+</Row>
+
 
           {/* Student Dropdowns */}
           {selectedType === "Student" && (
