@@ -5,7 +5,7 @@ import "./sidepannel.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {
-  
+
   const location = useLocation();
   const [isOnlineOpen, setOnlineOpen] = useState(false);
   const toggleOnlineMenu = () => {
@@ -32,9 +32,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/adminDashboard"
-            className={`nav-link ${
-              location.pathname === "/adminDashboard" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/adminDashboard" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -46,9 +45,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/listTeacher"
-            className={`nav-link ${
-              location.pathname === "/listTeacher" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/listTeacher" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -60,9 +58,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/studentList"
-            className={`nav-link ${
-              location.pathname === "/studentList" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/studentList" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -74,9 +71,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/enrollmentRequest"
-            className={`nav-link ${
-              location.pathname === "/enrollmentRequest" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/enrollmentRequest" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -88,9 +84,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/quiz"
-            className={`nav-link ${
-              location.pathname === "/quiz" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/quiz" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -102,9 +97,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/questionListPage"
-            className={`nav-link ${
-              location.pathname === "/questionListPage" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/questionListPage" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -125,9 +119,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <i className="bi bi-calendar2-check"></i>
               <span className="nav-text">Online</span>
               <i
-                className={`bi ${
-                  isOnlineOpen ? "bi-chevron-down" : "bi-chevron-right"
-                } dropdown-icon`}
+                className={`bi ${isOnlineOpen ? "bi-chevron-down" : "bi-chevron-right"
+                  } dropdown-icon`}
               ></i>
             </div>
           </div>
@@ -136,9 +129,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/onlineClass"
-                  className={`nav-link ${
-                    location.pathname === "/onlineClass" ? "active" : ""
-                  }`}
+                  className={`nav-link ${location.pathname === "/onlineClass" ? "active" : ""
+                    }`}
                   onClick={closeSidePanel}
                 >
                   <div className="icon-with-text">
@@ -151,9 +143,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/AbacusMath"
-                  className={`nav-link ${
-                    location.pathname === "/AbacusMath" ? "active" : ""
-                  }`}
+                  className={`nav-link ${location.pathname === "/AbacusMath" ? "active" : ""
+                    }`}
                   onClick={closeSidePanel}
                 >
                   <div className="icon-with-text">
@@ -169,9 +160,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         <li className="nav-item">
           <Link
             to="/adminAttendance"
-            className={`nav-link ${
-              location.pathname === "/adminAttendance" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/adminAttendance" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
@@ -180,32 +170,31 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
-        <li className="nav-item">
-          <Link
-            to="/adminSettings"
-            className={`nav-link ${
-              location.pathname === "/adminSettings" ? "active" : ""
-            }`}
-            onClick={closeSidePanel}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-gear"></i>
-              <span className="nav-text">Settings</span>
-            </div>
-          </Link>
-        </li>
 
         <li className="nav-item">
           <Link
             to="/notification"
-            className={`nav-link ${
-              location.pathname === "/notification" ? "active" : ""
-            }`}
+            className={`nav-link ${location.pathname === "/notification" ? "active" : ""
+              }`}
             onClick={closeSidePanel}
           >
             <div className="icon-with-text">
               <i className="bi bi-bell"></i>
               <span className="nav-text">Notification</span>
+            </div> 
+          </Link>
+        </li>
+
+        <li className="nav-item">
+          <Link
+            to="/adminSettings"
+            className={`nav-link ${location.pathname === "/adminSettings" ? "active" : ""
+              }`}
+            onClick={closeSidePanel}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-gear"></i>
+              <span className="nav-text">Settings</span>
             </div>
           </Link>
         </li>

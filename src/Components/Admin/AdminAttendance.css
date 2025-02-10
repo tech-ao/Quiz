@@ -23,6 +23,10 @@
   margin-top: 20px;
 }
 
+.table-padding {
+  padding-right: 35px;
+}
+
 .header button {
   border: none;
   padding: 5px 10px;
@@ -43,8 +47,7 @@
 }
 
 .admin-text:hover {
-  color: rgb(193, 8, 8);
-  font-weight: bold;
+  color:   rgb(15, 6, 6);
   text-shadow: black;
 }
 
