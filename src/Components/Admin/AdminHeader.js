@@ -47,7 +47,6 @@ const Header = ({ toggleSidebar }) => {
   };
   
   const handleProfile = () => {
-    alert('Redirecting to ProfilePage...');
     navigate('/adminSettings');
   };
 

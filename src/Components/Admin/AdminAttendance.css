@@ -47,8 +47,7 @@
 }
 
 .admin-text:hover {
-  color: rgb(193, 8, 8);
-  font-weight: bold;
+  color:   rgb(15, 6, 6);
   text-shadow: black;
 }
 

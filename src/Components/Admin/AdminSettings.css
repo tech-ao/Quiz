@@ -1,39 +1,45 @@
-
-
 .profile-Container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;  /* Reduce height */
-  max-height: 90vh;  /* Prevent excessive height */
+  min-height: 50vh;
+  max-height: 90vh;
   width: 100%;
   padding-bottom: 10%;
+  flex-direction: column; /* Ensure stacking on small screens */
 }
 
 .card-header {
   background-color: #22790c;
   color: #fff;
   font-weight: bold;
+  text-align: center; /* Center text for better UI */
 }
 
 .admin-info {
   display: flex;
   align-items: center;
+  gap: 15px; /* Improved spacing */
 }
 
 .admin-image {
   width: 80px;
   height: 80px;
-  margin-right: 20px;
+  border-radius: 50%; /* Rounded image */
+  object-fit: cover;
 }
 
 .form-control {
   border-radius: 5px;
+  width: 100%; /* Full width for better UX */
 }
 
 button[type="submit"] {
   background-color: #28a745;
   border: none;
+  padding: 10px 16px;
+  font-weight: bold;
+  width: 100%; /* Makes buttons more responsive */
 }
 
 button[type="submit"]:hover {
@@ -41,12 +47,14 @@ button[type="submit"]:hover {
 }
 
 button {
-  margin-left: 10px;
+  margin: 5px; /* Adjusted spacing */
+  padding: 8px 16px;
 }
 
 .dropdown-toggle {
   background-color: #6c757d;
   border: none;
+  width: auto;
 }
 
 .dropdown-toggle:hover {
@@ -59,24 +67,21 @@ button {
   transition: 0.3s;
   width: 95%;
   max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 30px;  /* Increase inner left padding */
-  padding-right: 30px;
-  margin-top: 8px;
-  border: none;  /* Optional: remove default card border */
-  position: relative; /* Ensure relative positioning for absolute elements like the edit button */
+  margin: 10px auto; /* Improved centering */
+  padding: 20px;
+  border: none;
+  position: relative;
 }
 
 .profile-row {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap; /* Ensures wrapping on small screens */
 }
 
 .divider-column {
   border-left: 2px solid #ccc;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 15px;
 }
 
 .profile-pic {
@@ -84,6 +89,8 @@ button {
   height: 120px;
   border: 3px solid #28a745;
   margin-bottom: 10px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .profile-card hr {
@@ -97,6 +104,7 @@ button {
 .table thead th {
   background-color: #0a6912;
   color: #fff;
+  text-align: center; /* Improve readability */
 }
 
 .table tbody tr:hover {
@@ -104,22 +112,22 @@ button {
 }
 
 .Admin-Name-row {
-  display: inline;
+  display: inline-block;
 }
 
+/* Buttons */
 button.edit-btn {
-  background-color: #218838; /* Green */
-  border: none;  
-  color: white; 
+  background-color: #218838;
+  border: none;
+  color: white;
   font-weight: bold;
-  padding: 8px 16px;
+  padding: 10px 16px;
   border-radius: 5px;
-  transition: background-color 0.3s ease; /* Smooth color transition */
+  transition: 0.3s ease;
 }
 
 button.edit-btn:hover {
-  background-color: #196c2d; 
-  border-color: #1e7e34; 
+  background-color: #196c2d;
 }
 
 button.edit-btn:focus {
@@ -128,25 +136,28 @@ button.edit-btn:focus {
 }
 
 
-button {
-  margin-left: 10px;
-}
-
-
-/* Mobile Responsive Design */
-@media (max-width: 768px) {
-  .profile-pic {
-    width: 100px;
-    height: 100px;
+/* Mobile & Tablet Responsive Design */
+@media (max-width: 1024px) {
+  .profile-card {
+    padding: 20px;
+    width: 100%;
   }
 
-  .profile-card {
-    padding: 15px;
+  .profile-row {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .divider-column {
+    border-left: none;
+    padding: 15px 0;
+    text-align: center;
   }
 
   .admin-info {
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
   .admin-image {
@@ -155,11 +166,13 @@ button {
 
   .form-control {
     font-size: 14px;
+    width: 100%;
   }
 
   .button-group {
-    flex-direction: column;
-    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .dropdown-toggle {
@@ -168,24 +181,53 @@ button {
 
   .table {
     font-size: 14px;
+    overflow-x: auto;
   }
 
   .table th, .table td {
     padding: 10px;
   }
 
-  /* Position the Edit Button to the top-right on mobile */
   .profile-card .d-flex.justify-content-end {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
   }
 
-  .profile-row {
-    flex-direction: column;
-  }
+  /* mobile */
+  @media (max-width: 500px) {
+    .profile-card {
+      padding: 15px;
+    }
 
-  .divider-column {
-    margin-top: 20px;
+    .admin-image {
+      width: 70px;
+      height: 70px;
+    }
+
+    .profile-pic {
+      width: 100px;
+      height: 100px;
+    }
+
+    .table th, .table td {
+      padding: 8px;
+    }
+
+    .button-group {
+      margin: 10px 0;
+    }
+
+    /* Smaller font size for Pixel 7 */
+    .form-control {
+      font-size: 12px;
+    }
+
+    /* Ensure buttons take up full width */
+    button[type="submit"],
+    button.edit-btn {
+      width: 100%;
+      padding: 12px;
+    }
   }
 }

@@ -87,7 +87,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                   />
                 </InputGroup>
               </Col>
-              <Col md={6} className="d-flex justify-content-end gap-3">
+              <Col md={6} className="d-flex justify-content-end" style={{paddingRight:'6%'}}>
                 <Button variant="outline-secondary" onClick={() => navigate('/addTeacher')}>
                   Add Teacher
                 </Button>
@@ -95,7 +95,7 @@ const ListTeacher = ({ Teachers = [] }) => {
               </Col>
             </Row>
 
-            <div className="table-responsive">
+            <div className="table-responsive" style={{width:'96%'}}>
               <Table hover className="mb-0">
                 <thead>
                   <tr>
