@@ -27,17 +27,5 @@
     color: #fff;
   }
   
-  @media (max-width: 768px) {
-    .main-container {
-      padding: 1rem;
-    }
-  
-    .sub-container {
-      padding: 1rem;
-    }
-  
-    .pagination {
-      margin-top: 1rem;
-    }
-  }
+
   

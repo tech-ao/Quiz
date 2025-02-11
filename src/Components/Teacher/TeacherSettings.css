@@ -55,11 +55,3 @@
   .Admin-Name-row {
     display: inline;
 }
-@media (max-width: 768px) {
-  .sub-container {
-    max-width:400px;
-    margin-left: -8px;
-  
-  }
-  
-}

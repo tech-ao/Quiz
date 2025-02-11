@@ -151,7 +151,8 @@ body {
   }
 }
 
-@media only screen and (max-width: 768px) {
+
+@media only screen and (max-width: 1024px) {
   .side-panel {
     width: 180px;
   }
@@ -165,9 +166,7 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-  .side-panel {
-    display: none;
-  }
+ 
   .main-container {
     width: 100%;
     margin-left: 0;
@@ -183,9 +182,7 @@ body {
 }
 
 @media only screen and (max-width: 480px) {
-  .side-panel {
-    display: none;
-  }
+ 
   .main-container {
     width: 100%;
     margin-left: 0;
