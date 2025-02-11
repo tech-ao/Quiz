@@ -108,57 +108,6 @@ const AdminAttendance = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-<<<<<<< HEAD
-          <Row className="mb-3">
-  <Col xs={6}>
-    <h3><b>Attendance Management</b></h3>
-  </Col>
-  <Col xs={6} className="text-right">
-    <Form.Select value={selectedType} onChange={handleTypeChange} className="align-right">
-      <option value="Student">Student</option>
-      <option value="Teacher">Teacher</option>
-    </Form.Select>
-  </Col>
-</Row>
-
-
-          {/* Student Dropdowns */}
-          {selectedType === "Student" && (
-            <Row className="mt-3">
-              <Col xs={12} md={6} lg={6}>
-                <Table className="table-sm" style={{width: "200%"}}>
-                  <thead>
-                    <tr>
-                      <th  style={{width: "50%"}}>Level</th>
-                      <th>Students</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <Form.Select value={selectedLevel} onChange={handleLevelChange}>
-                          <option value="">Select Level</option>
-                          {[...new Set(studentList.map((s) => s.level))].map((level) => (
-                            <option key={level} value={level}>{`Level ${level}`}</option>
-                          ))}
-                        </Form.Select>
-                      </td>
-                      <td>
-                        {selectedLevel !== "" && (
-                          <Form.Select onChange={handleStudentSelect}>
-                            <option value="">Select a Student</option>
-                            {studentList
-                              .filter((s) => s.level === Number(selectedLevel))
-                              .map((student) => (
-                                <option key={student.id} value={student.id}>{student.name}</option>
-                              ))}
-                          </Form.Select>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-=======
             <Row className="mb-3">
               <Col xs={12} className="d-flex justify-content-between align-items-center">
                 <h3><b>Attendance Management</b></h3>
@@ -168,7 +117,6 @@ const AdminAttendance = () => {
                     <option value="Teacher">Teacher</option>
                   </Form.Select>
                 </div>
->>>>>>> cdf9d006ee79c6e22451423f9e1bef8e03b59ddd
               </Col>
             </Row>
 
