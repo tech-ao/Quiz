@@ -29,6 +29,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .register-student-container h2 {
   text-align: center;
   margin-bottom: 20px;
@@ -48,4 +49,17 @@
   .register-student-container {
     padding: 15px;
   }
+}
+
+/* New rules to ensure the "Go to Login" link and "Register Student" button share the same width and appear in a single row */
+.register-student-container .d-flex.align-items-center.justify-content-between {
+  display: flex;
+  flex-direction: row;
+}
+
+.register-student-container .d-flex.align-items-center.justify-content-between > a,
+.register-student-container .d-flex.align-items-center.justify-content-between > button {
+  width: 50%;
+  text-align: center;
+  margin: 0; /* Override any margins to ensure equal width */
 }
