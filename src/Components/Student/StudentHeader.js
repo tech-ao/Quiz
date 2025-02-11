@@ -1,12 +1,20 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Badge } from "@mui/material";
-import { Navbar, Row, Col, Button } from "react-bootstrap";
-import { RiLockPasswordLine, RiLogoutCircleRLine, RiNotification3Line, RiAdminLine, RiGlobalLine, RiMenu3Line, RiRestartLine,} from "react-icons/ri";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react';
+import { Badge } from '@mui/material';
+import { Navbar, Row, Col, Button } from 'react-bootstrap';
+import {
+  RiLockPasswordLine,
+  RiLogoutCircleRLine,
+  RiNotification3Line,
+  RiAdminLine,
+  RiGlobalLine,
+  RiMenu3Line,
+  RiRestartLine,
+} from 'react-icons/ri';
+import { useNavigate, Link } from 'react-router-dom';
 import logo from "../../Components/images/Logo.png";
-import "../Admin/adminHeader.css";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchStudent } from "../../redux/Action/StudentAction";
+import '../Admin/adminHeader.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchStudent } from '../../redux/Action/StudentAction';
 
 const StudentHeader = ({ toggleSidebar, studentName }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -19,7 +27,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
   const togglePopup = () => setShowPopup((prev) => !prev);
 
   useEffect(() => {
-    const storedStudentId = localStorage.getItem("studentId");
+    const storedStudentId = localStorage.getItem('studentId');
     if (storedStudentId) {
       dispatch(fetchStudent(storedStudentId));
     }
@@ -50,6 +58,11 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
     setShowLogoutConfirm(false);
   };
 
+  const handleUpdatePassword = () => {
+    alert('Redirecting to update password...');
+    navigate('/update-password');
+  };
+
   return (
     <Navbar expand="lg" className="header py-2">
       {/* Desktop Header: Visible on medium screens and above */}
@@ -60,7 +73,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               className="logo1 me-2"
               src={logo}
               alt="Math Gym Logo"
-              style={{ cursor: "pointer", maxWidth: "80px" }}
+              style={{ cursor: 'pointer', maxWidth: '80px' }}
             />
           </Link>
           <Navbar.Brand className="text-success fw-bold ms-2">
@@ -69,7 +82,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
         </Col>
         <Col md={5} className="text-center">
           <span className="fw-bold welcome-message">
-            Welcome, {studentName || "Student"}{" "}
+            Welcome, {studentName || 'Student'}{' '}
             <span role="img" aria-label="wave">
               👋
             </span>
@@ -87,8 +100,8 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               color="secondary"
               overlap="circular"
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               className="notification-badge"
             >
@@ -110,7 +123,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
               <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">{studentName || "Student"}</span>
+              <span className="admin-text">{studentName || 'Student'}</span>
             </Button>
             {showPopup && (
               <div className="admin-popup">
@@ -123,7 +136,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handlePassword}
+                    onClick={handleUpdatePassword}
                   >
                     <RiRestartLine size={18} className="me-2" /> Password
                   </li>
