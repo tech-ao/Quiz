@@ -15,7 +15,6 @@ const StudentSettings = () => {
   const { selectedStudent } = useSelector((state) => state.students);
   const studentData = selectedStudent?.data;
 
-  // State management
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -23,10 +22,8 @@ const StudentSettings = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [studentId, setStudentId] = useState(null);
 
-  // Sidebar toggle state
   const [isSidebarVisible, setSidebarVisible] = useState(window.innerWidth >= 768);
 
-  // Handle screen resizing
   useEffect(() => {
     const handleResize = () => {
       setSidebarVisible(window.innerWidth >= 768);
@@ -35,7 +32,6 @@ const StudentSettings = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Toggle sidebar visibility
   const toggleSidebar = () => {
     setSidebarVisible((prev) => !prev);
   };
@@ -44,13 +40,14 @@ const StudentSettings = () => {
     setShowEditStudent(false);
     setSelectedStudentId(null);
   };
-  // Retrieve Student ID from Redux or LocalStorage
+
+  // Retrieve Student ID and Fetch Data
   useEffect(() => {
     let storedStudentId = localStorage.getItem("studentId");
 
     if (studentData?.userId) {
-      setStudentId(storedStudentId);
-      localStorage.setItem("studentId", storedStudentId);
+      setStudentId(studentData.userId);
+      localStorage.setItem("studentId", studentData.userId);
     } else if (storedStudentId) {
       setStudentId(storedStudentId);
       dispatch(fetchStudent(storedStudentId));
@@ -59,27 +56,33 @@ const StudentSettings = () => {
     }
   }, [dispatch, studentData?.userId]);
 
-  // Fetch student profile image
+  // Fetch profile image only when studentId is available
   useEffect(() => {
-    if (studentId) {
-      axios
-        .get(`${BASE_URL}/Profile/GetContentByUserId?userId=${studentId}`, {
+    if (!studentId) return;
+
+    const fetchProfileImage = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/Profile/GetContentByUserId?userId=${studentId}`, {
           headers: {
             accept: "text/plain",
             "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
             AccessToken: "123",
           },
-        })
-        .then((response) => {
-          const base64Image = response.data?.data;
-          setProfileImage(base64Image);
-          setLoading(false);
-        })
-        .catch(() => {
-          setError("Failed to load profile image");
-          setLoading(false);
         });
-    }
+
+        if (response.data?.data) {
+          setProfileImage(response.data.data);
+        } else {
+          setProfileImage(null);
+        }
+      } catch (err) {
+        setError("Failed to load profile image");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfileImage();
   }, [studentId]);
 
   // Open EditStudent component
@@ -91,19 +94,18 @@ const StudentSettings = () => {
     }
   };
 
-  // Close EditStudent component
-  if (!studentId) return <p className="text-danger text-center">Error: Student ID is missing!</p>;
+  if (!studentId) {
+    return <p className="text-danger text-center">Error: Student ID is missing!</p>;
+  }
 
   return (
     <div>
-      {/* Header with Sidebar Toggle */}
       <StudentHeader toggleSidebar={toggleSidebar} />
 
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            {/* Header with Edit Icon */}
             <h1 className="d-flex justify-content-between align-items-center">
               Student Settings
               <FaEdit
@@ -116,7 +118,6 @@ const StudentSettings = () => {
 
             <Card className="p-4">
               <Card.Body className="d-flex flex-column align-items-center">
-                {/* Profile Image Section */}
                 <div
                   style={{
                     border: "5px solid #4caf50",
@@ -143,7 +144,6 @@ const StudentSettings = () => {
                   )}
                 </div>
 
-                {/* Student Details Grid */}
                 <Row className="mt-4 w-100">
                   <Col md={4}><strong>First Name:</strong><p>{studentData?.firstName || "N/A"}</p></Col>
                   <Col md={4}><strong>Last Name:</strong><p>{studentData?.lastName || "N/A"}</p></Col>
@@ -171,11 +171,10 @@ const StudentSettings = () => {
         </Container>
       </div>
 
-      {/* EditStudent Component */}
       {showEditStudent && (
         <SettingEdit
           show={showEditStudent}
-          onClose={handleCloseEditStudent} 
+          onClose={handleCloseEditStudent}
           studentId={selectedStudentId}
         />
       )}
