@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import "../../Style.css";
 import StudentHeader from "./StudentHeader";
@@ -23,6 +24,11 @@ const StudentDashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+
+  const handleClick=(e)=>{
+    e.preventDefault();
+    Navigate('/studentnotification');
+  }
 
   useEffect(() => {
     const handleResize = () => {

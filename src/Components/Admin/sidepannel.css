@@ -1,0 +1,68 @@
+
+
+
+
+/* Styling for navigation links inside the side panel */
+.nav-link {
+  display: flex;
+  align-items:end;
+  padding: 10px;
+  color: #fff;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.nav-link:hover {
+  background-color: #e7ffec;
+}
+
+.sub-nav{
+  text-indent: 13px;
+}
+
+.nav-link.active {
+  background-color: #155724;
+  font-weight: bold;
+}
+
+.icon-with-text {
+  display: flex;
+  align-items: center;
+}
+
+.icon-with-text i {
+  font-size: 1.5rem;
+  margin-right: 10px;
+}
+
+.nav-text {
+  opacity: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  font-size: 12px;
+}
+
+.nav-text {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Hamburger button styling */
+.hamburger-button {
+  display: block;
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.hamburger-button i {
+  font-size: 2rem;
+  color: #333;
+}
+
+
+
+

@@ -40,13 +40,13 @@ const Header = () => {
 
   // Logout handler
   const handleLogout = () => {
-    navigate('/adminlogin'); // Redirect to admin login page
-    setShowLogoutConfirm(false); // Close the confirmation popup
+    navigate('/adminlogin');
+    setShowLogoutConfirm(false); 
   };
 
   // Cancel logout
   const handleCancelLogout = () => {
-    setShowLogoutConfirm(false); // Close popup without logging out
+    setShowLogoutConfirm(false); 
   };
 
   // Update password handler

@@ -1,35 +1,34 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Badge } from '@mui/material';
-import { Navbar, Row, Col, Button } from 'react-bootstrap';
-import {
-  RiLockPasswordLine,
-  RiLogoutCircleRLine,
-  RiNotification3Line,
-  RiAdminLine,
-  RiGlobalLine,
-  RiMenu3Line,
-  RiRestartLine,
-} from 'react-icons/ri';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from "react";
+import { Badge } from "@mui/material";
+import { Navbar, Row, Col, Button } from "react-bootstrap";
+import { RiLockPasswordLine, RiLogoutCircleRLine, RiNotification3Line, RiAdminLine, RiGlobalLine, RiMenu3Line, RiRestartLine,} from "react-icons/ri";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Components/images/Logo.png";
-import '../Admin/adminHeader.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStudent } from '../../redux/Action/StudentAction';
+import "../Admin/adminHeader.css";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudent } from "../../redux/Action/StudentAction";
 
-const StudentHeader = ({ toggleSidebar , studentName }) => {
-  const [showPopup, setShowPopup] = useState(false); 
+const StudentHeader = ({ toggleSidebar, studentName }) => {
+  const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false); // State for logout confirmation popup
   const popupRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const studentData = useSelector(state => state.studentData); // Assuming the student data is stored in Redux
- 
-  
+  const studentData = useSelector((state) => state.studentData); // Assuming the student data is stored in Redux
+
+  const handleClickNotification = () => {
+    navigate("/studentnotification");
+  };
+
+  const handlePassword = () => {
+    alert("Redirecting to change password...");
+    navigate("/updatepassword");
+  };
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
   useEffect(() => {
-    const storedStudentId = localStorage.getItem('studentId');
+    const storedStudentId = localStorage.getItem("studentId");
     if (storedStudentId) {
       dispatch(fetchStudent(storedStudentId)); // Fetch student data if required
     }
@@ -40,10 +39,9 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dispatch]);
-
 
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true); // Show the logout confirmation popup
@@ -51,19 +49,14 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
 
   const handleLogout = () => {
     // Remove student data from localStorage
-    localStorage.removeItem('studentName');
-    localStorage.removeItem('studentId');
-    navigate('/'); // Redirect to home page
+    localStorage.removeItem("studentName");
+    localStorage.removeItem("studentId");
+    navigate("/"); // Redirect to home page
     setShowLogoutConfirm(false); // Close the confirmation popup
   };
 
   const handleCancelLogout = () => {
     setShowLogoutConfirm(false); // Close the confirmation popup without logging out
-  };
-
-  const handleUpdatePassword = () => {
-    alert('Redirecting to update password...');
-    navigate('/update-password');
   };
 
   return (
@@ -76,7 +69,7 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
               className="logo1 me-2"
               src={logo}
               alt="Math Gym Logo"
-              style={{ cursor: 'pointer', maxWidth: '80px' }}
+              style={{ cursor: "pointer", maxWidth: "80px" }}
             />
           </Link>
           <Navbar.Brand className="text-success fw-bold ms-2 d-none d-md-block">
@@ -94,7 +87,7 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
         {/* Welcome Message */}
         <Col xs={12} md={5} className="text-center d-none d-md-block">
           <span className="fw-bold welcome-message">
-            Welcome, {studentName || 'Student'}{' '}
+            Welcome, {studentName || "Student"}{" "}
             <span role="img" aria-label="wave">
               👋
             </span>
@@ -102,21 +95,25 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
         </Col>
 
         {/* Action Buttons */}
-        <Col xs={6} md={4} className="d-flex justify-content-end align-items-center header-icon-group">
+        <Col
+          xs={6}
+          md={4}
+          className="d-flex justify-content-end align-items-center header-icon-group"
+        >
           {/* Notification Button */}
           <Button
             variant="outlined"
             title="Notification"
             className="me-2 d-sm-block action-button"
-            onClick={() => navigate('/')}
+            onClick={handleClickNotification} // this ensures the click triggers the redirection
           >
             <Badge
-              badgeContent={10} // Replace with dynamic count if available
+              badgeContent={10} // Replace with dynamic count if needed
               color="secondary"
               overlap="circular"
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               className="notification-badge"
             >
@@ -142,7 +139,7 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
               className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
               <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">{studentName || 'Student'}</span>
+              <span className="admin-text">{studentName || "Student"}</span>
             </Button>
 
             {showPopup && (
@@ -151,16 +148,16 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
                   {/* Profile Option */}
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => alert('Profile feature is coming soon!')}
+                    onClick={() => alert("Profile feature is coming soon!")}
                   >
                     <RiLockPasswordLine size={18} className="me-2" /> Profile
                   </li>
                   {/* Update Password */}
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
+                    onClick={handlePassword}
                   >
-                    <RiRestartLine size={18} className="me-2"/> Password
+                    <RiRestartLine size={18} className="me-2" /> Password
                   </li>
                   {/* Logout */}
                   <li
@@ -181,8 +178,12 @@ const StudentHeader = ({ toggleSidebar , studentName }) => {
         <div className="logout-confirmation-popup">
           <div className="popup-content">
             <h5>Are you sure you want to logout?</h5>
-            <Button variant="danger" onClick={handleLogout}>Yes</Button>
-            <Button variant="secondary" onClick={handleCancelLogout}>No</Button>
+            <Button variant="danger" onClick={handleLogout}>
+              Yes
+            </Button>
+            <Button variant="secondary" onClick={handleCancelLogout}>
+              No
+            </Button>
           </div>
         </div>
       )}
