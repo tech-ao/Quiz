@@ -78,20 +78,20 @@ function AdminDashboard() {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+          <div className="sub-container" style={{paddingLeft:'20px'}}>
             <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Admin Dashboard</h2>
               </Col>
               <Col xs={12} className="text-center d-block d-md-none mt-2">
-                <span className="fw-bold welcome-message">Welcome, Admin 👋</span>
-              </Col>
+                <span classNa me="fw-bold welcome-message">Welcome, Admin 👋</span>
+              </Col>  
             </Row>
 
             {/* Cards Section */}
-            <Row>
+            <Row style={{width:'98%'}}>
               <Col lg={8} sm={12}>
-                <Row>
+                <Row style={{width:'90%'}}>
                   {/* Dashboard Cards */}
                   {[
                     { label: "Total Students", count: dashboardDatas.activeCount || 0, icon: studentImg },
@@ -127,7 +127,7 @@ function AdminDashboard() {
               </Col>
 
               {/* Calendar Section */}
-              <Col lg={4} sm={12} className="mb-4">
+              <Col lg={4} sm={12} className="mb-4" style={{}}>
                 <Card className="shadow calendar-card">
                   <Card.Body>
                     <h5 className="calendar-heading" style={{ textAlign: "center", fontSize: "35px" }}>
@@ -140,7 +140,7 @@ function AdminDashboard() {
             </Row>
 
             {/* Quiz Section */}
-            <Row>
+            <Row style={{width:'98%'}}>
               <Col md={4} sm={12} className="mb-4">
                 <Card className="shadow-sm p-3 rounded">
                   <Card.Body>
