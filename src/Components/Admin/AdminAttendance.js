@@ -108,108 +108,108 @@ const AdminAttendance = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-          <Row className="mb-3">
-  <Col xs={6}>
-    <h3><b>Attendance Management</b></h3>
-  </Col>
-  <Col xs={6} className="text-right">
-    <Form.Select value={selectedType} onChange={handleTypeChange} className="align-right">
-      <option value="Student">Student</option>
-      <option value="Teacher">Teacher</option>
-    </Form.Select>
-  </Col>
-</Row>
-
-
-          {/* Student Dropdowns */}
-          {selectedType === "Student" && (
-            <Row className="mt-3">
-              <Col xs={12} md={6} lg={6}>
-                <Table className="table-sm" style={{width: "200%"}}>
-                  <thead>
-                    <tr>
-                      <th  style={{width: "50%"}}>Level</th>
-                      <th>Students</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <Form.Select value={selectedLevel} onChange={handleLevelChange}>
-                          <option value="">Select Level</option>
-                          {[...new Set(studentList.map((s) => s.level))].map((level) => (
-                            <option key={level} value={level}>{`Level ${level}`}</option>
-                          ))}
-                        </Form.Select>
-                      </td>
-                      <td>
-                        {selectedLevel !== "" && (
-                          <Form.Select onChange={handleStudentSelect}>
-                            <option value="">Select a Student</option>
-                            {studentList
-                              .filter((s) => s.level === Number(selectedLevel))
-                              .map((student) => (
-                                <option key={student.id} value={student.id}>{student.name}</option>
-                              ))}
-                          </Form.Select>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
+            <Row className="mb-3">
+              <Col xs={12} className="d-flex justify-content-between align-items-center">
+                <h3><b>Attendance Management</b></h3>
+                <div style={{ paddingRight: "66px" }}>
+                  <Form.Select value={selectedType} className="select-form" onChange={handleTypeChange} style={{ width: '110px' }}>
+                    <option value="Student">Student</option>
+                    <option value="Teacher">Teacher</option>
+                  </Form.Select>
+                </div>
               </Col>
             </Row>
-          )}
 
-          {/* Teacher Dropdowns */}
-          {selectedType === "Teacher" && (
-            <Row className="mt-3">
-              <Col xs={12} md={6} lg={6}>
-                <Table striped bordered hover className="table-sm" style={{ width: '200%'}}>
-                  <thead>
-                    <tr>
-                      <th style={{ width: '50%'}}>Type</th>
-                      <th>Teachers</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <Form.Select value={selectedTeacherType} onChange={handleTeacherTypeChange} >
-                          <option value="">Select Type</option>
-                          <option value="Part-Time">Part-Time</option>
-                          <option value="Full-Time">Full-Time</option>
-                        </Form.Select>
-                      </td>
-                      <td>
-                        {selectedTeacherType && (
-                          <Form.Select onChange={handleTeacherSelect} >
-                            <option value="">Select a teacher</option>
-                            {teacherList.filter(t => t.type === selectedTeacherType).map((teacher) => (
-                              <option key={teacher.id} value={teacher.id}>{teacher.name}</option>
+            {/* Student Dropdowns */}
+            {selectedType === "Student" && (
+              <Row className="mt-3">
+                <Col xs={12} md={6} lg={6} className="p-3" style={{ paddingRight: "40px" }}>
+                  <Table className="table-sm table-padding" style={{ width: "200%" }}>
+                    <thead>
+                      <tr>
+                        <th style={{ width: "50%" }}>Level</th>
+                        <th>Students</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Form.Select value={selectedLevel} onChange={handleLevelChange}>
+                            <option value="">Select Level</option>
+                            {[...new Set(studentList.map((s) => s.level))].map((level) => (
+                              <option key={level} value={level}>{`Level ${level}`}</option>
                             ))}
                           </Form.Select>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-          )}
+                        </td>
+                        <td>
+                          {selectedLevel !== "" && (
+                            <Form.Select onChange={handleStudentSelect}>
+                              <option value="">Select a Student</option>
+                              {studentList
+                                .filter((s) => s.level === Number(selectedLevel))
+                                .map((student) => (
+                                  <option key={student.id} value={student.id}>{student.name}</option>
+                                ))}
+                            </Form.Select>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            )}
 
-          {selectedPerson && (
-            <Row className="mt-4">
-              <Col xs={12}>
-                <h5>Attendance for {selectedPerson.name}</h5>
-                <div className="calendar-grid">{renderYearlyCalendar()}</div>
-              </Col>
-            </Row>
-          )}
+            {/* Teacher Dropdowns */}
+            {selectedType === "Teacher" && (
+              <Row className="mt-3">
+                <Col xs={12} md={6} lg={6} className="p-3" style={{ paddingRight: "40px" }}>
+                  <Table striped bordered hover className="table-sm table-padding" style={{ width: '200%' }}>
+                    <thead>
+                      <tr>
+                        <th style={{ width: '50%' }}>Type</th>
+                        <th>Teachers</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <Form.Select value={selectedTeacherType} onChange={handleTeacherTypeChange}>
+                            <option value="">Select Type</option>
+                            <option value="Part-Time">Part-Time</option>
+                            <option value="Full-Time">Full-Time</option>
+                          </Form.Select>
+                        </td>
+                        <td>
+                          {selectedTeacherType && (
+                            <Form.Select onChange={handleTeacherSelect}>
+                              <option value="">Select a teacher</option>
+                              {teacherList
+                                .filter((t) => t.type === selectedTeacherType)
+                                .map((teacher) => (
+                                  <option key={teacher.id} value={teacher.id}>{teacher.name}</option>
+                                ))}
+                            </Form.Select>
+                          )}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
+            )}
+
+            {selectedPerson && (
+              <Row className="mt-4">
+                <Col xs={12}>
+                  <h5>Attendance for {selectedPerson.name}</h5>
+                  <div className="calendar-grid">{renderYearlyCalendar()}</div>
+                </Col>
+              </Row>
+            )}
           </div>
         </Container>
       </div>
-      
     </div>
   );
 };
