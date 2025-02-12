@@ -15,8 +15,8 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  const [OldPassword, setOldPassword] = useState("");
-  const [Password, setNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
 
@@ -28,12 +28,8 @@ const LoginPage = () => {
     try {
       const apiUrl =
         role === "Student"
-          ? `${BASE_URL}/Login/StudentSignin?Email=${encodeURIComponent(
-              userId
-            )}&Password=${encodeURIComponent(password)}`
-          : `${BASE_URL}/Login/TeacherSignin?Email=${encodeURIComponent(
-              userId
-            )}&Password=${encodeURIComponent(password)}`;
+          ? `${BASE_URL}/Login/StudentSignin?Email=${encodeURIComponent(userId)}&Password=${encodeURIComponent(password)}`
+          : `${BASE_URL}/Login/TeacherSignin?Email=${encodeURIComponent(userId)}&Password=${encodeURIComponent(password)}`;
 
       const response = await fetch(apiUrl, {
         method: "POST",
@@ -46,9 +42,11 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log("Full Response Data:", data); // Debugging
 
-        if (data && data.isSuccess) {
+        if (data && data.isSuccess && data.data) {
+          console.log("isFirstLogin Value:", data.data.isFirstLogin); // Debugging
+
           if (data.data.isFirstLogin) {
             setStudentId(data.data.studentId);
             setShowPopup(true);
@@ -57,8 +55,7 @@ const LoginPage = () => {
             console.log("Login Successful:", data);
             sessionStorage.setItem("isLoggedIn", "true");
             sessionStorage.setItem("userRole", role);
-            const dashboardPath =
-              role === "Student" ? "/studentDashboard" : "/TeacherDashboard";
+            const dashboardPath = role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
             navigate(dashboardPath, { state: { userData: data.data } });
           }
         } else {
@@ -72,6 +69,45 @@ const LoginPage = () => {
       setError("An error occurred. Please check your connection.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordUpdate = async () => {
+    if (!oldPassword || !newPassword) {
+      setError("Please enter both old and new password.");
+      return;
+    }
+
+    try {
+      const updateApiUrl = `${BASE_URL}/UpdatePassword`;
+      const response = await fetch(updateApiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+        },
+        body: JSON.stringify({
+          studentId: studentId,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        }),
+      });
+
+      const result = await response.json();
+      console.log("Password Update Response:", result);
+
+      if (result.isSuccess) {
+        alert("Password updated successfully. Please log in with your new password.");
+        setShowPopup(false);
+        setPassword(""); // Reset old password field
+        setUserId(userData.email); // Keep email prefilled
+      } else {
+        setError("Failed to update password. Please check your old password.");
+      }
+    } catch (err) {
+      console.error("Error updating password:", err);
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -126,6 +162,7 @@ const LoginPage = () => {
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </Button>
+                
               </Form.Group>
               <Button
                 type="submit"
@@ -135,7 +172,8 @@ const LoginPage = () => {
               >
                 {loading ? "Logging in..." : "Login"}
               </Button>
-              <div className="text-center mt-3">
+            </Form>
+            <div className="text-center mt-3">
                 <small>
                   Don’t have an account? <a href="/registerStudent" className="text-decoration-none">Sign Up</a>
                 </small>
@@ -145,10 +183,29 @@ const LoginPage = () => {
                   Forgot your password? <a href="/forgotPassword" className="text-decoration-none">Forgot Password</a>
                 </small>
               </div>
-            </Form>
           </div>
         </Col>
       </Row>
+
+      {/* Password Update Modal */}
+      <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Password</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group className="mb-3">
+            <Form.Label>Old Password</Form.Label>
+            <Form.Control type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} required />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>New Password</Form.Label>
+            <Form.Control type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handlePasswordUpdate}>Update Password</Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   );
 };
