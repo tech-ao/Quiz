@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 const StudentDashboard = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [studentId, setStudentId] = useState(null);
   const [studentData, setStudentData] = useState({});
@@ -24,11 +25,6 @@ const StudentDashboard = () => {
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
-
-  const handleClick=(e)=>{
-    e.preventDefault();
-    Navigate('/studentnotification');
-  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -50,7 +46,7 @@ const StudentDashboard = () => {
       setError("Student ID is missing");
       setLoading(false);
     }
-  }, []);
+  }, [location.state]);
 
   // Fetch student data only if studentId is available
   useEffect(() => {
@@ -81,9 +77,13 @@ const StudentDashboard = () => {
     ? `data:image/png;base64,${profile.data.data}`
     : "https://via.placeholder.com/150"; // Default placeholder
 
+  // Compute the full name from firstName and lastName
+  const fullName = `${studentData.firstName || ""} ${studentData.lastName || ""}`.trim();
+
   return (
     <div>
-      <StudentHeader toggleSidebar={toggleSidebar} studentName={studentData?.firstName || "Loading..."} />
+      {/* Pass fullName to the header */}
+      <StudentHeader toggleSidebar={toggleSidebar} studentName={fullName || "Loading..."} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
         <Container className="main-container p-4 min-vh-100">
@@ -114,12 +114,30 @@ const StudentDashboard = () => {
 
                     <Col md={7}>
                       <Row>
-                        <Col xs={6}><p><strong>Name:</strong> {studentData.firstName || "N/A"}</p></Col>
-                        <Col xs={6}><p><strong>Date of Birth:</strong> {studentData.dob ? new Date(studentData.dob).toLocaleDateString('en-GB') : "N/A"}</p></Col>
+                        <Col xs={6}>
+                          <p>
+                            <strong>Name:</strong>{" "}
+                            {fullName || "N/A"}
+                          </p>
+                        </Col>
+                        <Col xs={6}>
+                          <p>
+                            <strong>Date of Birth:</strong>{" "}
+                            {studentData.dob ? new Date(studentData.dob).toLocaleDateString('en-GB') : "N/A"}
+                          </p>
+                        </Col>
                       </Row>
                       <Row>
-                        <Col xs={6}><p><strong>Email:</strong> {studentData.email || "N/A"}</p></Col>
-                        <Col xs={6}><p><strong>Phone:</strong> {studentData.phoneNumber || "N/A"}</p></Col>
+                        <Col xs={6}>
+                          <p>
+                            <strong>Email:</strong> {studentData.email || "N/A"}
+                          </p>
+                        </Col>
+                        <Col xs={6}>
+                          <p>
+                            <strong>Phone:</strong> {studentData.phoneNumber || "N/A"}
+                          </p>
+                        </Col>
                       </Row>
                     </Col>
                   </Row>

@@ -167,7 +167,11 @@ const StudentSettings = () => {
                   </Col>
                   <Col md={4}>
                     <strong>Date of Birth:</strong>
-                    <p>{studentData?.dob || "N/A"}</p>
+                    <p>
+                      {studentData?.dob 
+                        ? new Date(studentData.dob).toLocaleDateString('en-GB')
+                        : "N/A"}
+                    </p>
                   </Col>
                   <Col md={4}>
                     <strong>Gender:</strong>
