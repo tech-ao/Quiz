@@ -238,7 +238,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogoutClick} 
+                    onClick={handleLogoutClick}
                   >
                     <RiLogoutCircleRLine size={18} className="me-2" /> Logout
                   </li>
