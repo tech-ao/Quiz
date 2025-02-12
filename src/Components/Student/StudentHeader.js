@@ -17,33 +17,43 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudent } from '../../redux/Action/StudentAction';
 
 const StudentHeader = ({ toggleSidebar }) => {
+  // Use a constant to set a uniform (increased) icon size for all icons.
+  const ICON_SIZE = 30;
+
+  // Local state variables:
+  // - showPopup: toggles the admin popup.
+  // - showLogoutConfirm: toggles the logout confirmation.
+  // - isMobileExpanded: controls whether the mobile left group is expanded (logo is visible) or collapsed.
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+
   const popupRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Retrieve student data from the "students" slice as used in the dashboard.
+  // Retrieve student data from the "students" slice.
   const { selectedStudent } = useSelector((state) => state.students);
-  // Get the student name from the data (no fallback text).
-  const studentName = selectedStudent?.data?.firstName || "";
+  // Construct the full name using first and last name (fallback to an empty string).
+  const studentFullName = selectedStudent?.data
+    ? `${selectedStudent.data.firstName} ${selectedStudent.data.lastName}`
+    : "";
 
-  const togglePopup = () => setShowPopup((prev) => !prev);
+  const togglePopup = () => setShowPopup(prev => !prev);
 
   useEffect(() => {
     const storedStudentId = localStorage.getItem('studentId');
     if (storedStudentId) {
       dispatch(fetchStudent(storedStudentId));
     }
-
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setShowPopup(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutside);
   }, [dispatch]);
 
   const handleLogoutClick = () => {
@@ -80,7 +90,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                 cursor: 'pointer',
                 maxWidth: '80px',
                 border: '1px solid #000',
-                borderRadius: '5px'
+                borderRadius: '5px',
               }}
             />
           </Link>
@@ -90,7 +100,7 @@ const StudentHeader = ({ toggleSidebar }) => {
         </Col>
         <Col md={5} className="text-center">
           <span className="fw-bold welcome-message">
-            Welcome, {studentName}
+            Welcome, {studentFullName}
             <span role="img" aria-label="wave"> 👋</span>
           </span>
         </Col>
@@ -108,7 +118,7 @@ const StudentHeader = ({ toggleSidebar }) => {
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               className="notification-badge"
             >
-              <RiNotification3Line size={20} />
+              <RiNotification3Line size={ICON_SIZE} />
             </Badge>
           </Button>
           <Button
@@ -117,7 +127,7 @@ const StudentHeader = ({ toggleSidebar }) => {
             className="me-2 action-button"
             onClick={() => window.open('https://mathgymint.com', '_blank')}
           >
-            <RiGlobalLine size={20} />
+            <RiGlobalLine size={ICON_SIZE} />
           </Button>
           <div className="position-relative" ref={popupRef}>
             <Button
@@ -125,8 +135,8 @@ const StudentHeader = ({ toggleSidebar }) => {
               onClick={togglePopup}
               className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
-              <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">{studentName}</span>
+              <RiAdminLine size={ICON_SIZE} className="me-1" />
+              <span className="admin-text">{studentFullName}</span>
             </Button>
             {showPopup && (
               <div className="admin-popup">
@@ -135,19 +145,19 @@ const StudentHeader = ({ toggleSidebar }) => {
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={() => navigate('/studentSettings')}
                   >
-                    <RiLockPasswordLine size={18} className="me-2" /> Profile
+                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" /> Profile
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={handleUpdatePassword}
                   >
-                    <RiRestartLine size={18} className="me-2" /> Password
+                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
                     onClick={handleLogoutClick}
                   >
-                    <RiLogoutCircleRLine size={18} className="me-2" /> Logout
+                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" /> Logout
                   </li>
                 </ul>
               </div>
@@ -161,36 +171,43 @@ const StudentHeader = ({ toggleSidebar }) => {
         className="align-items-center w-100 d-flex d-md-none"
         style={{ padding: '0 5px', justifyContent: 'space-between' }}
       >
-        {/* Left Group: Logo and Hamburger Icon */}
+        {/* Left Group: Initially, only the hamburger icon is visible at the left edge.
+            When clicked, it toggles the sidebar (via toggleSidebar) and also sets isMobileExpanded to true,
+            causing the logo to appear to the left of the hamburger icon. Clicking it again hides the logo and sidebar. */}
         <Col xs="auto" className="d-flex align-items-center">
-          <Link to="/studentDashboard">
-            <img
-              className="logo1"
-              src={logo}
-              alt="Math Gym Logo"
-              style={{
-                cursor: 'pointer',
-                maxWidth: '60px',
-                border: '1px solid #000',
-                borderRadius: '5px'
-              }}
-            />
-          </Link>
+          {isMobileExpanded && (
+            <Link to="/studentDashboard">
+              <img
+                className="logo1 me-2"
+                src={logo}
+                alt="Math Gym Logo"
+                style={{
+                  cursor: 'pointer',
+                  maxWidth: '60px',
+                  border: '1px solid #000',
+                  borderRadius: '5px',
+                }}
+              />
+            </Link>
+          )}
           <Button
             variant="link"
-            onClick={toggleSidebar}
-            style={{ padding: '0', marginLeft: '10px' }}
+            onClick={() => {
+              setIsMobileExpanded(prev => !prev);
+              toggleSidebar();
+            }}
+            style={{ padding: '0' }}
           >
-            <RiMenu3Line size={20} />
+            <RiMenu3Line size={ICON_SIZE} />
           </Button>
         </Col>
 
-        {/* Right Group: Notification, Website, and Student Profile Icons */}
+        {/* Right Group: Always-visible icons */}
         <Col xs="auto" className="d-flex align-items-center">
           <Button
             variant="link"
             onClick={() => navigate('/')}
-            style={{ padding: '10' }}
+            style={{ padding: '10px' }}
           >
             <Badge
               badgeContent={10}
@@ -198,7 +215,7 @@ const StudentHeader = ({ toggleSidebar }) => {
               overlap="circular"
               anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             >
-              <RiNotification3Line size={18} />
+              <RiNotification3Line size={ICON_SIZE} />
             </Badge>
           </Button>
           <Button
@@ -206,7 +223,7 @@ const StudentHeader = ({ toggleSidebar }) => {
             onClick={() => window.open('https://mathgymint.com', '_blank')}
             style={{ padding: '0', marginLeft: '10px' }}
           >
-            <RiGlobalLine size={18} />
+            <RiGlobalLine size={ICON_SIZE} />
           </Button>
           <div className="position-relative" style={{ marginLeft: '10px' }}>
             <Button
@@ -215,12 +232,12 @@ const StudentHeader = ({ toggleSidebar }) => {
               className="text-decoration-none fw-bold d-flex flex-column align-items-center"
               style={{ padding: '0' }}
             >
-              <RiAdminLine size={18} />
+              <RiAdminLine size={ICON_SIZE} />
               <span
                 className="text-success"
                 style={{ fontSize: '10px', marginTop: '2px' }}
               >
-                {studentName}
+                {studentFullName}
               </span>
             </Button>
             {showPopup && (
@@ -230,19 +247,19 @@ const StudentHeader = ({ toggleSidebar }) => {
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={() => navigate('/studentSettings')}
                   >
-                    <RiLockPasswordLine size={16} className="me-2" /> Profile
+                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" /> Profile
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={handleUpdatePassword}
                   >
-                    <RiRestartLine size={16} className="me-2" /> Password
+                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
                     onClick={handleLogoutClick}
                   >
-                    <RiLogoutCircleRLine size={16} className="me-2" /> Logout
+                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" /> Logout
                   </li>
                 </ul>
               </div>
@@ -262,7 +279,7 @@ const StudentHeader = ({ toggleSidebar }) => {
               padding: '20px',
               background: '#fff',
               borderRadius: '8px',
-              textAlign: 'center'
+              textAlign: 'center',
             }}
           >
             <h5>Are you sure you want to logout?</h5>
@@ -271,7 +288,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '10px',
-                marginTop: '15px'
+                marginTop: '15px',
               }}
             >
               <Button variant="danger" style={{ width: '100%' }} onClick={handleLogout}>
