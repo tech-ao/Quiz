@@ -34,7 +34,11 @@ const Test = () => {
 
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-          <h2 className="text-center mb-4">Test List</h2>
+            <Row className="mb-4">
+              <Col>
+                <h2 className="fw-bold">Test List</h2>
+              </Col>
+            </Row>
             {!selectedTest ? (
               <Row>
                 {tests.map((test) => (

@@ -16,13 +16,17 @@ import '../Admin/adminHeader.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStudent } from '../../redux/Action/StudentAction';
 
-const StudentHeader = ({ toggleSidebar, studentName }) => {
+const StudentHeader = ({ toggleSidebar }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const popupRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const studentData = useSelector((state) => state.studentData);
+
+  // Retrieve student data from the "students" slice as used in the dashboard.
+  const { selectedStudent } = useSelector((state) => state.students);
+  // Get the student name from the data (no fallback text).
+  const studentName = selectedStudent?.data?.firstName || "";
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
@@ -39,8 +43,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    return () =>
-      document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [dispatch]);
 
   const handleLogoutClick = () => {
@@ -73,7 +76,12 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               className="logo1 me-2"
               src={logo}
               alt="Math Gym Logo"
-              style={{ cursor: 'pointer', maxWidth: '80px' }}
+              style={{
+                cursor: 'pointer',
+                maxWidth: '80px',
+                border: '1px solid #000',
+                borderRadius: '5px'
+              }}
             />
           </Link>
           <Navbar.Brand className="text-success fw-bold ms-2">
@@ -82,10 +90,8 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
         </Col>
         <Col md={5} className="text-center">
           <span className="fw-bold welcome-message">
-            Welcome, {studentName || 'Student'}{' '}
-            <span role="img" aria-label="wave">
-              👋
-            </span>
+            Welcome, {studentName}
+            <span role="img" aria-label="wave"> 👋</span>
           </span>
         </Col>
         <Col md={4} className="d-flex justify-content-end align-items-center header-icon-group">
@@ -99,10 +105,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               badgeContent={10}
               color="secondary"
               overlap="circular"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
               className="notification-badge"
             >
               <RiNotification3Line size={20} />
@@ -123,7 +126,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
             >
               <RiAdminLine size={20} className="me-1" />
-              <span className="admin-text">{studentName || 'Student'}</span>
+              <span className="admin-text">{studentName}</span>
             </Button>
             {showPopup && (
               <div className="admin-popup">
@@ -165,7 +168,12 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
               className="logo1"
               src={logo}
               alt="Math Gym Logo"
-              style={{ cursor: 'pointer', maxWidth: '60px' }}
+              style={{
+                cursor: 'pointer',
+                maxWidth: '60px',
+                border: '1px solid #000',
+                borderRadius: '5px'
+              }}
             />
           </Link>
           <Button
@@ -195,9 +203,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
           </Button>
           <Button
             variant="link"
-            onClick={() =>
-              window.open('https://mathgymint.com', '_blank')
-            }
+            onClick={() => window.open('https://mathgymint.com', '_blank')}
             style={{ padding: '0', marginLeft: '10px' }}
           >
             <RiGlobalLine size={18} />
@@ -214,7 +220,7 @@ const StudentHeader = ({ toggleSidebar, studentName }) => {
                 className="text-success"
                 style={{ fontSize: '10px', marginTop: '2px' }}
               >
-                {studentName || 'Student'}
+                {studentName}
               </span>
             </Button>
             {showPopup && (

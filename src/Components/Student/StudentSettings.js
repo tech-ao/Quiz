@@ -106,15 +106,16 @@ const StudentSettings = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            <h1 className="d-flex justify-content-between align-items-center">
-              Student Settings
-              <FaEdit
-                size={24}
-                className="text-primary cursor-pointer"
-                style={{ cursor: "pointer" }}
-                onClick={handleOpenEditStudent}
-              />
-            </h1>
+            <Row className="mb-4">
+              <Col className="d-flex justify-content-between align-items-center">
+                <h2 className="fw-bold text-dark">Student Settings</h2>
+                <FaEdit
+                  size={24}
+                  className="text-primary cursor-pointer"
+                  onClick={handleOpenEditStudent}
+                />
+              </Col>
+            </Row>
 
             <Card className="p-4">
               <Card.Body className="d-flex flex-column align-items-center">
@@ -145,25 +146,55 @@ const StudentSettings = () => {
                 </div>
 
                 <Row className="mt-4 w-100">
-                  <Col md={4}><strong>First Name:</strong><p>{studentData?.firstName || "N/A"}</p></Col>
-                  <Col md={4}><strong>Last Name:</strong><p>{studentData?.lastName || "N/A"}</p></Col>
-                  <Col md={4}><strong>Email:</strong><p>{studentData?.email || "N/A"}</p></Col>
+                  <Col md={4}>
+                    <strong>First Name:</strong>
+                    <p>{studentData?.firstName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Last Name:</strong>
+                    <p>{studentData?.lastName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Email:</strong>
+                    <p>{studentData?.email || "N/A"}</p>
+                  </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
-                  <Col md={4}><strong>Phone:</strong><p>{studentData?.countryCode} {studentData?.phoneNumber || "N/A"}</p></Col>
-                  <Col md={4}><strong>Date of Birth:</strong><p>{studentData?.dob || "N/A"}</p></Col>
-                  <Col md={4}><strong>Gender:</strong><p>{studentData?.genderName || "N/A"}</p></Col>
+                  <Col md={4}>
+                    <strong>Phone:</strong>
+                    <p>{studentData?.countryCode} {studentData?.phoneNumber || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Date of Birth:</strong>
+                    <p>{studentData?.dob || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Gender:</strong>
+                    <p>{studentData?.genderName || "N/A"}</p>
+                  </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
-                  <Col md={4}><strong>Register Number:</strong><p>{studentData?.registerNumber || "N/A"}</p></Col>
-                  <Col md={4}><strong>Grade:</strong><p>{studentData?.gradeName || "N/A"}</p></Col>
-                  <Col md={4}><strong>Status:</strong><p>{studentData?.statusName || "N/A"}</p></Col>
+                  <Col md={4}>
+                    <strong>Register Number:</strong>
+                    <p>{studentData?.registerNumber || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Grade:</strong>
+                    <p>{studentData?.gradeName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Status:</strong>
+                    <p>{studentData?.statusName || "N/A"}</p>
+                  </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
-                  <Col md={4}><strong>Address:</strong><p>{studentData?.address || "N/A"}</p></Col>
+                  <Col md={4}>
+                    <strong>Address:</strong>
+                    <p>{studentData?.address || "N/A"}</p>
+                  </Col>
                 </Row>
               </Card.Body>
             </Card>

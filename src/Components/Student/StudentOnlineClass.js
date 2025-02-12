@@ -69,8 +69,12 @@ const StudentOnlineClass = () => {
 
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            {/* Class Schedule List */}
-            <h2 className="text-center mb-4">Assigned Classes</h2>
+            {/* Updated Title aligned to the left */}
+            <Row className="mb-4">
+              <Col>
+                <h2 className="fw-bold">Assigned Classes</h2>
+              </Col>
+            </Row>
             <Row>
               {classSchedule.map((cls) => (
                 <Col md={6} lg={4} key={cls.id} className="mb-4">

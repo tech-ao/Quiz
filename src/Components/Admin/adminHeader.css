@@ -100,7 +100,6 @@ button {
   background-color: white;
   padding: 30px;
   border-radius: 12px;
-  display: flex;
   flex-direction: column;
   align-items: center;
   width: 300px; /* Adjust the width as needed */
