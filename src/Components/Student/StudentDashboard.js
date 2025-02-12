@@ -86,7 +86,7 @@ const StudentDashboard = () => {
       <StudentHeader toggleSidebar={toggleSidebar} studentName={fullName || "Loading..."} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
           <div className="sub-container">
             {error ? (
               <p className="text-danger">Error: {error}</p>

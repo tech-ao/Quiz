@@ -67,7 +67,7 @@ const StudentOnlineClass = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
 
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
           <div className="sub-container">
             {/* Updated Title aligned to the left */}
             <Row className="mb-4">
