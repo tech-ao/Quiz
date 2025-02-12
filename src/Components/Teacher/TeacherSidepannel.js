@@ -123,7 +123,7 @@ const TeacherSidePanel = () => {
           >
             <div className="icon-with-text">
               <i className="bi bi-gear"></i>
-              <span className="nav-text">Seetings</span>
+              <span className="nav-text">Settings</span>
             </div>
           </Link>
         </li>

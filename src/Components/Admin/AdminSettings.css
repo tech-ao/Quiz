@@ -135,6 +135,7 @@ button.edit-btn:focus {
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
 }
 
+
 /* Mobile & Tablet Responsive Design */
 @media (max-width: 1024px) {
   .profile-card {

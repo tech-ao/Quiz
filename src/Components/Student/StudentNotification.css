@@ -1,0 +1,28 @@
+.notification-page {
+    background-color: #f8f9fa;
+  }
+  
+  .notification-card {
+    border-radius: 8px;
+    border: none;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .notification-card:hover {
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .notification-card h5 {
+    margin-bottom: 5px;
+  }
+  
+  .notification-card p {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+  
+  .btn-sm {
+    font-size: 0.85rem;
+  }
+  

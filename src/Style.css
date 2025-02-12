@@ -1,5 +1,5 @@
 body {
-  background-color: #95b0a7;
+  background-color: #e7ffec;
 }
 
 .modalbg input,
@@ -24,39 +24,145 @@ body {
   z-index: 1000;
 }
 
-.modalbg input:focus,
-.modalbg select:focus,
-.modalbg textarea:focus {
-  outline: none;
-  border: 1px solid #289b2b;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.modalbg select:valid,
-.modalbg input:valid {
-  border: 1px solid #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
-
-.button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  background-color: #bef3bc;
-}
-
-.chipButton {
-  border-radius: 20px;
-}
-
+/* Side Panel */
 .side-panel {
   background-color: #e7ffec;
   width: 250px;
   min-height: 100vh;
   overflow: hidden;
-  transition: width 0.3s ease;
+  transition: transform 0.3s ease-in-out;
   z-index: 100;
   position: fixed;
   top: 100px;
+  left: 0;
+  border-right: 2px solid #8cdf97;
+}
+
+/* Side Panel when closed */
+.side-panel.hidden {
+  transform: translateX(-100%);
+}
+
+/* Navigation links */
+.nav-item {
+  margin: 5px 0;
+}
+
+/* Styling for links */
+.nav-link {
+  color: #09690c;
+  font-weight: 500;
+  padding: 12px 16px;
+  transition: background-color 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.nav-link.active {
+  background-color: #bdfdd9;
+  border-left: 4px solid green;
+  color: #000;
+}
+
+.nav-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #09690c;
+}
+
+/* Icon and text styling */
+.icon-with-text {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #09690c;
+}
+
+/* Dropdown menu styling */
+.sub-nav {
+  padding-left: 20px;
+  border-left: 2px solid #8cdf97;
+  margin-top: 5px;
+}
+
+.sub-nav .nav-link {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+/* Dropdown icons */
+.dropdown-icon {
+  margin-left: auto;
+}
+
+/* Input focus */
+.form-control:focus {
+  border-color: #28a745;
+  box-shadow: none;
+}
+
+/* Links */
+.forgot-password,
+.signup-link {
+  font-size: 14px;
+  color: #007bff;
+}
+
+.forgot-password:hover,
+.signup-link:hover {
+  text-decoration: underline;
+}
+
+/* Auth Buttons */
+.auth-buttons .login-btn,
+.auth-buttons .subscribe-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+}
+
+/* Main Container */
+.main-container {
+  margin-top: 1rem;
+  position: fixed;
+  top: 100px;
+  left: 250px;
+  width: calc(100% - 250px);
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+/* Adjusting when side panel is hidden */
+.side-panel.hidden + .main-container {
+  left: 0;
+  width: 100%;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 1024px) {
+  .side-panel {
+    width: 200px;
+  }
+  .main-container {
+    left: 200px;
+    width: calc(100% - 200px);
+  }
+}
+
+
+@media only screen and (max-width: 1024px) {
+  .side-panel {
+    width: 180px;
+  }
+  .side-panel.hidden {
+    transform: translateX(-100%);
+  }
+  .main-container {
+    left: 0;
+    width: 100%;
+  }
 }
 
 .sub-container {
@@ -69,103 +175,31 @@ body {
   overflow-x: hidden;
   word-wrap: break-word;
 }
-
-.toggle-btn {
-  position: fixed;
-  top: 30px;
-  left: 10px;
-  z-index: 1000;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-}
-
-.nav-link {
-  color: #09690c !important;
-  font-weight: 500;
-  padding: 12px 16px;
-  transition: background-color 0.2s ease;
-}
-
-.nav-link.active {
-  background-color: #bdfdd9 !important;
-  border-left: 4px solid green;
-  color: #000;
-}
-
-.form-control:focus {
-  border-color: #28a745;
-  box-shadow: none;
-}
-
-.forgot-password,
-.signup-link {
-  font-size: 14px;
-  color: #007bff;
-}
-
-.forgot-password:hover,
-.signup-link:hover {
-  text-decoration: underline;
-}
-
-.auth-buttons .login-btn,
-.auth-buttons .subscribe-btn {
-  margin-left: 10px;
-  padding: 5px 10px;
-}
-
-.main-container {
-  margin-top: 1rem;
-  position: fixed;
-  top: 100px;
-  left: 250px; /* Adjust this based on your .side-panel width */
-  width: calc(100% - 250px); /* Make sure it doesn't overlap */
-  height: calc(100vh - 100px);
-  overflow-y: auto;
-}
-
-
-@media only screen and (max-width: 1024px) {
-  .side-panel {
-    width: 200px;
-  }
-  .main-container {
-    margin-left: 200px;
-  }
-}
-
-@media only screen and (max-width: 768px) {
-  .side-panel {
-    width: 180px;
-  }
-  .main-container {
-    margin-left: 180px;
-  }
-}
-
 @media only screen and (max-width: 600px) {
-  .side-panel {
-    width: 100px;
-  }
+ 
   .main-container {
-    margin-left: 100px;
+    width: 100%;
+    margin-left: 0;
   }
-  .header {
-    padding: 1rem;
+  .calendar-card {
+    width: 100%;
+    text-align: center;
+  }
+  .nav-link {
+    font-size: 14px;
+    padding: 10px;
   }
 }
 
 @media only screen and (max-width: 480px) {
-  .side-panel {
-    display: none;
-  }
+ 
   .main-container {
-    margin-left: 0;
     width: 100%;
+    margin-left: 0;
   }
 }
 
+/* Tooltip Styling */
 .icon-button-container {
   position: relative;
   display: inline-block;
@@ -206,16 +240,19 @@ body {
   opacity: 1;
 }
 
+/* Buttons */
 button.ml-2.btn.btn-primary {
   background-color: #ffff;
   color: black;
 }
 
+/* Margins */
 .me-1 {
-  margin-right: .25rem !important;
+  margin-right: .25rem;
   color: #198754;
 }
 
+/* SVG Icons */
 svg {
   vertical-align: middle;
   color: #198754;

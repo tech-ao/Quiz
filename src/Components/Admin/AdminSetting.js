@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col, Card, Image, Button, Container, Form} from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Image,
+  Button,
+  Container,
+  Form,
+} from "react-bootstrap";
 import profilePic from "../images/dummmy_profile.jpg"; // Replace with actual profile image path
 import "./AdminSettings.css";
 import Sidebar from "./SidePannel";
@@ -90,7 +98,7 @@ const AdminSetting = () => {
                       src={profilePic}
                       roundedCircle
                       className="profile-pic mb-3"
-                      alt="Profile" style={{width:'130px'}}
+                      alt="Profile" style={{width:'120px'}}
                     />
 
                     {/* Name */}

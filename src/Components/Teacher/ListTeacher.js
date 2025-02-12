@@ -1,7 +1,7 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
 import Sidebar from '../Admin/SidePannel';
-import AdminHeader from '../Admin/AdminHeader'
+import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import EditTeacher from './EditTeacher';
@@ -9,11 +9,12 @@ import ViewTeacher from '../ViewTeacher';
 import { useNavigate } from "react-router-dom";
 
 const ListTeacher = ({ Teachers = [] }) => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
@@ -25,6 +26,7 @@ const ListTeacher = ({ Teachers = [] }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
@@ -57,7 +59,6 @@ const ListTeacher = ({ Teachers = [] }) => {
     address: "123 Street, City",
   };
 
-
   const filteredTeachers = Teachers.filter((Teacher) =>
     [Teacher.username, Teacher.email]
       .join(' ')
@@ -78,6 +79,9 @@ const ListTeacher = ({ Teachers = [] }) => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <h2 className="fw-bold">Teacher List</h2>
+              </Col>
               <Col md={6} className="d-flex justify-content-between align-items-center">
                 <InputGroup style={{ width: '70%' }}>
                   <Form.Control
@@ -86,16 +90,13 @@ const ListTeacher = ({ Teachers = [] }) => {
                     onChange={handleSearch}
                   />
                 </InputGroup>
-              </Col>
-              <Col md={6} className="d-flex justify-content-end" style={{paddingRight:'6%'}}>
-                <Button variant="outline-secondary" onClick={() => navigate('/addTeacher')}>
-                  Add Teacher
+                <Button variant="outline-success" onClick={() => navigate('/addTeacher')}>
+                  <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
-
               </Col>
             </Row>
 
-            <div className="table-responsive" style={{width:'96%'}}>
+            <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
                   <tr>

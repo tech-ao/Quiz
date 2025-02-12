@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import Sidebar from "./StudnetSidebar";
+import SidePannel from "./StudnetSidebar";
 import StudentHeader from "./StudentHeader";
 import { FaEye, FaDownload } from "react-icons/fa";
 
@@ -64,30 +64,39 @@ const StudentCertificate = () => {
 
   return (
     <div>
+      {/* Header with Sidebar Toggle */}
       <StudentHeader toggleSidebar={toggleSidebar} />
+
       <div className="d-flex">
-        {isSidebarVisible && <Sidebar />}
+        {isSidebarVisible && <SidePannel />}
+
         <Container className="main-container p-4 min-vh-100">
-          <h1 className="text-center mb-4">Student Certificates</h1>
-          <Row>
-            {studentCertificates.map((cert) => (
-              <Col md={4} sm={6} xs={12} key={cert.id} className="mb-4">
-                <Card className="p-3 text-center shadow-sm">
-                  <Card.Body>
-                    <h5 className="text-success">{cert.name}</h5>
-                    <p><strong>Level:</strong> {cert.level}</p>
-                    <p><strong>Certified Date:</strong> {cert.certifiedDate}</p>
-                    <p><strong>Percentage:</strong> {cert.percentage}</p>
-                    <p><strong>School:</strong> {cert.school}</p>
-                    <div className="d-flex justify-content-center gap-3">
-                      <FaEye size={20} className="text-info cursor-pointer" onClick={() => handlePreview(cert)} />
-                      <FaDownload size={20} className="text-success cursor-pointer" onClick={() => handleDownload(cert)} />
-                    </div>
-                  </Card.Body>
-                </Card>
+          <div className="sub-container">
+            <Row className="mb-4">
+              <Col>
+                <h2 className="fw-bold">Student Certificates</h2>
               </Col>
-            ))}
-          </Row>
+            </Row>
+            <Row>
+              {studentCertificates.map((cert) => (
+                <Col md={4} sm={6} xs={12} key={cert.id} className="mb-4">
+                  <Card className="p-3 text-center shadow-sm">
+                    <Card.Body>
+                      <h5 className="text-success">{cert.name}</h5>
+                      <p><strong>Level:</strong> {cert.level}</p>
+                      <p><strong>Certified Date:</strong> {cert.certifiedDate}</p>
+                      <p><strong>Percentage:</strong> {cert.percentage}</p>
+                      <p><strong>School:</strong> {cert.school}</p>
+                      <div className="d-flex justify-content-center gap-3">
+                        <FaEye size={20} className="text-info cursor-pointer" onClick={() => handlePreview(cert)} />
+                        <FaDownload size={20} className="text-success cursor-pointer" onClick={() => handleDownload(cert)} />
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+          </div>
         </Container>
       </div>
     </div>

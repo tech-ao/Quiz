@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Container, Row, Col, Card, Image } from "react-bootstrap";
 import "../../Style.css";
 import StudentHeader from "./StudentHeader";
 import StudentSidePannel from "./StudnetSidebar";
 import { useLocation } from "react-router-dom";
-import { getProfileData } from '../../redux/Action/ProfileAction';
+import { getProfileData } from "../../redux/Action/ProfileAction";
 import { getStudent } from "../../redux/Services/api";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 
 const StudentDashboard = () => {
   const location = useLocation();
@@ -17,12 +18,17 @@ const StudentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const profile = useSelector(state => state.profile);
+  const profile = useSelector((state) => state.profile);
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+
+  const handleClick=(e)=>{
+    e.preventDefault();
+    Navigate('/studentnotification');
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,24 +38,26 @@ const StudentDashboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Set studentId immediately from localStorage or location.state
   useEffect(() => {
-    // Try to get studentId from location state first
     const storedStudentId = localStorage.getItem("studentId");
+    const newStudentId = location.state?.userData?.studentId || storedStudentId;
 
-    if (location.state?.userData?.studentId) {
-      const newStudentId = location.state.userData.studentId;
-      localStorage.setItem("studentId", newStudentId); // Store in localStorage
+    if (newStudentId) {
+      localStorage.setItem("studentId", newStudentId); // Store for persistence
       setStudentId(newStudentId);
-    } else if (storedStudentId) {
-      setStudentId(storedStudentId); // Use stored ID if available
     } else {
       setError("Student ID is missing");
       setLoading(false);
     }
-  }, [location.state]);
+  }, []);
 
+  // Fetch student data only if studentId is available
   useEffect(() => {
-    if (!studentId) return;
+    if (!studentId) {
+      setLoading(false); // Stop loading if no studentId
+      return;
+    }
 
     const fetchAllData = async () => {
       setLoading(true);
@@ -68,89 +76,91 @@ const StudentDashboard = () => {
     fetchAllData();
   }, [studentId, dispatch]);
 
-  if (!studentId) return <p className="text-danger">Error: Student ID is missing!</p>;
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-danger">Error: {error}</p>;
-
-  console.log(studentData, profile);
-
-  const profileImage = profile.data?.data 
+  // Profile image handling
+  const profileImage = profile.data?.data
     ? `data:image/png;base64,${profile.data.data}`
     : "https://via.placeholder.com/150"; // Default placeholder
 
   return (
     <div>
-      <StudentHeader toggleSidebar={toggleSidebar} studentName={studentData.firstName} />
+      <StudentHeader toggleSidebar={toggleSidebar} studentName={studentData?.firstName || "Loading..."} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            <Card className="mb-4 p-4">
-              <Row className="align-items-center">
-                <Col md={3} className="text-center">
-                  <div
-                    style={{
-                      border: "5px solid #4caf50",
-                      borderRadius: "50%",
-                      padding: "5px",
-                      display: "inline-block",
-                    }}
-                  >
-                    <Image
-                      src={profileImage}
-                      roundedCircle
-                      alt="Student"
-                      style={{ width: "150px", height: "150px", objectFit: "cover" }}
-                    />
-                  </div>
-                </Col>
+            {error ? (
+              <p className="text-danger">Error: {error}</p>
+            ) : (
+              <>
+                <Card className="mb-4 p-4">
+                  <Row className="align-items-center">
+                    <Col md={3} className="text-center">
+                      <div
+                        style={{
+                          border: "5px solid #4caf50",
+                          borderRadius: "50%",
+                          padding: "5px",
+                          display: "inline-block",
+                        }}
+                      >
+                        <Image
+                          src={profileImage}
+                          roundedCircle
+                          alt="Student"
+                          style={{ width: "150px", height: "150px", objectFit: "cover" }}
+                        />
+                      </div>
+                    </Col>
 
-                <Col md={7}>
-                  <Row>
-                    <Col xs={6}><p><strong>Name:</strong> {studentData.firstName || "N/A"}</p></Col>
-                    <Col xs={6}><p><strong>Date of Birth:</strong> {studentData.dob ? new Date(studentData.dob).toLocaleDateString('en-GB') : "N/A"}</p></Col>                  </Row>
-                  <Row>
-                    <Col xs={6}><p><strong>Email:</strong> {studentData.email || "N/A"}</p></Col>
-                    <Col xs={6}><p><strong>Phone:</strong> {studentData.phoneNumber || "N/A"}</p></Col>
+                    <Col md={7}>
+                      <Row>
+                        <Col xs={6}><p><strong>Name:</strong> {studentData.firstName || "N/A"}</p></Col>
+                        <Col xs={6}><p><strong>Date of Birth:</strong> {studentData.dob ? new Date(studentData.dob).toLocaleDateString('en-GB') : "N/A"}</p></Col>
+                      </Row>
+                      <Row>
+                        <Col xs={6}><p><strong>Email:</strong> {studentData.email || "N/A"}</p></Col>
+                        <Col xs={6}><p><strong>Phone:</strong> {studentData.phoneNumber || "N/A"}</p></Col>
+                      </Row>
+                    </Col>
                   </Row>
-                </Col>
-              </Row>
-            </Card>
+                </Card>
 
-            <Row className="g-3">
-              <Col xs={12} sm={6} md={3}>
-                <Card className="text-center bg-pink shadow">
-                  <Card.Body>
-                    <Card.Title>Total Marks</Card.Title>
-                    <Card.Text>{studentData.totalMarks || 10}%</Card.Text> 
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col xs={12} sm={6} md={3}>
-                <Card className="text-center shadow">
-                  <Card.Body>
-                    <Card.Title>Attendance</Card.Title>
-                    <Card.Text>{studentData.attendance || 20}%</Card.Text> 
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col xs={12} sm={6} md={3}>
-                <Card className="text-center shadow">
-                  <Card.Body>
-                    <Card.Title>Quizzes Completed</Card.Title>
-                    <Card.Text>{studentData.quizzesCompleted || 30}</Card.Text> 
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col xs={12} sm={6} md={3}>
-                <Card className="text-center shadow">
-                  <Card.Body>
-                    <Card.Title>Rank</Card.Title>
-                    <Card.Text>{studentData.rank || 3}</Card.Text> 
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+                <Row className="g-3">
+                  <Col xs={12} sm={6} md={3}>
+                    <Card className="text-center bg-pink shadow">
+                      <Card.Body>
+                        <Card.Title>Total Marks</Card.Title>
+                        <Card.Text>{studentData.totalMarks || 10}%</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={6} md={3}>
+                    <Card className="text-center shadow">
+                      <Card.Body>
+                        <Card.Title>Attendance</Card.Title>
+                        <Card.Text>{studentData.attendance || 20}%</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={6} md={3}>
+                    <Card className="text-center shadow">
+                      <Card.Body>
+                        <Card.Title>Quizzes Completed</Card.Title>
+                        <Card.Text>{studentData.quizzesCompleted || 30}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                  <Col xs={12} sm={6} md={3}>
+                    <Card className="text-center shadow">
+                      <Card.Body>
+                        <Card.Title>Rank</Card.Title>
+                        <Card.Text>{studentData.rank || 3}</Card.Text>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                </Row>
+              </>
+            )}
           </div>
         </Container>
       </div>

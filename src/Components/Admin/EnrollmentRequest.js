@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Form, Button, Badge, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Table, Form, Button, Badge, Spinner, InputGroup } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "./EnrollmentRequest.css";
@@ -12,8 +12,9 @@ const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedRequests, setSelectedRequests] = useState([]);
+  const [selectedRequestId, setSelectedRequestId] = useState(null);
   const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
@@ -41,7 +42,8 @@ const EnrollmentRequestList = () => {
         setLoading(true);
         const response = await fetchStudentEnrollmentRequest({ paginationDetail });
         if (response && response.data) {
-          setRequests(response.data);
+          setRequests(response.data.searchAndListStudentResult || []);
+          setFilteredRequests(response.data.searchAndListStudentResult || []);
         } else {
           setError("Failed to fetch enrollment requests.");
         }
@@ -54,35 +56,40 @@ const EnrollmentRequestList = () => {
     fetchRequests();
   }, [currentPage]);
 
-  const handleSearch = () => {
-    const filteredRequests = requests.searchAndListStudentResult.filter(
-      (request) =>
-        request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        request.email.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    setFilteredRequests(
+      requests.filter(
+        (request) =>
+          request.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          request.email.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     );
-    setRequests(filteredRequests);
-  };
+  }, [searchTerm, requests]);
 
-  const handleSelectRequest = (id) => {
-    setSelectedRequests(selectedRequests.includes(id) ? [] : [id]);
+  const handleSelectRequest = (studentId) => {
+    setSelectedRequestId(selectedRequestId === studentId ? null : studentId);
   };
 
   const handleApprove = async () => {
-    await updateStatus(1);
+    if (selectedRequestId) {
+      await updateStatus(1);
+    }
   };
 
   const handleDeny = async () => {
-    await updateStatus(3);
+    if (selectedRequestId) {
+      await updateStatus(3);
+    }
   };
 
   const updateStatus = async (statusId) => {
     try {
-      await Promise.all(
-        selectedRequests.map((studentId) => dispatch(editStudentAction({ statusId }, studentId)))
-      );
-      dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
-      toast.success(`Status updated successfully!`);
-      setSelectedRequests([]);
+      if (selectedRequestId) {
+        await dispatch(editStudentAction({ statusId }, selectedRequestId));
+        dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
+        toast.success("Status updated successfully!");
+        setSelectedRequestId(null);
+      }
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
     }
@@ -95,23 +102,23 @@ const EnrollmentRequestList = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            <Row className="mb-3">
-              <Col md={8} className="d-flex">
-                <Form.Control
-                  type="text"
-                  placeholder="Search by name or email"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                <Button variant="primary" className="ml-2" onClick={handleSearch}>
-                  Search
-                </Button>
+            <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <h2 className="fw-bold">Enrollment Request</h2>
               </Col>
-              <Col md={4} className="d-flex justify-content-end">
-                <Button variant="success" onClick={handleApprove} className="ml-2" disabled={selectedRequests.length === 0}>
+              <Col md={6} className="d-flex justify-content-between align-items-center">
+                <InputGroup style={{ width: "70%" }}>
+                  <Form.Control
+                    type="text"
+                    placeholder="Search by name or email"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </InputGroup>
+                <Button variant="success" onClick={handleApprove} disabled={selectedRequestId === null}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny} className="ml-2" disabled={selectedRequests.length === 0}>
+                <Button variant="danger" onClick={handleDeny} disabled={selectedRequestId === null}>
                   Reject
                 </Button>
               </Col>
@@ -139,13 +146,13 @@ const EnrollmentRequestList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {requests.searchAndListStudentResult.map((request, index) => (
+                      {filteredRequests.map((request, index) => (
                         <tr key={request.id || index}>
                           <td>
                             <Form.Check
                               type="checkbox"
-                              checked={selectedRequests.includes(request.id)}
-                              onChange={() => handleSelectRequest(request.id)}
+                              checked={selectedRequestId === request.studentId}
+                              onChange={() => handleSelectRequest(request.studentId)}
                             />
                           </td>
                           <td>{index + 1}</td>

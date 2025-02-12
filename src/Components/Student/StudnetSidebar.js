@@ -74,6 +74,21 @@ const StudentSidePannel = ({ studyModeId }) => {
             </div>
           </Link>
         </li>
+
+      <li className="nav-item">
+                <Link
+                  to="/studentnotification"
+                  className={`nav-link ${location.pathname === "/studentnotification" ? "active" : ""
+                    }`}
+                >
+                  <div className="icon-with-text">
+                    <i className="bi bi-bell"></i>
+                    <span className="nav-text">Notification</span>
+                  </div> 
+                </Link>
+              </li>
+
+
         <li className="nav-item">
           <Link
             to="/studentSettings"
