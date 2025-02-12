@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import Sidebar from "./StudnetSidebar"; 
+import SidePannel from './StudnetSidebar';
 import StudentHeader from "./StudentHeader";
 
 const Test = () => {
@@ -26,13 +26,15 @@ const Test = () => {
 
   return (
     <div>
+      {/* Header with Sidebar Toggle */}
       <StudentHeader toggleSidebar={toggleSidebar} />
+
       <div className="d-flex">
-        {/* Sidebar Visibility Fix */}
-        {isSidebarVisible && <Sidebar />}
-        
+        {isSidebarVisible && <SidePannel />}
+
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
+          <h2 className="text-center mb-4">Test List</h2>
             {!selectedTest ? (
               <Row>
                 {tests.map((test) => (

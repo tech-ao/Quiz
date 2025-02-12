@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
-import Sidebar from "./StudnetSidebar";
+import SidePannel from "./StudnetSidebar";
 import StudentHeader from "./StudentHeader";
 import { FaEye, FaDownload } from "react-icons/fa";
 
@@ -64,10 +64,14 @@ const StudentCertificate = () => {
 
   return (
     <div>
+      {/* Header with Sidebar Toggle */}
       <StudentHeader toggleSidebar={toggleSidebar} />
+
       <div className="d-flex">
-        {isSidebarVisible && <Sidebar />}
+        {isSidebarVisible && <SidePannel />}
+
         <Container className="main-container p-4 min-vh-100">
+          <div className="sub-container">
           <h1 className="text-center mb-4">Student Certificates</h1>
           <Row>
             {studentCertificates.map((cert) => (
@@ -88,6 +92,7 @@ const StudentCertificate = () => {
               </Col>
             ))}
           </Row>
+          </div>
         </Container>
       </div>
     </div>
