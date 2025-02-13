@@ -6,13 +6,13 @@ import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
-import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
+import { editStudentAction, getStudents ,fetchStudent} from "../../redux/Action/StudentAction";
 
 const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedRequestId, setSelectedRequestId] = useState(null);
+  const [selectedRequestIds, setSelectedRequestIds] = useState([]);
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -67,33 +67,50 @@ const EnrollmentRequestList = () => {
   }, [searchTerm, requests]);
 
   const handleSelectRequest = (studentId) => {
-    setSelectedRequestId(selectedRequestId === studentId ? null : studentId);
+    setSelectedRequestIds((prevSelected) =>
+      prevSelected.includes(studentId)
+        ? prevSelected.filter((id) => id !== studentId)
+        : [...prevSelected, studentId]
+    );
   };
 
   const handleApprove = async () => {
-    if (selectedRequestId) {
+    if (selectedRequestIds.length > 0) {
       await updateStatus(1);
     }
   };
 
   const handleDeny = async () => {
-    if (selectedRequestId) {
+    if (selectedRequestIds.length > 0) {
       await updateStatus(3);
     }
   };
 
   const updateStatus = async (statusId) => {
     try {
-      if (selectedRequestId) {
-        await dispatch(editStudentAction({ statusId }, selectedRequestId));
-        dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
-        toast.success("Status updated successfully!");
-        setSelectedRequestId(null);
+      if (selectedRequestIds.length === 1) {
+        // If only one student is selected, fetch their details before updating
+        const studentId = selectedRequestIds[0];
+        await dispatch(fetchStudent(studentId));
+        await dispatch(editStudentAction({ statusId }, studentId));
+      } else if (selectedRequestIds.length > 1) {
+        // If multiple students are selected, update all
+        await Promise.all(
+          selectedRequestIds.map((id) => dispatch(editStudentAction({ statusId }, id)))
+        );
       }
+  
+      // Refresh student list after update
+      dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
+      toast.success("Status updated successfully!");
+  
+      // Reset selection
+      setSelectedRequestIds([]);
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
     }
   };
+  
 
   return (
     <div>
@@ -115,10 +132,10 @@ const EnrollmentRequestList = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </InputGroup>
-                <Button variant="success" onClick={handleApprove} disabled={selectedRequestId === null}>
+                <Button variant="success" onClick={handleApprove} disabled={selectedRequestIds.length === 0}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny} disabled={selectedRequestId === null}>
+                <Button variant="danger" onClick={handleDeny} disabled={selectedRequestIds.length === 0}>
                   Reject
                 </Button>
               </Col>
@@ -151,7 +168,7 @@ const EnrollmentRequestList = () => {
                           <td>
                             <Form.Check
                               type="checkbox"
-                              checked={selectedRequestId === request.studentId}
+                              checked={selectedRequestIds.includes(request.studentId)}
                               onChange={() => handleSelectRequest(request.studentId)}
                             />
                           </td>
