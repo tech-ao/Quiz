@@ -1,15 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 import './Question.css';
 
 const Quiz = () => {
+  const [isSidebarVisible, setSidebarVisible] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call once to adjust initial state
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
+
   return (
     <div>
-      <AdminHeader />
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        <Sidebar />
+        {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="justify-content-center">

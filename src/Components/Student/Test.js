@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import SidePannel from './StudnetSidebar';
+import SidePannel from "./StudnetSidebar";
 import StudentHeader from "./StudentHeader";
+import "./Test.css"; // Ensure this file includes the sticky header styles
 
 const Test = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
@@ -34,11 +35,16 @@ const Test = () => {
 
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
-            <Row className="mb-4">
-              <Col>
-                <h2 className="fw-bold">Test List</h2>
-              </Col>
-            </Row>
+            {/* Sticky Header for both large & small screens */}
+            <div className="sticky-header">
+              <Row className="mb-4">
+                <Col>
+                  <h2 className="fw-bold">Test List</h2>
+                </Col>
+              </Row>
+            </div>
+
+            {/* Display Test List or Test Details */}
             {!selectedTest ? (
               <Row>
                 {tests.map((test) => (
@@ -52,7 +58,9 @@ const Test = () => {
                           <strong>Duration:</strong> {test.duration}<br />
                           <strong>Questions:</strong> {test.totalQuestions}
                         </Card.Text>
-                        <Button variant="success" onClick={() => setSelectedTest(test)}>View Test</Button>
+                        <Button variant="success" onClick={() => setSelectedTest(test)}>
+                          View Test
+                        </Button>
                       </Card.Body>
                     </Card>
                   </Col>
@@ -73,7 +81,9 @@ const Test = () => {
                   selectedTest.details.map((q, index) => (
                     <Card className="mb-3" key={index}>
                       <Card.Body>
-                        <Card.Text><strong>Q{index + 1}:</strong> {q.question}</Card.Text>
+                        <Card.Text>
+                          <strong>Q{index + 1}:</strong> {q.question}
+                        </Card.Text>
                         <ul>
                           {q.options.map((opt, idx) => (
                             <li key={idx}>{opt}</li>

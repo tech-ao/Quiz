@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import AdminHeader from '../Admin/AdminHeader';
 import SidePannel from './SidePannel';
@@ -29,6 +29,23 @@ const OnlineClass = () => {
     userType: 'Student', // Default is 'Student'
     teacherName: '', // Empty by default for Student
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call once to adjust initial state
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
@@ -143,30 +160,6 @@ const OnlineClass = () => {
                 Schedule Class
               </Button>
             </Form>
-
-            {/* Class Schedule List */}
-            <h2 className="text-center mb-4 mt-5">Class Schedule</h2>
-            <Row>
-              {classSchedule.map((cls) => (
-                <Col md={6} lg={4} key={cls.id} className="mb-4">
-                  <Card className="schedule-card">
-                    <Card.Body>
-                      <Card.Title>{cls.name}</Card.Title>
-                      <Card.Text>
-                        <strong>Date:</strong> {cls.date}
-                        <br />
-                        <strong>Time:</strong> {cls.time}
-                        <br />
-                        <strong>Instructor:</strong> {cls.instructor}
-                      </Card.Text>
-                      <Button variant="success" onClick={() => alert(`Joining ${cls.name}`)}>
-                        Join Class
-                      </Button>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
-            </Row>
           </div>
         </Container>
       </div>
