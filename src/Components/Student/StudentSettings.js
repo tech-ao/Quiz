@@ -9,6 +9,7 @@ import BASE_URL from "../../redux/Services/Config";
 import { editStudentAction, fetchStudent } from "../../redux/Action/StudentAction";
 import SettingEdit from "./SettingEdit";
 import "./StudentSettings.css";
+import UpdatePassword from './UpdatePassword';
 
 const StudentSettings = () => {
   const dispatch = useDispatch();
@@ -201,6 +202,7 @@ const StudentSettings = () => {
                   </Col>
                 </Row>
               </Card.Body>
+              <UpdatePassword/> 
             </Card>
           </div>
         </Container>

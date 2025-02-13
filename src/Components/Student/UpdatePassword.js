@@ -11,7 +11,7 @@ const UpdatePassword = () => {
     e.preventDefault();
     if (newPassword === confirmPassword) {
       alert('Password updated successfully!');
-      // You can add your password update logic here
+      
     } else {
       alert('New password and confirmation do not match!');
     }

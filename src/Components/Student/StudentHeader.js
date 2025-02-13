@@ -71,11 +71,6 @@ const StudentHeader = ({ toggleSidebar }) => {
     setShowLogoutConfirm(false);
   };
 
-  const handleUpdatePassword = () => {
-    alert('Redirecting to update password...');
-    navigate('/update-password');
-  };
-
   return (
     <Navbar expand="lg" className="header py-2">
       {/* Desktop Header: Visible on medium screens and above */}
@@ -109,7 +104,7 @@ const StudentHeader = ({ toggleSidebar }) => {
             variant="outlined"
             title="Notification"
             className="me-2 action-button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/studentnotification')}
           >
             <Badge
               badgeContent={10}
@@ -149,7 +144,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
+                    onClick={()=>navigate('/studentSettings')}
                   >
                     <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
                   </li>
@@ -204,68 +199,109 @@ const StudentHeader = ({ toggleSidebar }) => {
 
         {/* Right Group: Always-visible icons */}
         <Col xs="auto" className="d-flex align-items-center">
-          <Button
-            variant="link"
-            onClick={() => navigate('/')}
-            style={{ padding: '10px' }}
+  <Button
+    variant="link"
+    onClick={() => navigate('/studentnotification')}
+    style={{ padding: '10px' }}
+  >
+    <Badge
+      badgeContent={10}
+      color="secondary"
+      overlap="circular"
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    >
+      <RiNotification3Line
+        style={{
+          fontSize: window.innerWidth <= 767 ? '18px' : '24px', 
+        }}
+      />
+    </Badge>
+  </Button>
+  <Button
+    variant="link"
+    onClick={() => window.open('https://mathgymint.com', '_blank')}
+    style={{ padding: '0', marginLeft: '10px' }}
+  >
+    <RiGlobalLine
+      style={{
+        fontSize: window.innerWidth <= 767 ? '18px' : '24px',
+      }}
+    />
+  </Button>
+  <div className="position-relative" style={{ marginLeft: '10px' }}>
+    <Button
+      variant="link"
+      onClick={togglePopup}
+      className="text-decoration-none fw-bold d-flex flex-column align-items-center"
+      style={{ padding: '0' }}
+    >
+      <RiAdminLine
+        style={{
+          fontSize: window.innerWidth <= 767 ? '18px' : '24px',
+        }}
+      />
+      <span
+        className="text-success"
+        style={{
+          fontSize: window.innerWidth <= 767 ? '8px' : '10px', 
+          marginTop: '2px',
+        }}
+      >
+        {studentFullName}
+      </span>
+    </Button>
+    {showPopup && (
+      <div className="admin-popup">
+        <ul className="list-unstyled m-0 p-2">
+          <li
+            className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+            onClick={() => navigate('/studentSettings')}
           >
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              overlap="circular"
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-              <RiNotification3Line size={ICON_SIZE} />
-            </Badge>
-          </Button>
-          <Button
-            variant="link"
-            onClick={() => window.open('https://mathgymint.com', '_blank')}
-            style={{ padding: '0', marginLeft: '10px' }}
+            <RiLockPasswordLine
+              style={{
+                fontSize: window.innerWidth <= 767 ? '18px' : '24px', // Adjust icon size for mobile
+              }}
+              className="me-2"
+            />
+            Profile
+          </li>
+          <li
+            className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+            onClick={() => navigate('/studentSettings')}
+            style={{
+              width: '115%',
+              margin: '0 auto',
+              paddingLeft: '20px',
+              borderRadius: '2px',
+              textAlign: 'left',
+            }}
           >
-            <RiGlobalLine size={ICON_SIZE} />
-          </Button>
-          <div className="position-relative" style={{ marginLeft: '10px' }}>
-            <Button
-              variant="link"
-              onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex flex-column align-items-center"
-              style={{ padding: '0' }}
-            >
-              <RiAdminLine size={ICON_SIZE} />
-              <span
-                className="text-success"
-                style={{ fontSize: '10px', marginTop: '2px' }}
-              >
-                {studentFullName}
-              </span>
-            </Button>
-            {showPopup && (
-              <div className="admin-popup">
-                <ul className="list-unstyled m-0 p-2">
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => navigate('/studentSettings')}
-                  >
-                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" /> Profile
-                  </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
-                  >
-                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
-                  </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogoutClick}
-                  >
-                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" /> Logout
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </Col>
+            <RiRestartLine
+              style={{
+                fontSize: window.innerWidth <= 767 ? '18px' : '24px', // Adjust icon size for mobile
+              }}
+              className="me-2"
+            />
+            Password
+          </li>
+          <li
+            className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
+            onClick={handleLogoutClick}
+          >
+            <RiLogoutCircleRLine
+              style={{
+                fontSize: window.innerWidth <= 767 ? '18px' : '24px', // Adjust icon size for mobile
+              }}
+              className="me-2"
+            />
+            Logout
+          </li>
+        </ul>
+      </div>
+    )}
+  </div>
+</Col>
+
       </Row>
 
       {/* Logout Confirmation Popup */}
