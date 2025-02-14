@@ -33,7 +33,7 @@ const Test = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
 
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
           <div className="sub-container">
             {/* Sticky Header for both large & small screens */}
             <div className="sticky-header">

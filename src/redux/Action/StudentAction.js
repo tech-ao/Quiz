@@ -14,6 +14,8 @@ export const getStudents = (paginationDetail) => async (dispatch) => {
 
 
 export const fetchStudent = (studentId)=>async (dispatch)=>{
+  console.log(studentId);
+  
   dispatch({type:"FETCH_STUDENT_REQUEST"});
   try{
     const student = await getStudent(studentId);
@@ -67,19 +69,42 @@ export const addStudentAction = (studentData , paginationDetail) => async (dispa
 // };
 
 
-export const editStudentAction = (studentData,paginationDetail) => async (dispatch) =>{
-  console.log(studentData);
+// export const editStudentAction = (studentData,paginationDetail) => async (dispatch) =>{
+//   console.log(studentData);
   
-  dispatch({type:"EDIT_STUDENT_REQUEST"});
-  try{
+//   dispatch({type:"EDIT_STUDENT_REQUEST"});
+//   try{
+//     const editedStudent = await editStudent(studentData);
+//     dispatch({type:"EDIT_STUDENT_SUCCESS", payload:editedStudent});
+//     dispatch(fetchStudents(paginationDetail));
+    
+//   }catch(error){
+//     dispatch({type:"EDIT_STUDENT_FAILURE", payload: error.message});
+//   }
+// }
+
+export const editStudentAction = (studentData, paginationDetail) => async (dispatch) => {
+  dispatch({ type: "EDIT_STUDENT_REQUEST" });
+
+  try {
     const editedStudent = await editStudent(studentData);
-    dispatch({type:"EDIT_STUDENT_SUCCESS", payload:editedStudent});
+
+    // Immediately update Redux store
+    dispatch({
+      type: "EDIT_STUDENT_SUCCESS",
+      payload: editedStudent, // Update Redux state immediately
+    });
+
+    // Fetch updated student list (optional)
     dispatch(fetchStudents(paginationDetail));
     
-  }catch(error){
-    dispatch({type:"EDIT_STUDENT_FAILURE", payload: error.message});
+  } catch (error) {
+    dispatch({
+      type: "EDIT_STUDENT_FAILURE",
+      payload: error.message,
+    });
   }
-}
+};
 
 export const deleteStudentAction = (studentId) =>async (dispatch) =>{
   dispatch({type:"DELETE_STUDENT_REQUEST"});

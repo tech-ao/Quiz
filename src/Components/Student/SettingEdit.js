@@ -99,22 +99,28 @@ const SettingEdit = ({ show, onClose }) => {
       }
     }
   };
+  
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setIsSubmitting(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      await dispatch(editStudentAction(formData, selectedStudent.studentId));
-      dispatch(getStudents({ paginationDetail: { pageNumber: 1, pageSize: 15 } }));
-      toast.success("Student modified successfully!");
-      onClose();
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Failed to modify student.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  try {
+    await dispatch(editStudentAction(formData, {paginationDetail: { pageNumber: 1, pageSize: 15 } }));
+    
+    toast.success("Student modified successfully!");
+    
+    // Refresh the page to reflect changes (not ideal)
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000); // Adding slight delay to ensure Redux updates before reload
+    
+  } catch (error) {
+    console.error("Error submitting form:", error);
+    toast.error("Failed to modify student.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleCancel = () => {
     setFormData({
