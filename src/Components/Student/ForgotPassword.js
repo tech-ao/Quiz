@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, Form, Container, Row, Col, Card } from "react-bootstrap";
+import { Button, Form, Container, Row, Col, Card, Spinner, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../../redux/Services/Config";
+import RegisterHeader from "./RegisterHeader";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -33,65 +34,77 @@ const ForgotPassword = () => {
 
       if (response.ok && data.isSuccess) {
         setIsVerified(true);
-        setSuccess("Mail sent successfully. Please check your email.");
+        setSuccess("📩 Email sent successfully. Please check your inbox.");
       } else {
-        setError(data.message || "Failed to verify email.");
+        setError(data.message || "⚠️ Failed to verify email.");
       }
     } catch (err) {
       console.error("Error verifying email:", err);
-      setError("An error occurred. Please try again.");
+      setError("❌ An error occurred. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Container className="d-flex justify-content-center align-items-center vh-100">
-      <Row className="w-100">
-        <Col xs={12} md={6} lg={5} className="mx-auto">
-          <Card className="shadow-lg border-0 p-4">
-            <Card.Body>
-              <h3 className="text-center mb-4">Forgot Password</h3>
-              {error && <div className="alert alert-danger">{error}</div>}
-              {success && <div className="alert alert-success">{success}</div>}
+    <div className="forgot-password-page">
+      <RegisterHeader />
+      <Container className="d-flex justify-content-center align-items-center vh-100">
+        <Row className="w-100">
+          <Col xs={12} md={6} lg={5} className="mx-auto">
+            <Card className="shadow-lg border-0 rounded-4 p-4">
+              <Card.Body>
+                <h3 className="text-center mb-4 fw-bold text-success">Forgot Password</h3>
 
-              <Form>
-                <Form.Group className="mb-3" controlId="email">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    readOnly={isVerified}
-                    required
-                  />
-                </Form.Group>
+                {/* Display Success or Error Messages */}
+                {error && <Alert variant="danger" className="text-center">{error}</Alert>}
+                {success && <Alert variant="success" className="text-center">{success}</Alert>}
 
-                {!isVerified && (
+                <Form>
+                  <Form.Group className="mb-3" controlId="email">
+                    <Form.Label className="fw-semibold">Email Address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      readOnly={isVerified}
+                      required
+                      className="py-2"
+                    />
+                  </Form.Group>
+
+                  {!isVerified && (
+                    <Button
+                      variant="success"
+                      className="w-100 py-2 fw-semibold"
+                      onClick={handleVerifyEmail}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Spinner animation="border" size="sm" className="me-2" /> Verifying...
+                        </>
+                      ) : (
+                        "Verify Email"
+                      )}
+                    </Button>
+                  )}
+
                   <Button
-                    variant="success"
-                    className="w-100 mb-2"
-                    onClick={handleVerifyEmail}
-                    disabled={loading}
+                    variant="outline-secondary"
+                    className="w-100 mt-2 py-2 fw-semibold"
+                    onClick={() => navigate("/")}
                   >
-                    {loading ? "Verifying..." : "Verify Email"}
+                    Close
                   </Button>
-                )}
-
-                <Button
-                  variant="secondary"
-                  className="w-100"
-                  onClick={() => navigate("/")}
-                >
-                  Close
-                </Button>
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
