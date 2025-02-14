@@ -1,115 +1,260 @@
-import React, { useState } from 'react';
-import {Form, Button } from 'react-bootstrap';
+import React, { useState } from "react";
 
-const UpdatePassword = ({ closeModal }) => {
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [isVerified, setIsVerified] = useState(false);
+const PasswordChangePopup = ({ onClose }) => {
+  const [formData, setFormData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [isPasswordVerified, setIsPasswordVerified] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (newPassword === confirmPassword) {
-      alert('Password updated successfully!');
-      closeModal(); // Close the modal after successful update
-    } else {
-      alert('New password and confirmation do not match!');
-    }
+    console.log("Password update submitted:", formData);
+  };
+
+  const handleVerify = () => {
+    setIsPasswordVerified(true);
   };
 
   return (
     <div
-      className="password-modal"
+      className="fixed inset-0 flex items-center justify-center"
       style={{
-        position: 'fixed',
-        left: '10%',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 9999,
-        backgroundColor: '#fff',
-        borderRadius: '8px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-        width: '350px',
-        padding: '20px',
-        overflow: 'hidden',
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
       }}
     >
-      {/* Close button (cross symbol) */}
-      <Button
-        variant="link"
-        onClick={closeModal} // This will trigger the function passed as a prop to close the modal
+      <div
         style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          fontSize: '20px',
-          color: '#888',
-          border: 'none',
-          background: 'transparent',
+          backgroundColor: "white",
+          padding: "24px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+          position: "relative",
+          width: "90%",
+          maxWidth: "400px",
+          minHeight: "300px",
         }}
       >
-        ×
-      </Button>
-
-      <h2>Update Password</h2>
-      <Form onSubmit={handleSubmit}>
-        {/* Old Password */}
-        <Form.Group controlId="oldPassword" style={{ marginBottom: '10px' }}>
-          <Form.Label>Old Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter old password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        {/* Verify Old Password Checkbox */}
-        <Form.Group controlId="verifyCheckbox" style={{ marginBottom: '10px' }}>
-          <Form.Check
-            type="checkbox"
-            label="Verify Old Password"
-            checked={isVerified}
-            onChange={(e) => setIsVerified(e.target.checked)}
-          />
-        </Form.Group>
-
-        {/* New Password */}
-        <Form.Group controlId="newPassword" style={{ marginBottom: '10px' }}>
-          <Form.Label>New Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter new password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            disabled={!isVerified} // Disable New Password field until old password is verified
-          />
-        </Form.Group>
-
-        {/* Confirm New Password */}
-        <Form.Group controlId="confirmPassword" style={{ marginBottom: '20px' }}>
-          <Form.Label>Confirm New Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Confirm new password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            disabled={!isVerified} // Disable Confirm Password field until old password is verified
-          />
-        </Form.Group>
-
-        {/* Update Password Button */}
-        <Button
-          variant="primary"
-          type="submit"
-          className="w-100"
-          disabled={!isVerified || !newPassword || !confirmPassword}
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "16px",
+            background: "none",
+            border: "none",
+            fontSize: "20px",
+            cursor: "pointer",
+            color: "#666",
+            zIndex: 1001,
+          }}
         >
-          Update Password
-        </Button>
-      </Form>
+          ✕
+        </button>
+
+        <div style={{ padding: "16px" }}>
+          <h2
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              marginBottom: "1rem",
+              textAlign: "center",
+            }}
+          >
+            Change Password
+          </h2>
+
+          <form
+            onSubmit={handleSubmit}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1rem",
+              width: "100%",
+            }}
+          >
+            {/* Old Password Input */}
+            <div style={{ width: "100%" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  marginBottom: "0.25rem",
+                  color: "#333",
+                }}
+              >
+                Old Password
+              </label>
+              <input
+                type="password"
+                name="oldPassword"
+                value={formData.oldPassword}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  outline: "none",
+                  transition: "all 0.2s ease",
+                  "&:focus": {
+                    borderColor: "#666",
+                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
+                  },
+                }}
+                required
+                autoFocus
+              />
+            </div>
+
+            {/* Verify Button */}
+            <button
+              type="button"
+              onClick={handleVerify}
+              disabled={isPasswordVerified}
+              style={{
+                width: "80%",
+                padding: "8px",
+                backgroundColor: isPasswordVerified ? "#cccccc" : "#dc2626",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: isPasswordVerified ? "default" : "pointer",
+                marginTop: "0.5rem",
+                fontSize: "1rem",
+                fontWeight: "500",
+                transition: "all 0.2s ease",
+                ":hover:not(:disabled)": {
+                  backgroundColor: "#ca1818",
+                },
+              }}
+            >
+              {isPasswordVerified ? "Verified" : "Verify Password"}
+            </button>
+
+            {/* New Password Input */}
+            <div style={{ width: "100%" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  marginBottom: "0.25rem",
+                  color: "#333",
+                }}
+              >
+                New Password
+              </label>
+              <input
+                type="password"
+                name="newPassword"
+                value={formData.newPassword}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  outline: "none",
+                  transition: "all 0.2s ease",
+                  backgroundColor: !isPasswordVerified ? "#f5f5f5" : "white",
+                  "&:focus": {
+                    borderColor: "#666",
+                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
+                  },
+                }}
+                required
+                disabled={!isPasswordVerified}
+              />
+            </div>
+
+            {/* Confirm Password Input */}
+            <div style={{ width: "100%" }}>
+              <label
+                style={{
+                  display: "block",
+                  fontSize: "0.875rem",
+                  fontWeight: "500",
+                  marginBottom: "0.25rem",
+                  color: "#333",
+                }}
+              >
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                style={{
+                  width: "100%",
+                  padding: "8px",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  fontSize: "1rem",
+                  outline: "none",
+                  transition: "all 0.2s ease",
+                  backgroundColor: !isPasswordVerified ? "#f5f5f5" : "white",
+                  "&:focus": {
+                    borderColor: "#666",
+                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
+                  },
+                }}
+                required
+                disabled={!isPasswordVerified}
+              />
+            </div>
+
+            {/* Update Button */}
+            <button
+              type="submit"
+              disabled={!isPasswordVerified}
+              style={{
+                width: "80%",
+                padding: "8px",
+                backgroundColor: !isPasswordVerified ? "#cccccc" : "#dc2626",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: !isPasswordVerified ? "default" : "pointer",
+                marginTop: "0.5rem",
+                fontSize: "1rem",
+                fontWeight: "500",
+                transition: "all 0.2s ease",
+                ":hover:not(:disabled)": {
+                  backgroundColor: "#ca1818",
+                },
+              }}
+            >
+              Update
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };
-
-export default UpdatePassword;
+ 
+export default PasswordChangePopup;

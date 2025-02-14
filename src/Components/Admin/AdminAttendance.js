@@ -55,6 +55,23 @@ const AdminAttendance = () => {
     setSelectedPerson(null);
   };
 
+useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call once to adjust initial state
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleStudentSelect = (e) => {
     const selectedStudentId = Number(e.target.value);
     const student = studentList.find((s) => s.id === selectedStudentId);
