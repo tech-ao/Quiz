@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Form, Button, Badge, Spinner, InputGroup } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import axios from "axios";
 import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
-import { editStudentAction, getStudents ,fetchStudent} from "../../redux/Action/StudentAction";
+
+const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
 const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
@@ -82,35 +84,56 @@ const EnrollmentRequestList = () => {
 
   const handleDeny = async () => {
     if (selectedRequestIds.length > 0) {
-      await updateStatus(3);
+      await updateStatus(2);
     }
   };
 
-  const updateStatus = async (statusId) => {
+  const updateStatus = async (statusEnum) => {
     try {
-      if (selectedRequestIds.length === 1) {
-        // If only one student is selected, fetch their details before updating
-        const studentId = selectedRequestIds[0];
-        await dispatch(fetchStudent(studentId));
-        await dispatch(editStudentAction({ statusId }, studentId));
-      } else if (selectedRequestIds.length > 1) {
-        // If multiple students are selected, update all
-        await Promise.all(
-          selectedRequestIds.map((id) => dispatch(editStudentAction({ statusId }, id)))
-        );
+      if (selectedRequestIds.length === 0) {
+        toast.error("No students selected.");
+        return;
       }
-  
-      // Refresh student list after update
-      dispatch(getStudents({ pageSize: studentsPerPage, pageNumber: currentPage + 1 }));
+
+      const requestBody = {
+        statusEnum,
+        studentIdList: selectedRequestIds,
+      };
+
+      await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+        },
+      });
       toast.success("Status updated successfully!");
-  
-      // Reset selection
+
+      // Refresh student list after update
+      setRequests((prev) =>
+        prev.map((student) =>
+          selectedRequestIds.includes(student.studentId)
+            ? { ...student, statusName: statusEnum === 1 ? "Approved" : "Rejected" }
+            : student
+        )
+      );
       setSelectedRequestIds([]);
+
+      // Re-fetch enrollment requests
+      const paginationDetail = {
+        pageSize: studentsPerPage,
+        pageNumber: currentPage + 1,
+      };
+      const response = await fetchStudentEnrollmentRequest({ paginationDetail });
+      if (response && response.data) {
+        setRequests(response.data.searchAndListStudentResult || []);
+        setFilteredRequests(response.data.searchAndListStudentResult || []);
+      }
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
     }
   };
-  
 
   return (
     <div>
@@ -179,9 +202,7 @@ const EnrollmentRequestList = () => {
                           <td>{request.phoneNumber}</td>
                           <td>{request.genderName}</td>
                           <td>
-                            <Badge bg={request.statusName === "Pending" ? "warning" : "success"}>
-                              {request.statusName}
-                            </Badge>
+                            <Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge>
                           </td>
                         </tr>
                       ))}
