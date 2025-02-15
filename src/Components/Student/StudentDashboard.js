@@ -87,6 +87,23 @@ const StudentDashboard = () => {
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
         <Container className="main-container p-4 ">
+
+        <div className="sticky-header" style={{
+            position: "sticky",
+            top: 0,
+            background: "white",
+            zIndex: 1000,
+            padding: "20px 0",
+            textAlign: "center",
+            fontSize: "24px",
+            fontWeight: "bold",
+            height: "80px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}>
+            {fullName} Dashboard
+          </div>
           <div className="sub-container">
             {error ? (
               <p className="text-danger">Error: {error}</p>

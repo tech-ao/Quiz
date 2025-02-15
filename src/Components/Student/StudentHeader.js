@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Badge } from '@mui/material';
-import { Navbar, Row, Col, Button } from 'react-bootstrap';
+import React, { useState, useRef, useEffect } from "react";
+import { Badge } from "@mui/material";
+import { Navbar, Row, Col, Button } from "react-bootstrap";
 import {
   RiLockPasswordLine,
   RiLogoutCircleRLine,
@@ -9,12 +9,13 @@ import {
   RiGlobalLine,
   RiMenu3Line,
   RiRestartLine,
-} from 'react-icons/ri';
-import { useNavigate, Link } from 'react-router-dom';
+} from "react-icons/ri";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Components/images/Logo.png";
-import '../Admin/adminHeader.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchStudent } from '../../redux/Action/StudentAction';
+import "../Admin/adminHeader.css";
+import UpdatePassword from "./UpdatePassword";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudent } from "../../redux/Action/StudentAction";
 
 const StudentHeader = ({ toggleSidebar }) => {
   // Use a constant to set a uniform (increased) icon size for all icons.
@@ -39,10 +40,17 @@ const StudentHeader = ({ toggleSidebar }) => {
     ? `${selectedStudent.data.firstName} ${selectedStudent.data.lastName}`
     : "";
 
-  const togglePopup = () => setShowPopup(prev => !prev);
+  const togglePopup = () => setShowPopup((prev) => !prev);
+
+
+  const [showPasswordPopup, setShowPasswordPopup] = useState(false);
+
+const togglePasswordPopup = () => {
+  setShowPasswordPopup((prev) => !prev);
+};
 
   useEffect(() => {
-    const storedStudentId = localStorage.getItem('studentId');
+    const storedStudentId = localStorage.getItem("studentId");
     if (storedStudentId) {
       dispatch(fetchStudent(storedStudentId));
     }
@@ -51,9 +59,8 @@ const StudentHeader = ({ toggleSidebar }) => {
         setShowPopup(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () =>
-      document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [dispatch]);
 
   const handleLogoutClick = () => {
@@ -61,9 +68,9 @@ const StudentHeader = ({ toggleSidebar }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('studentName');
-    localStorage.removeItem('studentId');
-    navigate('/');
+    localStorage.removeItem("studentName");
+    localStorage.removeItem("studentId");
+    navigate("/");
     setShowLogoutConfirm(false);
   };
 
@@ -71,14 +78,9 @@ const StudentHeader = ({ toggleSidebar }) => {
     setShowLogoutConfirm(false);
   };
 
-  const handleUpdatePassword = () => {
-    alert('Redirecting to update password...');
-    navigate('/update-password');
-  };
-
   return (
     <Navbar expand="lg" className="header py-2">
-      {/* Desktop Header: Visible on medium screens and above */}
+      {/* Desktop Header */}
       <Row className="align-items-center w-100 d-none d-md-flex">
         <Col md={3} className="d-flex align-items-center">
           <Link to="/studentDashboard">
@@ -87,10 +89,10 @@ const StudentHeader = ({ toggleSidebar }) => {
               src={logo}
               alt="Math Gym Logo"
               style={{
-                cursor: 'pointer',
-                maxWidth: '80px',
-                border: '1px solid #000',
-                borderRadius: '5px',
+                cursor: "pointer",
+                maxWidth: "80px",
+                border: "1px solid #000",
+                borderRadius: "5px",
               }}
             />
           </Link>
@@ -100,22 +102,28 @@ const StudentHeader = ({ toggleSidebar }) => {
         </Col>
         <Col md={5} className="text-center">
           <span className="fw-bold welcome-message">
-            Welcome, {studentFullName}
-            <span role="img" aria-label="wave"> 👋</span>
+            Welcome, {studentFullName}{" "}
+            <span role="img" aria-label="wave">
+              {" "}
+              👋
+            </span>
           </span>
         </Col>
-        <Col md={4} className="d-flex justify-content-end align-items-center header-icon-group">
+        <Col
+          md={4}
+          className="d-flex justify-content-end align-items-center header-icon-group"
+        >
           <Button
             variant="outlined"
             title="Notification"
             className="me-2 action-button"
-            onClick={() => navigate('/')}
+            onClick={() => navigate("/studentnotification")}
           >
             <Badge
               badgeContent={10}
               color="secondary"
               overlap="circular"
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
               className="notification-badge"
             >
               <RiNotification3Line size={ICON_SIZE} />
@@ -125,7 +133,7 @@ const StudentHeader = ({ toggleSidebar }) => {
             variant="outlined"
             title="Website"
             className="me-2 action-button"
-            onClick={() => window.open('https://mathgymint.com', '_blank')}
+            onClick={() => window.open("https://mathgymint.com", "_blank")}
           >
             <RiGlobalLine size={ICON_SIZE} />
           </Button>
@@ -143,13 +151,14 @@ const StudentHeader = ({ toggleSidebar }) => {
                 <ul className="list-unstyled m-0 p-2">
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => navigate('/studentSettings')}
+                    onClick={() => navigate("/studentSettings")}
                   >
-                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" /> Profile
+                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" />{" "}
+                    Profile
                   </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
+                  <li className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                  onClick={()=>{togglePasswordPopup();
+                    setShowPopup(false);}}
                   >
                     <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
                   </li>
@@ -157,7 +166,8 @@ const StudentHeader = ({ toggleSidebar }) => {
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
                     onClick={handleLogoutClick}
                   >
-                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" /> Logout
+                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" />{" "}
+                    Logout
                   </li>
                 </ul>
               </div>
@@ -166,14 +176,11 @@ const StudentHeader = ({ toggleSidebar }) => {
         </Col>
       </Row>
 
-      {/* Mobile Header: Visible on small screens */}
+      {/* Mobile Header */}
       <Row
         className="align-items-center w-100 d-flex d-md-none"
-        style={{ padding: '0 5px', justifyContent: 'space-between' }}
+        style={{ padding: "0 5px", justifyContent: "space-between" }}
       >
-        {/* Left Group: Initially, only the hamburger icon is visible at the left edge.
-            When clicked, it toggles the sidebar (via toggleSidebar) and also sets isMobileExpanded to true,
-            causing the logo to appear to the left of the hamburger icon. Clicking it again hides the logo and sidebar. */}
         <Col xs="auto" className="d-flex align-items-center">
           {isMobileExpanded && (
             <Link to="/studentDashboard">
@@ -182,10 +189,10 @@ const StudentHeader = ({ toggleSidebar }) => {
                 src={logo}
                 alt="Math Gym Logo"
                 style={{
-                  cursor: 'pointer',
-                  maxWidth: '60px',
-                  border: '1px solid #000',
-                  borderRadius: '5px',
+                  cursor: "pointer",
+                  maxWidth: "60px",
+                  border: "1px solid #000",
+                  borderRadius: "5px",
                 }}
               />
             </Link>
@@ -193,49 +200,58 @@ const StudentHeader = ({ toggleSidebar }) => {
           <Button
             variant="link"
             onClick={() => {
-              setIsMobileExpanded(prev => !prev);
+              setIsMobileExpanded((prev) => !prev);
               toggleSidebar();
             }}
-            style={{ padding: '0' }}
+            style={{ padding: "0" }}
           >
             <RiMenu3Line size={ICON_SIZE} />
           </Button>
         </Col>
 
-        {/* Right Group: Always-visible icons */}
         <Col xs="auto" className="d-flex align-items-center">
           <Button
             variant="link"
-            onClick={() => navigate('/')}
-            style={{ padding: '10px' }}
+            onClick={() => navigate("/studentnotification")}
+            style={{ padding: "5px", marginRight: "10px" }} // Adjust padding for proper spacing
           >
             <Badge
               badgeContent={10}
               color="secondary"
               overlap="circular"
-              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
-              <RiNotification3Line size={ICON_SIZE} />
+              <RiNotification3Line
+                // size={ICON_SIZE}
+                style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+              />
             </Badge>
           </Button>
           <Button
             variant="link"
-            onClick={() => window.open('https://mathgymint.com', '_blank')}
-            style={{ padding: '0', marginLeft: '10px' }}
+            onClick={() => window.open("https://mathgymint.com", "_blank")}
+            style={{ padding: "0", marginLeft: "10px" }}
           >
-            <RiGlobalLine size={ICON_SIZE} />
+            <RiGlobalLine
+              style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+            />
           </Button>
-          <div className="position-relative" style={{ marginLeft: '10px' }}>
+          <div className="position-relative" style={{ marginLeft: "10px" }}>
             <Button
               variant="link"
               onClick={togglePopup}
               className="text-decoration-none fw-bold d-flex flex-column align-items-center"
-              style={{ padding: '0' }}
+              style={{ padding: "0" }}
             >
-              <RiAdminLine size={ICON_SIZE} />
+              <RiAdminLine
+                style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+              />
               <span
                 className="text-success"
-                style={{ fontSize: '10px', marginTop: '2px' }}
+                style={{
+                  fontSize: window.innerWidth <= 767 ? "10px" : "10px",
+                  marginTop: "2px",
+                }}
               >
                 {studentFullName}
               </span>
@@ -245,21 +261,38 @@ const StudentHeader = ({ toggleSidebar }) => {
                 <ul className="list-unstyled m-0 p-2">
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => navigate('/studentSettings')}
+                    onClick={() => navigate("/studentSettings")}
                   >
-                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" /> Profile
+                    <RiLockPasswordLine
+                      style={{
+                        fontSize: window.innerWidth <= 767 ? "18px" : "24px",
+                      }}
+                      className="me-2"
+                    />{" "}
+                    Profile
                   </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={handleUpdatePassword}
+                  <li className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item" style={{width:'198px'}}
+                  onClick={()=>{togglePasswordPopup();
+                    setShowPopup(false);}}
                   >
-                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
+                    <RiRestartLine
+                      style={{
+                        fontSize: window.innerWidth <= 767 ? "18px" : "24px", }}
+                      className="me-2"
+                    />{" "}
+                    Password
                   </li>
                   <li
                     className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
                     onClick={handleLogoutClick}
                   >
-                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" /> Logout
+                    <RiLogoutCircleRLine
+                      style={{
+                        fontSize: window.innerWidth <= 767 ? "18px" : "24px",
+                      }}
+                      className="me-2"
+                    />{" "}
+                    Logout
                   </li>
                 </ul>
               </div>
@@ -274,33 +307,45 @@ const StudentHeader = ({ toggleSidebar }) => {
           <div
             className="popup-content"
             style={{
-              width: '300px',
-              margin: '0 auto',
-              padding: '20px',
-              background: '#fff',
-              borderRadius: '8px',
-              textAlign: 'center',
+              width: "300px",
+              margin: "0 auto",
+              padding: "20px",
+              background: "#fff",
+              borderRadius: "8px",
+              textAlign: "center",
             }}
           >
             <h5>Are you sure you want to logout?</h5>
             <div
               style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '10px',
-                marginTop: '15px',
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+                marginTop: "15px",
               }}
             >
-              <Button variant="danger" style={{ width: '100%' }} onClick={handleLogout}>
+              <Button
+                variant="danger"
+                style={{ width: "100%" }}
+                onClick={handleLogout}
+              >
                 Yes
               </Button>
-              <Button variant="secondary" style={{ width: '100%' }} onClick={handleCancelLogout}>
+              <Button
+                variant="secondary"
+                style={{ width: "100%" }}
+                onClick={handleCancelLogout}
+              >
                 No
               </Button>
             </div>
           </div>
         </div>
       )}
+      {/* Password Change Popup */}
+{showPasswordPopup && (
+  <UpdatePassword onClose={togglePasswordPopup} />
+)}
     </Navbar>
   );
 };
