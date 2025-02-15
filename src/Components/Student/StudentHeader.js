@@ -42,12 +42,11 @@ const StudentHeader = ({ toggleSidebar }) => {
 
   const togglePopup = () => setShowPopup((prev) => !prev);
 
-
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
 
-const togglePasswordPopup = () => {
-  setShowPasswordPopup((prev) => !prev);
-};
+  const togglePasswordPopup = () => {
+    setShowPasswordPopup((prev) => !prev);
+  };
 
   useEffect(() => {
     const storedStudentId = localStorage.getItem("studentId");
@@ -141,11 +140,13 @@ const togglePasswordPopup = () => {
             <Button
               variant="link"
               onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
+              className="text-decoration-none fw-bold d-flex flex-column align-items-center admin-menu admin-text"
+              style={{top:'13px'}}
             >
-              <RiAdminLine size={ICON_SIZE} className="me-1" />
+              <RiAdminLine size={ICON_SIZE} className="mb-1" />
               <span className="admin-text">{studentFullName}</span>
             </Button>
+
             {showPopup && (
               <div className="admin-popup">
                 <ul className="list-unstyled m-0 p-2">
@@ -156,9 +157,12 @@ const togglePasswordPopup = () => {
                     <RiLockPasswordLine size={ICON_SIZE} className="me-2" />{" "}
                     Profile
                   </li>
-                  <li className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                  onClick={()=>{togglePasswordPopup();
-                    setShowPopup(false);}}
+                  <li
+                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                    onClick={() => {
+                      togglePasswordPopup();
+                      setShowPopup(false);
+                    }}
                   >
                     <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
                   </li>
@@ -216,14 +220,14 @@ const togglePasswordPopup = () => {
             style={{ padding: "5px", marginRight: "10px" }} // Adjust padding for proper spacing
           >
             <Badge
-              badgeContent={10}
+              badgeContent={7}
               color="secondary"
               overlap="circular"
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
               <RiNotification3Line
                 // size={ICON_SIZE}
-                style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+                style={{ fontSize: window.innerWidth <= 767 ? "20px" : "14px" }}
               />
             </Badge>
           </Button>
@@ -233,7 +237,7 @@ const togglePasswordPopup = () => {
             style={{ padding: "0", marginLeft: "10px" }}
           >
             <RiGlobalLine
-              style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+              style={{ fontSize: window.innerWidth <= 767 ? "20px" : "24px" }}
             />
           </Button>
           <div className="position-relative" style={{ marginLeft: "10px" }}>
@@ -244,13 +248,13 @@ const togglePasswordPopup = () => {
               style={{ padding: "0" }}
             >
               <RiAdminLine
-                style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
+                style={{ fontSize: window.innerWidth <= 767 ? "20px" : "24px" }}
               />
               <span
                 className="text-success"
                 style={{
                   fontSize: window.innerWidth <= 767 ? "10px" : "10px",
-                  marginTop: "2px",
+                  marginTop: "3px",
                 }}
               >
                 {studentFullName}
@@ -271,13 +275,18 @@ const togglePasswordPopup = () => {
                     />{" "}
                     Profile
                   </li>
-                  <li className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item" style={{width:'198px'}}
-                  onClick={()=>{togglePasswordPopup();
-                    setShowPopup(false);}}
+                  <li
+                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                    style={{ width: "198px" }}
+                    onClick={() => {
+                      togglePasswordPopup();
+                      setShowPopup(false);
+                    }}
                   >
                     <RiRestartLine
                       style={{
-                        fontSize: window.innerWidth <= 767 ? "18px" : "24px", }}
+                        fontSize: window.innerWidth <= 767 ? "18px" : "24px",
+                      }}
                       className="me-2"
                     />{" "}
                     Password
@@ -343,9 +352,7 @@ const togglePasswordPopup = () => {
         </div>
       )}
       {/* Password Change Popup */}
-{showPasswordPopup && (
-  <UpdatePassword onClose={togglePasswordPopup} />
-)}
+      {showPasswordPopup && <UpdatePassword onClose={togglePasswordPopup} />}
     </Navbar>
   );
 };
