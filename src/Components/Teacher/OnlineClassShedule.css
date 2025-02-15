@@ -1,25 +1,82 @@
-/* ClassSchedule.css */
+/* Sticky Header for Assigned Classes */
+.sticky-header {
+  position: sticky !important;
+  top: 0 !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 10px 10px 0  0 !important;
+  border-bottom: 1px solid #ddd !important;
+  margin-top: 0 !important;
+  max-height: 80px !important; /* Adjusted height for small screens */
+  align-items: center;
+
+}
+
+/* Ensure Assigned Classes title is aligned to the top */
+.sticky-header h2 {
+  margin: 0 !important;
+  padding: 10px 0 !important;
+}
+
+/* Ensure no extra padding on the main container */
+.main-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure sub-container doesn’t push content down */
+.sub-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Class Schedule Card Styles */
 .schedule-card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 8px !important;
+}
+
+.schedule-card .card-body {
+  padding: 20px !important;
+}
+
+.schedule-card .card-title {
+  font-size: 1.2rem !important;
+  font-weight: bold !important;
+}
+
+.schedule-card .card-text {
+  font-size: 1rem !important;
+  color: #555 !important;
+}
+
+.schedule-card .btn {
+  width: 100% !important;
+  margin-top: 10px !important;
+}
+
+/* Responsive Styling */
+@media (max-width: 575.98px) {
+
+  .sticky-header{
+    max-height: 80px !important; /* Adjusted height for small screens */
+    align-items: center;
+
+}
+
+  .sticky-header h2 {
+    font-size: 1.25rem !important;
   }
-  
-  .schedule-card .card-body {
-    padding: 20px;
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .sticky-header h2 {
+    font-size: 1.375rem !important;
   }
-  
-  .schedule-card .card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
+}
+
+@media (min-width: 768px) {
+  .sticky-header h2 {
+    font-size: 1.5rem !important;
   }
-  
-  .schedule-card .card-text {
-    font-size: 1rem;
-    color: #555;
-  }
-  
-  .schedule-card .btn {
-    width: 100%;
-    margin-top: 10px;
-  }
-  
+}

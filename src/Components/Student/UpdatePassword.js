@@ -134,9 +134,10 @@ const PasswordChangePopup = ({ onClose }) => {
               onClick={handleVerify}
               disabled={isPasswordVerified}
               style={{
-                width: "80%",
+                width: "100%",
                 padding: "8px",
-                backgroundColor: isPasswordVerified ? "#cccccc" : "#dc2626",
+                right:'11px',
+                backgroundColor: isPasswordVerified ? "#86efac" : "#f87171",
                 color: "white",
                 border: "none",
                 borderRadius: "4px",
@@ -146,7 +147,7 @@ const PasswordChangePopup = ({ onClose }) => {
                 fontWeight: "500",
                 transition: "all 0.2s ease",
                 ":hover:not(:disabled)": {
-                  backgroundColor: "#ca1818",
+                  backgroundColor: isPasswordVerified ? "#4ade80" : "#ef4444",
                 },
               }}
             >
@@ -232,9 +233,10 @@ const PasswordChangePopup = ({ onClose }) => {
               type="submit"
               disabled={!isPasswordVerified}
               style={{
-                width: "80%",
+                width: "100%",
                 padding: "8px",
-                backgroundColor: !isPasswordVerified ? "#cccccc" : "#dc2626",
+                right:'11px',
+                backgroundColor: !isPasswordVerified ? "#cccccc" : "#f87171",
                 color: "white",
                 border: "none",
                 borderRadius: "4px",
@@ -244,7 +246,7 @@ const PasswordChangePopup = ({ onClose }) => {
                 fontWeight: "500",
                 transition: "all 0.2s ease",
                 ":hover:not(:disabled)": {
-                  backgroundColor: "#ca1818",
+                  backgroundColor: "#ef4444",
                 },
               }}
             >
@@ -256,5 +258,5 @@ const PasswordChangePopup = ({ onClose }) => {
     </div>
   );
 };
- 
+
 export default PasswordChangePopup;

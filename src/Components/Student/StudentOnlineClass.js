@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'; 
+import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import StudentHeader from './StudentHeader';
 import SidePannel from './StudnetSidebar';
 import '../Teacher/OnlineClassShedule.css'; // Custom CSS for styling
-
 // Sample class data
 const classSchedule = [
   { 
@@ -67,14 +66,17 @@ const StudentOnlineClass = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
 
-        <Container className="main-container p-4 ">
-          <div className="sub-container">
-            {/* Updated Title aligned to the left */}
+        <Container className="main-container p-4">
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header">
             <Row className="mb-4">
               <Col>
                 <h2 className="fw-bold">Assigned Classes</h2>
               </Col>
             </Row>
+          </div>
+
+          <div className="sub-container">
             <Row>
               {classSchedule.map((cls) => (
                 <Col md={6} lg={4} key={cls.id} className="mb-4">

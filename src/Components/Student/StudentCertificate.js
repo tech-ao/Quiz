@@ -3,6 +3,7 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import SidePannel from "./StudnetSidebar";
 import StudentHeader from "./StudentHeader";
 import { FaEye, FaDownload } from "react-icons/fa";
+import "./StudentCertificate.css"; // Import updated CSS file
 
 const StudentCertificate = () => {
   const studentCertificates = [
@@ -70,13 +71,17 @@ const StudentCertificate = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
 
-        <Container className="main-container p-4 ">
-          <div className="sub-container">
+        <Container className="main-container p-4">
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header">
             <Row className="mb-4">
               <Col>
                 <h2 className="fw-bold">Student Certificates</h2>
               </Col>
             </Row>
+          </div>
+
+          <div className="sub-container">
             <Row>
               {studentCertificates.map((cert) => (
                 <Col md={4} sm={6} xs={12} key={cert.id} className="mb-4">

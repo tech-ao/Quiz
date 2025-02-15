@@ -1,28 +1,86 @@
+/* Sticky Header for Notifications */
+.sticky-header {
+  position: sticky !important;
+  top: 0 !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #ddd !important;
+  margin-top: 0 !important;
+     max-height: 80px !important; /* Adjusted height for small screens */
+    align-items: center;
+
+}
+
+/* Ensure Notifications title is aligned to the top */
+.sticky-header h2 {
+  margin: 0 !important;
+  padding: 10px 0 !important;
+}
+
+/* Ensure no extra padding on the main container */
+.main-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure sub-container doesn’t push content down */
+.sub-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Notification Page Styles */
 .notification-page {
-    background-color: #f8f9fa;
+  background-color: #f8f9fa !important;
+}
+
+/* Notification Card Styles */
+.notification-card {
+  border-radius: 8px !important;
+  border: none !important;
+  transition: box-shadow 0.3s ease-in-out !important;
+}
+
+.notification-card:hover {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+.notification-card h5 {
+  margin-bottom: 5px !important;
+}
+
+.notification-card p {
+  margin-bottom: 0 !important;
+  font-size: 0.9rem !important;
+  color: #6c757d !important;
+}
+
+/* Small Button Styles */
+.btn-sm {
+  font-size: 0.85rem !important;
+}
+
+/* Responsive Styling */
+@media (max-width: 575.98px) {
+  .sticky-header{
+      max-height: 80px !important; /* Adjusted height for small screens */
   }
-  
-  .notification-card {
-    border-radius: 8px;
-    border: none;
-    transition: box-shadow 0.3s ease-in-out;
+  .sticky-header h2 {
+    font-size: 1.25rem !important;
+    padding: 25px 0 0 0 !important;
+
   }
-  
-  .notification-card:hover {
-    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .sticky-header h2 {
+    font-size: 1.375rem !important;
   }
-  
-  .notification-card h5 {
-    margin-bottom: 5px;
+}
+
+@media (min-width: 768px) {
+  .sticky-header h2 {
+    font-size: 1.5rem !important;
   }
-  
-  .notification-card p {
-    margin-bottom: 0;
-    font-size: 0.9rem;
-    color: #6c757d;
-  }
-  
-  .btn-sm {
-    font-size: 0.85rem;
-  }
-  
+}

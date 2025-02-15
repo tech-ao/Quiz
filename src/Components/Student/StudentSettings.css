@@ -1,27 +1,136 @@
+/* Sticky Header for Student Settings */
+.sticky-header {
+  position: sticky !important;
+  top: 0 !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  border-bottom: 1px solid #ddd !important;
+  margin-top: 0 !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  width: 100% !important;
+  max-height: 80px !important; /* Adjusted height for small screens */
+  align-items: center;
 
+}
 
+/* Ensure Student Settings title and edit icon are aligned */
+.sticky-header h2 {
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* Ensure edit icon stays on the right */
+.sticky-header .cursor-pointer {
+  cursor: pointer !important;
+}
+
+/* Ensure no extra padding on the main container */
+.main-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure sub-container doesn’t push content down and add margin-bottom */
+.sub-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  margin-bottom: 20px !important; /* Default margin-bottom */
+}
+
+/* Heading Style */
 h1 {
-  color: #22790c; /* Example color for the heading */
+  color: #22790c !important; /* Example color for the heading */
 }
 
+/* Form Control */
 .form-control {
-  border-radius: 5px;
+  border-radius: 5px !important;
 }
 
+/* Submit Button */
 button[type="submit"] {
-  background-color: #28a745;
-  border: none;
+  background-color: #28a745 !important;
+  border: none !important;
 }
 
 button[type="submit"]:hover {
-  background-color: #218838;
+  background-color: #218838 !important;
 }
 
+/* Table Styles */
 .table thead th {
-  background-color: #0a6912;
-  color: #fff;
+  background-color: #0a6912 !important;
+  color: #fff !important;
 }
 
 .table tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: #f1f1f1 !important;
+}
+
+/* Responsive Styling */
+@media (max-width: 575.98px) {
+  .sticky-header {
+    flex-direction: row !important;
+    max-height: 80px !important; /* Adjusted height for small screens */
+   
+  }
+
+  .sticky-header h2 {
+    font-size: 1.25rem !important;
+    padding: 10px 0 10px 0 !important;
+
+  }
+
+  .sticky-header .cursor-pointer {
+    font-size: 20px !important;
+  }
+
+  /* Margin bottom for small screens */
+  .sub-container {
+    margin-bottom: 15px !important;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .sticky-header {
+    height: 90px !important; /* Adjusted height for medium screens */
+    padding: 18px 0 !important;
+  }
+
+  .sticky-header h2 {
+    font-size: 1.375rem !important;
+  }
+
+  .sticky-header .cursor-pointer {
+    font-size: 22px !important;
+  }
+
+  /* Margin bottom for medium screens */
+  .sub-container {
+    margin-bottom: 18px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .sticky-header {
+    height: 100px !important; /* Full height for large screens */
+    padding: 20px 10px 0 0 !important;
+  }
+
+  .sticky-header h2 {
+    font-size: 1.5rem !important;
+  }
+
+  .sticky-header .cursor-pointer {
+    font-size: 24px !important;
+  }
+
+  /* Margin bottom for large screens */
+  .sub-container {
+    margin-bottom: 25px !important;
+  }
 }

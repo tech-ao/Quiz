@@ -6,6 +6,25 @@ import logo from "../../Components/images/Logo.png";
 import '../Admin/adminHeader.css';
 
 const RegisterHeader = () => {
+  const styles = {
+    headerTitle: {
+      fontSize: 'calc(18px + 1vw)', // Responsive size
+      fontWeight: 'bold',
+      color: '#28a745', // Success green color
+    },
+    headerSubtitle: {
+      fontSize: 'calc(14px + 0.5vw)', // Smaller than Math Gym
+      fontWeight: 500,
+      color: '#6c757d', // Muted gray
+    },
+    largeScreen: {
+      '@media (min-width: 992px)': {
+        headerTitle: { fontSize: '36px' },
+        headerSubtitle: { fontSize: '22px' },
+      }
+    }
+  };
+
   return (
     <Navbar expand="lg" className="header py-2 fixed-header">
       <Container className="d-flex align-items-center w-100">
@@ -25,22 +44,20 @@ const RegisterHeader = () => {
             />
           </Link>
         </div>
-        {/* Center: Welcome Text with responsive font size */}
+        
+        {/* Center: Math Gym and Flex Your Brain */}
         <div className="flex-grow-1 text-center">
-          <span 
-            className="fw-bold welcome-message" 
-            style={{ fontSize: 'calc(14px + 1vw)' }}
-          >
-            Welcome MathGym
-          </span>
+          <span style={styles.headerTitle}>Math Gym</span>
+          <br />
+          <span style={styles.headerSubtitle}>Flex Your Brain</span>
         </div>
-        {/* Right: Web Icon in success color */}
+
+        {/* Right: Web Icon */}
         <div className="d-flex align-items-center">
           <a 
             href="https://mathgymint.com/" 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="web-icon"
           >
             <FaGlobe size={24} color="#198754" />
           </a>

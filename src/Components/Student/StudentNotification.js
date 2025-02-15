@@ -29,12 +29,17 @@ const StudentNotification = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+          
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header">
             <Row className="mb-4">
               <Col>
                 <h2 className="fw-bold">Notifications</h2>
               </Col>
             </Row>
+          </div>
+
+          <div className="sub-container">
             <Row>
               {[...Array(5)].map((_, index) => (
                 <Col md={12} key={index} className="mb-3">
