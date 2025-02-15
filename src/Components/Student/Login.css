@@ -64,6 +64,22 @@
   }
   
   /* Responsive Media Queries */
+
+/* Small screens (320px to 375px) */
+@media (max-width: 375px) {
+  .login-card {
+    width: 100% !important; /* Increase width */
+    max-width: 400px !important; /* Ensure slightly larger size */
+  }
+}
+
+/* For 425px screens */
+@media (max-width: 425px) {
+  .login-card {
+    width: 100% !important;  /* Increase width to reduce side gaps */
+    max-width: 420px !important; /* Allow more space */
+  }
+}
   
   /* Small devices (phones, max-width 576px) */
   @media (max-width: 576px) {

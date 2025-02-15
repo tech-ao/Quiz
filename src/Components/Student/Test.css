@@ -1,48 +1,72 @@
+/* Reset margins and paddings for body and root container */
+
 /* Sticky Header Styles (applies to both small and large screens) */
 .sticky-header {
-  position: sticky;
-  top: 0;
-  background: #fff;
-  z-index: 1000;
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
+  position: sticky !important;
+  top: 0 !important;
+  background: #fff !important;
+  z-index: 1000 !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #ddd !important;
+  margin-top: 0 !important;
+     max-height: 80px !important; /* Adjusted height for small screens */
+    align-items: center;
+
+}
+
+/* Ensure Test List title is aligned to the top */
+.sticky-header h2 {
+  margin: 0 !important;
+  padding: 10px 0 !important;
+}
+
+/* Ensure no extra padding on the main container */
+.main-container {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Ensure sub-container doesn’t push content down */
+.sub-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* Existing Styles */
 h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 0;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  margin-bottom: 0 !important;
 }
 
 button {
-  font-size: 1rem;
+  font-size: 1rem !important;
 }
 
 /* Modal Styles */
 .modal-title {
-  font-size: 1.25rem;
-  font-weight: bold;
+  font-size: 1.25rem !important;
+  font-weight: bold !important;
 }
 
 .modal-body {
-  padding: 20px;
+  padding: 20px !important;
 }
 
 .form-select,
 .form-control {
-  font-size: 1rem;
-  padding: 8px 12px;
+  font-size: 1rem !important;
+  padding: 8px 12px !important;
 }
 
 button[type="submit"] {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #007bff !important;
+  border-color: #007bff !important;
 }
 
 button[type="submit"]:hover {
-  background-color: #0056b3;
-  border-color: #004080;
+  background-color: #0056b3 !important;
+  border-color: #004080 !important;
 }
 
 /* Media Queries for Responsive Design */
@@ -50,46 +74,53 @@ button[type="submit"]:hover {
 /* Small Devices (Portrait Phones, Less than 576px) */
 @media (max-width: 575.98px) {
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.25rem !important;
+    padding: 25px 0 0 0 !important;
+
   }
-  
+
   button {
-    font-size: 0.875rem;
+    font-size: 0.875rem !important;
   }
-  
+
   .modal-body {
-    padding: 15px;
+    padding: 15px !important;
   }
-  
+
   .form-select,
   .form-control {
-    font-size: 0.875rem;
-    padding: 6px 10px;
+    font-size: 0.875rem !important;
+    padding: 6px 10px !important;
   }
 }
 
 /* Medium Devices (Tablets, 576px to 768px) */
 @media (min-width: 576px) and (max-width: 767.98px) {
+
+  .sticky-header{
+    max-height: 80px !important; /* Adjusted height for small screens */
+}
+
   h2 {
-    font-size: 1.375rem;
+    font-size: 1.375rem !important;
   }
-  
+
   button {
-    font-size: 0.95rem;
+    font-size: 0.95rem !important;
   }
-  
+
   .modal-body {
-    padding: 18px;
+    padding: 18px !important;
   }
 }
 
 /* Large Devices (Desktops, 768px and up) */
 @media (min-width: 768px) {
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.5rem !important;
   }
-  
+
   button {
-    font-size: 1rem;
+    font-size: 1rem !important;
   }
 }

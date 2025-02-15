@@ -105,17 +105,19 @@ const StudentSettings = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
+
+           
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header d-flex justify-content-between align-items-center">
+            <h2 className="fw-bold text-dark">Student Settings</h2>
+            <FaEdit
+              size={24}
+              className="text-primary cursor-pointer"
+              onClick={handleOpenEditStudent}
+            />
+          </div>
           <div className="sub-container">
-            <Row className="mb-4">
-              <Col className="d-flex justify-content-between align-items-center">
-                <h2 className="fw-bold text-dark">Student Settings</h2>
-                <FaEdit
-                  size={24}
-                  className="text-primary cursor-pointer"
-                  onClick={handleOpenEditStudent}
-                />
-              </Col>
-            </Row>
+           
 
             <Card className="p-4">
               <Card.Body className="d-flex flex-column align-items-center">

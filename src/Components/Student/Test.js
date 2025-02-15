@@ -33,17 +33,17 @@ const Test = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
 
-        <Container className="main-container p-4 ">
-          <div className="sub-container">
-            {/* Sticky Header for both large & small screens */}
-            <div className="sticky-header">
-              <Row className="mb-4">
-                <Col>
-                  <h2 className="fw-bold">Test List</h2>
-                </Col>
-              </Row>
-            </div>
+        <Container className="main-container p-4">
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header">
+            <Row className="mb-4">
+              <Col>
+                <h2 className="fw-bold">Test List</h2>
+              </Col>
+            </Row>
+          </div>
 
+          <div className="sub-container">
             {/* Display Test List or Test Details */}
             {!selectedTest ? (
               <Row>
