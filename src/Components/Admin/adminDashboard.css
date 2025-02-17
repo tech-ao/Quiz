@@ -21,13 +21,32 @@ button {
   align-items: center;
 }
 
+/* Admin Bar */
 .admin-bar {
   position: sticky;
-  top: 0px;
+  top: 0;
   width: 100%;
   z-index: 1000;
   background-color: #bdfdd9;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Attendance Section */
+.attendance-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.attendance-title {
+  margin-left: 25px;
+}
+
+.date-tag {
+  padding: 4px 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.9em;
 }
 
 .card-body {
@@ -56,63 +75,57 @@ button {
   cursor: pointer;
 }
 
-/* Bootstrap Inline Media Queries */
+.admin-text {
+  color: #198754 !important;
+}
 
-/* Tablet View - 992px or Below */
+.taggleAdminbut {
+  position: absolute !important;
+  left: 0 !important;
+}
+
+/* Responsive Styles */
+
+/* Tablet View (992px and Below) */
 @media (max-width: 992px) {
   .welcome-message {
     font-size: 1rem !important;
   }
-
   .action-button {
     font-size: 14px !important;
   }
-
   .dashboard-card {
     width: 100% !important;
   }
 }
 
-/* Mobile View - 768px or Below */
+/* Mobile View (768px and Below) */
 @media (max-width: 768px) {
   .logo1 {
     max-width: 60px !important;
   }
-
-  .welcome-message {
-    display: none !important;
-  }
-
+  .welcome-message,
   .admin-text {
     display: none !important;
   }
-
   .admin-menu {
     justify-content: center !important;
   }
-
   .header-icon-group {
     position: static !important;
     margin-left: auto !important;
   }
-
   .dashboard-cards-container {
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
   }
-
-  .dashboard-card {
-    width: 90% !important;
-    margin-bottom: 1rem !important;
-  }
-
+  .dashboard-card,
   .calendar-card,
   .quiz-section {
     width: 90% !important;
-    margin: auto !important;
+    margin-bottom: 1rem !important;
   }
-
   .main-container {
     display: flex !important;
     flex-direction: column !important;
@@ -121,27 +134,21 @@ button {
   }
 }
 
-/* Very Small Mobile View - 576px or Below */
+/* Extra Small Devices (576px and Below) */
 @media (max-width: 576px) {
   .action-button {
     font-size: 12px !important;
   }
-
   .admin-popup {
     width: 120px !important;
     right: 5px !important;
   }
-
   .menu-item {
     font-size: 12px !important;
   }
-}
-
-.admin-text {
-  color: #198754 !important;
-}
-
-.taggleAdminbut {
-  position: absolute !important;
-  left: 0 !important;
+  .dashboard-card,
+  .calendar-card,
+  .quiz-section {
+    width: 95% !important;
+  }
 }
