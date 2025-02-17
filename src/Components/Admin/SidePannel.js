@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {
-
+  const [isAttendanceOpen, setAttendanceOpen] = useState(false);
   const location = useLocation();
   const [isOnlineOpen, setOnlineOpen] = useState(false);
   const toggleOnlineMenu = () => {
@@ -16,6 +16,10 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
     if (!event.target.closest(".side-panel") && isOpen) {
       closeSidePanel();
     }
+  };
+
+  const toggleAttendanceMenu = () => {
+    setAttendanceOpen(!isAttendanceOpen);
   };
 
   useEffect(() => {
@@ -131,8 +135,9 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
                   className={`nav-link ${location.pathname === "/onlineClass" ? "active" : ""
                     }`}
                   onClick={closeSidePanel}
+                  style={{marginLeft: '15px'}}
                 >
-                  <div className="icon-with-text">
+                  <div className="icon-with-text" style={{gap:'5px'}}>
                     <i className="bi bi-file-earmark-person"></i>
                     <span className="nav-text">Online Class</span>
                   </div>
@@ -145,8 +150,9 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
                   className={`nav-link ${location.pathname === "/AbacusMath" ? "active" : ""
                     }`}
                   onClick={closeSidePanel}
+                  style={{marginLeft: '15px'}}
                 >
-                  <div className="icon-with-text">
+                  <div className="icon-with-text" style={{gap:'5px'}}>
                     <i className="bi bi-controller"></i>
                     <span className="nav-text">Abacus</span>
                   </div>
@@ -157,18 +163,48 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         </li>
 
         <li className="nav-item">
-          <Link
-            to="/adminAttendance"
-            className={`nav-link ${location.pathname === "/adminAttendance" ? "active" : ""
-              }`}
-            onClick={closeSidePanel}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-file-earmark-bar-graph"></i>
-              <span className="nav-text">Attendance</span>
-            </div>
-          </Link>
-        </li>
+  <div
+    className={`nav-link ${isAttendanceOpen ? "active" : ""}`}
+    onClick={toggleAttendanceMenu}
+    style={{ cursor: "pointer" }}
+  >
+    <div className="icon-with-text">
+      <i className="bi bi-file-earmark-bar-graph"></i>
+      <span className="nav-text">Attendance</span>
+      <i className={`bi ${isAttendanceOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+    </div>
+  </div>
+  {isAttendanceOpen && (
+    <ul className="nav flex-column sub-nav">
+      <li className="nav-item">
+        <Link
+          to="/teacherAttendance"
+          className={`nav-link ${location.pathname === "/adminAttendance" ? "active" : ""}`}
+          onClick={closeSidePanel}
+          style={{ marginLeft: '15px' }}
+        >
+          <div className="icon-with-text" style={{ gap: '5px' }}>
+            <i className="bi bi-person"></i>
+            <span className="nav-text">Teacher</span>
+          </div>
+        </Link>
+      </li>
+      <li className="nav-item">
+        <Link
+          to="/studentAttendance"
+          className={`nav-link ${location.pathname === "/studentAttendance" ? "active" : ""}`}
+          onClick={closeSidePanel}
+          style={{ marginLeft: '15px' }}
+        >
+          <div className="icon-with-text" style={{ gap: '5px' }}>
+            <i className="bi bi-person-bounding-box"></i>
+            <span className="nav-text">Student</span>
+          </div>
+        </Link>
+      </li>
+    </ul>
+  )}
+</li>
 
         <li className="nav-item">
           <Link
