@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Form } from "react-bootstrap";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./adminDashboard.css";
 import Sidebar from "./SidePannel";
 import studentImg from "../images/Total Students icon.png";
 import teacherImg from "../images/Total Teacher Icon.png";
@@ -11,30 +10,26 @@ import enrolImg from "../images/Enrolment Requet Icon.png";
 import AdminHeader from "./AdminHeader";
 import { fetchDashboardContent } from "../../redux/Services/Enum";
 import { useNavigate } from "react-router-dom";
-import HamBurger from "../Admin/HamBurger";
+import "./adminDashboard.css";
 
 function AdminDashboard() {
   const [dashboardData, setDashboardData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate(); // Initialize useNavigate
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  const toggleSidebar = () => {
-        setIsSidebarVisible((prev) => !prev);
-      };
-      useEffect(() => {
-        const handleResize = () => {
-          if (window.innerWidth >= 768) {
-            setIsSidebarVisible(true); // Show sidebar by default on desktop
-          } else {
-            setIsSidebarVisible(false); // Hide sidebar by default on mobile
-          }
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-      }, []);
-  
+  const navigate = useNavigate();
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
-  // Fetch dashboard data on mount
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarVisible(window.innerWidth >= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     const fetchAllData = async () => {
       setLoading(true);
@@ -52,7 +47,6 @@ function AdminDashboard() {
 
   const dashboardDatas = dashboardData?.data || {};
 
-  // Handle click on each card to navigate
   const handleCardClick = (label) => {
     switch (label) {
       case "Total Students":
@@ -61,7 +55,7 @@ function AdminDashboard() {
       case "Total Teacher":
         navigate("/listteacher");
         break;
-      case "Total EnrollmentRequest":
+      case "Total Enrollment Request":
         navigate("/enrollmentRequest");
         break;
       case "Total Question":
@@ -78,81 +72,72 @@ function AdminDashboard() {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container" style={{paddingLeft:'20px'}}>
-            <Row className="align-items-center mb-4">
-              <Col md={6}>
-                <h2 className="fw-bold">Admin Dashboard</h2>
-              </Col>
-              <Col xs={12} className="text-center d-block d-md-none mt-2">
-                <span classNa me="fw-bold welcome-message">Welcome, Admin 👋</span>
-              </Col>  
+          <div className="sub-container">
+            <Row className="sticky-title align-items-center mb-4">
+              <h2 className="fw-bold text-left">Admin Dashboard</h2>
             </Row>
 
-            {/* Cards Section */}
-            <Row style={{width:'98%'}}>
-              <Col lg={8} sm={12}>
-                <Row style={{width:'90%'}}>
-                  {/* Dashboard Cards */}
+            {/* Dashboard Cards & Calendar Section */}
+            <Row className="g-4">
+              <Col lg={8}>
+                <Row className="g-3">
                   {[
-                    { label: "Total Students", count: dashboardDatas.activeCount || 0, icon: studentImg },
-                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, icon: teacherImg },
-                    { label: "Total EnrollmentRequest", count: "0", icon: enrolImg },
-                    { label: "Total Question", count: dashboardDatas.questionsCount || 0, icon: questionImg }
+                    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
+                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
+                    { label: "Enrollment Request", count: 0, img: enrolImg, route: "/enrollmentRequest" },
+                    { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg, route: "/questionListPage" },
                   ].map((item, index) => (
-                    <Col md={6} sm={6} xs={12} key={index} className="mb-4">
-                      <Card
-                        className="dashboard-card shadow-sm"
-                        onClick={() => handleCardClick(item.label)} // Handle click event and navigate
+                    <Col lg={6} md={6} sm={12} key={index}>
+                      <Card 
+                        className="dashboard-card shadow-sm p-4 d-flex mb-4" 
+                        style={{ minWidth: "340px", maxWidth: "100%" }}  
+                        onClick={() => handleCardClick(item.label)}
                       >
-                        <div style={{ display: "flex", alignItems: "center", padding: "10px" }}>
-                          {/* Icon Section */}
-                          <div className="icon-container" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                            <img
-                              src={item.icon}
-                              alt={item.label}
-                              style={{ width: "50px", height: "50px", objectFit: "contain" }}
-                            />
+                        <Card.Body className="d-flex align-items-center">
+                          <img 
+                            src={item.img} 
+                            alt={item.label} 
+                            className="card-icon me-3" 
+                            width="50"  
+                            height="50" 
+                          />
+                          <div className="ms-3 w-100 d-flex flex-column">
+                            <h5 className="fw-bold m-0" style={{ fontSize: "1.1rem" }}>{item.label}</h5> {/* Decreased font size for title */}
+                            <h3 className="m-0" style={{ fontSize: "1.5rem" }}>{item.count}</h3>  {/* Decreased font size for count */}
                           </div>
-
-                          {/* Text Section */}
-                          <div style={{ marginLeft: "2rem" }}>
-                            <h5 className="mt-3">{item.label}</h5>
-                            <h3>{item.count}</h3>
-                          </div>
-                        </div>
+                        </Card.Body>
                       </Card>
                     </Col>
                   ))}
                 </Row>
               </Col>
 
-              {/* Calendar Section */}
-              <Col lg={4} sm={12} className="mb-4" style={{}}>
-                <Card className="shadow calendar-card">
+              {/* Calendar Section (Moved to the Right) */}
+              <Col lg={4} className="d-flex align-items-stretch">
+                <Card className="calendar-card shadow-sm p-4 h-100">
                   <Card.Body>
-                    <h5 className="calendar-heading" style={{ textAlign: "center", fontSize: "35px" }}>
-                      <b>Calendar</b>
-                    </h5>
-                    <Calendar className="calender-note" />
+                    <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
+                    <div className="d-flex justify-content-center">
+                      <Calendar className="calender-note" />
+                    </div>
                   </Card.Body>
                 </Card>
               </Col>
             </Row>
 
-            {/* Quiz Section */}
-            <Row style={{width:'98%'}}>
-              <Col md={4} sm={12} className="mb-4">
-                <Card className="shadow-sm p-3 rounded">
+            {/* Quiz & Filter Sections */}
+            <Row className="g-4 mt-4">
+              <Col lg={6} md={12} sm={12}>
+                <Card className="quiz-section shadow-sm p-4">
                   <Card.Body>
-                    <h5>Quiz</h5>
+                    <h5 className="fw-bold text-center mb-3">Quiz</h5>
                     <Row>
                       {[...Array(4)].map((_, i) => (
                         <Col xs={6} key={i} className="mb-3">
-                          <Card className="shadow-sm bg-white">
-                            <Card.Body className="text-center">
-                              Total Students
-                              <br />
-                              <h4>100+</h4>
+                          <Card className="shadow-sm bg-light">
+                            <Card.Body className="text-center p-3">
+                              <h6>Quiz {i + 1}</h6>
+                              <p>100+ Students</p>
                             </Card.Body>
                           </Card>
                         </Col>
@@ -163,27 +148,28 @@ function AdminDashboard() {
               </Col>
 
               {/* Filter Options */}
-              <Col md={8} sm={12}>
-                <Card className="shadow-sm p-3 rounded">
+              <Col lg={6} md={12} sm={12}>
+                <Card className="filter-card shadow-sm p-4 rounded">
                   <Card.Body>
-                    <h5 className="mb-4">Filter Options</h5>
+                    <h5 className="mb-4 fw-bold">Filter Options</h5>
                     <Row>
-                      <Col md={6} sm={12}>
+                      <Col lg={3} md={6} sm={12}>
                         <Form.Group>
-                          <Form.Label>Grade</Form.Label>
+                          <Form.Label>Grade:</Form.Label>
                           <Form.Select>
-                            <option value="">Select Grade</option>
+                            <option value="">Select </option>
                             <option value="grade1">Grade 1</option>
                             <option value="grade2">Grade 2</option>
                             <option value="grade3">Grade 3</option>
                           </Form.Select>
                         </Form.Group>
                       </Col>
-                      <Col md={6} sm={12}>
+
+                      <Col lg={3} md={6} sm={12}>
                         <Form.Group>
-                          <Form.Label>Top Rank</Form.Label>
+                          <Form.Label>Rank:</Form.Label>
                           <Form.Select>
-                            <option value="">Select Rank</option>
+                            <option value="">Select </option>
                             <option value="rank1">Rank 1</option>
                             <option value="rank2">Rank 2</option>
                             <option value="rank3">Rank 3</option>
@@ -197,8 +183,6 @@ function AdminDashboard() {
             </Row>
           </div>
         </Container>
-
-       
       </div>
     </div>
   );

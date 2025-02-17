@@ -14,16 +14,13 @@ button {
 
 /* Popup menu styling */
 .admin-popup {
+  position: absolute;
   top: 100%;
   right: 0;
-  z-index:9999;
-  width: 200px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  position: absolute;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 200px; /* Adjust width as needed */
+  z-index: 9999;
 }
+
 
 .menu-item {
   cursor: pointer;
@@ -44,15 +41,7 @@ button {
 }
 
 /* Admin popup menu styling */
-.admin-popup {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  width: 200px;
-}
+
 
 .menu-item:hover {
   background-color: #f0f0f0;
@@ -221,9 +210,7 @@ button {
   left: 0;
 }
 
-.admin-popup {
-  position: absolute;
-}
+
 
 /* Dark Green Border for Logo */
 .border-dark-green {
