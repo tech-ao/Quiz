@@ -68,7 +68,7 @@ const togglePasswordPopup = () => {
   const handleLogout = () => {
     localStorage.removeItem("studentName");
     localStorage.removeItem("studentId");
-    navigate("/");
+    navigate("/adminLogin");
     setShowLogoutConfirm(false);
   };
 
