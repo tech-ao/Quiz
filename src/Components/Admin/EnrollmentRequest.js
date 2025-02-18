@@ -7,6 +7,8 @@ import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
+import ViewStudentPanel from "../Student/ViewStudent";
+import { fetchStudent } from "../../redux/Action/StudentAction";
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
@@ -19,6 +21,8 @@ const EnrollmentRequestList = () => {
   const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showViewStudent, setShowViewStudent] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
@@ -110,7 +114,6 @@ const EnrollmentRequestList = () => {
       });
       toast.success("Status updated successfully!");
 
-      // Refresh student list after update
       setRequests((prev) =>
         prev.map((student) =>
           selectedRequestIds.includes(student.studentId)
@@ -120,7 +123,6 @@ const EnrollmentRequestList = () => {
       );
       setSelectedRequestIds([]);
 
-      // Re-fetch enrollment requests
       const paginationDetail = {
         pageSize: studentsPerPage,
         pageNumber: currentPage + 1,
@@ -135,14 +137,25 @@ const EnrollmentRequestList = () => {
     }
   };
 
+  const handleOpenViewStudent = (studentId) => {
+    setSelectedStudentId(studentId);
+    dispatch(fetchStudent(studentId));
+    setShowViewStudent(true);
+  };
+
+  const handleCloseViewStudent = () => {
+    setShowViewStudent(false);
+    setSelectedStudentId(null);
+  };
+
   return (
     <div>
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4">
           <div className="sub-container">
-            <Row className="align-items-center mb-4">
+          <Row className="align-items-center mb-4">
               <Col md={6}>
                 <h2 className="fw-bold">Enrollment Request</h2>
               </Col>
@@ -183,6 +196,7 @@ const EnrollmentRequestList = () => {
                         <th>Phone</th>
                         <th>Gender</th>
                         <th>Status</th>
+                        <th>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -201,19 +215,22 @@ const EnrollmentRequestList = () => {
                           <td>{request.email}</td>
                           <td>{request.phoneNumber}</td>
                           <td>{request.genderName}</td>
+                          <td><Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge></td>
                           <td>
-                            <Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge>
+                            <Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>View</Button>
                           </td>
                         </tr>
                       ))}
                     </tbody>
                   </Table>
+                 
                 </Col>
               </Row>
             )}
           </div>
         </Container>
       </div>
+      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
     </div>
   );
 };
