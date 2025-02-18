@@ -3,7 +3,7 @@ import Sidebar from '../Admin/SidePannel';
 import AddStudent from './AddStudent';
 import EditStudent from './EditStudent';
 import AdminHeader from '../Admin/AdminHeader';
-import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown,Badge} from 'react-bootstrap';
+import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown, Badge } from 'react-bootstrap';
 import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
@@ -25,22 +25,24 @@ const getStatusColor = (status) => {
 };
 
 const StudentList = () => {
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  
-    const toggleSidebar = () => {
-      setIsSidebarVisible((prev) => !prev);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setIsSidebarVisible(false); // Hide sidebar by default on mobile
+      }
     };
-    useEffect(() => {
-      const handleResize = () => {
-        if (window.innerWidth >= 768) {
-          setIsSidebarVisible(true); // Show sidebar by default on desktop
-        } else {
-          setIsSidebarVisible(false); // Hide sidebar by default on mobile
-        }
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
 
@@ -52,7 +54,7 @@ const StudentList = () => {
   const [showViewStudent, setShowViewStudent] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
 
-  const studentsPerPage = 15;
+  const studentsPerPage = 10;
 
   useEffect(() => {
     const paginationDetail = {
@@ -137,25 +139,38 @@ const StudentList = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
-            <Row className="align-items-center mb-4">
+          <Row className="sticky-top bg-white py-3">
+            <Col md={6}>
+              <h2 className="fw-bold">Student List</h2>
+            </Col>
+          </Row>
+          <div className="sub-container mb-4">
+            <Row className="align-items-center mb-4 sticky-search">
               <Col md={6}>
-                <h2 className="fw-bold">Student List</h2>
-              </Col>
-              <Col md={6} className="d-flex justify-content-between align-items-center">
-                <InputGroup style={{ width: '70%' }}>
+                <InputGroup className="d-flex">
                   <Form.Control
                     placeholder="Search students by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
+                    className="input-box"
+                    style={{
+                      marginRight: '15px', // Adds gap between input and button
+                    }}
                   />
+                  <Button
+                    variant="outline-success"
+                    onClick={handleOpenAddStudent}
+                    className="search-btn"
+                    style={{
+                      minWidth: '150px', // Ensures button stays wide enough
+                    }}
+                  >
+                    <i className="bi bi-person-plus me-2"></i> Add Student
+                  </Button>
                 </InputGroup>
-                <Button variant="outline-success" onClick={handleOpenAddStudent}>
-                  <i className="bi bi-person-plus me-2"></i> Add Student
-                </Button>
               </Col>
             </Row>
-            <div>
+            <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
                   <tr>
@@ -173,7 +188,7 @@ const StudentList = () => {
                 </thead>
                 <tbody>
                   {filteredStudents.length > 0 ? (
-                    filteredStudents.map((student, index) => (
+                    filteredStudents.slice(currentPage * studentsPerPage, (currentPage + 1) * studentsPerPage).map((student, index) => (
                       <tr key={student.studentId || index}>
                         <td>{index + 1}</td>
                         <td>{student.registerNumber}</td>
@@ -188,7 +203,7 @@ const StudentList = () => {
                         </td>
                         <td>
                           <Dropdown>
-                            <Dropdown.Toggle  size="sm" id={`dropdown-${student.studentId}`}>
+                            <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>
                               Actions
                             </Dropdown.Toggle>
                             <Dropdown.Menu>
@@ -218,10 +233,10 @@ const StudentList = () => {
             </div>
             <div className="d-flex justify-content-center mt-4">
               <ReactPaginate
-                pageCount={Math.ceil(filteredStudents.length / studentsPerPage)}
+                pageCount={totalPages}
                 pageRangeDisplayed={10}
                 marginPagesDisplayed={2}
-                onPageChange={handlePageChange}
+                onPageChange={(e) => handlePageChange(e.selected + 1)}
                 containerClassName="pagination"
                 activeClassName="active"
                 pageClassName="page-item"
