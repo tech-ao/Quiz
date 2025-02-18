@@ -98,6 +98,47 @@
   left: 0 !important;
 }
 
+/* Prevent right-side overflow */
+.main-container {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+  padding-right: 15px; /* Prevents content from touching the edge */
+}
+
+/* Ensure the dashboard cards fit properly */
+.dashboard-card {
+  width: 100%;
+  max-width: calc(100% - 20px); /* Prevents right-side overflow */
+}
+
+/* Prevent sidebar from causing overflow */
+.sidebar {
+  max-width: 250px;
+  min-width: 200px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Fix container and row overflow issues */
+.row {
+  margin: 0;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  overflow-x: hidden; /* Ensures no content spills outside */
+}
+
+.col {
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Ensure calendar, quiz, and filter cards fit properly */
+.calendar-card, .quiz-section, .filter-card {
+  width: 100%;
+  max-width: calc(100% - 20px); /* Prevents right-side overflow */
+}
+
 /* Responsive Styles */
 
 /* Tablet View (992px and Below) */
