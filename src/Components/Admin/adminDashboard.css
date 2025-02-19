@@ -125,7 +125,6 @@
   margin: 0;
   flex-grow: 1;
   flex-wrap: wrap;
-  overflow-x: hidden; /* Ensures no content spills outside */
 }
 
 .col {
@@ -171,7 +170,6 @@
     margin-left: auto !important;
   }
   .dashboard-cards-container {
-    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
   }
@@ -182,7 +180,6 @@
     margin-bottom: 1rem !important;
   }
   .main-container {
-    display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;

@@ -145,7 +145,7 @@ const StudentList = () => {
               <h2 className="fw-bold">Student List</h2>
             </Col>
             <Col md={6}>
-                <InputGroup className="d-flex">
+                <InputGroup className="d-flex"  >
                   <Form.Control
                     placeholder="Search students by name or email"
                     value={searchTerm}
@@ -153,7 +153,7 @@ const StudentList = () => {
                     className="input-box"
                     style={{
                       marginRight: '15px', // Adds gap between input and button
-                      maxWidth:"200px",
+                       maxWidth: window.innerWidth <= 768 ? "50%" : "400px"
                     }}
                   />
                   <Button
@@ -169,7 +169,14 @@ const StudentList = () => {
                 </InputGroup>
               </Col>
           </Row>
-          <div className="sub-container mb-4">
+         <div 
+  className="sub-container mb-4"
+  style={{
+    flex: 1,
+    overflow: "auto",
+  }}
+>
+
            
             <div className="table-responsive">
               <Table hover className="mb-0">

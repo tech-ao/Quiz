@@ -82,12 +82,13 @@ const ListTeacher = ({ Teachers = [] }) => {
               <Col md={6}>
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
-              <Col md={6} className="d-flex justify-content-between align-items-center" style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
-                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px"  }}>
+              <Col md={6} className="d-flex  align-items-center" style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
+                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px", marginRight: '15px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
+                   
                   />
                 </InputGroup>
                 <Button variant="outline-success" onClick={() => navigate('/addTeacher')}>

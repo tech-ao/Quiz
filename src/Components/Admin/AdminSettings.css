@@ -83,7 +83,6 @@ button[type="submit"]:hover {
 }
 
 button {
-  margin: 5px; /* Adjusted spacing */
   padding: 8px 16px;
 }
 

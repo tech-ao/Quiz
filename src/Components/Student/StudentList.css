@@ -34,12 +34,20 @@
   top: 0;
   z-index: 99;
   background-color: white;
-  align-items: center !important;
   height: 80px; /* Set height of sticky header for larger screens */
+}
+.main-container {
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Responsive styles for small screens */
 @media (max-width: 768px) {
+  .main-container {
+    height: 100vh;
+    overflow: hidden;
+  }
+  
   .table-responsive {
     -webkit-overflow-scrolling: touch;
   }

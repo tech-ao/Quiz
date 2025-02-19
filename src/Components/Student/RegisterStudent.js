@@ -316,6 +316,19 @@ const RegisterStudent = () => {
               </Form.Select>
             </Form.Group>
 
+            <Form.Group className="mb-3" controlId="formAddress">
+  <Form.Label>Address</Form.Label>
+  <Form.Control
+    as="textarea"
+    name="address"
+    rows={3}
+    placeholder="Enter your address"
+    value={formData.address}
+    onChange={handleInputChange}
+    required
+  />
+</Form.Group>
+
             <div className="d-flex align-items-center justify-content-between">
               <Link to="/" className="text-decoration-none text-success me-2">
                 Go to Login

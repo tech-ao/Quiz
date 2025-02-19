@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {
   const [isAttendanceOpen, setAttendanceOpen] = useState(false);
-  const location = useLocation();
   const [isOnlineOpen, setOnlineOpen] = useState(false);
-  const toggleOnlineMenu = () => {
-    setOnlineOpen(!isOnlineOpen);
-  };
-
+  const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
   // Close the panel when clicking outside
   const handleOutsideClick = (event) => {
     if (!event.target.closest(".side-panel") && isOpen) {
@@ -18,16 +15,44 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
     }
   };
 
+  const toggleOnlineMenu = () => {
+    setOnlineOpen(!isOnlineOpen);
+  };
+
   const toggleAttendanceMenu = () => {
     setAttendanceOpen(!isAttendanceOpen);
   };
 
+  // Show Logout Confirmation Popup
+  const handleLogoutClick = () => {
+    setShowLogoutPopup(true);
+  };
+
+  // Handle Logout
+  const handleLogout = () => {
+    setShowLogoutPopup(false);
+    localStorage.removeItem("userToken"); // Remove authentication token
+    navigate("/login"); // Redirect to login page
+  };
+
+  // Cancel Logout
+  const handleCancelLogout = () => {
+    setShowLogoutPopup(false);
+  };
+
   useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (!event.target.closest(".side-panel") && isOpen) {
+        closeSidePanel();
+      }
+    };
+
     document.addEventListener("click", handleOutsideClick);
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
   }, [isOpen]);
+
 
   return (
     <div className={`side-panel ${isOpen ? "open" : ""}`}>
@@ -233,7 +258,24 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
+        <li className="nav-item">
+          <button onClick={handleLogoutClick} className="nav-link btn-link">
+            <div className="icon-with-text">
+              <i className="bi bi-box-arrow-right"></i>
+              <span className="nav-text">Logout</span>
+            </div>
+          </button>
+        </li>
       </ul>
+      { showLogoutPopup && (
+        <div className="logout-confirmation-popup">
+          <div className="popup-content">
+            <h5>Are you sure you want to logout?</h5>
+            <button onClick={handleLogout} className="btn btn-danger">Yes, Logout</button>
+            <button onClick={handleCancelLogout} className="btn btn-secondary">Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

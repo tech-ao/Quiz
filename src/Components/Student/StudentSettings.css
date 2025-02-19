@@ -74,7 +74,7 @@ button[type="submit"]:hover {
 @media (max-width: 575.98px) {
   .sticky-header {
     flex-direction: row !important;
-    max-height: 80px !important; /* Adjusted height for small screens */
+    max-height: 100px !important; /* Adjusted height for small screens */
    
   }
 
