@@ -83,7 +83,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
               <Col md={6} className="d-flex justify-content-between align-items-center" style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
-                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "60%" : "200px"  }}>
+                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px"  }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
