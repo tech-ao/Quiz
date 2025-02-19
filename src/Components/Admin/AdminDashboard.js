@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import "./adminDashboard.css";
 
 function AdminDashboard() {
-  const [dashboardData, setDashboardData] = useState([]);
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
@@ -46,24 +46,16 @@ function AdminDashboard() {
   }, []);
 
   const dashboardDatas = dashboardData?.data || {};
+  const dashboardCards = [
+    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
+    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
+    { label: "Enrollment Request", count: 0, img: enrolImg, route: "/enrollmentRequest" },
+    { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg, route: "/questionListPage" },
+  ];
 
   const handleCardClick = (label) => {
-    switch (label) {
-      case "Total Students":
-        navigate("/studentList");
-        break;
-      case "Total Teacher":
-        navigate("/listteacher");
-        break;
-      case "Total Enrollment Request":
-        navigate("/enrollmentRequest");
-        break;
-      case "Total Question":
-        navigate("/questionListPage");
-        break;
-      default:
-        break;
-    }
+    const route = dashboardCards.find((item) => item.label === label)?.route;
+    if (route) navigate(route);
   };
 
   return (
@@ -77,23 +69,14 @@ function AdminDashboard() {
               <h2 className="fw-bold text-left">Admin Dashboard</h2>
             </Row>
 
-            {/* Dashboard Cards & Calendar Section */}
-            <Row className="g-0">
-              <Col lg={8} style={{ maxWidth: "650px" }}>
-                <Row className="g-0">
-                  {[ 
-                    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
-                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
-                    { label: "Enrollment Request", count: 0, img: enrolImg, route: "/enrollmentRequest" },
-                    { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg, route: "/questionListPage" },
-                  ].map((item, index) => (
-                    <Col lg={6} md={6} sm={12} key={index} style={{ maxWidth: "320px" }}>
+            <Row className="g-4">
+              <Col lg={8}>
+                <Row className="g-3">
+                  {dashboardCards.map((item, index) => (
+                    <Col lg={6} md={6} sm={12} key={index} style={{ maxWidth: window.innerWidth <= 768 ? "100%" : "500px" }}>
                       <Card 
                         className="dashboard-card shadow-sm p-4 d-flex mb-4" 
-                        style={{
-                          minWidth: "250px",
-                          maxWidth: window.innerWidth <= 768 ? "100%" : "90%", // 100% width on small screens, 85% for large
-                        }}  
+                        style={{ maxWidth: window.innerWidth <= 768 ? "100%" : "350px" }}
                         onClick={() => handleCardClick(item.label)}
                       >
                         <Card.Body className="d-flex align-items-center">
@@ -105,91 +88,75 @@ function AdminDashboard() {
                             height="50" 
                           />
                           <div className="ms-3 w-100 d-flex flex-column">
-                            <h5 className="fw-bold m-0" style={{ fontSize: "1.1rem" }}>{item.label}</h5> 
-                            <h3 className="m-0" style={{ fontSize: "1.5rem" }}>{item.count}</h3>  
+                            <h5 className="fw-bold m-0" style={{ fontSize: "1.1rem" }}>{item.label}</h5>
+                            <h3 className="m-0" style={{ fontSize: "1.5rem" }}>{item.count}</h3>
                           </div>
                         </Card.Body>
                       </Card>
                     </Col>
                   ))}
                 </Row>
-
-                {/* Quiz Section (Moved here inside the same Col lg={8}) */}
-                <Row className="g-2 mt-4">
-                  <Col lg={12}>
-                    <Card className="quiz-section shadow-sm p-4">
-                      <Card.Body>
-                        <h5 className="fw-bold text-center mb-3">Quiz</h5>
-                        <Row className="g-3">
-                          {[{ title: "Total Level", description: "100+ Students" }, { title: "Total Question", description: "150+ Questions" }].map((item, i) => (
-                            <Col lg={6} md={6} sm={12} key={i}> {/* Set to display horizontally */}
-                              <Card className="shadow-sm bg-light">
-                                <Card.Body className="text-center p-3">
-                                  <h6 className="fw-bold">{item.title}</h6> 
-                                  <p>{item.description}</p>
-                                </Card.Body>
-                              </Card>
-                            </Col>
-                          ))}
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                </Row>
-              </Col>
-
-              {/* Calendar Section */}
-              <Col lg={4} className="d-flex align-items-stretch">
-                <Card className="calendar-card shadow-sm p-4 h-100" 
-                  style={{ 
-                    marginRight: "0px", /* Remove negative margin for small screens */
-                    maxWidth: "420px", /* Set width for calendar */
-                  }}
-                >
+                <Card className="quiz-section shadow-sm p-4 mt-4" style={{ maxWidth: window.innerWidth <= 768 ? "100%" : "770px" }}>
                   <Card.Body>
-                    <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
-                    <div className="d-flex justify-content-center">
-                      <Calendar className="calender-note" />
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
-
-            {/* Filter Options */}
-            <Row className="g-3 mt-4">
-              <Col lg={6} md={12} sm={12}>
-                <Card className="filter-card shadow-sm p-4 rounded">
-                  <Card.Body>
-                    <h5 className="mb-4 fw-bold">Filter Options</h5>
+                    <h5 className="fw-bold text-center mb-3">Quiz</h5>
                     <Row>
-                      <Col lg={3} md={6} sm={12}>
-                        <Form.Group>
-                          <Form.Label>Grade:</Form.Label>
-                          <Form.Select>
-                            <option value="">Select </option>
-                            <option value="grade1">Grade 1</option>
-                            <option value="grade2">Grade 2</option>
-                            <option value="grade3">Grade 3</option>
-                          </Form.Select>
-                        </Form.Group>
-                      </Col>
-
-                      <Col lg={3} md={6} sm={12}>
-                        <Form.Group>
-                          <Form.Label>Rank:</Form.Label>
-                          <Form.Select>
-                            <option value="">Select </option>
-                            <option value="rank1">Rank 1</option>
-                            <option value="rank2">Rank 2</option>
-                            <option value="rank3">Rank 3</option>
-                          </Form.Select>
-                        </Form.Group>
-                      </Col>
+                      {[...Array(2)].map((_, i) => (
+                        <Col md={6} key={i}>
+                          <Card className="shadow-sm bg-light">
+                            <Card.Body className="text-center p-3">
+                              <h6>Quiz {i + 1}</h6>
+                              <p>100+ Students</p>
+                            </Card.Body>
+                          </Card>
+                        </Col>
+                      ))}
                     </Row>
                   </Card.Body>
                 </Card>
               </Col>
+              <Col lg={4}>
+  <Card className="calendar-card shadow-sm p-4 " style={{ maxWidth: window.innerWidth <= 768 ? "100%" : "400px", maxHeight: window.innerWidth <= 768 ? "100%" : "600px" }}>
+    <Card.Body>
+      <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
+      <div className="d-flex justify-content-center">
+        <Calendar className="calender-note" />
+      </div>
+    </Card.Body>
+  </Card>
+</Col>
+
+<Col lg={8} className="mt-4">
+  <Card className="filter-card shadow-sm p-4 rounded">
+    <Card.Body>
+      <h5 className="fw-bold text-center mb-3">Filter Options</h5>
+      <Row>
+        <Col lg={6} md={6} sm={12}>
+          <Form.Group>
+            <Form.Label>Grade:</Form.Label>
+            <Form.Select>
+              <option value="">Select</option>
+              <option value="grade1">Grade 1</option>
+              <option value="grade2">Grade 2</option>
+              <option value="grade3">Grade 3</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+        <Col lg={6} md={6} sm={12}>
+          <Form.Group>
+            <Form.Label>Rank:</Form.Label>
+            <Form.Select>
+              <option value="">Select</option>
+              <option value="rank1">Rank 1</option>
+              <option value="rank2">Rank 2</option>
+              <option value="rank3">Rank 3</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+      </Row>
+    </Card.Body>
+  </Card>
+</Col>
+
             </Row>
           </div>
         </Container>

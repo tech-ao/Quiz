@@ -77,48 +77,26 @@ const ListTeacher = ({ Teachers = [] }) => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <Row className="sticky-title-row">
-            <Col md={12}>
-              <h2 className="fw-bold sticky-title">Teacher List</h2>
-            </Col>
-          </Row>
-
           <div className="sub-container">
-            <Row className="align-items-center mb-4 sticky-search-row">
-              <Col md={12} className="d-flex justify-content-start align-items-center">
-                <InputGroup
-                  className="search-box"
-                  style={{
-                    maxWidth: '400px', // Reduces the width of search box on large screens
-                    width: '100%',
-                    flexDirection: 'row',
-                  }}
-                >
+            <Row className="align-items-center mb-4">
+              <Col md={6}>
+                <h2 className="fw-bold">Teacher List</h2>
+              </Col>
+              <Col md={6} className="d-flex justify-content-between align-items-center" style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
+                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "60%" : "200px"  }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
-                    className="search-input"
-                    style={{
-                      width: 'auto', // Prevent input from taking full width on larger screens
-                    }}
                   />
                 </InputGroup>
-                <Button
-                  variant="outline-success"
-                  onClick={() => navigate('/addTeacher')}
-                  className="add-teacher-btn"
-                  style={{
-                    width: 'auto', // Prevent wrapping of button text
-                    minWidth: '150px', // Ensures button doesn't get too small on small screens
-                  }}
-                >
+                <Button variant="outline-success" onClick={() => navigate('/addTeacher')}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>
             </Row>
 
-            <div className="table-responsive" style={{ overflowX: 'auto' }}>
+            <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
                   <tr>

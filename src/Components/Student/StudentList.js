@@ -10,6 +10,7 @@ import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Acti
 import { toast } from 'react-toastify';
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
+import "./StudentList.css"
 
 const getStatusColor = (status) => {
   switch (status) {
@@ -143,10 +144,7 @@ const StudentList = () => {
             <Col md={6}>
               <h2 className="fw-bold">Student List</h2>
             </Col>
-          </Row>
-          <div className="sub-container mb-4">
-            <Row className="align-items-center mb-4 sticky-search">
-              <Col md={6}>
+            <Col md={6}>
                 <InputGroup className="d-flex">
                   <Form.Control
                     placeholder="Search students by name or email"
@@ -155,6 +153,7 @@ const StudentList = () => {
                     className="input-box"
                     style={{
                       marginRight: '15px', // Adds gap between input and button
+                      maxWidth:"200px",
                     }}
                   />
                   <Button
@@ -169,7 +168,9 @@ const StudentList = () => {
                   </Button>
                 </InputGroup>
               </Col>
-            </Row>
+          </Row>
+          <div className="sub-container mb-4">
+           
             <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
