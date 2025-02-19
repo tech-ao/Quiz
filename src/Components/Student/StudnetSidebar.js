@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import './StudentSidebar.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
@@ -8,113 +7,119 @@ const StudentSidePannel = ({ studyModeId }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // State for controlling the popup visibility
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
 
   const handleLogoutClick = () => {
-    setShowLogoutPopup(true); // Show the confirmation popup
+    setShowLogoutPopup(true);
   };
 
   const handleLogout = () => {
-    console.log("Logging out...");
-    navigate("/"); // Redirect to home or login page
-    setShowLogoutPopup(false); // Close the popup after logout
+    localStorage.removeItem("studentId");
+    navigate("/", { replace: true });
+    setShowLogoutPopup(false);
   };
 
   const handleCancelLogout = () => {
-    setShowLogoutPopup(false); // Close the popup if the user cancels
+    setShowLogoutPopup(false);
+  };
+
+  // Handle navigation with studyModeId check
+  const handleNavigation = (path) => {
+    if (path === '/StudentOnlineClass' && studyModeId === 2) {
+      console.warn("Access denied to Online Class due to studyModeId restrictions.");
+      return;
+    }
+    navigate(path);
   };
 
   return (
     <div className="side-panel bg-green" style={{ width: '250px', minHeight: '100vh', position: 'fixed' }}>
       <ul className="nav flex-column">
         <li className="nav-item">
-          <Link
-            to="/studentDashboard"
+          <div
             className={`nav-link ${location.pathname === '/studentDashboard' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/studentDashboard')}
           >
             <div className="icon-with-text">
               <i className="bi bi-grid"></i>
               <span className="nav-text">Dashboard</span>
             </div>
-          </Link>
+          </div>
         </li>
+
         <li className="nav-item">
-          <Link
-            to="/Test"
+          <div
             className={`nav-link ${location.pathname === '/Test' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/Test')}
           >
             <div className="icon-with-text">
               <i className="bi bi-patch-question"></i>
               <span className="nav-text">Test</span>
             </div>
-          </Link>
+          </div>
         </li>
 
         <li className="nav-item">
-          <Link
-            to="/StudentOnlineClass"
-            className={`nav-link ${location.pathname === '/StudentOnlineClass' ? 'active' : ''}`}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-laptop"></i>
-              <span className="nav-text">Online Class</span>
-            </div>
-          </Link>
-        </li>
-
-        <li className="nav-item">
-          <Link
-            to="/studentCertificate"
+          <div
             className={`nav-link ${location.pathname === '/studentCertificate' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/studentCertificate')}
           >
             <div className="icon-with-text">
               <i className="bi bi-award"></i>
               <span className="nav-text">Certificate</span>
             </div>
-          </Link>
+          </div>
         </li>
 
-      <li className="nav-item">
-                <Link
-                  to="/studentnotification"
-                  className={`nav-link ${location.pathname === "/studentnotification" ? "active" : ""
-                    }`}
-                >
-                  <div className="icon-with-text">
-                    <i className="bi bi-bell"></i>
-                    <span className="nav-text">Notification</span>
-                  </div> 
-                </Link>
-              </li>
-
+        <li className="nav-item">
+          <div
+            className={`nav-link ${location.pathname === '/studentnotification' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/studentnotification')}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-bell"></i>
+              <span className="nav-text">Notification</span>
+            </div>
+          </div>
+        </li>
 
         <li className="nav-item">
-          <Link
-            to="/studentSettings"
+          <div
             className={`nav-link ${location.pathname === '/studentSettings' ? 'active' : ''}`}
+            onClick={() => handleNavigation('/studentSettings')}
           >
             <div className="icon-with-text">
               <i className="bi bi-gear"></i>
               <span className="nav-text">Settings</span>
             </div>
-          </Link>
+          </div>
         </li>
 
+        {/* Online Class: Conditional Navigation */}
+        {studyModeId !== 2 && (
+          <li className="nav-item">
+            <div
+              className={`nav-link ${location.pathname === '/StudentOnlineClass' ? 'active' : ''}`}
+              onClick={() => handleNavigation('/StudentOnlineClass')}
+            >
+              <div className="icon-with-text">
+                <i className="bi bi-laptop"></i>
+                <span className="nav-text">Online Class</span>
+              </div>
+            </div>
+          </li>
+        )}
+
         <li className="nav-item">
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              handleLogoutClick(); // Trigger the logout confirmation popup
-            }}
-            className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}
+          <div
+            className="nav-link logout-link"
+            onClick={handleLogoutClick}
           >
             <div className="icon-with-text">
               <i className="bi bi-box-arrow-right"></i>
               <span className="nav-text">Logout</span>
             </div>
-          </a>
+          </div>
         </li>
       </ul>
 

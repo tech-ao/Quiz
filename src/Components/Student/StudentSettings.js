@@ -103,10 +103,8 @@ const StudentSettings = () => {
       <StudentHeader toggleSidebar={toggleSidebar} />
 
       <div className="d-flex">
-        {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
-
-           
+        {isSidebarVisible && <Sidebar studyModeId={studentData?.studyModeId}/>}
+        <Container className="main-container p-4 min-vh-100">           
           {/* Moved Sticky Header to main-container */}
           <div className="sticky-header d-flex justify-content-between align-items-center">
             <h2 className="fw-bold text-dark">Student Settings</h2>
