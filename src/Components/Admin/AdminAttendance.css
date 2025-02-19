@@ -85,6 +85,11 @@
 .highlighted {
   background-color: #e9ecef;
 }
+.day.highlighted {
+  background-color: #d1f7c4;
+  border-radius: 50%;
+  color: #4caf50;
+}
 
 .selected {
   background-color: #007bff;

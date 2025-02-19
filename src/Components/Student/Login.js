@@ -79,31 +79,37 @@ const LoginPage = () => {
     }
 
     try {
-      const updateApiUrl = `${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${encodeURIComponent(studentId)}&Password=${encodeURIComponent(newPassword)}&OldPassword=${encodeURIComponent(oldPassword)}`;
-
+      const updateApiUrl = `${BASE_URL}/UpdatePassword`;
       const response = await fetch(updateApiUrl, {
         method: "POST",
         headers: {
+          "Content-Type": "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
         },
+        body: JSON.stringify({
+          studentId: studentId,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        }),
       });
 
-      const data = await response.json();
+      const result = await response.json();
+      console.log("Password Update Response:", result);
 
-      if (response.ok && data.isSuccess) {
-        alert("Password updated successfully!");
+      if (result.isSuccess) {
+        alert("Password updated successfully. Please log in with your new password.");
         setShowPopup(false);
-        setError("");
+        setPassword(""); // Reset old password field
+        setUserId(userData.email); // Keep email prefilled
       } else {
-        setError(data.message || "Failed to update password.");
+        setError("Failed to update password. Please check your old password.");
       }
     } catch (err) {
       console.error("Error updating password:", err);
       setError("An error occurred. Please try again.");
     }
   };
-  
 
   return (
     <Container fluid className="bg-image">
