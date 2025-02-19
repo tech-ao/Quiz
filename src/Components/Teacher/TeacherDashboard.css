@@ -1,100 +1,67 @@
+/* Keep your existing desktop styles as they are */
 .dashboard-card {
   font-size: 14px;
   padding: 15px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
+  max-width: 400px;
   text-align: center;
+  border-radius: 8px;
+  margin: 15px auto;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.me-1{
+  color: white;
 }
 
-/* Ensure all cards are equal height */
-.dashboard-card-container .card {
-  flex: 1;
-  min-height: 300px;
+/* Add these mobile-specific styles */
+@media (max-width: 768px) {
+  .main-container{
+    right: 30%;
+    width: 400%;
+  }
+  .gradient-card {
+    width: 70%;
+    right: 20%;
+    
+  }
+  
+  .dashboard-card-header {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .dashboard-icon {
+    font-size: 40px;
+  }
+  
+  .dashboard-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
 }
 
-/* Align icon and title in a row with proper spacing */
-.dashboard-card-header {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 30px !important; /* Increased spacing between icon and title */
-  width: 100%;
-  white-space: nowrap; /* Prevents text from wrapping */
-}
-
-/* Icons should be inline-block */
-.dashboard-icon {
-  font-size: 60px !important; /* Increase icon size */
-  display: inline-block !important;
-}
-
-/* Move title to the right of the icon */
-.dashboard-title {
-  font-size: 1.4rem !important; /* Slightly larger text */
-  font-weight: 600 !important;
-  display: inline-block !important;
-  text-align: left !important;
-  flex-grow: 1 !important; /* Ensures it takes available space */
-}
-
-/* Ensure all buttons are the same size */
-.dashboard-button {
-  width: 100% !important;
-  padding: 12px !important;
-  font-size: 1rem !important;
-}
-
-/* Styling for upcoming classes section */
-.upcoming-classes-container {
-  display: flex !important;
-  justify-content: space-between !important;
-  flex-wrap: wrap !important;
-}
-
-/* Increase size of upcoming class cards */
-.class-card.large-class-card {
-  flex: 1 !important;
-  min-width: 320px !important;
-  max-width: 380px !important;
-  text-align: center !important;
-  padding: 20px !important;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1) !important;
-}
-
-button {
-  font-size: 0.9rem !important;
-  margin-top: auto !important;
-}
-
-button.btn-primary {
-  background-color: #007bff !important;
-  border: none !important;
-}
-
-button.btn-warning {
-  background-color: #ffc107 !important;
-  border: none !important;
-  color: #fff !important;
-}
-
-button.btn-success {
-  background-color: #28a745 !important;
-  border: none !important;
-}
-
-button.btn-info {
-  background-color: #17a2b8 !important;
-  border: none !important;
-  color: #fff !important;
-}
-
-button:hover {
-  opacity: 0.9 !important;
-}
-
-/* White background for specific cards */
-.white-bg-card {
-  background-color: #ffffff !important;
+/* Add these tablet-specific styles */
+@media (min-width: 576px) and (max-width: 768px) {
+  .dashboard-card {
+    width: 90%;
+    max-width: 500px;
+    padding: 12px;
+    margin: 12px auto;
+  }
+  
+  .dashboard-card-header {
+    gap: 15px;
+  }
+  
+  .dashboard-icon {
+    font-size: 45px;
+  }
+  
+  .dashboard-title {
+    font-size: 1.3rem;
+  }
 }

@@ -1,57 +1,158 @@
+/* Existing styles remain the same */
+.card-header {
+  background-color: #22790c;
+  color: #fff;
+  font-weight: bold;
+}
 
-  
-  .card-header {
-    background-color: #22790c;
-    color: #fff;
-    font-weight: bold;
-  }
-  
+.admin-info {
+  display: flex;
+  align-items: center;
+}
+
+.admin-image {
+  width: 80px;
+  height: 80px;
+  margin-right: 20px;
+}
+
+.form-control {
+  border-radius: 5px;
+}
+
+button[type="submit"] {
+  background-color: #28a745;
+  border: none;
+}
+
+button[type="submit"]:hover {
+  background-color: #218838;
+}
+
+button {
+  margin-left: 10px;
+}
+
+.dropdown-toggle {
+  background-color: #6c757d;
+  border: none;
+}
+
+.dropdown-toggle:hover {
+  background-color: #5a6268;
+}
+
+.table thead th {
+  background-color: #0a6912;
+  color: #fff;
+}
+
+.table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.Admin-Name-row {
+  display: inline;
+}
+
+/* Responsive Fixes for Mobile & Tablet */
+@media (max-width: 992px) {
+  /* Tablet (Below 992px) */
   .admin-info {
-    display: flex;
-    align-items: center;
+    flex-direction: column;
+    text-align: center;
   }
-  
+
   .admin-image {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    margin-right: 0;
+    margin-bottom: 10px;
   }
-  
-  .form-control {
-    border-radius: 5px;
+
+  .table th, .table td {
+    font-size: 14px;
+    padding: 8px;
   }
-  
-  button[type="submit"] {
-    background-color: #28a745;
-    border: none;
+
+  .card-header {
+    font-size: 16px;
+    text-align: center;
   }
-  
-  button[type="submit"]:hover {
-    background-color: #218838;
+}
+
+@media (max-width: 768px) {
+  /* Mobile (Below 768px) */
+  .container {
+    max-width: 90%;
+    margin: 0 auto;
   }
-  
+
+  .admin-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .admin-image {
+    width: 50px;
+    height: 50px;
+  }
+
+  .table th, .table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .card {
+    width: 90%;
+    margin: 10px auto;
+  }
+
+  .card-header {
+    font-size: 14px;
+    padding: 8px;
+    text-align: center;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
   button {
-    margin-left: 10px;
+    width: 100%;
+    margin: 5px 0;
   }
-  
-  .dropdown-toggle {
-    background-color: #6c757d;
-    border: none;
+}
+
+@media (max-width: 576px) {
+  /* Extra Small Devices */
+  .container {
+    max-width: 85%;
+    margin: 0 auto;
   }
-  
-  .dropdown-toggle:hover {
-    background-color: #5a6268;
+
+  .card {
+    width: 85%;
+    margin: 15px auto;
   }
-  
-  .table thead th {
-    background-color: #0a6912;
-    color: #fff;
+
+  .admin-image {
+    width: 40px;
+    height: 40px;
   }
-  
-  .table tbody tr:hover {
-    background-color: #f1f1f1;
+
+  .table th, .table td {
+    font-size: 10px;
+    padding: 4px;
   }
-  
-  .Admin-Name-row {
-    display: inline;
+
+  .card-header {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  button {
+    font-size: 12px;
+  }
 }
