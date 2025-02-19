@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Form, Table } from "react-bootstrap";
-import Calendar from "react-calendar"; // Correctly imported Calendar
 import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
-import AdminHeader from "../Admin/AdminHeader";
-import { FaCheckCircle } from "react-icons/fa";
+import AdminHeader from "./AdminHeader";
+import { Filter } from "lucide-react";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const TeacherAttendance = ({
   teacherList = [],
@@ -61,22 +61,50 @@ const TeacherAttendance = ({
     if (teacher) {
       setSelectedPerson(teacher);
       setAttendanceDates(teacher.attendance || []);
-      setSelectedDate(null);
     }
   };
 
   const handleDateChange = (e) => {
     setSelectedDate(new Date(e.target.value));
+    setSelectedPerson(null); // Clear selected person when date changes
   };
 
-  const filterAttendanceByDate = () => {
-    if (selectedDate && selectedPerson) {
-      return selectedPerson.attendance.filter(
-        (attendanceDate) =>
-          attendanceDate.toDateString() === selectedDate.toDateString()
-      );
-    }
-    return [];
+  // Get all teachers of selected type and their attendance status for selected date
+  const renderAttendanceList = () => {
+    if (!selectedTeacherType || !selectedDate) return null;
+
+    const typeTeachers = teacherListExample.filter(
+      (t) => t.type === selectedTeacherType
+    );
+
+    return (
+      <div className="attendance-list mt-4" style={{ marginLeft: "27px" }}>
+        <h6 style={{ fontSize: "20px" }}>
+          <b>Attendance for {selectedDate.toDateString()}</b>
+        </h6>
+        <ul className="list-unstyled">
+          {typeTeachers.map((teacher) => {
+            const isPresent = teacher.attendance.some(
+              (date) => date.toDateString() === selectedDate.toDateString()
+            );
+            return (
+              <li
+                key={teacher.id}
+                className="d-flex align-items-center mb-2"
+                style={{ color: isPresent ? "black" : "red" }}
+              >
+                {isPresent ? (
+                  <FaCheckCircle className="me-2" />
+                ) : (
+                  <FaTimesCircle className="me-2" />
+                )}
+                <b style={{ fontWeight: "2px" }}>{teacher.name}</b>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
   };
 
   const renderYearlyCalendar = () => {
@@ -102,9 +130,13 @@ const TeacherAttendance = ({
           <div className="days-grid">
             {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
               const date = new Date(currentYear, monthIndex, day);
-              const isHighlighted = attendanceDates.some(
-                (d) => d.toDateString() === date.toDateString()
-              );
+              const isHighlighted = teacherListExample
+                .filter((t) => t.type === selectedTeacherType)
+                .some((teacher) =>
+                  teacher.attendance.some(
+                    (d) => d.toDateString() === date.toDateString()
+                  )
+                );
               return (
                 <div
                   key={day}
@@ -122,139 +154,131 @@ const TeacherAttendance = ({
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
-        {isSidebarVisible && <SidePannel />}
-        <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
-            <Row className="mt-3" style={{ paddingLeft: "20px" }}>
-              <Col
-                xs={12}
-                md={6}
-                lg={6}
-                className="p-3"
-                style={{ paddingRight: "50px" }}
+      <Container className="main-container p-4 min-vh-100">
+        <div className="sub-container">
+          <Row className="mt-3" style={{ paddingLeft: "20px" }}>
+            <Col
+              xs={12}
+              md={6}
+              lg={6}
+              className="p-3"
+              style={{ paddingRight: "50px" }}
+            >
+              <Table
+                className="table-sm table-padding"
+                style={{ width: "120%" }}
               >
-                <Table
-                  striped
-                  bordered
-                  hover
-                  className="table-sm table-padding"
-                  style={{ width: "120%" }}
-                >
-                  <thead>
-                    <tr>
-                      <th style={{ width: "40%" }}>Type</th>
-                      <th>Teachers</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <Form.Select
-                          value={selectedTeacherType}
-                          onChange={handleTeacherTypeChange}
-                          className="w-5"
-                          style={{ width: "150px" }}
-                        >
-                          <option value="">Select Type</option>
-                          <option value="Part-Time">Part-Time</option>
-                          <option value="Full-Time">Full-Time</option>
-                        </Form.Select>
-                      </td>
-                      <td>
-                        {selectedTeacherType &&
-                          teacherListExample.length > 0 && (
-                            <Form.Select
-                              onChange={handleTeacherSelect}
-                              className="w-50"
-                              aria-label="Select Teacher"
-                            >
-                              <option value="">Select a teacher</option>
-                              {teacherListExample
-                                .filter((t) => t.type === selectedTeacherType)
-                                .map((teacher) => (
-                                  <option key={teacher.id} value={teacher.id}>
-                                    {teacher.name}
-                                  </option>
-                                ))}
-                            </Form.Select>
-                          )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-            {selectedPerson && (
+                <thead>
+                  <tr>
+                    <th style={{ width: "40%" }}>Type</th>
+                    <th>Teachers</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <Form.Select
+                        value={selectedTeacherType}
+                        onChange={handleTeacherTypeChange}
+                        style={{ width: "150px" }}
+                      >
+                        <option value="">Select Type</option>
+                        <option value="Part-Time">Part-Time</option>
+                        <option value="Full-Time">Full-Time</option>
+                      </Form.Select>
+                    </td>
+                    <td>
+                      {selectedTeacherType && (
+                        <div className="d-flex align-items-center position-relative">
+                          <Form.Select
+                            onChange={handleTeacherSelect}
+                            value={selectedPerson?.id || ""}
+                            style={{ width: "65%" }}
+                          >
+                            <option value="">Select a teacher</option>
+                            {teacherListExample
+                              .filter((t) => t.type === selectedTeacherType)
+                              .map((teacher) => (
+                                <option key={teacher.id} value={teacher.id}>
+                                  {teacher.name}
+                                </option>
+                              ))}
+                          </Form.Select>
+
+                          <div
+                            style={{
+                              position: "relative",
+                              marginLeft: "20px",
+                            }}
+                          >
+                            <Form.Control
+                              type="date"
+                              onChange={handleDateChange}
+                              value={
+                                selectedDate
+                                  ? selectedDate.toISOString().split("T")[0]
+                                  : ""
+                              }
+                              style={{
+                                width: "24px",
+                                height: "24px",
+                                opacity: 0,
+                                position: "absolute",
+                                top: 0,
+                                left: "27px",
+                                zIndex: 2,
+                              }}
+                            />
+                            <Filter
+                              size={25}
+                              style={{
+                                position: "absolute",
+                                top: "-10px",
+                                left: "27px",
+                                zIndex: 1,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+
+          {/* Render attendance list or individual attendance */}
+          {selectedDate &&
+            (selectedPerson ? (
               <Row className="mt-4">
                 <Col xs={12}>
-                  <h5 className="attendance-title">
+                  <h5
+                    className="attendance-title"
+                    style={{ marginLeft: "27px" }}
+                  >
                     <b>Attendance for {selectedPerson.name}</b>
                   </h5>
-                  <div className="calendar-grid">{renderYearlyCalendar()}</div>
+                  <div className="attendance-details">
+                    <h6 style={{ marginLeft: "50px" }}>
+                      {selectedPerson.attendance.some(
+                        (date) =>
+                          date.toDateString() === selectedDate.toDateString()
+                      )
+                        ? `Present on ${selectedDate.toDateString()}`
+                        : `Absent on ${selectedDate.toDateString()}`}
+                    </h6>
+                  </div>
                 </Col>
               </Row>
-            )}
-            {selectedDate && (
-              <div className="attendance-details">
-                <h6 style={{ marginLeft: "50px" }}>
-                  {filterAttendanceByDate().length > 0
-                    ? `Attendance for ${selectedDate.toDateString()}`
-                    : "No attendance on this date"}
-                </h6>
-                {filterAttendanceByDate().length > 0 && (
-                  <ul>
-                    {filterAttendanceByDate().map((attendance, index) => (
-                      <li
-                        key={index}
-                        style={{ marginLeft: "10px", listStyle: "none" }}
-                      >
-                        <FaCheckCircle
-                          style={{ color: "green", marginRight: "5px" }}
-                        />
-                        {attendance.toDateString()}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )}
-            <div
-              style={{
-                position: "relative",
-                marginLeft: "20px",
-              }}
-            >
-              <Form.Control
-                type="date"
-                onChange={handleDateChange}
-                value={
-                  selectedDate ? selectedDate.toISOString().split("T")[0] : ""
-                }
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  opacity: 0,
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  zIndex: 2,
-                }}
-              />
-              <Calendar
-                size={25}
-                style={{
-                  position: "absolute",
-                  top: "-10px",
-                  left: 0,
-                  zIndex: 1,
-                }}
-              />
-            </div>
-          </div>
-        </Container>
-      </div>
+            ) : (
+              renderAttendanceList()
+            ))}
+
+          {/* Render Yearly Calendar */}
+          <div className="calendar-grid">{renderYearlyCalendar()}</div>
+        </div>
+      </Container>
     </div>
   );
 };
