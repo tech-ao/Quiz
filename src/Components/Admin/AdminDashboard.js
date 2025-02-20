@@ -119,9 +119,9 @@ function AdminDashboard() {
 
               {/* Calendar Section (Right Side) */}
               <Col lg={4} className="d-flex align-items-stretch">
-                <Card className="calendar-card shadow-sm p-4 "  style={{ maxHeight: window.innerWidth <= 768 ? "100%" : "400px" }}  >
+                <Card className="calendar-card shadow-sm p-4 "   >
                   <Card.Body>
-                    <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
+                    <h5 className="calendar-heading text-center fw-bold ">Calendar</h5>
                     <div className="d-flex justify-content-center">
                       <Calendar className="calender-note" />
                     </div>
