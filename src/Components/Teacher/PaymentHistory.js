@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Table, Badge, Form, Button, Modal } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherHeader from './TeacherHeader';
 import './PaymentHistory.css';
 
 const paymentHistory = [
@@ -36,7 +36,7 @@ const PaymentHistory = () => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">

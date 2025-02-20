@@ -34,6 +34,7 @@ import UpdatePassword from "./Components/Student/UpdatePassword";
 import StudentNotification from "./Components/Student/StudentNotification";
 import StudentAttendance from "./Components/Admin/StudentAttendance";
 import TeacherAttendance from "./Components/Admin/TeacherAttendance";
+
 import "react-toastify/dist/ReactToastify.css";
 
 // Import Redux Provider and Store
@@ -50,7 +51,7 @@ import StudentSettings from "./Components/Student/StudentSettings";
 import Announcements from "./Components/Teacher/Announcements";
 import TeacherSettings from "./Components/Teacher/TeacherSettings";
 import AbacusMath from "./Components/Admin/Abacus";
-
+import StudentData from "./Components/Teacher/StudentData";
 import AbacusKit from "./Components/Admin/Kit";
 import AbacusSidePanel from "./Components/Admin/AbacusSidePannel";
 
@@ -76,7 +77,7 @@ function App() {
           <Route path="/adminAttendance" element={<AdminAttendance />} />
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
-
+          <Route path="/studentdata" element={<StudentData/>}/>
           {/* Protected Routes */}
           <Route
             path="/adminDashboard"

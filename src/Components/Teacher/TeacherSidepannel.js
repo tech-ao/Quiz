@@ -28,7 +28,7 @@ const TeacherSidePanel = () => {
             {/* Dashboard */}
             <li className="nav-item">
               <Link
-                to="/dashboard"
+                to="/teacherDashboard"
                 className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
               >
                 <div className="icon-with-text">
@@ -41,7 +41,7 @@ const TeacherSidePanel = () => {
             {/* Student */}
             <li className="nav-item">
               <Link
-                to="/student"
+                to="/studentdata"
                 className={`nav-link ${location.pathname === '/student' ? 'active' : ''}`}
               >
                 <div className="icon-with-text">
@@ -180,7 +180,7 @@ const TeacherSidePanel = () => {
             {/* Fee's */}
             <li className="nav-item">
               <Link
-                to="/fees"
+                to="/paymentHistory"
                 className={`nav-link ${location.pathname === '/fees' ? 'active' : ''}`}
               >
                 <div className="icon-with-text">
