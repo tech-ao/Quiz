@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Table } from "react-bootstrap";
-import { FaBook, FaFileAlt, FaCalendar, FaBookOpen, FaPrint, FaShareAlt } from "react-icons/fa";
+import {
+  FaBook,
+  FaFileAlt,
+  FaCalendar,
+  FaBookOpen,
+  FaPrint,
+  FaShareAlt,
+} from "react-icons/fa";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
-import './TeacherDashboard.css';
+import "./TeacherDashboard.css";
 
 const TeacherDashboard = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(
@@ -11,6 +18,7 @@ const TeacherDashboard = () => {
   );
 
   const toggleSidebar = () => {
+    console.log("Sidebar toggled!");
     setIsSidebarVisible((prev) => !prev);
   };
 
@@ -23,10 +31,10 @@ const TeacherDashboard = () => {
   }, []);
 
   const statsData = [
-    { title: 'Total Students', count: '10', icon: FaBook },
-    { title: 'Leave Application', count: '05', icon: FaFileAlt },
-    { title: 'Upcoming Classes', count: '32', icon: FaCalendar },
-    { title: 'Assignment', count: '17', icon: FaBookOpen }
+    { title: "Total Students", count: "10", icon: FaBook },
+    { title: "Leave Application", count: "05", icon: FaFileAlt },
+    { title: "Upcoming Classes", count: "32", icon: FaCalendar },
+    { title: "Assignment", count: "17", icon: FaBookOpen },
   ];
 
   return (
@@ -35,7 +43,7 @@ const TeacherDashboard = () => {
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container fluid className="dashboard-container p-4">
-          <Row className="mt-4 g-4" style={{width:'100%'}}>
+          <Row className="mt-4 g-4" style={{ width: "100%" }}>
             {/* Left Column - Stats Cards */}
             <Col xs={12} lg={5} xl={4}>
               {statsData.map((stat, index) => (
@@ -43,7 +51,7 @@ const TeacherDashboard = () => {
                   <Card className="stats-card border-0">
                     <Card.Body className="d-flex align-items-center bg-mint-green rounded">
                       <div className="ms-5">
-                        <stat.icon size={24} className="stats-icon me-3" />
+                        <stat.icon size={24} className="stats-icon me-3" style={{marginTop:'10%'}}/>
                         <div className="d-inline-block">
                           <div className="stats-title">{stat.title}</div>
                           <div className="stats-count">{stat.count}</div>
@@ -61,17 +69,19 @@ const TeacherDashboard = () => {
                 <Card.Body className="bg-mint-green rounded">
                   <div className="d-flex justify-content-between align-items-center mb-4">
                     <h5 className="mb-0 fw-bold">Payment History</h5>
-                    <div>
-  <Button variant="success" className="me-2 w-auto px-2 px-sm-3">
-    <FaPrint className="d-block d-sm-inline me-1" />
-    <span className="d-none d-sm-inline"> Print</span>
-  </Button>
-  <Button variant="success" className="w-auto px-2 px-sm-3">
-    <FaShareAlt className="d-block d-sm-inline me-1" />
-    <span className="d-none d-sm-inline"> Share</span>
-  </Button>
-</div>
-
+                    <div className="d-flex align-items-center gap-3 icon-container">
+                      <Button
+                        variant="link"
+                        className="me-2 p-0 icon-only-button"
+                      >
+                        <FaPrint className="icon-only" />
+                        <span className="d-none d-sm-inline"> Print</span>
+                      </Button>
+                      <Button variant="link" className="p-0 icon-only-button">
+                        <FaShareAlt className="icon-only" />
+                        <span className="d-none d-sm-inline"> Share</span>
+                      </Button>
+                    </div>
                   </div>
 
                   <Table responsive className="payment-table">
@@ -98,7 +108,9 @@ const TeacherDashboard = () => {
                           <small className="text-muted">QR Code</small>
                         </td>
                         <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
+                          <span className="badge bg-success rounded-pill">
+                            Done
+                          </span>
                         </td>
                       </tr>
                       <tr>
@@ -115,60 +127,12 @@ const TeacherDashboard = () => {
                           <small className="text-muted">Transfer</small>
                         </td>
                         <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
+                          <span className="badge bg-success rounded-pill">
+                            Done
+                          </span>
                         </td>
                       </tr>
-                      <tr>
-                        <td>
-                          <div>Rigo Stationary</div>
-                          <small className="text-muted">A4 Sheets</small>
-                        </td>
-                        <td>
-                          <div>Today</div>
-                          <small className="text-muted">10m ago</small>
-                        </td>
-                        <td>
-                          <div>$ 100</div>
-                          <small className="text-muted">Transfer</small>
-                        </td>
-                        <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div>Rigo Stationary</div>
-                          <small className="text-muted">A4 Sheets</small>
-                        </td>
-                        <td>
-                          <div>Today</div>
-                          <small className="text-muted">10m ago</small>
-                        </td>
-                        <td>
-                          <div>$ 100</div>
-                          <small className="text-muted">Transfer</small>
-                        </td>
-                        <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <div>Rigo Stationary</div>
-                          <small className="text-muted">A4 Sheets</small>
-                        </td>
-                        <td>
-                          <div>Today</div>
-                          <small className="text-muted">10m ago</small>
-                        </td>
-                        <td>
-                          <div>$ 100</div>
-                          <small className="text-muted">Transfer</small>
-                        </td>
-                        <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
-                        </td>
-                      </tr>
+
                       <tr>
                         <td>
                           <div>Claudia Store</div>
@@ -183,14 +147,18 @@ const TeacherDashboard = () => {
                           <small className="text-muted">Transfer</small>
                         </td>
                         <td>
-                          <span className="badge bg-success rounded-pill">Done</span>
+                          <span className="badge bg-success rounded-pill">
+                            Done
+                          </span>
                         </td>
                       </tr>
                     </tbody>
                   </Table>
 
                   <div className="text-center mt-4">
-                    <a href="#" className="text-primary text-decoration-none">Show All My Transactions</a>
+                    <a href="#" className="text-primary text-decoration-none">
+                      Show All My Transactions
+                    </a>
                   </div>
                 </Card.Body>
               </Card>

@@ -3,14 +3,20 @@
     flex-direction: column;
     height: 100vh;
     width: 250px;
-    position: relative;
     background-color: #E7FFEC;
+    overflow-y: hidden; 
+    /* padding: 10px; */
+    position: fixed; /* Fixes the sidebar */
+    top: 100px;
+    left: 0;
+    background-color: #E7FFEC;
+    overflow: hidden; 
   }
   
   .menu-content {
     flex: 1;
     overflow-y: auto;
-    padding-bottom: 60px; 
+   padding-bottom: 10px;
   }
   
   .menu-section {
@@ -25,6 +31,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    
+  }
+
+  .log{
+    justify-content: center;
   }
   
   .nav-link {
@@ -56,13 +67,17 @@
     color: #09690c;
     display: inline-block;
   }
+  .menu-content::-webkit-scrollbar {
+    width: 5px;
+}
   
   .logout-section {
     position: fixed;
     bottom: 0;
     width: 250px;
     background-color: #198754;
-    padding: 8px 0;
+    padding: 10px 0;
+    text-align: center;
     z-index: 1000;
   }
   
@@ -75,3 +90,25 @@
     -ms-overflow-style: none;  
     scrollbar-width: none;  
   }
+  
+  @media (max-width: 768px) {
+    .side-panel {
+        width: 200px; /* Reduced width for better fit */
+        top: 0;
+        height: 100vh;
+        left: 0;
+    }
+
+    .logout-section {
+        width: 200px; /* Match your sidebar width */
+        left: 0;
+        z-index: 100;
+        }
+        .log{
+          justify-content: center;
+        }
+    .menu-section{
+      padding-top: 120px;
+    }
+    
+}
