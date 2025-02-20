@@ -48,8 +48,7 @@ h1 {
 /* Form Control */
 .form-control {
   border-radius: 5px !important;
-  height: 50px;
-  margin-top: 15px;
+  height: 40px;
 }
 
 /* Submit Button */

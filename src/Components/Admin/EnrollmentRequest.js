@@ -137,10 +137,19 @@ const EnrollmentRequestList = () => {
           <div className="sticky-header">
             <Row className="align-items-center">
               <Col md={6}><h2 className="fw-bold">Enrollment Request</h2></Col>
-              <Col md={6} className="d-flex justify-content-between align-items-center">
-                <Button variant="success" onClick={handleApprove}>Approve</Button>
-                <Button variant="danger" onClick={handleDeny}>Reject</Button>
-              </Col>
+                      <Col md={6} className="d-flex justify-content-end">
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              alignItems: "center",
+            }}
+          >
+            <Button variant="success" onClick={handleApprove}>Approve</Button>
+            <Button variant="danger" onClick={handleDeny}>Reject</Button>
+          </div>
+        </Col>
+
             </Row>
           </div>
           <div className="sub-container">

@@ -1,47 +1,86 @@
-/* Styling for navigation links inside the side panel */
+/* Sidebar Styling */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh; /* Full viewport height */
+  background-color: #155724; /* Dark green background */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Prevent scrolling */
+}
+
+/* Navigation links inside the sidebar */
 .nav-link {
   display: flex;
-  align-items:end;
+  align-items: center;
   padding: 10px;
   color: #fff;
   font-size: 1rem;
+  text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
 .nav-link:hover {
   background-color: #e7ffec;
-}
-
-.sub-nav{
-  text-indent: 13px;
+  color: #155724;
 }
 
 .nav-link.active {
-  background-color: #155724;
+  background-color: #0f3d26;
   font-weight: bold;
 }
 
+/* Sub-navigation indentation */
+.sub-nav {
+  padding-left: 20px;
+}
+
+.sub-nav .nav-link {
+  font-size: 0.9rem;
+}
+
+/* Icon with text alignment */
 .icon-with-text {
   display: flex;
   align-items: center;
+  width: 100%;
 }
 
+/* Icon size and spacing */
 .icon-with-text i {
   font-size: 1.5rem;
-  margin-right: 20px;
+  margin-right: 15px;
 }
 
-.nav-text {
-  opacity: 0;
-  visibility: hidden;
-  white-space: nowrap;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  font-size: 12px;
-}
-
+/* Text animation inside navigation */
 .nav-text {
   opacity: 1;
   visibility: visible;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+/* Dropdown arrow positioning */
+.dropdown-icon {
+  margin-left: auto;
+}
+
+/* Logout section fixed at the bottom */
+.logout-section {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #198754;
+  padding: 10px 0;
+  text-align: center;
+}
+
+.logout-section .nav-link {
+  justify-content: center;
+  color: white;
+  font-weight: bold;
 }
 
 /* Hamburger button styling */
@@ -59,6 +98,18 @@
   color: #333;
 }
 
+/* Responsive styles */
+@media (max-width: 768px) {
+  .side-panel {
+    width: 220px; /* Slightly narrower for mobile screens */
+  }
 
+  .icon-with-text i {
+    font-size: 1.3rem;
+    margin-right: 10px;
+  }
 
-
+  .nav-link {
+    font-size: 0.9rem;
+  }
+}

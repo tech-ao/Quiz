@@ -30,7 +30,7 @@ button[type="submit"]:hover {
 }
 
 button {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 .dropdown-toggle {
@@ -128,7 +128,7 @@ button {
 @media (max-width: 576px) {
   /* Extra Small Devices */
   .container {
-    max-width: 85%;
+    max-width: 100%;
     margin: 0 auto;
   }
 

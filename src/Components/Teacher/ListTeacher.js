@@ -152,7 +152,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                 </tbody>
               </Table>
             </div>
-            <div className="d-flex justify-content-center mt-4">
+            <div className="d-flex justify-content-center ">
               <ReactPaginate
                 pageCount={Math.ceil(filteredTeachers.length / TeachersPerPage)}
                 pageRangeDisplayed={5}
