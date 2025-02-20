@@ -108,7 +108,7 @@ function NotificationPage() {
             <Row>
               {filteredNotifications.length > 0 ? (
                 filteredNotifications.map((notification) => (
-                  <Col md={12} key={notification.id} className="mb-3">
+                  <Col md={12} key={notification.id} className="mb-3" >
                     <Card className="shadow-sm notification-card">
                       <Card.Body className="d-flex align-items-center justify-content-between">
                         {/* Notification Details */}
