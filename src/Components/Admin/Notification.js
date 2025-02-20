@@ -13,11 +13,11 @@ function NotificationPage() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false); // State to show/hide calendar
   const [notifications, setNotifications] = useState([
-    { id: 1, title: "Notification 1", content: "Details of notification 1", date: "2024-02-15" },
-    { id: 2, title: "Notification 2", content: "Details of notification 2", date: "2024-02-16" },
-    { id: 3, title: "Notification 3", content: "Details of notification 3", date: "2024-02-17" },
-    { id: 4, title: "Notification 4", content: "Details of notification 4", date: "2024-02-18" },
-    { id: 5, title: "Notification 5", content: "Details of notification 5", date: "2024-02-19" },
+    { id: 1, title: "Notification 1", content: "Details of notification 1", receivedDate: "2024-02-15" },
+    { id: 2, title: "Notification 2", content: "Details of notification 2", receivedDate: "2024-02-16" },
+    { id: 3, title: "Notification 3", content: "Details of notification 3", receivedDate: "2024-02-17" },
+    { id: 4, title: "Notification 4", content: "Details of notification 4", receivedDate: "2024-02-18" },
+    { id: 5, title: "Notification 5", content: "Details of notification 5", receivedDate: "2024-02-19" },
   ]);
 
   const toggleSidebar = () => {
@@ -41,8 +41,9 @@ function NotificationPage() {
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setShowDatePicker(false); // Hide the calendar after selecting a date
+    const formattedDate = date.toISOString().split("T")[0]; // Convert selected date to YYYY-MM-DD format
+    setSelectedDate(formattedDate);
+    setShowDatePicker(false); // Hide the date picker after selection
   };
 
   const handleClearFilter = () => {
@@ -51,9 +52,7 @@ function NotificationPage() {
 
   const filteredNotifications = notifications.filter((notification) => {
     const matchesSearch = notification.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesDate = selectedDate
-      ? notification.date === new Date(selectedDate).toISOString().split("T")[0] // Corrected date filtering
-      : true;
+    const matchesDate = selectedDate ? notification.receivedDate === selectedDate : true;
     return matchesSearch && matchesDate;
   });
 
@@ -86,7 +85,7 @@ function NotificationPage() {
                   {showDatePicker && (
                     <div className="date-picker-container">
                       <DatePicker
-                        selected={selectedDate}
+                        selected={selectedDate ? new Date(selectedDate) : null}
                         onChange={handleDateChange}
                         inline
                         className="custom-datepicker"
@@ -116,7 +115,7 @@ function NotificationPage() {
                         <div>
                           <h5 className="fw-bold">{notification.title}</h5>
                           <p>{notification.content}</p>
-                          <small className="text-muted">Received on: {notification.date}</small>
+                          <small className="text-muted">Received on: {notification.receivedDate}</small>
                         </div>
                         {/* View Button */}
                         <Button variant="success" className="btn-sm view-btn">
@@ -128,7 +127,7 @@ function NotificationPage() {
                 ))
               ) : (
                 <Col md={12}>
-                  <p className="text-center">No notifications found.</p>
+                  <p className="no-notifications">No notifications found.</p>
                 </Col>
               )}
             </Row>
