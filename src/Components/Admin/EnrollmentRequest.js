@@ -133,7 +133,7 @@ const EnrollmentRequestList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
           <div className="sticky-header">
             <Row className="align-items-center">
               <Col md={6}><h2 className="fw-bold">Enrollment Request</h2></Col>

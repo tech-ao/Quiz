@@ -76,7 +76,7 @@ const ListTeacher = ({ Teachers = [] }) => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4">
           <div className="sub-container">
             <Row className="align-items-center mb-4">
               <Col md={6}>

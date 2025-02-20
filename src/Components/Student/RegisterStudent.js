@@ -138,6 +138,7 @@ const RegisterStudent = () => {
           phoneNumber: "",
           dob: "",
           grade: "",
+          address: "", 
           gender: "",
           studyModeId: "",
           country: "",

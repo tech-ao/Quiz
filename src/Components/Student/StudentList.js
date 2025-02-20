@@ -139,7 +139,7 @@ const StudentList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
         <Row className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
   <Col md={6}>
     <h2 className="fw-bold">Student List</h2>
