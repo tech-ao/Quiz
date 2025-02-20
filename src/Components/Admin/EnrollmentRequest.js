@@ -7,6 +7,7 @@ import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
+import ViewStudentPanel from "../Student/ViewStudent";
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
@@ -16,9 +17,10 @@ const EnrollmentRequestList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRequestIds, setSelectedRequestIds] = useState([]);
   const [requests, setRequests] = useState([]);
-  const [filteredRequests, setFilteredRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showViewStudent, setShowViewStudent] = useState(false);
+  const [selectedStudentId, setSelectedStudentId] = useState(null);
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
@@ -62,6 +64,70 @@ const EnrollmentRequestList = () => {
     fetchRequests();
   }, [currentPage]);
 
+  const handleSelectRequest = (studentId) => {
+    setSelectedRequestIds((prevSelected) =>
+      prevSelected.includes(studentId)
+        ? prevSelected.filter((id) => id !== studentId)
+        : [...prevSelected, studentId]
+    );
+  };
+
+  const handleApprove = async () => {
+    if (selectedRequestIds.length > 0) {
+      await updateStatus(1);
+    }
+  };
+
+  const handleDeny = async () => {
+    if (selectedRequestIds.length > 0) {
+      await updateStatus(2);
+    }
+  };
+
+  const updateStatus = async (statusEnum) => {
+    try {
+      if (selectedRequestIds.length === 0) {
+        toast.error("No students selected.");
+        return;
+      }
+
+      const requestBody = {
+        statusEnum,
+        studentIdList: selectedRequestIds,
+      };
+
+      await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
+        headers: {
+          Accept: "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+        },
+      });
+      toast.success("Status updated successfully!");
+
+      setRequests((prev) =>
+        prev.map((student) =>
+          selectedRequestIds.includes(student.studentId)
+            ? { ...student, statusName: statusEnum === 1 ? "Approved" : "Rejected" }
+            : student
+        )
+      );
+      setSelectedRequestIds([]);
+    } catch (error) {
+      toast.error("Failed to update status. Please try again.");
+    }
+  };
+
+  const handleOpenViewStudent = (studentId) => {
+    setSelectedStudentId(studentId);
+    setShowViewStudent(true);
+  };
+
+  const handleCloseViewStudent = () => {
+    setShowViewStudent(false);
+    setSelectedStudentId(null);
+  };
+
   return (
     <div>
       <AdminHeader toggleSidebar={toggleSidebar} />
@@ -70,73 +136,61 @@ const EnrollmentRequestList = () => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sticky-header">
             <Row className="align-items-center">
-              <Col md={6}>
-                <h2 className="fw-bold">Enrollment Request</h2>
-              </Col>
+              <Col md={6}><h2 className="fw-bold">Enrollment Request</h2></Col>
               <Col md={6} className="d-flex justify-content-between align-items-center">
-                <InputGroup style={{ width: "70%" }}>
-                  <Form.Control
-                    type="text"
-                    placeholder="Search by name or email"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </InputGroup>
-                <Button variant="success">Approve</Button>
-                <Button variant="danger">Reject</Button>
+                <Button variant="success" onClick={handleApprove}>Approve</Button>
+                <Button variant="danger" onClick={handleDeny}>Reject</Button>
               </Col>
             </Row>
           </div>
-
           <div className="sub-container">
-            <Row>
-              <Col style={{marginTop:"30px"}}>
-                <Table striped bordered hover responsive >
-                  <thead>
-                    <tr>
-                      <th>Select</th>
-                      <th>S.Number</th>
-                      <th>Reg Number</th>
-                      <th>Name</th>
-                      <th>Email</th>
-                      <th>Phone</th>
-                      <th>Gender</th>
-                      <th>Status</th>
+            {loading ? (
+              <div className="text-center"><Spinner animation="border" /></div>
+            ) : error ? (
+              <div className="alert alert-danger">{error}</div>
+            ) : (
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>Select</th>
+                    <th>S.Number</th>
+                    <th>Reg Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentRequests.map((request, index) => (
+                    <tr key={request.id || index}>
+                      <td><Form.Check type="checkbox" onChange={() => handleSelectRequest(request.studentId)} /></td>
+                      <td>{indexOfFirstRequest + index + 1}</td>
+                      <td>{request.studentId}</td>
+                      <td>{request.firstName}</td>
+                      <td>{request.email}</td>
+                      <td>{request.phoneNumber}</td>
+                      <td>{request.genderName}</td>
+                      <td><Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge></td>
+                      <td><Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>View</Button></td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {currentRequests.map((request, index) => (
-                      <tr key={request.id || index}>
-                        <td>
-                          <Form.Check type="checkbox" />
-                        </td>
-                        <td>{indexOfFirstRequest + index + 1}</td>
-                        <td>{request.studentId}</td>
-                        <td>{request.firstName}</td>
-                        <td>{request.email}</td>
-                        <td>{request.phoneNumber}</td>
-                        <td>{request.genderName}</td>
-                        <td>
-                          <Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-                <Pagination className="justify-content-center">
-                  <Pagination.Prev onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} disabled={currentPage === 1} />
-                  {[...Array(totalPages).keys()].map((number) => (
-                    <Pagination.Item key={number} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
-                      {number + 1}
-                    </Pagination.Item>
                   ))}
-                  <Pagination.Next onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages} />
-                </Pagination>
-              </Col>
-            </Row>
+                </tbody>
+              </Table>
+            )}
+            <Pagination className="justify-content-center">
+              <Pagination.Prev onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} disabled={currentPage === 1} />
+              {[...Array(totalPages).keys()].map((number) => (
+                <Pagination.Item key={number} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>{number + 1}</Pagination.Item>
+              ))}
+              <Pagination.Next onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages} />
+            </Pagination>
           </div>
         </Container>
       </div>
+      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
     </div>
   );
 };

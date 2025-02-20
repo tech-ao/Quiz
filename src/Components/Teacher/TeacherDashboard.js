@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button, Table } from "react-bootstrap";
-import { FaBook, FaFileAlt, FaCalendar, FaBookOpen } from "react-icons/fa";
-import { FaPrint, FaShareAlt } from "react-icons/fa";
+import { FaBook, FaFileAlt, FaCalendar, FaBookOpen, FaPrint, FaShareAlt } from "react-icons/fa";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import './TeacherDashboard.css';
@@ -23,106 +22,65 @@ const TeacherDashboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const statsData = [
+    { title: 'Total Students', count: '10', icon: FaBook },
+    { title: 'Leave Application', count: '05', icon: FaFileAlt },
+    { title: 'Upcoming Classes', count: '32', icon: FaCalendar },
+    { title: 'Assignment', count: '17', icon: FaBookOpen }
+  ];
+
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
+      <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100">
-          <Row style={{ marginTop: "80px" }}>
-            <Col md={4} className="stats-container">
-              <Card className="gradient-card text-white mb-3">
-                <Card.Body
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "100px" }}
-                >
-                  <FaBook size={32} className="me-3" />
-                  <div>
-                    <div className="fs-6" style={{ color: "black" }}>
-                      Total Students
-                    </div>
-                    <div className="fs-2 fw-bold" style={{ color: "black" }}>
-                      10
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card className="gradient-card text-white mb-3">
-                <Card.Body
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "100px" }}
-                >
-                  <FaFileAlt size={32} className="me-3" />
-                  <div>
-                    <div className="fs-6" style={{ color: "black" }}>
-                      Leave Application
-                    </div>
-                    <div className="fs-2 fw-bold" style={{ color: "black" }}>
-                      05
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card className="gradient-card text-white mb-3">
-                <Card.Body
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "100px" }}
-                >
-                  <FaCalendar size={32} className="me-3" />
-                  <div>
-                    <div className="fs-6" style={{ color: "black" }}>
-                      Upcoming Classes
-                    </div>
-                    <div className="fs-2 fw-bold" style={{ color: "black" }}>
-                      32
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
-              <Card className="gradient-card text-white">
-                <Card.Body
-                  className="d-flex align-items-center"
-                  style={{ paddingLeft: "100px" }}
-                >
-                  <FaBookOpen size={32} className="me-3" />
-                  <div>
-                    <div className="fs-6" style={{ color: "black" }}>
-                      Assignment
-                    </div>
-                    <div className="fs-2 fw-bold" style={{ color: "black" }}>
-                      17
-                    </div>
-                  </div>
-                </Card.Body>
-              </Card>
+        <Container fluid className="dashboard-container p-4">
+          <Row className="mt-4 g-4" style={{width:'100%'}}>
+            {/* Left Column - Stats Cards */}
+            <Col xs={12} lg={5} xl={4}>
+              {statsData.map((stat, index) => (
+                <div key={index} className="mb-4">
+                  <Card className="stats-card border-0">
+                    <Card.Body className="d-flex align-items-center bg-mint-green rounded">
+                      <div className="ms-5">
+                        <stat.icon size={24} className="stats-icon me-3" />
+                        <div className="d-inline-block">
+                          <div className="stats-title">{stat.title}</div>
+                          <div className="stats-count">{stat.count}</div>
+                        </div>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </div>
+              ))}
             </Col>
 
-            <Col md={8} style={{ width: "800px" }}>
-              <Card>
-                <Card.Body style={{ height: "115%" }}>
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h4 className="mb-0">
-                      <b>Payment History</b>
-                    </h4>
+            {/* Right Column - Payment History */}
+            <Col xs={12} lg={7} xl={8}>
+              <Card className="payment-card border-0 h-100">
+                <Card.Body className="bg-mint-green rounded">
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h5 className="mb-0 fw-bold">Payment History</h5>
                     <div>
-                      <Button variant="primary" className="btn btn-success">
-                        <FaPrint className="me-1" />
-                        Print
-                      </Button>
-                      <Button variant="primary" className="btn btn-success">
-                        <FaShareAlt
-                          className="me-1"/>
-                        Share
-                      </Button>
-                    </div>
+  <Button variant="success" className="me-2 w-auto px-2 px-sm-3">
+    <FaPrint className="d-block d-sm-inline me-1" />
+    <span className="d-none d-sm-inline"> Print</span>
+  </Button>
+  <Button variant="success" className="w-auto px-2 px-sm-3">
+    <FaShareAlt className="d-block d-sm-inline me-1" />
+    <span className="d-none d-sm-inline"> Share</span>
+  </Button>
+</div>
+
                   </div>
-                  <Table responsive>
-                    <thead className="bg-primary text-white">
-                      <tr>
-                        <th>Purpose</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Result</th>
+
+                  <Table responsive className="payment-table">
+                    <thead>
+                      <tr className="bg-dark-green text-white">
+                        <th className="py-3">Purpose</th>
+                        <th className="py-3">Date</th>
+                        <th className="py-3">Amount</th>
+                        <th className="py-3">Result</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -140,7 +98,7 @@ const TeacherDashboard = () => {
                           <small className="text-muted">QR Code</small>
                         </td>
                         <td>
-                          <span className="badge bg-success">Done</span>
+                          <span className="badge bg-success rounded-pill">Done</span>
                         </td>
                       </tr>
                       <tr>
@@ -157,7 +115,58 @@ const TeacherDashboard = () => {
                           <small className="text-muted">Transfer</small>
                         </td>
                         <td>
-                          <span className="badge bg-success">Done</span>
+                          <span className="badge bg-success rounded-pill">Done</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div>Rigo Stationary</div>
+                          <small className="text-muted">A4 Sheets</small>
+                        </td>
+                        <td>
+                          <div>Today</div>
+                          <small className="text-muted">10m ago</small>
+                        </td>
+                        <td>
+                          <div>$ 100</div>
+                          <small className="text-muted">Transfer</small>
+                        </td>
+                        <td>
+                          <span className="badge bg-success rounded-pill">Done</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div>Rigo Stationary</div>
+                          <small className="text-muted">A4 Sheets</small>
+                        </td>
+                        <td>
+                          <div>Today</div>
+                          <small className="text-muted">10m ago</small>
+                        </td>
+                        <td>
+                          <div>$ 100</div>
+                          <small className="text-muted">Transfer</small>
+                        </td>
+                        <td>
+                          <span className="badge bg-success rounded-pill">Done</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <div>Rigo Stationary</div>
+                          <small className="text-muted">A4 Sheets</small>
+                        </td>
+                        <td>
+                          <div>Today</div>
+                          <small className="text-muted">10m ago</small>
+                        </td>
+                        <td>
+                          <div>$ 100</div>
+                          <small className="text-muted">Transfer</small>
+                        </td>
+                        <td>
+                          <span className="badge bg-success rounded-pill">Done</span>
                         </td>
                       </tr>
                       <tr>
@@ -174,13 +183,14 @@ const TeacherDashboard = () => {
                           <small className="text-muted">Transfer</small>
                         </td>
                         <td>
-                          <span className="badge bg-success">Done</span>
+                          <span className="badge bg-success rounded-pill">Done</span>
                         </td>
                       </tr>
                     </tbody>
                   </Table>
-                  <div className="text-center mt-3">
-                    <Button variant="link">Show All My Transactions</Button>
+
+                  <div className="text-center mt-4">
+                    <a href="#" className="text-primary text-decoration-none">Show All My Transactions</a>
                   </div>
                 </Card.Body>
               </Card>

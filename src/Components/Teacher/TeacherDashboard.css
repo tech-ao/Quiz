@@ -1,67 +1,76 @@
-/* Keep your existing desktop styles as they are */
-.dashboard-card {
-  font-size: 14px;
-  padding: 15px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 90%;
-  max-width: 400px;
-  text-align: center;
-  border-radius: 8px;
-  margin: 15px auto;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+.dashboard-container {
+  background-color: #fff;
+  min-height: 100vh;
+  margin-top: 43px;
 }
+
 .me-1{
   color: white;
 }
 
-/* Add these mobile-specific styles */
+.stats-card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.bg-mint-green {
+  background-color: #e6fff0;
+}
+
+.bg-dark-green {
+  background-color: #006838;
+}
+
+.stats-title {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.stats-count {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.stats-icon {
+  color: #006838;
+}
+
+.payment-card {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.payment-table th {
+  font-weight: 500;
+  border: none;
+}
+
+.payment-table td {
+  border-color: #eee;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-  .main-container{
-    right: 30%;
-    width: 400%;
-  }
-  .gradient-card {
-    width: 70%;
-    right: 20%;
-    
+  .stats-card {
+    margin-bottom: 1rem;
   }
   
-  .dashboard-card-header {
-    flex-direction: column;
-    gap: 10px;
-    text-align: center;
+  .payment-card {
+    margin-top: 1rem;
   }
   
-  .dashboard-icon {
-    font-size: 40px;
-  }
-  
-  .dashboard-title {
-    font-size: 1.2rem;
-    text-align: center;
+  .stats-count {
+    font-size: 1.5rem;
   }
 }
 
-/* Add these tablet-specific styles */
-@media (min-width: 576px) and (max-width: 768px) {
-  .dashboard-card {
-    width: 90%;
-    max-width: 500px;
-    padding: 12px;
-    margin: 12px auto;
-  }
-  
-  .dashboard-card-header {
-    gap: 15px;
-  }
-  
-  .dashboard-icon {
-    font-size: 45px;
-  }
-  
-  .dashboard-title {
-    font-size: 1.3rem;
-  }
+/* Custom button styles */
+.btn-success {
+  background-color: #006838;
+  border-color: #006838;
+}
+
+.btn-success:hover {
+  background-color: #005530;
+  border-color: #005530;
 }
