@@ -30,15 +30,12 @@
   .icon-with-text {
     display: flex;
     align-items: center;
-<<<<<<< HEAD
     gap: 0.5rem;
     
   }
 
   .log{
     justify-content: center;
-=======
->>>>>>> 65f5b84bdc79b4835cec3950103a8dcc835ad6e4
   }
   
   .nav-link {
