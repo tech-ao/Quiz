@@ -48,6 +48,8 @@ h1 {
 /* Form Control */
 .form-control {
   border-radius: 5px !important;
+  height: 50px;
+  margin-top: 15px;
 }
 
 /* Submit Button */
@@ -74,7 +76,7 @@ button[type="submit"]:hover {
 @media (max-width: 575.98px) {
   .sticky-header {
     flex-direction: row !important;
-    max-height: 100px !important; /* Adjusted height for small screens */
+    max-height: 200px !important; /* Adjusted height for small screens */
    
   }
 
@@ -117,7 +119,6 @@ button[type="submit"]:hover {
 @media (min-width: 768px) {
   .sticky-header {
     height: 100px !important; /* Full height for large screens */
-    padding: 20px 10px 0 0 !important;
   }
 
   .sticky-header h2 {
