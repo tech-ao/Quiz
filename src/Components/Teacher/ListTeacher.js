@@ -5,6 +5,7 @@ import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup } from 'react-bootstrap';
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import EditTeacher from './EditTeacher';
+import AddTeacher from './AddTeacher';
 import ViewTeacher from '../ViewTeacher';
 import { useNavigate } from "react-router-dom";
 
@@ -31,6 +32,7 @@ const ListTeacher = ({ Teachers = [] }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [showEditTeacher, setShowEditTeacher] = useState(false);
   const [showViewTeacher, setShowViewTeacher] = useState(false);
+   const [showAddTeacher, setShowAddTeacher] = useState(false);
   const TeachersPerPage = 10;
   const navigate = useNavigate();
 
@@ -47,7 +49,8 @@ const ListTeacher = ({ Teachers = [] }) => {
   const handleCloseEditTeacher = () => setShowEditTeacher(false);
   const handleOpenViewTeacher = () => setShowViewTeacher(true);
   const handleCloseViewTeacher = () => setShowViewTeacher(false);
-
+  const handleOpenAddTeacher = () => setShowAddTeacher(true);
+  const handleCloseAddTeacher = () => setShowAddTeacher(false);
   const TeacherData = {
     firstName: "John",
     lastName: "Doe",
@@ -91,7 +94,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                    
                   />
                 </InputGroup>
-                <Button variant="outline-success" onClick={() => navigate('/addTeacher')}>
+                <Button variant="outline-success"onClick={handleOpenAddTeacher}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>
@@ -172,7 +175,7 @@ const ListTeacher = ({ Teachers = [] }) => {
             </div>
           </div>
         </Container>
-
+        <AddTeacher show={showAddTeacher} onClose={handleCloseAddTeacher} />
         <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} />
         <ViewTeacher show={showViewTeacher} onClose={() => setShowViewTeacher(false)} TeacherData={TeacherData} />
       </div>

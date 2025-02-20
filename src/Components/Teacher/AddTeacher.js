@@ -1,7 +1,13 @@
-import React, { useState } from 'react';
-import { Modal, Button, Form, Row, Col } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import { Modal, Button, Form, Row, Col } from "react-bootstrap";
+import { addTeacherAction } from "../../redux/Action/TeacherAction";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../../redux/Services/Enum";
 
-const AddTeacher = ({ show, handleClose, handleSubmit }) => {
+
+const AddTeacher = ({ show, onClose }) => {
     const [formData, setFormData] = useState({
         fullName: '',
         dob: '',
@@ -9,18 +15,19 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
         phoneNumber: '',
         email: '',
         permanentAddress: '',
-        residentialAddress: '',
-        nationality: '',
+        currentResidentialAddress: '',
+        nationalityId: '',
+        preferedCountryId: null,
         candidatePhoto: null,
         photoID: null,
-        highestEducation: '',
-        institutions: '',
+        higherLevelEducation: '',
+        institute: '',
         degrees: '',
-        specialization: '',
-        graduationYear: '',
-        currentEmployer: '',
+        subjectSpecialist: '',
+        yearOfGraduation: '',
+        employerName: '',
         jobTitle: '',
-        experienceYears: '',
+        yoe: '',
         availability: '',
         workSchedule: '',
         preferredCountries: '',
@@ -29,11 +36,60 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
     });
 
     const [errors, setErrors] = useState({});
+    const [countries, setCountries] = useState([]);
+    const [grades, setGrades] = useState([]);
+    const [genders, setGenders] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            console.log(formData);
+
+            await dispatch(addTeacherAction(formData));
+
+            toast.success("Student added successfully!");
+            onClose();
+        } catch (error) {
+            toast.error("Failed to add student!");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    useEffect(() => {
+        const fetchAllData = async () => {
+            setLoading(true);
+            try {
+                const countriesData = await fetchCountries();
+                setCountries(countriesData);
+
+                const gradesData = await fetchGrades();
+                setGrades(gradesData);
+
+                const gendersData = await fetchGenders();
+                setGenders(gendersData);
+
+
+            } catch (error) {
+                console.error("Error fetching data:", error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAllData();
+    }, []);
+
+    const dispatch = useDispatch();
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
@@ -49,15 +105,15 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
         if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = 'Enter a valid 10-digit phone number';
         if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = 'Enter a valid email address';
         if (!formData.permanentAddress.trim()) newErrors.permanentAddress = 'Permanent Address is required';
-        if (!formData.nationality.trim()) newErrors.nationality = 'Nationality is required';
-        if (!formData.highestEducation.trim()) newErrors.highestEducation = 'Highest Education is required';
-        if (!formData.institutions.trim()) newErrors.institutions = 'Institutions Attended is required';
+        if (!formData.nationalityId.trim()) newErrors.nationalityId = 'nationalityId is required';
+        if (!formData.higherLevelEducation.trim()) newErrors.higherLevelEducation = 'Highest Education is required';
+        if (!formData.institute.trim()) newErrors.institute = 'institute Attended is required';
         if (!formData.degrees.trim()) newErrors.degrees = 'Degrees/Certifications is required';
-        if (!formData.specialization.trim()) newErrors.specialization = 'Subject Specialization is required';
-        if (!formData.graduationYear.match(/^\d{4}$/)) newErrors.graduationYear = 'Graduation Year must be a 4-digit number';
-        if (!formData.currentEmployer.trim()) newErrors.currentEmployer = 'Current Employer is required';
+        if (!formData.subjectSpecialist.trim()) newErrors.subjectSpecialist = 'Subject subjectSpecialist is required';
+        if (!formData.yearOfGraduation.match(/^\d{4}$/)) newErrors.yearOfGraduation = 'Graduation Year must be a 4-digit number';
+        if (!formData.employerName.trim()) newErrors.employerName = 'Current Employer is required';
         if (!formData.jobTitle.trim()) newErrors.jobTitle = 'Job Title is required';
-        if (!formData.experienceYears.match(/^\d+$/)) newErrors.experienceYears = 'Years of Experience must be a number';
+        if (!formData.yoe.match(/^\d+$/)) newErrors.yoe = 'Years of Experience must be a number';
         if (!formData.availability) newErrors.availability = 'Availability is required';
         if (!formData.workSchedule.trim()) newErrors.workSchedule = 'Preferred Work Schedule is required';
         if (!formData.preferredCountries) newErrors.preferredCountries = 'Preferred Countries is required';
@@ -70,20 +126,16 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const submitForm = (e) => {
-        e.preventDefault();
-        if (validateForm()) {
-            handleSubmit(formData);
-        }
-    };
+
 
     return (
-        <Modal show={show} onHide={handleClose} size="lg">
+        <Modal show={show} onHide={onClose} size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>Add Teacher</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={submitForm}>
+                <Form onSubmit={handleSubmit}>
+
                     <Row>
                         <Col>
                             <Form.Group>
@@ -121,14 +173,15 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                                     name="gender"
                                     value={formData.gender}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.gender}
+                                    required
                                 >
                                     <option value="">Select Gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
+                                    {genders.map((gender, index) => (
+                                        <option key={index} value={gender.item1}>
+                                            {gender.item2}
+                                        </option>
+                                    ))}
                                 </Form.Select>
-                                <Form.Control.Feedback type="invalid">{errors.gender}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -178,15 +231,15 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                     <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Nationality</Form.Label>
+                                <Form.Label>nationalityId</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="nationality"
-                                    value={formData.nationality}
+                                    name="nationalityId"
+                                    value={formData.nationalityId}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.nationality}
+                                    isInvalid={!!errors.nationalityId}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.nationality}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.nationalityId}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -194,12 +247,12 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                                 <Form.Label>Highest Education</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="highestEducation"
-                                    value={formData.highestEducation}
+                                    name="higherLevelEducation"
+                                    value={formData.higherLevelEducation}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.highestEducation}
+                                    isInvalid={!!errors.higherLevelEducation}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.highestEducation}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.higherLevelEducation}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -207,15 +260,15 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                     <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Institutions Attended</Form.Label>
+                                <Form.Label>institute Attended</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="institutions"
-                                    value={formData.institutions}
+                                    name="institute"
+                                    value={formData.institute}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.institutions}
+                                    isInvalid={!!errors.institute}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.institutions}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.institute}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -236,15 +289,15 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                     <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Subject Specialization</Form.Label>
+                                <Form.Label>Subject subjectSpecialist</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="specialization"
-                                    value={formData.specialization}
+                                    name="subjectSpecialist"
+                                    value={formData.subjectSpecialist}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.specialization}
+                                    isInvalid={!!errors.subjectSpecialist}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.specialization}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.subjectSpecialist}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -252,12 +305,12 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                                 <Form.Label>Graduation Year</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="graduationYear"
-                                    value={formData.graduationYear}
+                                    name="yearOfGraduation"
+                                    value={formData.yearOfGraduation}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.graduationYear}
+                                    isInvalid={!!errors.yearOfGraduation}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.graduationYear}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.yearOfGraduation}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -268,12 +321,12 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                                 <Form.Label>Current Employer</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="currentEmployer"
-                                    value={formData.currentEmployer}
+                                    name="employerName"
+                                    value={formData.employerName}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.currentEmployer}
+                                    isInvalid={!!errors.employerName}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.currentEmployer}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.employerName}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -297,12 +350,12 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                                 <Form.Label>Years of Experience</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    name="experienceYears"
-                                    value={formData.experienceYears}
+                                    name="yoe"
+                                    value={formData.yoe}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.experienceYears}
+                                    isInvalid={!!errors.yoe}
                                 />
-                                <Form.Control.Feedback type="invalid">{errors.experienceYears}</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.yoe}</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -339,15 +392,20 @@ const AddTeacher = ({ show, handleClose, handleSubmit }) => {
                         </Col>
                         <Col>
                             <Form.Group>
-                                <Form.Label>Preferred Countries</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="preferredCountries"
-                                    value={formData.preferredCountries}
+                                <Form.Label>prefered Country Name</Form.Label>
+                                <Form.Select
+                                    name="country"
+                                    value={formData.preferedCountryId}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.preferredCountries}
-                                />
-                                <Form.Control.Feedback type="invalid">{errors.preferredCountries}</Form.Control.Feedback>
+                                    required
+                                >
+                                    <option value="">Select Country</option>
+                                    {countries.map((country, index) => (
+                                        <option key={index} value={country.item1}>
+                                            {country.item2}
+                                        </option>
+                                    ))}
+                                </Form.Select>
                             </Form.Group>
                         </Col>
                     </Row>
