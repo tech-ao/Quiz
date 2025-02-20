@@ -43,19 +43,20 @@ const TeacherDashboard = () => {
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container fluid className="dashboard-container p-4">
-          <Row className="mt-4 g-4" style={{ width: "100%" }}>
+          <Row
+            className="mt-4 g-4"
+            style={{ width: "100%", paddingBottom: "70px" }}
+          >
             {/* Left Column - Stats Cards */}
             <Col xs={12} lg={5} xl={4}>
               {statsData.map((stat, index) => (
-                <div key={index} className="mb-4">
+                <div key={index} className="mb-4 my-1">
                   <Card className="stats-card border-0">
-                    <Card.Body className="d-flex align-items-center bg-mint-green rounded">
-                      <div className="ms-5">
-                        <stat.icon size={24} className="stats-icon me-3" style={{marginTop:'10%'}}/>
-                        <div className="d-inline-block">
-                          <div className="stats-title">{stat.title}</div>
-                          <div className="stats-count">{stat.count}</div>
-                        </div>
+                    <Card.Body className="d-flex align-items-center bg-mint-green rounded p-3">
+                      <stat.icon size={24} className="stats-icon me-3 mt-n2" />
+                      <div>
+                        <div className="stats-title">{stat.title}</div>
+                        <div className="stats-count">{stat.count}</div>
                       </div>
                     </Card.Body>
                   </Card>

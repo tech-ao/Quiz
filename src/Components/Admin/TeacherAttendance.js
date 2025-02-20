@@ -154,6 +154,9 @@ const TeacherAttendance = ({
 
   return (
     <div>
+    <AdminHeader toggleSidebar={toggleSidebar} />
+      <div className="d-flex">
+        {isSidebarVisible && <SidePannel />}
       <Container className="main-container p-4 min-vh-100">
         <div className="sub-container">
           <Row className="mt-3" style={{ paddingLeft: "20px" }}>
@@ -280,6 +283,7 @@ const TeacherAttendance = ({
         </div>
       </Container>
     </div>
+    </div> 
   );
 };
 
