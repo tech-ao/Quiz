@@ -194,9 +194,9 @@ const TeacherSidePanel = () => {
       </div>
 
       {/* Logout */}
-      <div className="logout-section">
+      <div className="logout-section" style={{width:'209px'}}>
         <ul className="nav flex-column">
-          <li className="nav-item">
+          <li className="nav-item" >
             <Link to="/logout" className="nav-link">
               <div className="icon-with-text" style={{justifyContent:'center'}}>
                 <i className="bi bi-box-arrow-right" style={{color:'white'}}></i>
