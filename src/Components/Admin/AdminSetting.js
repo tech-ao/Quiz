@@ -82,7 +82,7 @@ const AdminSetting = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4 ">
           <div className="sub-container">
             <div className="flex-grow-1">
               <Card className="p-4 shadow-lg profile-card">

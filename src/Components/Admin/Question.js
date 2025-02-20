@@ -147,7 +147,7 @@ const QuestionListPage = () => {
       <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container p-4">
           {!showDetailsContainer ? (
             <div>
               <Row className="align-items-center mb-4">
