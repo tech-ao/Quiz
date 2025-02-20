@@ -140,35 +140,25 @@ const StudentList = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
-          <Row className="sticky-top bg-white py-3">
-            <Col md={6}>
-              <h2 className="fw-bold">Student List</h2>
-            </Col>
-            <Col md={6}>
-                <InputGroup className="d-flex"  >
-                  <Form.Control
-                    placeholder="Search students by name or email"
-                    value={searchTerm}
-                    onChange={handleSearch}
-                    className="input-box"
-                    style={{
-                      marginRight: '15px', // Adds gap between input and button
-                       maxWidth: window.innerWidth <= 768 ? "50%" : "400px"
-                    }}
-                  />
-                  <Button
-                    variant="outline-success"
-                    onClick={handleOpenAddStudent}
-                    className="search-btn"
-                    style={{
-                      minWidth: '150px', // Ensures button stays wide enough
-                    }}
-                  >
-                    <i className="bi bi-person-plus me-2"></i> Add Student
-                  </Button>
-                </InputGroup>
-              </Col>
-          </Row>
+        <Row className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
+  <Col md={6}>
+    <h2 className="fw-bold">Student List</h2>
+  </Col>
+  <Col md={6} className="d-flex align-items-center" style={{ marginTop: window.innerWidth <= 768 ? "10px" : "20px" }}>
+    <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px", marginRight: '15px' }}>
+      <Form.Control
+        placeholder="Search students by name or email"
+        value={searchTerm}
+        onChange={handleSearch}
+      />
+    </InputGroup>
+    <Button variant="outline-success" onClick={handleOpenAddStudent}>
+      <i className="bi bi-person-plus me-2"></i> Add Student
+    </Button>
+  </Col>
+</Row>
+
+
          <div 
   className="sub-container mb-4"
   style={{
