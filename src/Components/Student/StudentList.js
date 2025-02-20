@@ -166,9 +166,7 @@ const StudentList = () => {
     overflow: "auto",
   }}
 >
-
-           
-            <div className="table-responsive">
+ <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
                   <tr>
@@ -228,8 +226,7 @@ const StudentList = () => {
                   )}
                 </tbody>
               </Table>
-            </div>
-            <div className="d-flex justify-content-center mt-4">
+               <div className="d-flex justify-content-center mt-4">
               <ReactPaginate
                 pageCount={totalPages}
                 pageRangeDisplayed={10}
@@ -247,6 +244,10 @@ const StudentList = () => {
                 nextLinkClassName="page-link"
               />
             </div>
+            </div>
+           
+           
+           
           </div>
         </Container>
       </div>

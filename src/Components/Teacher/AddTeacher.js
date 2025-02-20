@@ -137,7 +137,9 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form onSubmit={handleSubmit}>
 
                     <Row>
+                        <h4>Personal Information</h4>
                         <Col>
+                        
                             <Form.Group>
                                 <Form.Label>Full Name</Form.Label>
                                 <Form.Control
@@ -258,6 +260,7 @@ const AddTeacher = ({ show, onClose }) => {
                     </Row>
 
                     <Row>
+                        <h4>Education Qualification</h4>
                         <Col>
                             <Form.Group>
                                 <Form.Label>institute Attended</Form.Label>

@@ -2,6 +2,7 @@ body {
   background-color: #e7ffec;
 }
 
+
 .modalbg input,
 .modalbg select,
 .modalbg textarea {
@@ -43,10 +44,7 @@ body {
   transform: translateX(-100%);
 }
 
-/* Navigation links */
-.nav-item {
-  margin: 5px 0;
-}
+
 
 /* Styling for links */
 .nav-link {
@@ -129,9 +127,9 @@ body {
   position: fixed;
   top: 100px;
   left: 250px;
+  
   width: calc(100% - 250px);
   height: calc(100vh - 100px);
-  overflow-y: auto;
   transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
 }
 
@@ -173,7 +171,6 @@ body {
   padding: 10px;
   border-radius: 20px;
   max-height: 90%;
-  overflow-y: auto;
   overflow-x: hidden;
   word-wrap: break-word;
 }
@@ -198,6 +195,8 @@ body {
   .main-container {
     width: 100%;
     margin-left: 0;
+    overflow-y: auto;
+
     
   }
 }
