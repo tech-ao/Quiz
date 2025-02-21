@@ -148,22 +148,26 @@ const QuestionListPage = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4">
+{/* Sticky Header */}
+<div className="sticky-header">
+    <Row className="align-items-center">
+      <Col xs={6}>
+        <h2>Question List</h2>
+      </Col>
+      <Col xs={6} className="text-end">
+        <Button
+          variant="success"
+          style={{marginTop:"20px"}}
+          onClick={() => setShowAddQuestionModal(true)}
+        >
+          Add Question
+        </Button>
+      </Col>
+    </Row>
+  </div>
+
           {!showDetailsContainer ? (
-            <div>
-              <Row className="align-items-center mb-4">
-                <Col xs={6}>
-                  <h2>Question List</h2>
-                </Col>
-                <Col xs={6} className="text-end">
-                  <Button
-                    variant="success"
-                    className="me-2"
-                    onClick={() => setShowAddQuestionModal(true)}
-                  >
-                    Add Question
-                  </Button>
-                </Col>
-              </Row>
+            
               <Table bordered hover>
                 <thead>
                   <tr>
@@ -191,7 +195,7 @@ const QuestionListPage = () => {
                   ))}
                 </tbody>
               </Table>
-            </div>
+            
           ) : (
             <div>
               <Row className="align-items-center mb-4">

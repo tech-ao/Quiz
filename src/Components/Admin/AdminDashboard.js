@@ -74,7 +74,7 @@ function AdminDashboard() {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container  ">
           <div className="sub-container">
             <Row className="sticky-title align-items-center mb-4">
               <h2 className="fw-bold text-left">Admin Dashboard</h2>
@@ -94,7 +94,7 @@ function AdminDashboard() {
                   ].map((item, index) => (
                     <Col lg={6} md={6} sm={12} key={index}>
                       <Card 
-                        className="dashboard-card shadow-sm p-4 d-flex mb-4" 
+                        className="dashboard-card shadow-sm  d-flex mb-4" 
                         style={{ minWidth: "340px", maxWidth: "100%" }}  
                         onClick={() => handleCardClick(item.label)}
                       >
@@ -119,7 +119,7 @@ function AdminDashboard() {
 
               {/* Calendar Section (Right Side) */}
               <Col lg={4} className="d-flex align-items-stretch">
-                <Card className="calendar-card shadow-sm p-4 "   >
+                <Card className="calendar-card shadow-sm  "   >
                   <Card.Body>
                     <h5 className="calendar-heading text-center fw-bold ">Calendar</h5>
                     <div className="d-flex justify-content-center">
@@ -131,7 +131,7 @@ function AdminDashboard() {
             </Row>
 
             {/* Filter Options */}
-            <Row className="g-4 mt-4">
+            <Row className="g-4 ">
               <Col lg={6} md={12} sm={12}>
                 <Card className="filter-card shadow-sm p-4 rounded">
                   <Card.Body>

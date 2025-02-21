@@ -63,14 +63,13 @@
 }
 
 /* =================== Buttons & Icons =================== */
-.me-1 {
-  color: white;
-}
+
 
 /* Success Button Styling */
 .btn-success {
   background-color: #006838;
   border-color: #006838;
+  
 }
 
 .btn-success:hover {
