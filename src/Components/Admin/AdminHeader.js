@@ -83,7 +83,7 @@ const togglePasswordPopup = () => {
         <Col md={3} className="d-flex align-items-center">
           <Link to="/adminDashboard">
             <img
-              className="logo1 me-2"
+              className="logo1 me-2 m-4"
               src={logo}
               alt="Math Gym Logo"
               style={{
@@ -94,8 +94,9 @@ const togglePasswordPopup = () => {
               }}
             />
           </Link>
-          <Navbar.Brand className="text-success fw-bold ms-2">
-            MATH GYM
+          <Navbar.Brand className="text-success fw-bold ms-5">
+            <div style={{ fontSize: "1.2em" }}>MATH GYM</div>
+            <div style={{ fontSize: "0.8em" }}>Flex Your Brain</div>
           </Navbar.Brand>
         </Col>
         <Col md={5} className="text-center">
@@ -105,7 +106,7 @@ const togglePasswordPopup = () => {
         </Col>
         <Col
           md={4}
-          className="d-flex justify-content-end align-items-center header-icon-group"
+          className="d-flex justify-content-end  align-items-center header-icon-group"
         >
           <Button
             variant="outlined"
@@ -131,15 +132,26 @@ const togglePasswordPopup = () => {
           >
             <RiGlobalLine size={ICON_SIZE} />
           </Button>
-          <div className="position-relative" ref={popupRef}>
+          <div className="position-relative" style={{marginRight:"20px"}} ref={popupRef}>
           <Button
-  variant="link"
-  onClick={togglePopup}
-  className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
-    >
-  <RiAdminLine size={ICON_SIZE} className="me-1" />
-  <span className="admin-text">{adminFullName}</span>
-</Button>  {/* <-- Closing tag moved here */} 
+              variant="link"
+              onClick={togglePopup}
+              className="text-decoration-none fw-bold d-flex flex-column align-items-center"
+              style={{ padding: "0" }}
+            >
+              <RiAdminLine size={ICON_SIZE} style={{ marginTop:"20px"}} />
+              
+            </Button> {/* <-- Closing tag moved here */} 
+            <span
+                className="text-success"
+                style={{
+               
+                  marginTop: "25px",
+                  textAlign: "center",
+                }}
+              >
+                {adminFullName}
+              </span>
 
 {showPopup && (
   <div className="admin-popup">
@@ -184,6 +196,7 @@ const togglePasswordPopup = () => {
                   maxWidth: "60px",
                   border: "1px solid #000",
                   borderRadius: "5px",
+                  margin:"10px"
                 }}
               />
             </Link>

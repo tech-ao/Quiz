@@ -34,12 +34,7 @@ button {
 }
 
 .dropdown-toggle {
-  background-color: #6c757d;
   border: none;
-}
-
-.dropdown-toggle:hover {
-  background-color: #5a6268;
 }
 
 .table thead th {

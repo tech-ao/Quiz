@@ -27,18 +27,17 @@ const getStatusColor = (status) => {
 
 const StudentList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
 
   const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
+    setIsSidebarVisible(prev => !prev);
   };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setIsSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setIsSidebarVisible(false); // Hide sidebar by default on mobile
-      }
+      setIsSidebarVisible(window.innerWidth >= 768);
+      setIsSmallScreen(window.innerWidth < 768);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -74,13 +73,27 @@ const StudentList = () => {
     setCurrentPage(pageNumber - 1);
   };
 
+  // Helper function to extract the numeric grade (if gradeName is in "Level X" format)
+  const extractGradeNumber = (gradeName) => {
+    if (typeof gradeName === 'string' && gradeName.toLowerCase().includes('level')) {
+      return gradeName.toLowerCase().replace('level', '').trim();
+    }
+    return gradeName.toString().trim();
+  };
+
+  // Filter students by search term and selected grade filter (if any)
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
-    ? students.data.searchAndListStudentResult.filter((student) =>
-      [student.firstName, student.email]
-        .join(' ')
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase())
-    )
+    ? students.data.searchAndListStudentResult.filter((student) => {
+        const matchesSearch = [student.firstName, student.email]
+          .join(' ')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+        const studentGradeValue = extractGradeNumber(student.gradeName);
+        const matchesGrade = selectedGrade !== null 
+          ? studentGradeValue === selectedGrade.toString() 
+          : true;
+        return matchesSearch && matchesGrade;
+      })
     : [];
 
   const handleOpenAddStudent = () => setShowAddStudent(true);
@@ -139,34 +152,98 @@ const StudentList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 ">
-        <Row className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
-  <Col md={6}>
-    <h2 className="fw-bold" style={{ marginTop: window.innerWidth <= 768 ? "0px" : "20px" }}>Student List</h2>
-  </Col>
-  <Col md={6} className="d-flex align-items-center" style={{ marginTop: window.innerWidth <= 768 ? "10px" : "0px" }}>
-    <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px", marginRight: '15px' }}>
-      <Form.Control
-        placeholder="Search students by name or email"
-        value={searchTerm}
-        onChange={handleSearch}
-      />
-    </InputGroup>
-    <Button variant="outline-success" onClick={handleOpenAddStudent}>
-      <i className="bi bi-person-plus me-2"></i> Add Student
-    </Button>
-  </Col>
-</Row>
+        <Container className="main-container p-4">
+          {/* Sticky Header */}
+          <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
+            {isSmallScreen ? (
+              <>
+                {/* Row 1: Title */}
+                <Row>
+                  <Col>
+                    <h2 className="fw-bold ">Student List</h2>
+                  </Col>
+                </Row>
+                {/* Row 2: Search bar */}
+                <Row className="mt-2">
+                  <Col>
+                    <InputGroup style={{ maxWidth: "400px", margin: "0 auto" }}>
+                      <Form.Control
+                        placeholder="Search students by name or email"
+                        value={searchTerm}
+                        onChange={handleSearch}
+                      />
+                    </InputGroup>
+                  </Col>
+                </Row>
+                {/* Row 3: Filter icon (left) and Add Student button (right) */}
+                <Row className="mt-2">
+                  <Col xs={6} className="d-flex justify-content-center">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ width: "100%" }}>
+                        <i className="bi bi-filter"></i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setSelectedGrade(null)}>
+                          Clear Filter
+                        </Dropdown.Item>
+                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(level => (
+                          <Dropdown.Item key={level} onClick={() => setSelectedGrade(level)}>
+                            Level {level}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Col>
+                  <Col xs={6} className="d-flex justify-content-center">
+                    <Button
+                      variant="outline-success"
+                      onClick={handleOpenAddStudent}
+                      style={{ width: "100%" }}
+                    >
+                      <i className="bi bi-person-plus me-2"></i> Add Student
+                    </Button>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              <Row>
+                <Col md={6}>
+                  <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
+                </Col>
+                <Col md={6} className="d-flex align-items-center">
+                  <InputGroup style={{ maxWidth: "400px", marginRight: '15px' }}>
+                    <Form.Control
+                      placeholder="Search students by name or email"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                    />
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px" }}>
+                        <i className="bi bi-filter"></i>
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setSelectedGrade(null)}>
+                          Clear Filter
+                        </Dropdown.Item>
+                        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(level => (
+                          <Dropdown.Item key={level} onClick={() => setSelectedGrade(level)}>
+                            Level {level}
+                          </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </InputGroup>
+                  <Button variant="outline-success" onClick={handleOpenAddStudent}>
+                    <i className="bi bi-person-plus me-2"></i> Add Student
+                  </Button>
+                </Col>
+              </Row>
+            )}
+          </div>
 
-
-         <div 
-  className="sub-container mb-4"
-  style={{
-    flex: 1,
-    overflow: "auto",
-  }}
->
- <div className="table-responsive">
+          {/* Main Table */}
+          <div className="sub-container mb-4" style={{ flex: 1, overflow: "auto" }}>
+            <div className="table-responsive">
               <Table hover className="mb-0">
                 <thead>
                   <tr>
@@ -184,39 +261,43 @@ const StudentList = () => {
                 </thead>
                 <tbody>
                   {filteredStudents.length > 0 ? (
-                    filteredStudents.slice(currentPage * studentsPerPage, (currentPage + 1) * studentsPerPage).map((student, index) => (
-                      <tr key={student.studentId || index}>
-                        <td>{index + 1}</td>
-                        <td>{student.registerNumber}</td>
-                        <td>{`${student.firstName} ${student.lastName}`}</td>
-                        <td>{student.genderName}</td>
-                        <td>{student.email}</td>
-                        <td>{student.phoneNumber}</td>
-                        <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
-                        <td>{student.gradeName}</td>
-                        <td>
-                          <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>{student.statusName}</Badge>
-                        </td>
-                        <td>
-                          <Dropdown>
-                            <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>
-                              Actions
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              <Dropdown.Item onClick={() => handleOpenViewStudent(student.studentId)}>
-                                <i className="bi bi-eye me-2"></i>View
-                              </Dropdown.Item>
-                              <Dropdown.Item onClick={() => handleOpenEditStudent(student.studentId)}>
-                                <i className="bi bi-pencil me-2"></i>Edit
-                              </Dropdown.Item>
-                              <Dropdown.Item onClick={() => handleOpenDeleteModal(student.studentId)}>
-                                <i className="bi bi-trash me-2"></i>Delete
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
-                        </td>
-                      </tr>
-                    ))
+                    filteredStudents
+                      .slice(currentPage * studentsPerPage, (currentPage + 1) * studentsPerPage)
+                      .map((student, index) => (
+                        <tr key={student.studentId || index}>
+                          <td>{currentPage * studentsPerPage + index + 1}</td>
+                          <td>{student.registerNumber}</td>
+                          <td>{`${student.firstName} ${student.lastName}`}</td>
+                          <td>{student.genderName}</td>
+                          <td>{student.email}</td>
+                          <td>{student.phoneNumber}</td>
+                          <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
+                          <td>{student.gradeName}</td>
+                          <td>
+                            <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
+                              {student.statusName}
+                            </Badge>
+                          </td>
+                          <td>
+                            <Dropdown>
+                              <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>
+                                Actions
+                              </Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                <Dropdown.Item onClick={() => handleOpenViewStudent(student.studentId)}>
+                                  <i className="bi bi-eye me-2"></i>View
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => handleOpenEditStudent(student.studentId)}>
+                                  <i className="bi bi-pencil me-2"></i>Edit
+                                </Dropdown.Item>
+                                <Dropdown.Item onClick={() => handleOpenDeleteModal(student.studentId)}>
+                                  <i className="bi bi-trash me-2"></i>Delete
+                                </Dropdown.Item>
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </td>
+                        </tr>
+                      ))
                   ) : (
                     <tr>
                       <td colSpan="10" className="text-center">
@@ -226,28 +307,25 @@ const StudentList = () => {
                   )}
                 </tbody>
               </Table>
-               <div className="d-flex justify-content-center mt-4">
-              <ReactPaginate
-                pageCount={totalPages}
-                pageRangeDisplayed={10}
-                marginPagesDisplayed={2}
-                onPageChange={(e) => handlePageChange(e.selected + 1)}
-                containerClassName="pagination"
-                activeClassName="active"
-                pageClassName="page-item"
-                pageLinkClassName="page-link"
-                previousLabel="&laquo;"
-                nextLabel="&raquo;"
-                previousClassName="page-item"
-                nextClassName="page-item"
-                previousLinkClassName="page-link"
-                nextLinkClassName="page-link"
-              />
+              <div className="d-flex justify-content-center mt-4">
+                <ReactPaginate
+                  pageCount={totalPages}
+                  pageRangeDisplayed={10}
+                  marginPagesDisplayed={2}
+                  onPageChange={(e) => handlePageChange(e.selected + 1)}
+                  containerClassName="pagination"
+                  activeClassName="active"
+                  pageClassName="page-item"
+                  pageLinkClassName="page-link"
+                  previousLabel="&laquo;"
+                  nextLabel="&raquo;"
+                  previousClassName="page-item"
+                  nextClassName="page-item"
+                  previousLinkClassName="page-link"
+                  nextLinkClassName="page-link"
+                />
+              </div>
             </div>
-            </div>
-           
-           
-           
           </div>
         </Container>
       </div>

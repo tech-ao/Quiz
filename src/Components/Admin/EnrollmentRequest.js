@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Form, Button, Badge, Spinner, InputGroup, Pagination } from "react-bootstrap";
+import { Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -36,10 +36,20 @@ const EnrollmentRequestList = () => {
   }, []);
 
   const studentsPerPage = 10;
+
+  // Filter requests by search term (matching first name or email)
+  const filteredRequests = requests.filter((request) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      request.firstName.toLowerCase().includes(searchLower) ||
+      request.email.toLowerCase().includes(searchLower)
+    );
+  });
+
   const indexOfLastRequest = currentPage * studentsPerPage;
   const indexOfFirstRequest = indexOfLastRequest - studentsPerPage;
-  const currentRequests = requests.slice(indexOfFirstRequest, indexOfLastRequest);
-  const totalPages = Math.ceil(requests.length / studentsPerPage);
+  const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
+  const totalPages = Math.ceil(filteredRequests.length / studentsPerPage);
 
   useEffect(() => {
     const paginationDetail = {
@@ -135,26 +145,35 @@ const EnrollmentRequestList = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 ">
           <div className="sticky-header">
-            <Row className="align-items-center">
-              <Col md={6}><h2 className="fw-bold">Enrollment Request</h2></Col>
-                      <Col md={6} className="d-flex justify-content-end">
-          <div
-            style={{
-              display: "flex",
-              gap: "10px",
-              alignItems: "center",
-            }}
-          >
-            <Button variant="success" onClick={handleApprove}>Approve</Button>
-            <Button variant="danger" onClick={handleDeny}>Reject</Button>
-          </div>
-        </Col>
-
+            <Row className="align-items-center" style={{ marginTop: "20px" }}>
+              <Col md={6}>
+                <h2 className="fw-bold">Enrollment Request</h2>
+              </Col>
+              <Col md={6} className="d-flex justify-content-end align-items-center">
+                <Form.Control
+                  type="text"
+                  placeholder="Search name or email"
+                  value={searchTerm}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  style={{ maxWidth: "400px", marginRight: "20px" }}
+                />
+                <Button variant="success" onClick={handleApprove}>
+                  Approve
+                </Button>
+                <Button variant="danger" onClick={handleDeny}>
+                  Reject
+                </Button>
+              </Col>
             </Row>
           </div>
           <div className="sub-container">
             {loading ? (
-              <div className="text-center"><Spinner animation="border" /></div>
+              <div className="text-center">
+                <Spinner animation="border" />
+              </div>
             ) : error ? (
               <div className="alert alert-danger">{error}</div>
             ) : (
@@ -175,15 +194,25 @@ const EnrollmentRequestList = () => {
                 <tbody>
                   {currentRequests.map((request, index) => (
                     <tr key={request.id || index}>
-                      <td><Form.Check type="checkbox" onChange={() => handleSelectRequest(request.studentId)} /></td>
+                      <td>
+                        <Form.Check type="checkbox" onChange={() => handleSelectRequest(request.studentId)} />
+                      </td>
                       <td>{indexOfFirstRequest + index + 1}</td>
                       <td>{request.studentId}</td>
                       <td>{request.firstName}</td>
                       <td>{request.email}</td>
                       <td>{request.phoneNumber}</td>
                       <td>{request.genderName}</td>
-                      <td><Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>{request.statusName}</Badge></td>
-                      <td><Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>View</Button></td>
+                      <td>
+                        <Badge bg={request.statusName === "Pending" ? "warning" : "danger"}>
+                          {request.statusName}
+                        </Badge>
+                      </td>
+                      <td>
+                        <Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
+                          View
+                        </Button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -192,7 +221,9 @@ const EnrollmentRequestList = () => {
             <Pagination className="justify-content-center">
               <Pagination.Prev onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} disabled={currentPage === 1} />
               {[...Array(totalPages).keys()].map((number) => (
-                <Pagination.Item key={number} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>{number + 1}</Pagination.Item>
+                <Pagination.Item key={number} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
+                  {number + 1}
+                </Pagination.Item>
               ))}
               <Pagination.Next onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))} disabled={currentPage === totalPages} />
             </Pagination>
