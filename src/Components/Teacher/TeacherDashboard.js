@@ -42,11 +42,10 @@ const TeacherDashboard = () => {
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 mx-auto">
-  <div className="sub-container">
-
+  <div className="sub-container dashboard-container">
           <Row
             className="mt-4 g-4"
-            style={{ width: "97%"}}
+            style={{paddingRight:"100px", paddingTop:'40px'}}
           >
             {/* Left Column - Stats Cards */}
             <Col xs={12} lg={5} xl={4} className="box-details">
