@@ -7,7 +7,7 @@
   height: 100vh;
   background-color: #e7ffec;
   transition: transform 0.3s ease-in-out;
-  z-index: 1050; /* Ensures it overlays the content */
+  z-index: 1050;
   overflow-y: auto;
 }
 
@@ -31,7 +31,6 @@
 
 /* Hide Scrollbar for Sidebar */
 .sidebar-container::-webkit-scrollbar {
-  width: 5px;
   display: none;
 }
 
@@ -44,32 +43,78 @@
 .dashboard-container {
   background-color: #fff;
   min-height: 100vh;
-  margin-left: 250px; /* Matches sidebar width */
-  margin-top: 43px;
-  padding: 20px;
-  width: calc(100% - 250px);
+  margin-left: -25px;
+  padding: 40px;
+  width: calc(109% - 160px);
   overflow-y: auto;
-  transition: margin-left 0.3s ease;
+  transition: margin-left 0.3sease;
+  margin-top: 100px;
+  
 }
 
 /* Adjust Dashboard for Mobile */
+
 @media (max-width: 768px) {
   .dashboard-container {
+      margin-left: 0;
+      margin-top: 60px;
+      padding: 0px;
+      width: 136%;
+      max-width: 542px;
+      margin: auto;
+      margin-left: 36px;
+      justify-content: center;
+  }
+}
+@media (max-width: 998px) {
+  .dashboard-container {
+    background-color: #fff;
+  min-height: 100vh;
+  margin-left: 195px;
+  padding: 40px;
+  width: calc(109% - 160px);
+  overflow-y: auto;
+  transition: margin-left 0.3sease;
+  margin-top: 10px;
+  }
+}
+
+@media (max-width: 568px) {
+  .dashboard-container {
     margin-left: 0;
-    margin-top: 60px;
-    padding: 15px;
-    width: 100%;
+    /* margin-top: 60px; */
+    padding: 0px;
+    width: 126%;
+    max-width: 540;
+    margin: auto;
+    margin-left: 4px;
+    justify-content: center;
+  }
+}
+
+
+@media (max-width: 368px) {
+  .dashboard-container {
+    margin-left: 0;
+    /* margin-top: 60px; */
+    padding: 0px;
+    width: 131%;
+    max-width: 540;
+    margin: auto;
+    margin-left: 4px;
+    justify-content: center;
+  }
+  .row-2{
+     margin-top:'10px'
   }
 }
 
 /* =================== Buttons & Icons =================== */
 
-
 /* Success Button Styling */
 .btn-success {
   background-color: #006838;
   border-color: #006838;
-  
 }
 
 .btn-success:hover {
@@ -83,6 +128,7 @@
   height: auto !important;
   max-height: 100vw;
   overflow-y: auto;
+  width: 120%;
 }
 
 /* =================== Stats Cards Responsive Styling =================== */
@@ -126,8 +172,8 @@
   justify-content: center;
   background-color: #198754;
   color: white;
-  border: 4px solid #198754; /* Increased border size */
-  border-radius: 8px; /* Slightly rounded corners */
+  border: 4px solid #198754;
+  border-radius: 8px;
   transition: background 0.3s ease-in-out, border 0.3s ease-in-out;
   text-decoration: none;
 }
@@ -154,16 +200,16 @@
 @media (max-width: 575px) {
   .icon-only-button {
     background: transparent !important;
-    border: none !important; /* Remove border in mobile */
+    border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
   }
 
   .icon-only {
-    color: #198754 !important; /* Green color for icons */
+    color: #198754 !important;
   }
 
   .button-text {
-    display: none; /* Hide text in mobile view */
+    display: none;
   }
 }

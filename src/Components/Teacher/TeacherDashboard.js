@@ -18,7 +18,6 @@ const TeacherDashboard = () => {
   );
 
   const toggleSidebar = () => {
-    console.log("Sidebar toggled!");
     setIsSidebarVisible((prev) => !prev);
   };
 
@@ -42,13 +41,14 @@ const TeacherDashboard = () => {
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container fluid className="dashboard-container p-4">
+        <Container className="main-container p-4 mx-auto">
+  <div className="sub-container dashboard-container">
           <Row
             className="mt-4 g-4"
-            style={{ width: "100%", paddingBottom: "70px" }}
+            style={{paddingRight:"100px", paddingTop:'40px'}}
           >
             {/* Left Column - Stats Cards */}
-            <Col xs={12} lg={5} xl={4}>
+            <Col xs={12} lg={5} xl={4} className="box-details">
               {statsData.map((stat, index) => (
                 <div key={index} className="mb-4 my-1">
                   <Card className="stats-card border-0">
@@ -165,6 +165,7 @@ const TeacherDashboard = () => {
               </Card>
             </Col>
           </Row>
+          </div>
         </Container>
       </div>
     </div>

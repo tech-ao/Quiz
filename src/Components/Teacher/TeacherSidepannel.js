@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './TeacherSidepannel.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const TeacherSidePanel = () => {
   const location = useLocation();
+  const navigate = useNavigate(); // Fix: Use navigate correctly
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
   const [openMenus, setOpenMenus] = useState({
     onlineClass: false,
     attendance: false,
     lessonPlan: false,
     assignment: false
   });
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  
 
   const toggleMenu = (menuName) => {
     setOpenMenus(prev => ({
@@ -20,16 +24,22 @@ const TeacherSidePanel = () => {
     }));
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("teacherName");
+    localStorage.removeItem("teacherId");
+    setShowLogoutConfirm(false);
+    navigate("/"); // Fix: Ensure proper navigation
+  };
+
   return (
     <div className="side-panel">
-        <div className="menu-content">
+      <div className="menu-content">
         <div className="menu-section">
           <ul className="nav flex-column">
-            {/* Dashboard */}
             <li className="nav-item">
               <Link
                 to="/teacherDashboard"
-                className={`nav-link ${location.pathname === '/dashboard' ? 'active' : ''}`}
+                className={`nav-link ${location.pathname === '/teacherDashboard' ? 'active' : ''}`} 
               >
                 <div className="icon-with-text">
                   <i className="bi bi-grid"></i>
@@ -38,11 +48,10 @@ const TeacherSidePanel = () => {
               </Link>
             </li>
 
-            {/* Student */}
             <li className="nav-item">
               <Link
                 to="/studentdata"
-                className={`nav-link ${location.pathname === '/student' ? 'active' : ''}`}
+                className={`nav-link ${location.pathname === '/studentdata' ? 'active' : ''}`}
               >
                 <div className="icon-with-text">
                   <i className="bi bi-person"></i>
@@ -51,7 +60,7 @@ const TeacherSidePanel = () => {
               </Link>
             </li>
 
-            {/* Online Class with dropdown */}
+            {/* Online Class */}
             <li className="nav-item">
               <div
                 className={`nav-link ${openMenus.onlineClass ? 'active' : ''}`}
@@ -148,40 +157,11 @@ const TeacherSidePanel = () => {
               )}
             </li>
 
-            {/* Assignment */}
-            <li className="nav-item">
-              <div
-                className={`nav-link ${openMenus.assignment ? 'active' : ''}`}
-                onClick={() => toggleMenu('assignment')}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="icon-with-text">
-                  <i className="bi bi-file-text"></i>
-                  <span className="nav-text">Assignment</span>
-                  <i className={`bi ${openMenus.assignment ? 'bi-chevron-down' : 'bi-chevron-right'} dropdown-icon`}></i>
-                </div>
-              </div>
-              {openMenus.assignment && (
-                <ul className="nav flex-column sub-nav">
-                  <li className="nav-item">
-                    <Link to="/assignment-list" className="nav-link">
-                      <span className="sub-nav-text">Assignment List</span>
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/completed-assignments" className="nav-link">
-                      <span className="sub-nav-text">Completed Assignments</span>
-                    </Link>
-                  </li>
-                </ul>
-              )}
-            </li>
-
             {/* Fee's */}
             <li className="nav-item">
               <Link
                 to="/paymentHistory"
-                className={`nav-link ${location.pathname === '/fees' ? 'active' : ''}`}
+                className={`nav-link ${location.pathname === '/paymentHistory' ? 'active' : ''}`}
               >
                 <div className="icon-with-text">
                   <i className="bi bi-cash"></i>
@@ -191,20 +171,34 @@ const TeacherSidePanel = () => {
             </li>
           </ul>
         </div>
+
         {/* Logout */}
         <div className="logout-section">
-        <ul className="nav flex-column">
+          <ul className="nav flex-column">
             <li className="nav-item">
-                <Link to="/logout" className="nav-link">
-                    <div className="icon-with-text log">
-                        <i className="bi bi-box-arrow-right" style={{ color: 'white' }}></i>
-                        <span className="nav-text" style={{ color: 'white' }}>Log Out</span>
-                    </div>
-                </Link>
+              <div className="nav-link" onClick={() => setShowLogoutConfirm(true)} style={{ cursor: 'pointer' }}>
+                <div className="icon-with-text log">
+                  <i className="bi bi-box-arrow-right" style={{ color: 'white' }}></i>
+                  <span className="nav-text" style={{ color: 'white' }}>Log Out</span>
+                </div>
+              </div>
             </li>
-        </ul>
-    </div>
-      </div>    
+          </ul>
+        </div>
+      </div>
+
+      {/* Logout Confirmation */}
+      {showLogoutConfirm && (
+        <div className="logout-confirmation-popup">
+          <div className="popup-content">
+            <h5>Are you sure you want to logout?</h5>
+            <div className="popup-buttons">
+              <button className="btn btn-danger w-100" onClick={handleLogout}>Yes</button>
+              <button className="btn btn-secondary w-100" onClick={() => setShowLogoutConfirm(false)}>No</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -69,11 +69,11 @@
 
 /* Logout section fixed at the bottom */
 .logout-section {
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  width: 100%;
+  width: 230px;
   background-color: #198754;
-  padding: 10px 0;
+  padding: 3px 0;
   text-align: center;
 }
 
