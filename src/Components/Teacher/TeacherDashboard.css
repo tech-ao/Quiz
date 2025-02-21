@@ -61,6 +61,25 @@
     width: 100%;
   }
 }
+@media (max-width: 768px) {
+  .main-container {
+    width: 100%;
+    max-width: 100%;  /* Expands width on mobile */
+    padding: 10px;
+    display: flex;
+    justify-content: center; /* Centers content */
+  }
+  
+  .sub-container {
+    width: 128%;
+    max-width: 400px; /* Adjust width for mobile */
+    margin: auto;  /* Ensures centering */
+    justify-content: center;
+    padding-right: 16%;
+    padding-left: 0;
+  }
+}
+
 
 /* =================== Buttons & Icons =================== */
 .me-1 {

@@ -22,7 +22,8 @@ const TeacherSidePanel = () => {
 
   return (
     <div className="side-panel">
-        <div className="menu-content">
+      <div className="menu-content">
+        {/* Menu sections */}
         <div className="menu-section">
           <ul className="nav flex-column">
             {/* Dashboard */}
@@ -191,20 +192,21 @@ const TeacherSidePanel = () => {
             </li>
           </ul>
         </div>
-        {/* Logout */}
+
+        {/* Logout section */}
         <div className="logout-section">
-        <ul className="nav flex-column">
+          <ul className="nav flex-column">
             <li className="nav-item">
-                <Link to="/logout" className="nav-link">
-                    <div className="icon-with-text log">
-                        <i className="bi bi-box-arrow-right" style={{ color: 'white' }}></i>
-                        <span className="nav-text" style={{ color: 'white' }}>Log Out</span>
-                    </div>
-                </Link>
+              <Link to="/logout" className="nav-link">
+                <div className="icon-with-text log">
+                  <i className="bi bi-box-arrow-right" style={{ color: 'white' }}></i>
+                  <span className="nav-text" style={{ color: 'white' }}>Log Out</span>
+                </div>
+              </Link>
             </li>
-        </ul>
-    </div>
-      </div>    
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
