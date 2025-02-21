@@ -11,6 +11,7 @@
 
 }
 
+
 /* Ensure Assigned Classes title is aligned to the top */
 .sticky-header h2 {
   margin: 0 !important;
@@ -58,9 +59,17 @@
 @media (max-width: 575.98px) {
 
   .sticky-header{
-    max-height: 80px !important; /* Adjusted height for small screens */
+    max-height: 120px !important; /* Adjusted height for small screens */
     align-items: center;
 
+}
+.online-sticky-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1050; /* Ensures it stays on top */
+  height: 80px;
+  text-align: center;
 }
 
   .sticky-header h2 {
@@ -78,4 +87,18 @@
   .sticky-header h2 {
     font-size: 1.5rem !important;
   }
+}
+@media (min-width: 768px){
+
+  .online-sticky-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1050; /* Ensures it stays on top */
+    padding: 10px;
+  height: 80px;
+  margin-top: 20px;
+  }
+  
+
 }

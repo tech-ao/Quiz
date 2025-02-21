@@ -71,10 +71,14 @@ const OnlineClass = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container ">
+        <div className="online-sticky-header">
+        <h2>Schedule Class</h2>
+        </div>
+
           <div className="sub-container">
             {/* Teacher's New Class Schedule Form */}
-            <h2 className="text-center mb-4">Schedule New Class</h2>
+           
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col md={6} className="mb-3">

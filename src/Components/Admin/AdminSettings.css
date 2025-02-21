@@ -75,7 +75,7 @@ button[type="submit"] {
   border: none;
   padding: 10px 16px;
   font-weight: bold;
-  width: 100%; /* Makes buttons more responsive */
+  width: 30%; /* Makes buttons more responsive */
 }
 
 button[type="submit"]:hover {
@@ -262,8 +262,7 @@ button.edit-btn:focus {
     /* Ensure buttons take up full width */
     button[type="submit"],
     button.edit-btn {
-      width: 100%;
-      padding: 12px;
+      width: 90%;
     }
   }
 }

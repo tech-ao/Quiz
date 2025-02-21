@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Table } from "react-bootstrap";
 import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
@@ -67,6 +67,24 @@ const StudentAttendance = ({
     const student = studentList.find((s) => s.id === selectedStudentId);
     setSelectedPerson(student);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarVisible(true); // Show sidebar by default on desktop
+      } else {
+        setSidebarVisible(false); // Hide sidebar by default on mobile
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Call once to adjust initial state
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);

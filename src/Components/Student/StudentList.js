@@ -142,9 +142,9 @@ const StudentList = () => {
         <Container className="main-container p-4 ">
         <Row className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
   <Col md={6}>
-    <h2 className="fw-bold">Student List</h2>
+    <h2 className="fw-bold" style={{ marginTop: window.innerWidth <= 768 ? "0px" : "20px" }}>Student List</h2>
   </Col>
-  <Col md={6} className="d-flex align-items-center" style={{ marginTop: window.innerWidth <= 768 ? "10px" : "20px" }}>
+  <Col md={6} className="d-flex align-items-center" style={{ marginTop: window.innerWidth <= 768 ? "10px" : "0px" }}>
     <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px", marginRight: '15px' }}>
       <Form.Control
         placeholder="Search students by name or email"
