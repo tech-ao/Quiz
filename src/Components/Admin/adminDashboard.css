@@ -123,13 +123,11 @@
 /* Fix container and row overflow issues */
 .row {
   margin: 0;
-  flex-grow: 1;
   flex-wrap: wrap;
 }
 
 .col {
   padding: 0;
-  overflow-x: hidden;
 }
 
 /* Ensure calendar, quiz, and filter cards fit properly */

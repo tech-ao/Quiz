@@ -31,6 +31,8 @@
 .view-btn {
   min-width: 80px !important;
   text-align: center !important;
+  height: 40px;
+  margin-top: 10px;
 }
 
 /* Sticky Header (100% width) */

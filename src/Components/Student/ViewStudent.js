@@ -97,6 +97,7 @@ const ViewStudentPanel = ({ show, onClose }) => {
             <strong>Email:</strong>
             <p>{studentData?.email || "N/A"}</p>
           </Col>
+          
         </Row>
         <Row className="mb-3">
           <Col>
@@ -105,13 +106,12 @@ const ViewStudentPanel = ({ show, onClose }) => {
               {studentData?.countryCode || ""} {studentData?.phoneNumber || "N/A"}
             </p>
           </Col>
-        </Row>
-        <Row className="mb-3">
           <Col>
             <strong>Date of Birth:</strong>
             <p>{formatDate(studentData?.dob)}</p>
           </Col>
         </Row>
+      
         <Row className="mb-3">
           <Col>
             <strong>Gender:</strong>

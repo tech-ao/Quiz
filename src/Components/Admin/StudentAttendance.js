@@ -4,8 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
 import AdminHeader from "./AdminHeader";
-import { Filter } from "lucide-react";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { FaFilter, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const DEFAULT_STUDENT_LIST = [
   { id: 1, name: "Emma Wilson", level: 0 },
@@ -34,7 +33,6 @@ const DEFAULT_STUDENT_LIST = [
   { id: 24, name: "Samuel Russell", level: 5 },
 ];
 
-//Mock attendance data
 const MOCK_ATTENDANCE = {
   "2025-01-28": [1, 0, 5, 6],
   "2025-02-15": [1, 3, 5, 7],
@@ -54,7 +52,30 @@ const StudentAttendance = ({
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSidebarVisible, setSidebarVisible] = useState(true);
-  const [isSortedAscending, setIsSortedAscending] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const headerHeight = 60;
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 768);
+      if (window.innerWidth >= 768) {
+        setSidebarVisible(true);
+      } else {
+        setSidebarVisible(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setSidebarVisible(!isSidebarVisible);
+  };
 
   const handleLevelChange = (e) => {
     setSelectedLevel(e.target.value);
@@ -68,40 +89,16 @@ const StudentAttendance = ({
     setSelectedPerson(student);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setSidebarVisible(false); // Hide sidebar by default on mobile
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    handleResize(); // Call once to adjust initial state
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
   const handleDateChange = (e) => {
     setSelectedDate(new Date(e.target.value));
-    setSelectedPerson(null); // Clear selected person when date changes
+    setSelectedPerson(null); // Clear selected student when date changes
   };
 
-  // Get attendance status for a specific date
   const getAttendanceForDate = (date) => {
     const dateString = date.toISOString().split("T")[0];
     return MOCK_ATTENDANCE[dateString] || [];
   };
 
-  // Render attendance list for selected level and date
   const renderAttendanceList = () => {
     if (!selectedLevel || !selectedDate) return null;
 
@@ -129,7 +126,7 @@ const StudentAttendance = ({
                 ) : (
                   <FaTimesCircle className="me-2" />
                 )}
-                <b style={{ fontWeight: "2px" }}> {student.name}</b>
+                <b style={{ fontWeight: "500" }}>{student.name}</b>
               </li>
             );
           })}
@@ -164,7 +161,6 @@ const StudentAttendance = ({
               const date = new Date(currentYear, monthIndex, day);
               const dateString = date.toISOString().split("T")[0];
               const hasAttendance = MOCK_ATTENDANCE[dateString]?.length > 0;
-
               return (
                 <div
                   key={day}
@@ -185,20 +181,34 @@ const StudentAttendance = ({
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container " style={{ overflowY: "hidden" }}>
+          {/* Sticky Title */}
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              backgroundColor: "white",
+              zIndex: 1000,
+              padding: "20px 0",
+              height: `${headerHeight}px`,
+            }}
+          >
+            <h2 style={{ margin: 0 }}>Student Attendance</h2>
+          </div>
+
           <div className="sub-container">
-            <Row className="mt-3" style={{ paddingLeft: "20px" }}>
+            <Row>
               <Col
                 xs={12}
                 md={6}
                 lg={6}
-                className="p-3"
-                style={{ paddingRight: "40px" }}
+                style={
+                  isSmallScreen
+                    ? { position: "sticky", top: `${headerHeight}px`, margin: "auto" }
+                    : { padding: "15px", paddingRight: "50px" }
+                }
               >
-                <Table
-                  className="table-sm table-padding"
-                  style={{ width: "90%" }}
-                >
+                <Table className="table-sm" style={{ width: "100%" }}>
                   <thead>
                     <tr>
                       <th style={{ width: "45%" }}>Level</th>
@@ -214,7 +224,7 @@ const StudentAttendance = ({
                           style={{ width: "85%" }}
                         >
                           <option value="">Select Level</option>
-                          {[...new Set(studentList?.map((s) => s.level))].map(
+                          {[...new Set(studentList.map((s) => s.level))].map(
                             (level) => (
                               <option key={level} value={level}>
                                 Level {level}
@@ -224,61 +234,42 @@ const StudentAttendance = ({
                         </Form.Select>
                       </td>
                       <td style={{ width: "60px" }}>
-                        {selectedLevel !== "" && (
-                          <div className="d-flex align-items-center position-relative">
-                            <Form.Select
-                              onChange={handleStudentSelect}
-                              value={selectedPerson?.id || ""}
-                              style={{ width: "65%" }}
-                            >
-                              <option value="">Select a Student</option>
-                              {studentList
-                                ?.filter(
-                                  (s) => s.level === Number(selectedLevel)
-                                )
+                        <div className="d-flex align-items-center position-relative">
+                          <Form.Select
+                            onChange={handleStudentSelect}
+                            value={selectedPerson?.id || ""}
+                            style={{ width: "70%"}}
+                          >
+                            <option value="" >Select Student</option>
+                            {selectedLevel &&
+                              studentList
+                                .filter((s) => s.level === Number(selectedLevel))
                                 .map((student) => (
                                   <option key={student.id} value={student.id}>
                                     {student.name}
                                   </option>
                                 ))}
-                            </Form.Select>
-
-                            <div
+                          </Form.Select>
+                          <div style={{ position: "relative", marginLeft: "20px" }}>
+                            <Form.Control
+                              type="date"
+                              onChange={handleDateChange}
+                              value={
+                                selectedDate
+                                  ? selectedDate.toISOString().split("T")[0]
+                                  : ""
+                              }
                               style={{
-                                position: "relative",
-                                marginLeft: "20px",
+                                opacity: 0,
+                                position: "absolute",
+                                top: 0,
+                                left: "27px",
+                                zIndex: 2,
                               }}
-                            >
-                              <Form.Control
-                                type="date"
-                                onChange={handleDateChange}
-                                value={
-                                  selectedDate
-                                    ? selectedDate.toISOString().split("T")[0]
-                                    : ""
-                                }
-                                style={{
-                                  width: "24px",
-                                  height: "24px",
-                                  opacity: 0,
-                                  position: "absolute",
-                                  top: 0,
-                                  left: "27px",
-                                  zIndex: 2,
-                                }}
-                              />
-                              <Filter
-                                size={25}
-                                style={{
-                                  position: "absolute",
-                                  top: "-10px",
-                                  left: "27px",
-                                  zIndex: 1,
-                                }}
-                              />
-                            </div>
+                            />
+                            <FaFilter style={{ fontSize: "30px" }} />
                           </div>
-                        )}
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -286,16 +277,16 @@ const StudentAttendance = ({
               </Col>
             </Row>
 
-            {/* Render attendance list or individual attendance */}
+            {/* Render attendance details */}
             {selectedDate &&
               (selectedPerson ? (
-                <Row className="mt-4">
+                <Row style={{ marginTop: "20px" }}>
                   <Col xs={12}>
-                    <h5 className="attendance-title">
-                      <b>Attendance for {selectedPerson.name}</b>
+                    <h5 style={{ marginLeft: "27px", fontWeight: "bold" }}>
+                      Attendance for {selectedPerson.name}
                     </h5>
-                    <div className="attendance-details">
-                      <h6 style={{ width: "150px", marginLeft: "50px" }}>
+                    <div style={{ marginLeft: "50px" }}>
+                      <h6>
                         {getAttendanceForDate(selectedDate).includes(
                           selectedPerson.id
                         )

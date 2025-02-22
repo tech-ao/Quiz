@@ -8,6 +8,8 @@ import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
+import { FiEye } from "react-icons/fi";
+
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
@@ -143,7 +145,7 @@ const EnrollmentRequestList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container ">
           <div className="sticky-header">
             <Row className="align-items-center" style={{ marginTop: "20px" }}>
               <Col md={6}>
@@ -210,7 +212,7 @@ const EnrollmentRequestList = () => {
                       </td>
                       <td>
                         <Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
-                          View
+                         <FiEye />
                         </Button>
                       </td>
                     </tr>

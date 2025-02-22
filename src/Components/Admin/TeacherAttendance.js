@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
 import AdminHeader from "./AdminHeader";
-import { Filter } from "lucide-react";
+import { FaFilter } from "react-icons/fa"; // Import filter icon
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const TeacherAttendance = ({
@@ -16,6 +16,10 @@ const TeacherAttendance = ({
   const [attendanceDates, setAttendanceDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+
+  // Set a fixed header height (in pixels)
+  const headerHeight = 60;
 
   const teacherListExample = [
     {
@@ -58,22 +62,21 @@ const TeacherAttendance = ({
       } else {
         setSidebarVisible(false); // Hide sidebar by default on mobile
       }
+      setIsSmallScreen(window.innerWidth < 768);
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Call once to adjust initial state
+    handleResize(); // Adjust initial state
 
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
 
-  
   const handleTeacherSelect = (e) => {
     const selectedTeacherId = Number(e.target.value);
     const teacher = teacherListExample.find((t) => t.id === selectedTeacherId);
@@ -85,10 +88,10 @@ const TeacherAttendance = ({
 
   const handleDateChange = (e) => {
     setSelectedDate(new Date(e.target.value));
-    setSelectedPerson(null); // Clear selected person when date changes
+    setSelectedPerson(null); // Clear selected teacher when date changes
   };
 
-  // Get all teachers of selected type and their attendance status for selected date
+  // Render attendance list for the selected date and teacher type
   const renderAttendanceList = () => {
     if (!selectedTeacherType || !selectedDate) return null;
 
@@ -97,7 +100,10 @@ const TeacherAttendance = ({
     );
 
     return (
-      <div className="attendance-list mt-4" style={{ marginLeft: "27px" }}>
+      <div
+        className="attendance-list mt-4"
+        style={{ marginLeft: "27px" }}
+      >
         <h6 style={{ fontSize: "20px" }}>
           <b>Attendance for {selectedDate.toDateString()}</b>
         </h6>
@@ -117,7 +123,7 @@ const TeacherAttendance = ({
                 ) : (
                   <FaTimesCircle className="me-2" />
                 )}
-                <b style={{ fontWeight: "2px" }}>{teacher.name}</b>
+                <b style={{ fontWeight: "500" }}>{teacher.name}</b>
               </li>
             );
           })}
@@ -173,60 +179,90 @@ const TeacherAttendance = ({
 
   return (
     <div>
-    <AdminHeader toggleSidebar={toggleSidebar} />
+      <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
-      <Container className="main-container p-4 min-vh-100">
-        <div className="sub-container">
-          <Row className="mt-3" style={{ paddingLeft: "20px" }}>
-            <Col
-              xs={12}
-              md={6}
-              lg={6}
-              className="p-3"
-              style={{ paddingRight: "50px" }}
-            >
-              <Table
-                className="table-sm table-padding"
-                style={{ width: "120%" }}
+        <Container
+          className="main-container"
+          style={{ overflowY:"hidden" }}
+        >
+          {/* Sticky Title */}
+          <div
+            style={{
+              position: "sticky",
+              top: 0,
+              backgroundColor: "white",
+              zIndex: 1000,
+              padding: "20px 0",
+              height: `${headerHeight}px`
+            }}
+          >
+            <h2 style={{ margin: 0 }}>Teacher Attendance</h2>
+          </div>
+
+          <div className="sub-container"
+
+          >
+            <Row >
+              <Col
+                xs={12}
+                md={6}
+                lg={6}
+                style={
+                  isSmallScreen
+                    ? {
+                       
+                        position: "sticky",
+                        top: `${headerHeight}px`,
+                        margin: "auto",
+                       
+                      }
+                    : { padding: "15px", paddingRight: "50px" }
+                }
               >
-                <thead>
-                  <tr>
-                    <th style={{ width: "40%" }}>Type</th>
-                    <th>Teachers</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <Form.Select
-                        value={selectedTeacherType}
-                        onChange={handleTeacherTypeChange}
-                        style={{ width: "150px" }}
-                      >
-                        <option value="">Select Type</option>
-                        <option value="Part-Time">Part-Time</option>
-                        <option value="Full-Time">Full-Time</option>
-                      </Form.Select>
-                    </td>
-                    <td>
-                      {selectedTeacherType && (
-                        <div className="d-flex align-items-center position-relative">
+                <Table
+                  className="table-sm"
+                  style={{ width: "100%" }}
+                >
+                  <thead>
+                    <tr>
+                      <th style={{ width: "40%" }}>Type</th>
+                      <th>Teachers</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <Form.Select
+                          value={selectedTeacherType}
+                          onChange={handleTeacherTypeChange}
+                          style={{ width: "150px" }}
+                        >
+                          <option value="">Select Type</option>
+                          <option value="Part-Time">Part-Time</option>
+                          <option value="Full-Time">Full-Time</option>
+                        </Form.Select>
+                      </td>
+                      <td>
+                        <div
+                          className="d-flex align-items-center"
+                          style={{ position: "relative" }}
+                        >
                           <Form.Select
                             onChange={handleTeacherSelect}
                             value={selectedPerson?.id || ""}
-                            style={{ width: "65%" }}
+                            style={{ width: "70%" }}
                           >
-                            <option value="">Select a teacher</option>
-                            {teacherListExample
-                              .filter((t) => t.type === selectedTeacherType)
-                              .map((teacher) => (
-                                <option key={teacher.id} value={teacher.id}>
-                                  {teacher.name}
-                                </option>
-                              ))}
+                            <option value="">Select teacher</option>
+                            {selectedTeacherType &&
+                              teacherListExample
+                                .filter((t) => t.type === selectedTeacherType)
+                                .map((teacher) => (
+                                  <option key={teacher.id} value={teacher.id}>
+                                    {teacher.name}
+                                  </option>
+                                ))}
                           </Form.Select>
-
                           <div
                             style={{
                               position: "relative",
@@ -242,8 +278,7 @@ const TeacherAttendance = ({
                                   : ""
                               }
                               style={{
-                                width: "24px",
-                                height: "24px",
+                              
                                 opacity: 0,
                                 position: "absolute",
                                 top: 0,
@@ -251,58 +286,46 @@ const TeacherAttendance = ({
                                 zIndex: 2,
                               }}
                             />
-                            <Filter
-                              size={25}
-                              style={{
-                                position: "absolute",
-                                top: "-10px",
-                                left: "27px",
-                                zIndex: 1,
-                              }}
-                            />
+                           <FaFilter style={{ fontSize: "30px" }} />
                           </div>
                         </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            </Col>
-          </Row>
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </Col>
+            </Row>
 
-          {/* Render attendance list or individual attendance */}
-          {selectedDate &&
-            (selectedPerson ? (
-              <Row className="mt-4">
-                <Col xs={12}>
-                  <h5
-                    className="attendance-title"
-                    style={{ marginLeft: "27px" }}
-                  >
-                    <b>Attendance for {selectedPerson.name}</b>
-                  </h5>
-                  <div className="attendance-details">
-                    <h6 style={{ marginLeft: "50px" }}>
-                      {selectedPerson.attendance.some(
-                        (date) =>
-                          date.toDateString() === selectedDate.toDateString()
-                      )
-                        ? `Present on ${selectedDate.toDateString()}`
-                        : `Absent on ${selectedDate.toDateString()}`}
-                    </h6>
-                  </div>
-                </Col>
-              </Row>
-            ) : (
-              renderAttendanceList()
-            ))}
+            {/* Render attendance list or individual attendance */}
+            {selectedDate &&
+              (selectedPerson ? (
+                <Row style={{ marginTop: "20px" }}>
+                  <Col xs={12}>
+                    <h5 style={{ marginLeft: "27px", fontWeight: "bold" }}>
+                      Attendance for {selectedPerson.name}
+                    </h5>
+                    <div style={{ marginLeft: "50px" }}>
+                      <h6>
+                        {selectedPerson.attendance.some(
+                          (date) =>
+                            date.toDateString() === selectedDate.toDateString()
+                        )
+                          ? `Present on ${selectedDate.toDateString()}`
+                          : `Absent on ${selectedDate.toDateString()}`}
+                      </h6>
+                    </div>
+                  </Col>
+                </Row>
+              ) : (
+                renderAttendanceList()
+              ))}
 
-          {/* Render Yearly Calendar */}
-          <div className="calendar-grid">{renderYearlyCalendar()}</div>
-        </div>
-      </Container>
+            {/* Render Yearly Calendar */}
+            <div className="calendar-grid">{renderYearlyCalendar()}</div>
+          </div>
+        </Container>
+      </div>
     </div>
-    </div> 
   );
 };
 

@@ -8,6 +8,8 @@ import ViewStudentPanel from './ViewStudent';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
+import { FaFilter } from "react-icons/fa"; // Import filter icon
+
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
 import "./StudentList.css"
@@ -152,7 +154,7 @@ const StudentList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4">
+        <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
             {isSmallScreen ? (
@@ -160,32 +162,23 @@ const StudentList = () => {
                 {/* Row 1: Title */}
                 <Row>
                   <Col>
-                    <h2 className="fw-bold ">Student List</h2>
+                    <h2 className="fw-bold">Student List</h2>
                   </Col>
                 </Row>
-                {/* Row 2: Search bar */}
+                {/* Row 2: Search bar, Filter Icon, and Add Student Button in the same row */}
                 <Row className="mt-2">
-                  <Col>
-                    <InputGroup style={{ maxWidth: "400px", margin: "0 auto" }}>
-                      <Form.Control
-                        placeholder="Search students by name or email"
-                        value={searchTerm}
-                        onChange={handleSearch}
-                      />
-                    </InputGroup>
-                  </Col>
-                </Row>
-                {/* Row 3: Filter icon (left) and Add Student button (right) */}
-                <Row className="mt-2">
-                  <Col xs={6} className="d-flex justify-content-center">
-                    <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ width: "100%" }}>
-                        <i className="bi bi-filter"></i>
+                  <Col className="search-container">
+                    <Form.Control
+                      placeholder="Search students by name or email"
+                      value={searchTerm}
+                      onChange={handleSearch}
+                    />
+                    <Dropdown className="filter-icon">
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{backgroundColor:"transparent" }}>
+                      <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        <Dropdown.Item onClick={() => setSelectedGrade(null)}>
-                          Clear Filter
-                        </Dropdown.Item>
+                      <Dropdown.Menu className="dropdown-menu-custom">
+                        <Dropdown.Item onClick={() => setSelectedGrade(null)}>Clear Filter</Dropdown.Item>
                         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(level => (
                           <Dropdown.Item key={level} onClick={() => setSelectedGrade(level)}>
                             Level {level}
@@ -193,12 +186,10 @@ const StudentList = () => {
                         ))}
                       </Dropdown.Menu>
                     </Dropdown>
-                  </Col>
-                  <Col xs={6} className="d-flex justify-content-center">
                     <Button
                       variant="outline-success"
+                      className="add-student-btn"
                       onClick={handleOpenAddStudent}
-                      style={{ width: "100%" }}
                     >
                       <i className="bi bi-person-plus me-2"></i> Add Student
                     </Button>
@@ -218,8 +209,8 @@ const StudentList = () => {
                       onChange={handleSearch}
                     />
                     <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px" }}>
-                        <i className="bi bi-filter"></i>
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px",backgroundColor:"transparent" }}>
+                        <FaFilter style={{ fontSize: "30px" }}  />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>

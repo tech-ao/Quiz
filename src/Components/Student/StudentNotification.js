@@ -13,10 +13,14 @@ const StudentNotification = () => {
   const dispatch = useDispatch();
 
   // Sidebar visibility state
-  const [isSidebarVisible, setIsSidebarVisible] = useState(() => {
-    return localStorage.getItem('isSidebarVisible') === 'true' || window.innerWidth >= 768;
-  });
-
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+   useEffect(() => {
+     const handleResize = () => {
+       setIsSidebarVisible(window.innerWidth >= 768);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
   // Student data and state management
   const [studentId, setStudentId] = useState(localStorage.getItem('studentId') || '');
   const [studentData, setStudentData] = useState(null);

@@ -61,7 +61,7 @@ function NotificationPage() {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4">
+        <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-header">
             <Row className="align-items-center">
@@ -80,7 +80,7 @@ function NotificationPage() {
                 {/* Filter Icon */}
                 <div className="filter-container">
                   <Button variant="light" className="filter-btn" onClick={handleFilterClick}>
-                    <FaFilter />
+                    <FaFilter style={{ fontSize: "30px" }} />
                   </Button>
                   {showDatePicker && (
                     <div className="date-picker-container">
