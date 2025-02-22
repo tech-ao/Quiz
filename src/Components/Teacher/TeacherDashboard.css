@@ -189,7 +189,7 @@
 .payment-title-section {
   border-radius: 25px;
   padding: 12px 20px;
-  min-width: 220px;
+  /* min-width: 220px; */
 }
 
 .payment-title-section h5 {
@@ -442,5 +442,89 @@
   .payment-table th:nth-child(4), /* Status */
   .payment-table td:nth-child(4) {
     width: 15%;
+  }
+}
+
+
+/* Payment History Header Responsive Styles */
+@media (max-width: 320px) {
+  .payment-history-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 1rem;
+    gap: 10px;
+  }
+
+  .payment-title-section {
+    width:53% !important;
+    padding: 0;
+    text-align: left;
+    display: inline-block;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .payment-title-section h5 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .sort-section {
+    justify-content: flex-start;
+    width: max-content;
+  }
+
+  .icon-container {
+    display: flex;
+    margin-left:0;
+  }
+
+  .icon-only-button {
+    width:25px;
+    height: 32px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #198754;
+    border: none;
+    border-radius: 4px;
+  }
+  .sort-dropdown{
+    padding: 0 !important;
+    width: 5%;
+    margin-left: -10px;
+  }
+  .icon-only {
+    font-size: 16px;
+    margin: 0;
+    color: white;
+  }
+
+  .button-text {
+    display: none;
+  }
+
+  /* Adjust dropdown for better alignment */
+  .sort-dropdown .dropdown-toggle {
+    padding: 0 4px !important;
+    font-size: 14px;
+  }
+}
+
+/* Additional adjustments for extremely narrow screens */
+@media (max-width: 280px) {
+  .payment-history-header {
+    flex-wrap: wrap;
+  }
+
+  .icon-container {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
   }
 }
