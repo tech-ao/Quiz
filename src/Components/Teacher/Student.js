@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import TeacherSidePanel from './TeacherSidepannel';
 import AddStudent from '../Student/AddStudent';
 import EditStudent from '../Student/EditStudent';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherHeader from './TeacherHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown } from 'react-bootstrap';
 import ViewStudentPanel from '../Student/ViewStudent';
+import TeacherSidepannel from './TeacherSidepannel';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
@@ -25,19 +26,22 @@ const getStatusColor = (status) => {
 };
 
 const Students = () => {
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  
-    const toggleSidebar = () => {
-      setIsSidebarVisible((prev) => !prev);
-    };
-
-    useEffect(() => {
-        const handleResize = () => {
-          setIsSidebarVisible(window.innerWidth >= 768);
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-      }, []);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(
+      window.innerWidth >= 768
+    );
+   const toggleSidebar = () => {
+       setIsSidebarVisible((prev) => !prev);
+     };
+   
+     // Handle window resize for sidebar visibility
+     useEffect(() => {
+       const handleResize = () => {
+         setIsSidebarVisible(window.innerWidth >= 768);
+       };
+       window.addEventListener('resize', handleResize);
+       return () => window.removeEventListener('resize', handleResize);
+     }, []);
+   
 
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
@@ -131,9 +135,9 @@ const Students = () => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <TeacherSidepannel/>}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4">

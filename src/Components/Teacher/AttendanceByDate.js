@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Table, Form } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherHeader from './TeacherHeader';
 import './Attendance.css'; // Import the CSS file
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const AttendanceDataPage = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [classSelected, setClassSelected] = useState('Class 1');
   const [sectionSelected, setSectionSelected] = useState('A');
   const [attendanceDate, setAttendanceDate] = useState('2024-12-04');
@@ -20,9 +20,17 @@ const AttendanceDataPage = () => {
     { id: 6, admission: '96302', roll: '221002', name: 'Jacob Bethell', status: 'Present', note: 'N/A' },
   ];
 
-  const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+   const toggleSidebar = () => {
+          setIsSidebarVisible((prev) => !prev);
+        };
+      
+        useEffect(() => {
+          const handleResize = () => {
+            setIsSidebarVisible(window.innerWidth >= 768);
+          };
+          window.addEventListener("resize", handleResize);
+          return () => window.removeEventListener("resize", handleResize);
+        }, []);
 
   // Function to render chip with different colors for status
   const renderStatusChip = (status) => {
@@ -45,7 +53,7 @@ const AttendanceDataPage = () => {
   return (
     <div>
       {/* Admin Header with Toggle Sidebar */}
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">

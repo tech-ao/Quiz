@@ -1,16 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container} from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
 
 
 const StudentData = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
-
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
 
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
+        setIsSidebarVisible((prev) => !prev);
+      };
+    
+      // Handle window resize for sidebar visibility
+      useEffect(() => {
+        const handleResize = () => {
+          setIsSidebarVisible(window.innerWidth >= 768);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+      }, []);
+      
 
   return (
     <div>

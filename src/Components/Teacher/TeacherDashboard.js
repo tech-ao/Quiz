@@ -45,7 +45,7 @@ const TeacherDashboard = () => {
   <div className="sub-container dashboard-container">
           <Row
             className="mt-4 g-4"
-            style={{paddingRight:"100px", paddingTop:'40px'}}
+            style={{paddingRight:"86px", paddingTop:"39px"}}
           >
             {/* Left Column - Stats Cards */}
             <Col xs={12} lg={5} xl={4} className="box-details">

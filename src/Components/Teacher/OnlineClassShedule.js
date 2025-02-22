@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
-import TeacherSidePanel from './TeacherSidepannel';
-import AdminHeader from '../Admin/AdminHeader';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Button, Form, Card } from "react-bootstrap";
+import TeacherSidePanel from "./TeacherSidepannel";
+import TeacherHeader from "./TeacherHeader";
 import './OnlineClassShedule.css'; // Custom CSS for styling
 
-const ClassSchedule = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+const OnlineClassSchedule = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [newClass, setNewClass] = useState({
     name: '',
     date: '',
@@ -15,8 +15,16 @@ const ClassSchedule = () => {
   const [classSchedule, setClassSchedule] = useState([]);
 
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible((prev) => !prev);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarVisible(window.innerWidth >= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,9 +40,9 @@ const ClassSchedule = () => {
       alert('Please fill in all fields');
       return;
     }
-    
+
     const newClassData = {
-      id: classSchedule.length + 1,
+      id: Date.now(), // Unique ID to prevent duplicates
       name: newClass.name,
       instructor: newClass.instructor,
       date: newClass.date,
@@ -47,7 +55,7 @@ const ClassSchedule = () => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
@@ -135,4 +143,4 @@ const ClassSchedule = () => {
   );
 };
 
-export default ClassSchedule;
+export default OnlineClassSchedule;
