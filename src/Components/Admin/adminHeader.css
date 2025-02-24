@@ -218,3 +218,8 @@ button {
   padding: 5px;
 }
 
+.custom-badge .MuiBadge-badge {
+  right: auto !important;  /* Reset right positioning */
+  left: 0 !important;      /* Move badge to the left */
+  transform: translate(-50%, -50%) !important; /* Adjust alignment */
+}
