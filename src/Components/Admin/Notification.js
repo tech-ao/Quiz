@@ -118,9 +118,7 @@ function NotificationPage() {
                           <small className="text-muted">Received on: {notification.receivedDate}</small>
                         </div>
                         {/* View Button */}
-                        <Button variant="success" className="btn-sm view-btn">
-                          View
-                        </Button>
+                       
                       </Card.Body>
                     </Card>
                   </Col>

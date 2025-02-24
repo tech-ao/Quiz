@@ -86,7 +86,7 @@ const ListTeacher = ({ Teachers = [] }) => {
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
               <Col md={6} className="d-flex " style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
-                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "55%" : "400px", marginRight: '15px' }}>
+                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "55%" : "400px", marginRight: '35px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
@@ -100,8 +100,8 @@ const ListTeacher = ({ Teachers = [] }) => {
               </Col>
             </Row>
 
-            <div className="table-responsive">
-              <Table hover className="mb-0">
+            <div className="table-responsive" style={{maxWidth:"1250px"}}>
+              <Table hover className="mb-0" >
                 <thead>
                   <tr>
                     <th>S.No</th>

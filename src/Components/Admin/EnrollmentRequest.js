@@ -160,12 +160,12 @@ const EnrollmentRequestList = () => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  style={{ maxWidth: "400px", marginRight: "20px" }}
+                  style={{ maxWidth: "400px", marginRight: "0px" }}
                 />
                 <Button variant="success" onClick={handleApprove}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny}>
+                <Button variant="danger" onClick={handleDeny}  style={{ marginRight: "20px" }}>
                   Reject
                 </Button>
               </Col>
@@ -211,7 +211,7 @@ const EnrollmentRequestList = () => {
                         </Badge>
                       </td>
                       <td>
-                        <Button variant="info" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
+                        <Button variant="transparent" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
                          <FiEye />
                         </Button>
                       </td>

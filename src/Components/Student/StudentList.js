@@ -175,7 +175,7 @@ const StudentList = () => {
                     />
                     <Dropdown className="filter-icon">
                       <Dropdown.Toggle variant="success" id="dropdown-filter" style={{backgroundColor:"transparent" }}>
-                      <FaFilter style={{ fontSize: "30px" }} />
+                      <FaFilter style={{ fontSize: "30px", }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="dropdown-menu-custom">
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>Clear Filter</Dropdown.Item>
@@ -190,6 +190,7 @@ const StudentList = () => {
                       variant="outline-success"
                       className="add-student-btn"
                       onClick={handleOpenAddStudent}
+                     
                     >
                       <i className="bi bi-person-plus me-2"></i> Add Student
                     </Button>
@@ -202,7 +203,7 @@ const StudentList = () => {
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
                 <Col md={6} className="d-flex align-items-center">
-                  <InputGroup style={{ maxWidth: "400px", marginRight: '15px' }}>
+                  <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}

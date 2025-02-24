@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
 import AdminHeader from "./AdminHeader";
-import { FaFilter } from "react-icons/fa"; // Import filter icon
+import { FaFilter } from "react-icons/fa";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const TeacherAttendance = ({
@@ -13,12 +13,10 @@ const TeacherAttendance = ({
 }) => {
   const [selectedTeacherType, setSelectedTeacherType] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(null);
-  const [attendanceDates, setAttendanceDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSidebarVisible, setSidebarVisible] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
-  // Set a fixed header height (in pixels)
   const headerHeight = 60;
 
   const teacherListExample = [
@@ -51,22 +49,17 @@ const TeacherAttendance = ({
   const handleTeacherTypeChange = (e) => {
     setSelectedTeacherType(e.target.value);
     setSelectedPerson(null);
-    setAttendanceDates([]);
     setSelectedDate(null);
   };
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setSidebarVisible(false); // Hide sidebar by default on mobile
-      }
       setIsSmallScreen(window.innerWidth < 768);
+      setSidebarVisible(window.innerWidth >= 768);
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Adjust initial state
+    handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -82,57 +75,45 @@ const TeacherAttendance = ({
     const teacher = teacherListExample.find((t) => t.id === selectedTeacherId);
     if (teacher) {
       setSelectedPerson(teacher);
-      setAttendanceDates(teacher.attendance || []);
+      setSelectedDate(null);
     }
   };
 
   const handleDateChange = (e) => {
     setSelectedDate(new Date(e.target.value));
-    setSelectedPerson(null); // Clear selected teacher when date changes
   };
 
-  // Render attendance list for the selected date and teacher type
   const renderAttendanceList = () => {
-    if (!selectedTeacherType || !selectedDate) return null;
-
-    const typeTeachers = teacherListExample.filter(
-      (t) => t.type === selectedTeacherType
+    if (!selectedPerson || !selectedDate) return null;
+    const isPresent = selectedPerson.attendance.some(
+      (date) => date.toDateString() === selectedDate.toDateString()
     );
 
     return (
-      <div
-        className="attendance-list mt-4"
-        style={{ marginLeft: "27px" }}
-      >
+      <div className="attendance-list mt-4" style={{ marginLeft: "27px" }}>
         <h6 style={{ fontSize: "20px" }}>
-          <b>Attendance for {selectedDate.toDateString()}</b>
+          <b>
+            Attendance for {selectedPerson.name} on{" "}
+            {selectedDate.toDateString()}
+          </b>
         </h6>
-        <ul className="list-unstyled">
-          {typeTeachers.map((teacher) => {
-            const isPresent = teacher.attendance.some(
-              (date) => date.toDateString() === selectedDate.toDateString()
-            );
-            return (
-              <li
-                key={teacher.id}
-                className="d-flex align-items-center mb-2"
-                style={{ color: isPresent ? "black" : "red" }}
-              >
-                {isPresent ? (
-                  <FaCheckCircle className="me-2" />
-                ) : (
-                  <FaTimesCircle className="me-2" />
-                )}
-                <b style={{ fontWeight: "500" }}>{teacher.name}</b>
-              </li>
-            );
-          })}
-        </ul>
+        <p style={{ marginLeft: "50px", color: isPresent ? "black" : "red" }}>
+          {isPresent ? (
+            <>
+              <FaCheckCircle className="me-2" /> Present
+            </>
+          ) : (
+            <>
+              <FaTimesCircle className="me-2" /> Absent
+            </>
+          )}
+        </p>
       </div>
     );
   };
 
   const renderYearlyCalendar = () => {
+    if (!selectedPerson) return null;
     const months = [
       "January",
       "February",
@@ -155,13 +136,9 @@ const TeacherAttendance = ({
           <div className="days-grid">
             {Array.from({ length: daysInMonth }, (_, i) => i + 1).map((day) => {
               const date = new Date(currentYear, monthIndex, day);
-              const isHighlighted = teacherListExample
-                .filter((t) => t.type === selectedTeacherType)
-                .some((teacher) =>
-                  teacher.attendance.some(
-                    (d) => d.toDateString() === date.toDateString()
-                  )
-                );
+              const isHighlighted = selectedPerson.attendance.some(
+                (d) => d.toDateString() === date.toDateString()
+              );
               return (
                 <div
                   key={day}
@@ -182,10 +159,7 @@ const TeacherAttendance = ({
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
-        <Container
-          className="main-container"
-          style={{ overflowY:"hidden" }}
-        >
+        <Container className="main-container" style={{ overflowY: "auto" }}>
           {/* Sticky Title */}
           <div
             style={{
@@ -194,135 +168,105 @@ const TeacherAttendance = ({
               backgroundColor: "white",
               zIndex: 1000,
               padding: "20px 0",
-              height: `${headerHeight}px`
+              height: `${headerHeight}px`,
             }}
           >
             <h2 style={{ margin: 0 }}>Teacher Attendance</h2>
           </div>
 
-          <div className="sub-container"
-
+          {/* Sticky Table Container immediately below the title */}
+          <div
+            style={{
+              position: "sticky",
+              top: `${headerHeight}px`,
+              backgroundColor: "white",
+              zIndex: 999,
+              padding: "15px",
+              paddingRight: "50px",
+            }}
           >
-            <Row >
-              <Col
-                xs={12}
-                md={6}
-                lg={6}
-                style={
-                  isSmallScreen
-                    ? {
-                       
-                        position: "sticky",
-                        top: `${headerHeight}px`,
-                        margin: "auto",
-                       
-                      }
-                    : { padding: "15px", paddingRight: "50px" }
-                }
-              >
-                <Table
-                  className="table-sm"
-                  style={{ width: "100%" }}
-                >
-                  <thead>
-                    <tr>
-                      <th style={{ width: "40%" }}>Type</th>
-                      <th>Teachers</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <Form.Select
-                          value={selectedTeacherType}
-                          onChange={handleTeacherTypeChange}
-                          style={{ width: "150px" }}
-                        >
-                          <option value="">Select Type</option>
-                          <option value="Part-Time">Part-Time</option>
-                          <option value="Full-Time">Full-Time</option>
-                        </Form.Select>
-                      </td>
-                      <td>
-                        <div
-                          className="d-flex align-items-center"
-                          style={{ position: "relative" }}
-                        >
-                          <Form.Select
-                            onChange={handleTeacherSelect}
-                            value={selectedPerson?.id || ""}
-                            style={{ width: "70%" }}
-                          >
-                            <option value="">Select teacher</option>
-                            {selectedTeacherType &&
-                              teacherListExample
-                                .filter((t) => t.type === selectedTeacherType)
-                                .map((teacher) => (
-                                  <option key={teacher.id} value={teacher.id}>
-                                    {teacher.name}
-                                  </option>
-                                ))}
-                          </Form.Select>
-                          <div
-                            style={{
-                              position: "relative",
-                              marginLeft: "20px",
-                            }}
-                          >
-                            <Form.Control
-                              type="date"
-                              onChange={handleDateChange}
-                              value={
-                                selectedDate
-                                  ? selectedDate.toISOString().split("T")[0]
-                                  : ""
-                              }
-                              style={{
-                              
-                                opacity: 0,
-                                position: "absolute",
-                                top: 0,
-                                left: "27px",
-                                zIndex: 2,
-                              }}
-                            />
-                           <FaFilter style={{ fontSize: "30px" }} />
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-
-            {/* Render attendance list or individual attendance */}
-            {selectedDate &&
-              (selectedPerson ? (
-                <Row style={{ marginTop: "20px" }}>
-                  <Col xs={12}>
-                    <h5 style={{ marginLeft: "27px", fontWeight: "bold" }}>
-                      Attendance for {selectedPerson.name}
-                    </h5>
-                    <div style={{ marginLeft: "50px" }}>
-                      <h6>
-                        {selectedPerson.attendance.some(
-                          (date) =>
-                            date.toDateString() === selectedDate.toDateString()
-                        )
-                          ? `Present on ${selectedDate.toDateString()}`
-                          : `Absent on ${selectedDate.toDateString()}`}
-                      </h6>
+            <Table className="table-sm" style={{ width: "50%" }}>
+              <thead>
+                <tr>
+                  <th style={{ width: "25%" }}>Type</th>
+                  <th style={{ width: "25%" }}>Teacher</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <Form.Select
+                      value={selectedTeacherType}
+                      onChange={handleTeacherTypeChange}
+                      style={{ width: "150px" }}
+                    >
+                      <option value="">Select Type</option>
+                      <option value="Part-Time">Part-Time</option>
+                      <option value="Full-Time">Full-Time</option>
+                    </Form.Select>
+                  </td>
+                  <td>
+                    <div
+                      className="d-flex align-items-center"
+                      style={{ position: "relative" }}
+                    >
+                      <Form.Select
+                        onChange={handleTeacherSelect}
+                        value={selectedPerson?.id || ""}
+                        style={{ width: "150px",marginLeft:"20px" }}
+                        disabled={!selectedTeacherType}
+                      >
+                        <option value="">Select teacher</option>
+                        {selectedTeacherType &&
+                          teacherListExample
+                            .filter((t) => t.type === selectedTeacherType)
+                            .map((teacher) => (
+                              <option key={teacher.id} value={teacher.id}>
+                                {teacher.name}
+                              </option>
+                            ))}
+                      </Form.Select>
+                      <div
+                        style={{
+                          position: "relative",
+                          marginLeft: "20px",
+                        }}
+                      >
+                        <Form.Control
+                          type="date"
+                          onChange={handleDateChange}
+                          value={
+                            selectedDate
+                              ? selectedDate.toISOString().split("T")[0]
+                              : ""
+                          }
+                          style={{
+                            opacity: 0,
+                            position: "absolute",
+                            top: 0,
+                            left: "20px",
+                            zIndex: 2,
+                            width: "100px",
+                          }}
+                        />
+                        <FaFilter style={{ fontSize: "32px" }} />
+                      </div>
                     </div>
-                  </Col>
-                </Row>
-              ) : (
-                renderAttendanceList()
-              ))}
-
-            {/* Render Yearly Calendar */}
-            <div className="calendar-grid">{renderYearlyCalendar()}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </Table>
           </div>
+
+          {/* Attendance list if a date is chosen */}
+          {selectedPerson && selectedDate && renderAttendanceList()}
+
+          {/* Render calendar only when a teacher has been selected */}
+          {selectedPerson && (
+            <div className="calendar-grid" style={{ margin: "20px",overflowY:"auto" }}>
+              {renderYearlyCalendar()}
+            </div>
+          )}
         </Container>
       </div>
     </div>

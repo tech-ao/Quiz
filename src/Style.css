@@ -139,6 +139,22 @@ body {
   width: 100%;
 }
 
+@media (max-width: 767px) {
+  .notification-popup {
+    top: 50px !important;
+    right: 10px !important;
+    width: 90% !important;
+    left: 5% !important;
+  }
+  .notification-details-popup {
+    top: 60px !important;
+    right: 10px !important;
+    width: 90% !important;
+    left: 5% !important;
+  }
+}
+
+
 /* Responsive Design */
 @media only screen and (max-width: 1024px) {
   .side-panel {
