@@ -148,9 +148,12 @@ const TeacherDashboard = () => {
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 mx-auto">
           <div className="sub-container dashboard-container">
+          <Row className="sticky-title align-items-center mb-4">
+                        <h2 className="fw-bold text-left">Teacher Dashboard</h2>
+                      </Row>
             <Row
-              className="mt-4 g-4"
-              style={{ paddingRight: "86px", paddingTop: "39px" }}
+              className="mt5 g-4"
+              style={{ paddingRight: "86px" }}
             >
               {/* Stats Cards */}
               <Col xs={12} lg={5} xl={4} className="box-details">
@@ -204,7 +207,7 @@ const TeacherDashboard = () => {
                         </div>
                       </div>
                       <div className="icon-container">
-                        <Button className="icon-only-button me-2">
+                        <Button className="icon-only-button me1">
                           <FaPrint className="icon-only" />
                           <span className="button-text">Print</span>
                         </Button>
