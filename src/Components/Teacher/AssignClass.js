@@ -114,7 +114,7 @@ const AssignClass = () => {
             </div>
 
             {/* Search and Tools Section */}
-            <div className="d-flex flex-column align-items-end">
+            <div className="d-flex flex-column align-items-end" style={{width:'98%'}}>
               <div className="d-flex justify-content-between align-items-center w-100">
                 <input
                   type="text"
@@ -187,29 +187,63 @@ const AssignClass = () => {
                           <option value="Completed">Completed</option>
                         </select>
                       </td>
-                      <td className="action-column" style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", gap: "10px", flexWrap: "wrap" }}>
-  <button
-    className="btn btn-primary btn-sm"
-    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
-    onClick={() => handleAction("view", classItem)}
-  >
-    <i className="bi bi-eye" style={{ fontSize: "16px" }}></i>
-  </button>
-  <button
-    className="btn btn-warning btn-sm"
-    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
-    onClick={() => handleAction("edit", classItem)}
-  >
-    <i className="bi bi-pencil" style={{ fontSize: "16px" }}></i>
-  </button>
-  <button
-    className="btn btn-danger btn-sm"
-    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
-    onClick={() => handleAction("remove", classItem)}
-  >
-    <i className="bi bi-trash" style={{ fontSize: "16px" }}></i>
-  </button>
-</td>
+                      <td className="action-column">
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: "10px",
+                            flexWrap: "nowrap",
+                          }}
+                        >
+                          <button
+                            className="btn btn-primary btn-sm"
+                            style={{
+                              width: "40px",
+                              height: "30px",
+                              borderRadius: "50%",
+                              padding: "0",
+                            }}
+                            onClick={() => handleAction("view", classItem)}
+                          >
+                            <i
+                              className="bi bi-eye"
+                              style={{ fontSize: "16px" }}
+                            ></i>
+                          </button>
+                          <button
+                            className="btn btn-warning btn-sm"
+                            style={{
+                              width: "40px",
+                              height: "30px",
+                              borderRadius: "50%",
+                              padding: "0",
+                            }}
+                            onClick={() => handleAction("edit", classItem)}
+                          >
+                            <i
+                              className="bi bi-pencil"
+                              style={{ fontSize: "16px" }}
+                            ></i>
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            style={{
+                              width: "40px",
+                              height: "30px",
+                              borderRadius: "50%",
+                              padding: "0",
+                            }}
+                            onClick={() => handleAction("remove", classItem)}
+                          >
+                            <i
+                              className="bi bi-trash"
+                              style={{ fontSize: "16px" }}
+                            ></i>
+                          </button>
+                        </div>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
