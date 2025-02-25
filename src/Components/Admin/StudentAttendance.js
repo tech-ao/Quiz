@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Container, Form, Table } from "react-bootstrap";
 import "react-calendar/dist/Calendar.css";
@@ -170,7 +171,7 @@ const StudentAttendance = ({
               paddingRight: "50px",
             }}
           >
-            <Table className="table-sm" style={{ width: "50%" }}>
+            <Table className="table-sm" style={{ width: "40%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Level</th>
@@ -286,7 +287,7 @@ const StudentAttendance = ({
           {selectedPerson && (
             <div
               className="calendar-grid"
-              style={{ margin: "20px", overflowY: "auto" }}
+              style={{  overflowY: "auto" }}
             >
               {renderYearlyCalendar()}
             </div>

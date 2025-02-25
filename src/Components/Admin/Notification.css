@@ -1,170 +1,147 @@
-/* Page Background */
+/* Overall page styling */
 .notification-page {
-  background-color: #f8f9fa !important;
+  background-color: #f0f2f5;
+  min-height: 100vh;
 }
 
-/* Notification Card Styling */
-.notification-card {
-  border-radius: 8px !important;
-  border: none !important;
-  transition: box-shadow 0.3s ease-in-out !important;
+/* Container padding */
+.main-container {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-.notification-card:hover {
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1) !important;
-}
-
-.notification-card h5 {
-  margin-bottom: 5px !important;
-}
-
-.notification-card p {
-  margin-bottom: 0 !important;
-  font-size: 0.9rem !important;
-  color: #6c757d !important;
-}
-
-.btn-sm {
-  font-size: 0.85rem !important;
-}
-
-.view-btn {
-  min-width: 80px !important;
-  text-align: center !important;
-  height: 40px;
-  margin-top: 10px;
-}
-
-/* Sticky Header (100% width) */
+/* Sticky header styling */
 .sticky-header {
-  position: sticky !important;
-  top: 0 !important;
-  width: 100% !important;
-  background: white !important;
-  z-index: 1000 !important;
-  padding: 10px 0 !important;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1000;
+  padding: 10px 0;
 }
 
-/* Search Input (Reduced Width & Fixed Height) */
+/* Search input styling */
 .search-input {
-  width: 60% !important; /* Reduced width */
-  height: 35px !important; /* Fixed height */
-  margin-right: 10px !important;
+  width: 250px;
 }
 
-/* Filter Icon Container */
+/* Filter container styling */
 .filter-container {
-  position: relative !important;
-  margin-left: 15px !important; /* Space between search input & filter icon */
-  margin-right: 20px !important; /* Space between filter icon & screen edge */
-  margin-bottom: 10px !important; /* Added bottom margin for icons */
+  position: relative;
 }
 
-/* Filter Icon Button */
+/* Filter button styling */
 .filter-btn {
-  border: none !important;
-  background: transparent !important;
-  font-size: 1.2rem !important;
-  cursor: pointer !important;
-  padding: 5px 10px !important;
-  margin-left: 15px !important; /* Keep icon 15px right to the search bar */
+  border: none;
+  background: transparent;
 }
 
-/* Date Picker Popup */
+/* Date picker container styling */
 .date-picker-container {
-  position: absolute !important;
-  top: 45px !important;
-  right: 0 !important;
-  background: white !important;
-  border-radius: 8px !important;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
-  padding: 10px !important;
-  text-align: center !important;
-  z-index: 1000 !important;
+  position: absolute;
+  right: 0;
+  top: 45px;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 1050;
 }
 
-/* Clear Filter Text */
+/* Clear filter text styling */
 .clear-filter-text {
-  display: block !important;
-  text-align: center !important;
-  margin-top: 5px !important;
-  color: red !important;
-  font-size: 14px !important;
-  cursor: pointer !important;
-  font-weight: bold !important;
+  display: block;
+  text-align: center;
+  color: #007bff;
+  cursor: pointer;
+  margin-top: 5px;
+  font-size: 0.9rem;
 }
 
-.clear-filter-text:hover {
-  text-decoration: underline !important;
+/* Notification list item styling */
+.notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: none;
+  border-bottom: 1px solid #ddd;
 }
 
-/* Date Picker Styling */
-.react-datepicker {
-  border: 1px solid #ccc !important;
-  border-radius: 8px !important;
+/* Unread notifications: ash color background */
+.notification-item.unread {
+  background-color: #e9ecef; /* Ash/gray color */
 }
 
-.react-datepicker__header {
-  background-color: white !important;
-  color: black !important;
-  border-bottom: 1px solid #ddd !important;
+/* Read notifications: white background */
+.notification-item.read {
+  background-color: #ffffff;
 }
 
-.react-datepicker__day--selected {
-  background-color: #007bff !important;
-  color: white !important;
+/* Notification content styling */
+.notification-content h5 {
+  margin: 0;
 }
 
-.react-datepicker__day:hover {
-  background-color: #0056b3 !important;
-  color: white !important;
+.notification-content p {
+  margin: 5px 0;
+  font-size: 0.95rem;
 }
 
-/* Allow Year Selection */
-.react-datepicker__year-dropdown {
-  background: white !important;
-  border: 1px solid #ccc !important;
+/* Action button styling */
+.notification-action button {
+  font-size: 0.9rem;
 }
 
-.react-datepicker__year-option {
-  padding: 5px 10px !important;
-  cursor: pointer !important;
-}
-
-.react-datepicker__year-option:hover {
-  background: #007bff !important;
-  color: white !important;
-}
-
-/* No Notifications Found Text */
+/* No notifications message */
 .no-notifications {
-  margin-top: 20px !important;
-  text-align: center !important;
-  font-size: 16px !important;
-  color: #6c757d !important;
+  text-align: center;
+  margin-top: 20px;
+  color: #6c757d;
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+.notification-list {
+  margin-top: 20px;
+}
+
+.notification-item {
+  cursor: pointer;
+  padding: 15px;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.notification-item.unread {
+  background-color: #d3d3d3; /* Ash color for unread messages */
+}
+
+.notification-item.read {
+  background-color: #ffffff; /* White color for read messages */
+}
+
+.notification-title {
+  font-weight: bold;
+}
+
+.no-notifications {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #777;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .sticky-header {
+    padding: 8px;
+  }
   .search-input {
-    width: 100% !important;
-    height: 35px !important; /* Keep same height on small screens */
-    margin-right: 0 !important;
+    width: 180px;
   }
-
-  .view-btn {
-    width: 80px !important;
+  .notification-item {
+    flex-direction: column;
+    align-items: flex-start;
   }
-
-  .filter-container {
-    margin-left: 10px !important;
-    margin-right: 10px !important;
-  }
-
-  /* Show Calendar to the Left of the Filter Icon on Small Screens */
-  .date-picker-container {
-    left: -220px !important; /* Moves the calendar to the left */
-    right: auto !important;
-    width: 250px !important; /* Adjust width for better fit */
+  .notification-action {
+    margin-top: 10px;
+    align-self: stretch;
   }
 }
