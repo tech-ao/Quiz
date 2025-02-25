@@ -73,7 +73,7 @@
 /* Date Picker Popup */
 .date-picker-container {
   position: absolute !important;
-  top: 45px !important;
+  top: 100px !important;
   right: 0 !important;
   background: white !important;
   border-radius: 8px !important;
@@ -163,7 +163,6 @@
 
   /* Show Calendar to the Left of the Filter Icon on Small Screens */
   .date-picker-container {
-    left: -220px !important; /* Moves the calendar to the left */
     right: auto !important;
     width: 250px !important; /* Adjust width for better fit */
   }

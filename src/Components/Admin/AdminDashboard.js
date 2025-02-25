@@ -84,7 +84,7 @@ function AdminDashboard() {
             <Row className="g-4 align-items-stretch">
               {/* Left Column: Dashboard Cards */}
               <div className="col-lg-8 d-flex align-items-stretch">
-                <div className="row g-3 flex-grow-1">
+                <div className="row  flex-grow-1">
                   {[
                     { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
                     { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
@@ -141,7 +141,7 @@ function AdminDashboard() {
             {/* Filter Options */}
             <Row className="g-4">
               <Col lg={6} md={12} sm={12}>
-                <Card className="filter-card shadow-sm p-4 rounded">
+                <Card className="filter-card shadow-sm  rounded">
                   <Card.Body>
                     <h5 className="mb-4 fw-bold">Filter Options</h5>
                     <Row>

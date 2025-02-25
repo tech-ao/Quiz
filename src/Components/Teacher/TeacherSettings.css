@@ -101,7 +101,6 @@ button {
 
   .card {
     width: 90%;
-    margin: 10px auto;
   }
 
   .card-header {
@@ -126,7 +125,6 @@ button {
 
   .card {
     width: 100%;
-    margin: 15px auto;
   }
 
   .admin-image {
