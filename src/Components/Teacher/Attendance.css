@@ -1,4 +1,26 @@
+.heading-text {
+  text-align: left;
+  margin-top: 23px;
+  top: 0;
+  position: sticky;
+}
 
+.search-bar {
+  width: 100%;
+  max-width: 130px;
+}
+
+.filter-box {
+  justify-content: right;
+  margin-right: 70px;
+  margin-bottom: -17px;
+}
+
+.attendance-list {
+  width: 100%;
+  margin-bottom: -17px;
+  overflow-x: auto;
+}
 
 .filter-section {
   display: flex;
@@ -90,13 +112,14 @@
   background-color: #e0a800;
 }
 
+/* Adjust dropdown width */
+.attendance-list select {
+  width: 90px;
+}
+
 /* Media Queries */
 @media (max-width: 768px) {
-  .filter-section {
-    flex-direction: column;
-    gap: 10px;
-  }
-
+  .filter-section,
   .attendance-actions {
     flex-direction: column;
     gap: 10px;
@@ -105,31 +128,70 @@
   .btn-save {
     width: 100%;
   }
-}
-.status-chip {
-  display: inline-block;
-  padding: 5px 10px;
-  border-radius: 20px;
-  color: white;
-  font-weight: bold;
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .filter-box {
+    justify-content: center;
+    margin-right: 0;
+  }
+
+  .attendance-list {
+    overflow-x: auto;
+  }
+
+  .table th,
+  .table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .attendance-list select {
+    width: 80px;
+  }
 }
 
-.present {
-  background-color: #28a745; /* Green */
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .filter-box {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .search-bar {
+    flex-grow: 1;
+    max-width: 150px;
+  }
+
+  .attendance-list select {
+    width: 70px;
+  }
+
+  .btn-save-top {
+    margin-top: 10px;
+  }
+
+  .bulkBtn {
+    margin-top: 20px;
+  }
 }
 
-.late {
-  background-color: #ffc107; /* Yellow */
-}
-
-.absent {
-  background-color: #dc3545; /* Red */
-}
-
-.holiday {
-  background-color: #17a2b8; /* Blue */
-}
-
-.half-day {
-  background-color: #fd7e14; /* Orange */
+@media (max-width: 360px) {
+  .bulkBtn {
+    margin-top: 20px;
+  }
+  .attendance-list {
+    padding: 4px 10px 10px 0px;
+    width: 140%;
+  }
 }
