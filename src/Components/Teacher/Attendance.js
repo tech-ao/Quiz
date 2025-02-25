@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherHeader from './TeacherHeader';
 import './Attendance.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const AttendancePage = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+const Attendance = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedSection, setSelectedSection] = useState('');
   const [attendanceDate, setAttendanceDate] = useState('2024-12-04');
@@ -16,10 +16,21 @@ const AttendancePage = () => {
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [previousRecords, setPreviousRecords] = useState([]);
 
+  // Sidebar toggle function
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible((prev) => !prev);
   };
 
+  // Handle window resize for sidebar visibility
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSidebarVisible(window.innerWidth >= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Handle Attendance Submission
   const handleSubmit = () => {
     if (studentName && registerNumber && selectedClass && selectedSection && attendanceDate) {
       setPreviousRecords([...attendanceRecords]);
@@ -39,6 +50,7 @@ const AttendancePage = () => {
     }
   };
 
+  // Handle Undo Action
   const handleUndo = () => {
     if (attendanceRecords.length > 0) {
       setAttendanceRecords(attendanceRecords.slice(0, -1));
@@ -47,7 +59,7 @@ const AttendancePage = () => {
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
@@ -156,4 +168,4 @@ const AttendancePage = () => {
   );
 };
 
-export default AttendancePage;
+export default Attendance;

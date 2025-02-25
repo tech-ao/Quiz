@@ -27,6 +27,7 @@ import StudentAttendanceList from "./Components/Teacher/Attendance";
 import AttendanceDataPage from "./Components/Teacher/AttendanceByDate";
 import OnlineClassShedule from "./Components/Teacher/OnlineClassShedule";
 import PaymentHistory from "./Components/Teacher/PaymentHistory";
+import TeacherNotification from "./Components/Teacher/TeacherNotification";
 import ForgotPassword from "./Components/Student/ForgotPassword";
 import { ToastContainer } from "react-toastify";
 import ResetPassword from "./Components/Admin/ResetPassword";
@@ -34,6 +35,7 @@ import UpdatePassword from "./Components/Student/UpdatePassword";
 import StudentNotification from "./Components/Student/StudentNotification";
 import StudentAttendance from "./Components/Admin/StudentAttendance";
 import TeacherAttendance from "./Components/Admin/TeacherAttendance";
+import Syllabus from "./Components/Teacher/Syllabus";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -47,6 +49,8 @@ import Quiz from "./Components/Admin/Quiz";
 import Test from "./Components/Student/Test";
 import StudentCertificate from "./Components/Student/StudentCertificate";
 import StudentOnlineClass from "./Components/Student/StudentOnlineClass";
+import AssignClass from "./Components/Teacher/AssignClass";
+import CompletedClass from "./Components/Teacher/CompletedClass";
 import StudentSettings from "./Components/Student/StudentSettings";
 import Announcements from "./Components/Teacher/Announcements";
 import TeacherSettings from "./Components/Teacher/TeacherSettings";
@@ -54,6 +58,8 @@ import AbacusMath from "./Components/Admin/Abacus";
 import StudentData from "./Components/Teacher/StudentData";
 import AbacusKit from "./Components/Admin/Kit";
 import AbacusSidePanel from "./Components/Admin/AbacusSidePannel";
+import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
+import Topics from "./Components/Teacher/Topics";
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -92,8 +98,20 @@ function App() {
             element={<ProtectedRoute element={<ListTeacher />} />}
           />
           <Route
+            path="/approvedleave"
+            element={<ProtectedRoute element={<ApprovalLeave />} />}
+          />
+          <Route
             path="/quiztest"
             element={<ProtectedRoute element={<QuizPage />} />}
+          />
+          <Route
+            path="/completedclass"
+            element={<ProtectedRoute element={<CompletedClass />} />}
+          />
+          <Route
+            path="/assignclass"
+            element={<ProtectedRoute element={<AssignClass />} />}
           />
           <Route
             path="/onlineClass"
@@ -102,6 +120,18 @@ function App() {
           <Route
             path="/StudentHeader"
             element={<ProtectedRoute element={<StudentHeader />} />}
+          />
+          <Route
+            path="/teachernotification"
+            element={<ProtectedRoute element={<TeacherNotification />} />}
+          />
+          <Route
+            path="/syllabus"
+            element={<ProtectedRoute element={<Syllabus />} />}
+          />
+          <Route
+            path="/topics"
+            element={<ProtectedRoute element={<Topics />} />}
           />
           <Route
             path="/StudentDashboard"

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Table, Badge, Form, Button, Modal } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
@@ -13,14 +13,23 @@ const paymentHistory = [
 ];
 
 const PaymentHistory = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [filter, setFilter] = useState('');
   const [selectedPayment, setSelectedPayment] = useState(null);
 
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
-  };
-
+      setIsSidebarVisible((prev) => !prev);
+    };
+  
+    // Handle window resize for sidebar visibility
+    useEffect(() => {
+      const handleResize = () => {
+        setIsSidebarVisible(window.innerWidth >= 768);
+      };
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
   const renderStatusBadge = (status) => {
     switch (status) {
       case 'Completed': return <Badge bg="success">{status}</Badge>;

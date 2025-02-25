@@ -1,4 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
+import { Badge } from "@mui/material";
+import { RiAdminLine } from "react-icons/ri";
 import { Navbar, Row, Col, Button } from "react-bootstrap";
 import {
   RiLockPasswordLine,
@@ -101,9 +103,30 @@ const TeacherHeader = ({ toggleSidebar }) => {
             variant="outlined"
             title="Notification"
             className="me-2 action-button"
+            onClick={() => navigate("/teachernotification")}
           >
-            <RiNotification3Line size={24} />
+            <Badge
+              badgeContent={10}
+              color="secondary"
+              overlap="circular"
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              style={{
+                position: "relative",
+              }}
+              componentsProps={{
+                badge: {
+                  style: {
+                    right: "auto",
+                    left: 0,
+                    transform: "translate(80%, -45%)",
+                  },
+                },
+              }}
+            >
+              <RiNotification3Line size={ICON_SIZE} />
+            </Badge>
           </Button>
+
           <Button
             variant="outlined"
             title="Website"
@@ -117,8 +140,16 @@ const TeacherHeader = ({ toggleSidebar }) => {
             <Button
               variant="link"
               onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex align-items-center admin-menu admin-text"
+              className="text-decoration-none fw-bold d-flex flex-column align-items-center admin-menu admin-text"
             >
+              <RiAdminLine
+                style={{
+                  fontSize: "24px",
+                  marginBottom: "2px",
+                  color: "green",
+                  marginTop:'20px'
+                }}
+              />
               <span className="admin-text">Teacher</span>
             </Button>
 
@@ -201,9 +232,26 @@ const TeacherHeader = ({ toggleSidebar }) => {
             variant="link"
             style={{ padding: "5px", marginRight: "10px" }}
           >
-            <RiNotification3Line
-              style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
-            />
+            <Badge
+              badgeContent={10}
+              color="secondary"
+              overlap="circular"
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              style={{
+                position: "relative",
+              }}
+              componentsProps={{
+                badge: {
+                  style: {
+                    right: "auto",
+                    left: 0,
+                    transform: "translate(80%, -45%)",
+                  },
+                },
+              }}
+            >
+              <RiNotification3Line size={ICON_SIZE} />
+            </Badge>
           </Button>
           <Button
             variant="link"
@@ -221,6 +269,13 @@ const TeacherHeader = ({ toggleSidebar }) => {
               className="text-decoration-none fw-bold d-flex flex-column align-items-center"
               style={{ padding: "0" }}
             >
+              <RiAdminLine
+                style={{
+                  fontSize: "24px",
+                  color: "green",
+                  marginTop:'10px'
+                }}
+              />
               <span
                 className="text-success"
                 style={{
