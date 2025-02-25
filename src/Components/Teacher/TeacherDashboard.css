@@ -7,34 +7,30 @@
   height: 100vh;
   background-color: #e7ffec;
   transition: transform 0.3s ease-in-out;
-  z-index: 1050; /* Ensures it overlays the content */
+  z-index: 1050;
   overflow-y: auto;
 }
 
-/* Keep Sidebar Visible on Larger Screens */
+/* Sidebar Visibility */
 @media (min-width: 768px) {
   .sidebar-container {
     transform: translateX(0);
   }
 }
 
-/* Hide Sidebar in Mobile */
 @media (max-width: 768px) {
   .sidebar-container {
     transform: translateX(-100%);
   }
-
   .sidebar-container.active {
     transform: translateX(0);
   }
 }
 
-/* Hide Scrollbar for Sidebar */
+/* Hide Scrollbar */
 .sidebar-container::-webkit-scrollbar {
-  width: 5px;
   display: none;
 }
-
 .sidebar-container {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -44,32 +40,71 @@
 .dashboard-container {
   background-color: #fff;
   min-height: 100vh;
-  margin-left: 250px; /* Matches sidebar width */
-  margin-top: 43px;
-  padding: 20px;
-  width: calc(100% - 250px);
+  margin-left: -25px;
+  padding: 45px;
+  width: calc(109% - 160px);
   overflow-y: auto;
   transition: margin-left 0.3s ease;
 }
 
-/* Adjust Dashboard for Mobile */
+/* Responsive Dashboard */
+@media (max-width: 998px) {
+  .dashboard-container {
+    background-color: #fff;
+    min-height: 100vh;
+    margin-left: 195px;
+    padding: 40px;
+    width: calc(109% - 160px);
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+    margin-top: 10px;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-container {
     margin-left: 0;
     margin-top: 60px;
-    padding: 15px;
-    width: 100%;
+    padding: 0;
+    width: 136%;
+    max-width: 542px;
+    margin: auto;
+    margin-left: 36px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 568px) {
+  .dashboard-container {
+    margin-left: 0;
+    padding: 0;
+    width: 126%;
+    max-width: 540px;
+    margin: auto;
+    margin-left: 4px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 368px) {
+  .dashboard-container {
+    margin-left: 0;
+    padding: 0;
+    width: 150%;
+    max-width: 540px;
+    margin: auto;
+    margin-left: -22px;
+    justify-content: center;
+  }
+  .row-2 {
+    margin-top: 10px;
   }
 }
 
 /* =================== Buttons & Icons =================== */
-
-
-/* Success Button Styling */
 .btn-success {
   background-color: #006838;
   border-color: #006838;
-  
 }
 
 .btn-success:hover {
@@ -77,41 +112,6 @@
   border-color: #005530;
 }
 
-/* Payment Card Styling */
-.payment-card {
-  min-height: 300px;
-  height: auto !important;
-  max-height: 100vw;
-  overflow-y: auto;
-}
-
-/* =================== Stats Cards Responsive Styling =================== */
-@media (max-width: 768px) {
-  .stats-card {
-    margin-bottom: 1rem;
-  }
-
-  .payment-card {
-    margin-top: 1rem;
-  }
-
-  .stats-count {
-    font-size: 1.5rem;
-  }
-}
-
-/* Tablet Adjustments */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .stats-count {
-    font-size: 1.5rem;
-  }
-
-  .stats-card .card-body {
-    padding: 0.875rem;
-  }
-}
-
-/* =================== Responsive Icon Buttons =================== */
 .icon-container {
   display: flex;
   align-items: center;
@@ -119,26 +119,24 @@
   margin-right: 10px;
 }
 
-/* Default button styling for desktop & tablet */
 .icon-only-button {
   display: flex;
-  gap: 5px;
+  /* gap: -1px; */
   justify-content: center;
-  background-color: #198754;
+  background-color: #198653;
   color: white;
-  border: 4px solid #198754; /* Increased border size */
-  border-radius: 8px; /* Slightly rounded corners */
+  font-weight: bold;
+  border: 4px solid #198754;
+  border-radius: 8px;
   transition: background 0.3s ease-in-out, border 0.3s ease-in-out;
   text-decoration: none;
 }
 
-/* Hover effect */
 .icon-only-button:hover {
   background-color: #005530;
   border-color: #005530;
 }
 
-/* Icon inside button */
 .icon-only {
   font-size: 20px;
   margin-right: 17px;
@@ -150,20 +148,391 @@
   display: inline;
 }
 
-/* Mobile View: Show only icons, remove button background */
 @media (max-width: 575px) {
   .icon-only-button {
     background: transparent !important;
-    border: none !important; /* Remove border in mobile */
+    border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
   }
+  .icon-only {
+    color: #198754 !important;
+  }
+  .button-text {
+    display: none;
+  }
+}
+
+
+/* =================== Payment History & Table Styling =================== */
+.payment-card {
+  min-height: 300px;
+  height: auto !important;
+  max-height: 100vh;
+  overflow-y: auto;
+  width: 120%;
+}
+
+/* Payment History Header */
+.payment-card .card-body {
+  padding: 1.5rem;
+}
+
+.payment-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.payment-title-section {
+  border-radius: 25px;
+  padding: 12px 20px;
+  /* min-width: 220px; */
+}
+
+.payment-title-section h5 {
+  margin-bottom: 4px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Sorting Section */
+.sort-section {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.sort-label {
+  color: black;
+}
+
+.sort-dropdown .dropdown-toggle {
+  color: blue !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  font-weight: 500;
+  text-decoration: none;
+}
+.dropdown-toggle{
+  background-color: #198754;
+}
+.sort-dropdown .dropdown-toggle::after {
+  display: none;
+}
+
+.sort-dropdown .dropdown-toggle:focus {
+  box-shadow: none !important;
+}
+
+.sort-dropdown .dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.sort-dropdown .dropdown-item {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.sort-dropdown .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+/* =================== Transaction Table =================== */
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  width: 100%;
+  max-width: 180%;
+}
+
+.table-container::-webkit-scrollbar {
+  display: none;
+}
+
+.payment-table {
+  min-width: 800px;
+  width: 100%;
+}
+
+.payment-table thead {
+  position: sticky;
+  top: 0;
+  background: #198754;
+  color: white;
+  z-index: 1;
+}
+
+/* =================== Stats Cards Responsive Styling =================== */
+@media (max-width: 768px) {
+  .stats-card {
+    margin-bottom: 1rem;
+  }
+  .payment-card {
+    margin-top: 1rem;
+  }
+  .stats-count {
+    font-size: 1.5rem;
+  }
+}
+
+/* Tablet Adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .stats-count {
+    font-size: 1.5rem;
+  }
+  .stats-card .card-body {
+    padding: 0.875rem;
+  }
+}
+
+.payment-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.table_container {
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.table_container::-webkit-scrollbar {
+  width: 2px;
+}
+
+.table_container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.payment-table {
+  min-width: 800px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+
+/* Icon-Only Button Responsive */
+@media (max-width: 320px) {
+  .icon-only-button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #198754;
+    border: none;
+  }
 
   .icon-only {
-    color: #198754 !important; /* Green color for icons */
+    font-size: 18px;
+    margin: 0;
+    color: white;
   }
 
   .button-text {
-    display: none; /* Hide text in mobile view */
+    display: none;
+  }
+}
+
+/* Payment Title Section Responsive */
+@media (max-width: 320px) {
+  .payment-title-section {
+    width: 100%;
+    padding: 8px 10px;
+    text-align: center;
+  }
+
+  .payment-title-section h5 {
+    font-size: 16px;
+  }
+
+  .payment-history-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .sort-section {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 320px) {
+  .icon-container {
+    gap: 0px; /* Reduce space between buttons */
+  }
+
+  .icon-only-button {
+    width: 36px; /* Reduce button size */
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 0%;
+    background-color: #198754;
+    border: none;
+   
+  }
+
+  .icon-only {
+    font-size: 16px; /* Reduce icon size */
+    margin: 0;
+    color: white;
+    margin-bottom: 100%;
+    margin-left: -380%;
+  }
+
+  .button-text {
+    display: none; /* Hide text for compact look */
+  }
+}
+@media (max-width: 320px) {
+  .payment-history-header {
+    margin-bottom: -1.5rem; /* Reduce bottom margin */
+  }
+
+  .payment-card .card-body {
+    padding: 0.8rem; /* Reduce padding inside the card */
+  }
+
+  .table_container {
+    margin-top: -5px; /* Pull the table closer */
+  }
+}
+@media (max-width: 320px) {
+  .payment-table th,
+  .payment-table td {
+    font-size: 12px; /* Reduce font size */
+    padding: 5px; /* Reduce padding */
+  }
+
+  .payment-table th:nth-child(1), /* Purpose */
+  .payment-table td:nth-child(1) {
+    width: 10%; /* Reduce width */
+  }
+
+  .payment-table th:nth-child(2), /* Date */
+  .payment-table td:nth-child(2) {
+    width: 20%;
+  }
+
+  .payment-table th:nth-child(3), /* Amount */
+  .payment-table td:nth-child(3) {
+    width: 25%;
+  }
+
+  .payment-table th:nth-child(4), /* Status */
+  .payment-table td:nth-child(4) {
+    width: 15%;
+  }
+}
+
+
+/* Payment History Header Responsive Styles */
+@media (max-width: 320px) {
+  .payment-history-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 1rem;
+    gap: 10px;
+  }
+
+  .payment-title-section {
+    width:53% !important;
+    padding: 0;
+    text-align: left;
+    display: inline-block;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .payment-title-section h5 {
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .sort-section {
+    justify-content: flex-start;
+    width: max-content;
+  }
+
+  .icon-container {
+    display: flex;
+    margin-left:0;
+  }
+
+  .icon-only-button {
+    width:25px;
+    height: 32px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #198754;
+    border: none;
+    border-radius: 4px;
+  }
+  .sort-dropdown{
+    padding: 0 !important;
+    width: 5%;
+    margin-left: -10px;
+  }
+  .icon-only {
+    font-size: 16px;
+    margin: 0;
+    color: white;
+  }
+
+  .button-text {
+    display: none;
+  }
+
+  /* Adjust dropdown for better alignment */
+  .sort-dropdown .dropdown-toggle {
+    padding: 0 4px !important;
+    font-size: 14px;
+  }
+}
+
+/* Additional adjustments for extremely narrow screens */
+@media (max-width: 280px) {
+  .payment-history-header {
+    flex-wrap: wrap;
+  }
+
+  .icon-container {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+
+@media (max-width: 500px) {
+  .table_container {
+    max-height: 250px; /* Adjust height on smaller screens */
   }
 }

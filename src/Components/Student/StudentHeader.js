@@ -114,21 +114,22 @@ const StudentHeader = ({ toggleSidebar }) => {
           className="d-flex justify-content-end align-items-center header-icon-group"
         >
           <Button
-            variant="outlined"
-            title="Notification"
-            className="me-2 action-button"
-            onClick={() => navigate("/studentnotification")}
-          >
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              className="notification-badge"
-            >
-              <RiNotification3Line size={ICON_SIZE} />
-            </Badge>
-          </Button>
+  variant="outlined"
+  title="Notification"
+  className="me-2 action-button"
+  onClick={() => navigate("/studentnotification")}
+>
+  <Badge
+    badgeContent={10}
+    color="secondary"
+    overlap="circular"
+    anchorOrigin={{ vertical: "top", horizontal: "left" }} // Adjusted position
+    className="notification-badge"
+  >
+    <RiNotification3Line size={ICON_SIZE} />
+  </Badge>
+</Button>
+
           <Button
             variant="outlined"
             title="Website"

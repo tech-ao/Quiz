@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import Sidebar from '../Teacher/TeacherSidepannel';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherSidePanel from './TeacherSidepannel';
+import TeacherHeader from './TeacherHeader';
 import './TeacherSettings.css';
 import { getStudent } from '../../redux/Services/api'; // Import the getStudent function
 
@@ -48,9 +48,9 @@ const TeacherSettings = () => {
   
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <Sidebar />}
+        {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="mb-4">
