@@ -12,6 +12,8 @@ import profilePic from "../images/dummmy_profile.jpg"; // Replace with actual pr
 import "./AdminSettings.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader"; // Assuming this contains the header with the toggle button
+import { FaEdit } from "react-icons/fa";
+
 
 const AdminSetting = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -82,7 +84,21 @@ const AdminSetting = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container" style={{ overflowY:"hidden"}}>
+  {/* Sticky Title */}
+  <div
+            style={{
+              position: "sticky",
+              top: 0,
+              backgroundColor: "white",
+              zIndex: 1000,
+              padding: "20px 0",
+              height: "80px"
+            }}
+          >
+            <h2 style={{ margin: 0 }}>Admin Details</h2>
+          </div>
+
           <div className="sub-container">
             <div className="flex-grow-1">
               <Card className="p-4 shadow-lg profile-card">
@@ -98,7 +114,7 @@ const AdminSetting = () => {
                       src={profilePic}
                       roundedCircle
                       className="profile-pic mb-3"
-                      alt="Profile" style={{width:'120px'}}
+                      alt="Profile" style={{width:'120px',marginLeft:"30%"}}
                     />
 
                     {/* Name */}
@@ -111,7 +127,7 @@ const AdminSetting = () => {
                         className="mb-3 form-control"
                       />
                     ) : (
-                      <h4 className="text-success fw-bold">
+                      <h4 className="text-success fw-bold " style={{marginLeft:"30%"}}>
                         {profileData.name}
                       </h4>
                     )}
@@ -227,9 +243,14 @@ const AdminSetting = () => {
                           Save
                         </Button>
                       ) : (
-                        <Button className="edit-btn" onClick={toggleEditMode}>
-                          Edit
-                        </Button>
+                        
+                        <FaEdit
+                              size={32}
+                              onClick={toggleEditMode}
+                              className=" edit-btn text-success cursor-pointer"
+                              style={{backgroundColor:"white"}}
+                        />
+                        
                       )}
                     </div>
 

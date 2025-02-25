@@ -104,13 +104,13 @@ const StudentSettings = () => {
 
       <div className="d-flex">
         {isSidebarVisible && <Sidebar studyModeId={studentData?.studyModeId}/>}
-        <Container className="main-container p-4 min-vh-100">           
+        <Container className="main-container ">           
           {/* Moved Sticky Header to main-container */}
           <div className="sticky-header d-flex justify-content-between align-items-center">
             <h2 className="fw-bold text-dark">Student Settings</h2>
             <FaEdit
               size={24}
-              className="text-primary cursor-pointer"
+              className="text-success cursor-pointer"
               onClick={handleOpenEditStudent}
             />
           </div>

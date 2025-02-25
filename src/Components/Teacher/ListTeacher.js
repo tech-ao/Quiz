@@ -79,14 +79,14 @@ const ListTeacher = ({ Teachers = [] }) => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4">
+        <Container className="main-container ">
           <div className="sub-container">
-            <Row className="align-items-center mb-4">
+            <Row className="align-items-center mt-2">
               <Col md={6}>
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
-              <Col md={6} className="d-flex  align-items-center" style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
-                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "50%" : "400px", marginRight: '15px' }}>
+              <Col md={6} className="d-flex " style={{ marginTop: window.innerWidth<=768?"10px":"30px"}}>
+                <InputGroup style={{ maxWidth: window.innerWidth <= 768 ? "55%" : "400px", marginRight: '35px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
@@ -94,14 +94,14 @@ const ListTeacher = ({ Teachers = [] }) => {
                    
                   />
                 </InputGroup>
-                <Button variant="outline-success"onClick={handleOpenAddTeacher}>
+                <Button variant="outline-success"onClick={handleOpenAddTeacher} style={{ maxWidth: window.innerWidth <= 768 ? "45%" : "200px" }} >
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>
             </Row>
 
-            <div className="table-responsive">
-              <Table hover className="mb-0">
+            <div className="table-responsive" style={{maxWidth:"1250px"}}>
+              <Table hover className="mb-0" >
                 <thead>
                   <tr>
                     <th>S.No</th>

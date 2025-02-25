@@ -52,7 +52,7 @@ const AdminLoginPage = () => {
 
   return (
     <Container fluid className="bg1-image">
-    <Row className="justify-content-center  align-items-center vh-100">
+    <Row className=" align-items-center ">
       <Col xs={12} sm={10} md={8} lg={5}>
         <div className="login-card">
           <div className="text-center mb-4">
@@ -90,7 +90,7 @@ const AdminLoginPage = () => {
                 {showPassword ? <FiEyeOff /> : <FiEye />}
               </Button>
             </Form.Group>
-            <Button type="submit" variant="success" className="w-100">
+            <Button type="submit" variant="success" className="">
               Login
             </Button>
             

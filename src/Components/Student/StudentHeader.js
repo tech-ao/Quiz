@@ -92,6 +92,7 @@ const StudentHeader = ({ toggleSidebar }) => {
                 maxWidth: "80px",
                 border: "1px solid #000",
                 borderRadius: "5px",
+                margin:"10px",
               }}
             />
           </Link>

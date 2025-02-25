@@ -187,66 +187,29 @@ const AssignClass = () => {
                           <option value="Completed">Completed</option>
                         </select>
                       </td>
-                      <td
-                        className="action-column"
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          padding: "20px",
-                          gap: "10px",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <button
-                          className="btn btn-primary btn-sm"
-                          style={{
-                            width: "70px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                            backgroundColor: "green",
-                            borderColor: "green",
-                            color: "white",
-                            minWidth: "70px",
-                            minHeight: "30px",
-                          }}
-                          onClick={() => handleAction("view", classItem)}
-                        >
-                          <i className="bi bi-eye"></i> View
-                        </button>
-                        <button
-                          className="btn btn-warning btn-sm"
-                          style={{
-                            width: "70px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                            backgroundColor: "green",
-                            borderColor: "green",
-                            color: "white",
-                            minWidth: "70px",
-                            minHeight: "30px",
-                          }}
-                          onClick={() => handleAction("edit", classItem)}
-                        >
-                          <i className="bi bi-pencil"></i> Edit
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          style={{
-                            width: "89px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "5px",
-                            minWidth: "89px",
-                            minHeight: "30px",
-                          }}
-                          onClick={() => handleAction("remove", classItem)}
-                        >
-                          <i className="bi bi-trash"></i> Remove
-                        </button>
-                      </td>
+                      <td className="action-column" style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px", gap: "10px", flexWrap: "wrap" }}>
+  <button
+    className="btn btn-primary btn-sm"
+    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
+    onClick={() => handleAction("view", classItem)}
+  >
+    <i className="bi bi-eye" style={{ fontSize: "16px" }}></i>
+  </button>
+  <button
+    className="btn btn-warning btn-sm"
+    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
+    onClick={() => handleAction("edit", classItem)}
+  >
+    <i className="bi bi-pencil" style={{ fontSize: "16px" }}></i>
+  </button>
+  <button
+    className="btn btn-danger btn-sm"
+    style={{ width: "40px", height: "30px", borderRadius: "50%", padding: "0" }}
+    onClick={() => handleAction("remove", classItem)}
+  >
+    <i className="bi bi-trash" style={{ fontSize: "16px" }}></i>
+  </button>
+</td>
                     </tr>
                   ))}
                 </tbody>

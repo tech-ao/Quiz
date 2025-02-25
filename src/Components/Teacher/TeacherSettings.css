@@ -34,12 +34,7 @@ button {
 }
 
 .dropdown-toggle {
-  background-color: #6c757d;
   border: none;
-}
-
-.dropdown-toggle:hover {
-  background-color: #5a6268;
 }
 
 .table thead th {
@@ -119,10 +114,7 @@ button {
     overflow-x: auto;
   }
 
-  button {
-    width: 100%;
-    margin: 5px 0;
-  }
+  
 }
 
 @media (max-width: 576px) {
@@ -133,7 +125,7 @@ button {
   }
 
   .card {
-    width: 85%;
+    width: 100%;
     margin: 15px auto;
   }
 
