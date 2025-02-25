@@ -5,14 +5,17 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f4f4f4;
-  padding: 20px;
+  background-color: #d8d5d5;
+  padding: 10px;
+  width: 100%;
 }
 
+/* Title */
 .title {
   font-size: 24px;
   margin-bottom: 20px;
   font-weight: bold;
+  text-align: center;
 }
 
 /* Abacus Frame */
@@ -22,14 +25,22 @@
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3),
     inset 0 -4px 8px rgba(255, 255, 255, 0.2);
-  width: 80%;
-  max-width: 900px;
+  width: 600px; /* Fixed width */
+  height: 400px; /* Set height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
+/* Rods and Beads Container */
 .aba-frame {
   display: flex;
-  justify-content: space-around;
-  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
 }
 
 /* Rods */
@@ -38,39 +49,33 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-}
-
-/* Center Bar */
-.abacus-center-bar {
-  position: relative;
-  width: 5px;
-  height: 320px;
+  width: 7px;
+  height: 280px;
   background-color: #000;
-  margin: 10px 0;
-  border-left: 2px solid #fff;
-  border-right: 2px solid #fff;
+  margin: 12px;
 }
 
 /* Beads */
 .abacus-bead {
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
-  margin: 5px 0;
+  margin: 8px 0;
   cursor: pointer;
   transition: transform 0.3s, background-color 0.3s;
 }
+
 .tb {
   position: absolute;
-  top: 0;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 70px;
 }
 
 .abacus-bead.top {
   background-color: #ffd700;
 }
+
 .abacus-bead.top.active {
   background-color: #007bff;
   transform: translateY(20px);
@@ -78,19 +83,44 @@
 
 .bb {
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  margin-top: 40px;
+} 
+
+.abacus-bead.top {
+  background-color: #ffd700;
+  transition: transform 0.3s ease-in-out;
 }
+
+/* Move down further when active */
+.abacus-bead.top.active {
+  background-color: #007bff;
+  transform: translateY(50px); /* Increased from 20px */
+}
+
+/* Reset to original position */
+.abacus-bead.top.inactive {
+  transform: translateY(0px);
+}
+
 
 .abacus-bead.bottom {
   background-color: #00c853;
+  transition: transform 0.3s ease-in-out;
 }
+
+/* Bead moves up when active */
 .abacus-bead.bottom.active {
   background-color: #007bff;
-  transform: translateY(-20px);
+  transform: translateY(-40px); /* Adjusted for smoother movement */
 }
+
+/* Reset bead to default position */
+.abacus-bead.bottom.inactive {
+  transform: translateY(0px);
+}
+
 
 /* Reset Button */
 .reset-button {
@@ -113,12 +143,13 @@
 /* Horizontal line for spacing */
 .horizontal-line {
   position: absolute;
-  width: 80%;
-  max-width: 870px;
-  height: 8px;
+  width: 100%;
+  max-width: 500px;
+  height: 6px;
   background-color: #000;
-  margin-top: 130px;
+  top: 38%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   border-top: 3px solid #fff;
   border-bottom: 3px solid #fff;
-
 }

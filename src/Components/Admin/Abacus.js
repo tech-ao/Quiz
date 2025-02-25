@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./aba.css"; // Import the updated CSS file
+import AbacusKit from "./Kit";
 
 const AbacusMath = () => {
+  const [showAbacusKit, setShowAbacusKit] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [openStage, setOpenStage] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null); // State to track selected question
@@ -22,7 +24,7 @@ const AbacusMath = () => {
   };
 
   const handleGoToKit = () => {
-    window.location.href = "/AbacusKit"; // Navigate to the quiz page
+    setShowAbacusKit(true); // Show AbacusKit inside main content
   };
 
   const questions = [
@@ -118,20 +120,23 @@ const AbacusMath = () => {
 
       {/* Main Content */}
       <main className="abacus-main-content">
-        <h2>Welcome to Abacus Math! Explore and learn with us.</h2>
-        {selectedQuestion !== null && (
-          <div className="abacus-question-image-container">
-            <img src={questionImages[selectedQuestion]} alt={`Question ${selectedQuestion + 1}`} className="abacus-question-image" />
-            <p className="abacus-question-description">This is the description for Question {selectedQuestion + 1}.</p>
-          </div>
-        )}
-      </main>
+  {!showAbacusKit ? (
+    <>
+      <h2>Welcome to Abacus Math! Explore and learn with us.</h2>
+    </>
+  ) : (
+    <AbacusKit onClose={() => setShowAbacusKit(false)} /> // Pass onClose prop
+  )}
+</main>
 
-      {/* Game Icon Button */}
-      <div className="abacus-game-icon-container" onClick={handleGoToKit}>
-        <i className="bi bi-controller" aria-hidden="true"></i> {/* Game icon */}
-      </div>
-    </div>
+{/* Game Icon Button */}
+{!showAbacusKit && (
+  <div className="abacus-game-icon-container" onClick={handleGoToKit}>
+    <i className="bi bi-controller" aria-hidden="true"></i> {/* Game icon */}
+  </div>
+)}
+
+</div>
   );
 };
 
