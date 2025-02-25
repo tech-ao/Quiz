@@ -17,7 +17,6 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -75,64 +74,72 @@ function AdminDashboard() {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container  ">
+        <Container className="main-container">
           <div className="sub-container">
             <Row className="sticky-title align-items-center mb-4">
               <h2 className="fw-bold text-left">Admin Dashboard</h2>
             </Row>
 
-            {/* Dashboard & Quiz Cards */}
-            <Row className="g-4">
-              <Col lg={8}>
-                <Row className="g-3">
+            {/* Single Row: Dashboard Cards (8 columns) & Calendar (4 columns) */}
+            <Row className="g-4 align-items-stretch">
+              {/* Left Column: Dashboard Cards */}
+              <div className="col-lg-8 d-flex align-items-stretch">
+                <div className="row g-3 flex-grow-1">
                   {[
                     { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
                     { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
                     { label: "Enrollment Request", count: 0, img: enrolImg, route: "/enrollmentRequest" },
                     { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg, route: "/questionListPage" },
                     { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg, route: "/quiz" },
-                    { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg, route: "/quizList" } // New Quiz Card
+                    { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg, route: "/quizList" }
                   ].map((item, index) => (
-                    <Col lg={6} md={6} sm={12} key={index}>
-                      <Card 
-                        className="dashboard-card shadow-sm  d-flex mb-4" 
-                        style={{ minWidth: "340px", maxWidth: "100%" }}  
+                    <div className="col-lg-6 col-md-6 col-sm-12" key={index}>
+                      <Card
+                        className="dashboard-card shadow-sm d-flex mb-4"
+                        style={{
+                          minWidth: "340px",
+                          maxWidth: "100%",
+                        }}
                         onClick={() => handleCardClick(item.label)}
                       >
                         <Card.Body className="d-flex align-items-center">
-                          <img 
-                            src={item.img} 
-                            alt={item.label} 
-                            className="card-icon me-3" 
-                            width="50"  
-                            height="50" 
+                          <img
+                            src={item.img}
+                            alt={item.label}
+                            className="card-icon me-3"
+                            width="50"
+                            height="50"
                           />
                           <div className="ms-3 w-100 d-flex flex-column">
-                            <h5 className="fw-bold m-0" style={{ fontSize: "1.1rem" }}>{item.label}</h5>
-                            <h3 className="m-0" style={{ fontSize: "1.5rem" }}>{item.count}</h3>
+                            <h5 className="fw-bold m-0" style={{ fontSize: "1.1rem" }}>
+                              {item.label}
+                            </h5>
+                            <h3 className="m-0" style={{ fontSize: "1.5rem" }}>
+                              {item.count}
+                            </h3>
                           </div>
                         </Card.Body>
                       </Card>
-                    </Col>
+                    </div>
                   ))}
-                </Row>
-              </Col>
+                </div>
+              </div>
 
-              {/* Calendar Section (Right Side) */}
-              <Col lg={4} className="d-flex align-items-stretch">
-                <Card className="calendar-card shadow-sm  "   >
+              {/* Right Column: Calendar Section */}
+              <div className="col-lg-4 d-flex align-items-stretch">
+                <Card className="calendar-card shadow-sm">
                   <Card.Body>
-                    <h5 className="calendar-heading text-center fw-bold ">Calendar</h5>
+                    <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
                     <div className="d-flex justify-content-center">
                       <Calendar className="calender-note" />
                     </div>
                   </Card.Body>
                 </Card>
-              </Col>
+              </div>
             </Row>
 
             {/* Filter Options */}
-            <Row className="g-4 ">
+            <Row className="g-4">
               <Col lg={6} md={12} sm={12}>
                 <Card className="filter-card shadow-sm p-4 rounded">
                   <Card.Body>

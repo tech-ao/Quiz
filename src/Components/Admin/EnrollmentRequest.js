@@ -8,8 +8,7 @@ import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
-import { FiEye } from "react-icons/fi";
-
+import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
@@ -135,6 +134,11 @@ const EnrollmentRequestList = () => {
     setShowViewStudent(true);
   };
 
+  // New function: Opens the default email client with the student's email address
+  const handleEmailAction = (email) => {
+    window.location.href = `mailto:${email}`;
+  };
+
   const handleCloseViewStudent = () => {
     setShowViewStudent(false);
     setSelectedStudentId(null);
@@ -165,7 +169,7 @@ const EnrollmentRequestList = () => {
                 <Button variant="success" onClick={handleApprove}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny}  style={{ marginRight: "20px" }}>
+                <Button variant="danger" onClick={handleDeny} >
                   Reject
                 </Button>
               </Col>
@@ -211,9 +215,14 @@ const EnrollmentRequestList = () => {
                         </Badge>
                       </td>
                       <td>
-                        <Button variant="transparent" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
-                         <FiEye />
-                        </Button>
+                        <div className="d-flex align-items-center gap-2">
+                          <Button variant="transparent" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
+                            <FiEye />
+                          </Button>
+                          <Button variant="transparent" size="sm" onClick={() => handleEmailAction(request.email)}>
+                            <FiMail />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}

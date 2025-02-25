@@ -165,12 +165,10 @@ const StudentAttendance = ({
               position: "sticky",
               top: `${headerHeight}px`,
               backgroundColor: "white",
-              zIndex: 999,
-              padding: "15px",
-              paddingRight: "50px",
+              zIndex: 999
             }}
           >
-            <Table className="table-sm" style={{ width: "50%" }}>
+            <Table className="table-sm" style={{ width: "40%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Level</th>
@@ -286,7 +284,7 @@ const StudentAttendance = ({
           {selectedPerson && (
             <div
               className="calendar-grid"
-              style={{ margin: "20px", overflowY: "auto" }}
+              style={{ overflowY: "auto" }}
             >
               {renderYearlyCalendar()}
             </div>

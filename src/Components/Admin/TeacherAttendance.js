@@ -181,11 +181,9 @@ const TeacherAttendance = ({
               top: `${headerHeight}px`,
               backgroundColor: "white",
               zIndex: 999,
-              padding: "15px",
-              paddingRight: "50px",
             }}
           >
-            <Table className="table-sm" style={{ width: "50%" }}>
+            <Table className="table-sm" style={{ width: "40%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Type</th>
@@ -263,7 +261,7 @@ const TeacherAttendance = ({
 
           {/* Render calendar only when a teacher has been selected */}
           {selectedPerson && (
-            <div className="calendar-grid" style={{ margin: "20px",overflowY:"auto" }}>
+            <div className="calendar-grid" style={{ overflowY:"auto" }}>
               {renderYearlyCalendar()}
             </div>
           )}
