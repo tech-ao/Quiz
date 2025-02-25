@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Offcanvas, Row, Col, Image } from "react-bootstrap";
+import { Offcanvas, Row, Col, Image, Button } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import BASE_URL from "../../redux/Services/Config";
 
 const ViewStudentPanel = ({ show, onClose }) => {
@@ -24,16 +25,15 @@ const ViewStudentPanel = ({ show, onClose }) => {
       axios
         .get(`${BASE_URL}/Profile/GetContentByUserId?userId=${studentData.userId}`, {
           headers: {
-            "accept": "text/plain", // Assuming the response is base64-encoded string
+            accept: "text/plain", // Assuming the response is a base64-encoded string
             "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280", // Replace with your actual API key
-            "AccessToken": "123" // Replace with the actual access token
+            AccessToken: "123" // Replace with the actual access token
           }
         })
         .then((response) => {
           const base64Image = response.data; // Assuming the API returns a base64 string
           setProfileImage(base64Image.data);
           console.log(base64Image.data);
-          
           setLoading(false);
         })
         .catch((err) => {
@@ -42,6 +42,38 @@ const ViewStudentPanel = ({ show, onClose }) => {
         });
     }
   }, [studentData?.userId]);
+
+  // Update status for the student (1: Approved, 2: Rejected)
+  const updateStatus = async (statusEnum) => {
+    if (!studentData || !studentData.studentId) {
+      toast.error("No student data available.");
+      return;
+    }
+    try {
+      const requestBody = {
+        statusEnum,
+        studentIdList: [studentData.studentId]
+      };
+      await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
+        headers: {
+          Accept: "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123"
+        }
+      });
+      toast.success("Status updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update status. Please try again.");
+    }
+  };
+
+  const handleApprove = () => {
+    updateStatus(1);
+  };
+
+  const handleDeny = () => {
+    updateStatus(2);
+  };
 
   return (
     <Offcanvas show={show} onHide={onClose} placement="end">
@@ -52,32 +84,30 @@ const ViewStudentPanel = ({ show, onClose }) => {
         {/* Profile Image Section */}
         <Row className="mb-3">
           <Col className="text-center">
-           
-          <div
-                    style={{
-                      border: "5px solid #4caf50",
-                      borderRadius: "50%",
-                      padding: "5px",
-                      display: "inline-block",
-                      height:'171px'
-                    }}
-                  >
-            {loading ? (
-              <p>Loading image...</p>
-            ) : error ? (
-              <p>{error}</p>
-            ) : profileImage ? (
-              <Image
-                src={`data:image/jpeg;base64,${profileImage}`} // Displaying base64 image
-                alt="Profile"
-                roundedCircle
-                width="150"
-                height="150px" 
-                
-              />
-            ) : (
-              <p>No image available</p>
-            )}
+            <div
+              style={{
+                border: "5px solid #4caf50",
+                borderRadius: "50%",
+                padding: "5px",
+                display: "inline-block",
+                height: "171px"
+              }}
+            >
+              {loading ? (
+                <p>Loading image...</p>
+              ) : error ? (
+                <p>{error}</p>
+              ) : profileImage ? (
+                <Image
+                  src={`data:image/jpeg;base64,${profileImage}`}
+                  alt="Profile"
+                  roundedCircle
+                  width="150"
+                  height="150px"
+                />
+              ) : (
+                <p>No image available</p>
+              )}
             </div>
           </Col>
         </Row>
@@ -105,8 +135,6 @@ const ViewStudentPanel = ({ show, onClose }) => {
               {studentData?.countryCode || ""} {studentData?.phoneNumber || "N/A"}
             </p>
           </Col>
-        </Row>
-        <Row className="mb-3">
           <Col>
             <strong>Date of Birth:</strong>
             <p>{formatDate(studentData?.dob)}</p>
@@ -138,6 +166,15 @@ const ViewStudentPanel = ({ show, onClose }) => {
             <p>{studentData?.address || "N/A"}</p>
           </Col>
         </Row>
+        {/* Approve and Reject Buttons */}
+        <div className="d-flex justify-content-end mt-3">
+          <Button variant="success" onClick={handleApprove} className="me-2">
+            Approve
+          </Button>
+          <Button variant="danger" onClick={handleDeny}>
+            Reject
+          </Button>
+        </div>
       </Offcanvas.Body>
     </Offcanvas>
   );

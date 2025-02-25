@@ -69,7 +69,7 @@
   background: white;
   z-index: 1050; /* Ensures it stays on top */
   height: 80px;
-  text-align: center;
+padding: 20px;
 }
 
   .sticky-header h2 {

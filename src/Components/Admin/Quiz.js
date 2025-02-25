@@ -33,7 +33,7 @@ const Quiz = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container">
           <div className="sub-container">
             <Row className="justify-content-center">
               <Col xs={12} md={8} className="text-center">

@@ -57,11 +57,11 @@
     background: transparent;
   }
   
+  
   /* Media queries for responsive design */
   @media (max-width: 768px) {
     .login-card {
         
-    width: 100%; /* Make it responsive */
       padding: 1.5rem;
     }
   

@@ -34,12 +34,10 @@
   top: 0;
   z-index: 99;
   background-color: white;
-  height: 120px; /* Set height of sticky header for larger screens */
 }
 
 /* Responsive styles for small screens */
 @media (max-width: 768px) {
- 
   
   .table-responsive {
     -webkit-overflow-scrolling: touch;
@@ -66,7 +64,6 @@
 
   /* Increase sticky header height for small screens */
   .sticky-top {
-    height: 180px !important; /* Increased height for small screens */
     padding-top: 20px !important; /* Adjust padding for increased header height */
   }
 
@@ -86,6 +83,37 @@
   /* Ensure the button is aligned properly on mobile */
   .search-btn {
     min-width: 100px; /* Add a minimum width to the button */
+  }
+
+  /* New styles for small screen search container */
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+    width: 100%;
+    position: relative;
+  }
+
+  .search-container input {
+    width: 45%;
+  }
+
+  .search-container .filter-icon {
+    width: 15%;
+    text-align: center;
+    position: relative;
+    z-index: 1050;
+  }
+
+  .search-container .add-student-btn {
+    width: 40%;
+  }
+
+  /* Ensure dropdown menu appears above subcontainer in small screens */
+  .dropdown-menu-custom {
+    z-index: 2000 !important;
+    position: absolute;
   }
 }
 

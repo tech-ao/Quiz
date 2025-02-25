@@ -17,6 +17,7 @@ function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);

@@ -98,7 +98,6 @@
 
 .calendar-grid {
   max-height: 500px;
-  overflow-y: auto;
 }
 .calendar-grid {
   display: flex;

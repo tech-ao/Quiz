@@ -151,21 +151,20 @@ button {
 }
 
 /* Buttons */
-button.edit-btn {
-  background-color: #218838;
+.edit-btn {
+  background-color: transparent;
   border: none;
-  color: white;
+
   font-weight: bold;
-  padding: 10px 16px;
   border-radius: 5px;
   transition: 0.3s ease;
 }
 
-button.edit-btn:hover {
+.edit-btn:hover {
   background-color: #196c2d;
 }
 
-button.edit-btn:focus {
+.edit-btn:focus {
   outline: none;
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
 }
@@ -209,9 +208,7 @@ button.edit-btn:focus {
     justify-content: center;
   }
 
-  .dropdown-toggle {
-    width: 100%;
-  }
+
 
   .table {
     font-size: 14px;
@@ -261,7 +258,7 @@ button.edit-btn:focus {
 
     /* Ensure buttons take up full width */
     button[type="submit"],
-    button.edit-btn {
+    .edit-btn {
       width: 90%;
     }
   }
