@@ -94,7 +94,7 @@ const TeacherSidePanel = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/approvalleave" className="nav-link">
+                    <Link to="/approvedleave" className="nav-link">
                       ➤ Approve Leave
                     </Link>
                   </li>
