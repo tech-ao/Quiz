@@ -6,6 +6,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   const [isAttendanceOpen, setAttendanceOpen] = useState(false);
   const [isOnlineOpen, setOnlineOpen] = useState(false);
   const [isEnrollmentOpen, setEnrollmentOpen] = useState(false);
+  const [isQuestionOpen, setQuestionOpen] = useState(false); // New state for Questions dropdown
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +30,10 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
     setEnrollmentOpen(!isEnrollmentOpen);
   };
 
+  const toggleQuestionMenu = () => {
+    setQuestionOpen(!isQuestionOpen);
+  };
+
   // Show Logout Confirmation Popup
   const handleLogoutClick = () => {
     setShowLogoutPopup(true);
@@ -38,7 +43,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   const handleLogout = () => {
     setShowLogoutPopup(false);
     localStorage.removeItem("userToken"); // Remove authentication token
-    navigate("/login"); // Redirect to login page
+    navigate("/adminLogin"); // Redirect to login page
   };
 
   // Cancel Logout
@@ -156,18 +161,53 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
+
+        {/* Questions Dropdown */}
         <li className="nav-item">
-          <Link
-            to="/questionListPage"
-            className={`nav-link ${location.pathname === "/questionListPage" ? "active" : ""}`}
-            onClick={closeSidePanel}
+          <div
+            className={`nav-link ${isQuestionOpen ? "active" : ""}`}
+            onClick={toggleQuestionMenu}
+            style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
-              <i className="bi bi-journal-text"></i>
+              <i className="bi bi-question-circle"></i>
               <span className="nav-text">Questions</span>
+              <i className={`bi ${isQuestionOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
-          </Link>
+          </div>
+          {isQuestionOpen && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <Link
+                  to="/addQuestion"
+                  className={`nav-link ${location.pathname === "/addQuestion" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                    <i className="bi bi-plus-circle"></i>
+                    <span className="nav-text">Add Question</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/questionPage"
+                  className={`nav-link ${location.pathname === "/questionPage" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-upload"></i>
+                    <span className="nav-text">Upload Question</span>
+                  </div>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
+
+      
 
         {/* Online Menu */}
         <li className="nav-item">
