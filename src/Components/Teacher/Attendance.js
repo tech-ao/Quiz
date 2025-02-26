@@ -145,8 +145,8 @@ const Attendance = () => {
                         <td>{record.registerNumber}</td>
                         <td>{record.level}</td>
                         <td>{record.date}</td>
-                        <td>
-                          <Form.Select
+                        <td >
+                          <Form.Select className="attendance-clmn"
                             value={record.status}
                             onChange={(e) => handleAttendanceChange(index, e.target.value)}
                           >
@@ -168,7 +168,7 @@ const Attendance = () => {
               </Table>
             </div>
 
-            <div className="d-flex mt-3 justify-content-start">
+            <div className="d-flex mt-3 justify-content-start bulkBtn">
               <Form.Select
                 value={bulkStatus}
                 onChange={(e) => setBulkStatus(e.target.value)}
@@ -180,7 +180,7 @@ const Attendance = () => {
                 <option value="Absent">Absent</option>
                 <option value="Holiday">Holiday</option>
               </Form.Select>
-              <Button variant="primary" onClick={applyBulkStatus}>
+              <Button variant="success" onClick={applyBulkStatus}>
                 Apply
               </Button>
             </div>

@@ -57,9 +57,10 @@ const AttendanceDataPage = () => {
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+        <h2 className="fw-bold text-start mb-4" style={{marginTop:'24px'}}>Attendance By Date</h2>
+          <div className="sub-container" >
             {/* Class, Section, and Attendance Date on Same Row */}
-            <Row className="filter-section mb-4">
+            <Row className="filter-section mb-4"  style={{width:"98%"}}>
               <Col md={4}>
                 <Form.Group>
                   <Form.Label>Class *</Form.Label>
@@ -100,14 +101,14 @@ const AttendanceDataPage = () => {
             </Row>
 
             {/* Search Button */}
-            <div className="filter-actions d-flex justify-content-end mb-4">
-              <Button className="btn-search" onClick={() => console.log('Search clicked')}>
+            <div className="filter-actions d-flex justify-content-end mb-6"  style={{width:"95%"}}>
+              <Button variant="success" className="btn-search" onClick={() => console.log('Search clicked')}>
                 Search
               </Button>
             </div>
 
             {/* Attendance Table */}
-            <div className="attendance-list">
+            <div className="attendance-list"  style={{width:"98%"}}>
               <Table responsive>
                 <thead>
                   <tr>

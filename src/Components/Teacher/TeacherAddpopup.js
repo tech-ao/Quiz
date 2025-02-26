@@ -21,7 +21,7 @@ const TeacherAddpopup = ({ onClose }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const roleOptions = 
+  const roleOptions =
     formData.role === "Student"
       ? ["All", "Level-1", "Level-2", "Level-3", "Level-4", "Level-5"]
       : formData.role === "Teacher"
@@ -71,7 +71,9 @@ const TeacherAddpopup = ({ onClose }) => {
                     />
                   </div>
                   <div className="col-md-6 col-sm-12 mb-3">
-                    <label className="form-label">Class Duration (Minutes) *</label>
+                    <label className="form-label">
+                      Class Duration (Minutes) *
+                    </label>
                     <input
                       type="number"
                       className="form-control"
@@ -83,7 +85,8 @@ const TeacherAddpopup = ({ onClose }) => {
                   </div>
                 </div>
 
-                <div className="mb-3">
+                <div className="row">
+                <div className="col-md-6 col-sm-12 mb-3">
                   <label className="form-label">Role *</label>
                   <select
                     className="form-select"
@@ -99,7 +102,7 @@ const TeacherAddpopup = ({ onClose }) => {
                 </div>
 
                 {formData.role && (
-                  <div className="mb-3">
+                  <div className="col-md-6 col-sm-12 mb-3">
                     <label className="form-label">Specific Role *</label>
                     <select
                       className="form-select"
@@ -117,48 +120,6 @@ const TeacherAddpopup = ({ onClose }) => {
                     </select>
                   </div>
                 )}
-
-                <div className="row">
-                  <div className="col-md-6 col-sm-12 mb-3">
-                    <label className="form-label">Staff *</label>
-                    <select
-                      className="form-select"
-                      name="staff"
-                      value={formData.staff}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select</option>
-                      <option value="Staff1">Staff 1</option>
-                      <option value="Staff2">Staff 2</option>
-                    </select>
-                  </div>
-                  <div className="col-md-6 col-sm-12 mb-3">
-                    <label className="form-label">Class *</label>
-                    <select
-                      className="form-select"
-                      name="className"
-                      value={formData.className}
-                      onChange={handleChange}
-                      required
-                    >
-                      <option value="">Select</option>
-                      <option value="Class1">Class 1</option>
-                      <option value="Class2">Class 2</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="form-label">Section *</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="section"
-                    value={formData.section}
-                    onChange={handleChange}
-                    required
-                  />
                 </div>
 
                 <div className="mb-3">
@@ -170,6 +131,7 @@ const TeacherAddpopup = ({ onClose }) => {
                     value={formData.gmeetUrl}
                     onChange={handleChange}
                     required
+                     placeholder="e.g., https://meet.google.com/xyz-abc-def"
                   />
                 </div>
 
@@ -184,7 +146,9 @@ const TeacherAddpopup = ({ onClose }) => {
                 </div>
 
                 <div className="modal-footer">
-                  <button type="submit" className="btn btn-primary">Save</button>
+                  <button type="submit" className="btn btn-primary">
+                    Save
+                  </button>
                 </div>
               </form>
             </div>

@@ -12,6 +12,7 @@ import {
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./Approved.css";
 
 const ApprovalLeave = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(
