@@ -191,32 +191,36 @@ const Header = ({ toggleSidebar }) => {
               <span className="admin-name">{adminFullName}</span>
             </Button>
             {showPopup && (
-              <div className="admin-popup">
-                <ul className="list-unstyled m-0 p-2">
-                  <li
-                    className="dropdown-item menu-item"
-                    onClick={() => navigate("/adminSettings")}
-                  >
-                    <RiLockPasswordLine className="popup-icon" /> Profile
-                  </li>
-                  <li
-                    className="dropdown-item menu-item"
-                    onClick={() => {
-                      togglePasswordPopup();
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiRestartLine className="popup-icon" /> Password
-                  </li>
-                  <li
-                    className="dropdown-item menu-item text-danger"
-                    onClick={handleLogoutClick}
-                  >
-                    <RiLogoutCircleRLine className="popup-icon" /> Logout
-                  </li>
-                </ul>
-              </div>
-            )}
+  <div className="admin-popup">
+    <ul className="list-unstyled m-0 p-2">
+      <li
+        className="dropdown-item menu-item"
+        style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
+        onClick={() => navigate("/adminSettings")}
+      >
+        <RiLockPasswordLine className="popup-icon" /> Profile
+      </li>
+      <li
+        className="dropdown-item menu-item"
+        style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
+        onClick={() => {
+          togglePasswordPopup();
+          setShowPopup(false);
+        }}
+      >
+        <RiRestartLine className="popup-icon" /> Password
+      </li>
+      <li
+        className="dropdown-item menu-item text-danger"
+        style={{ display: "flex", alignItems: "center", gap: "10px" }}
+        onClick={handleLogoutClick}
+      >
+        <RiLogoutCircleRLine className="popup-icon" /> Logout
+      </li>
+    </ul>
+  </div>
+)}
+
           </div>
         </Col>
       </Row>

@@ -55,7 +55,7 @@ function AdminDashboard() {
       case "Total Teacher":
         navigate("/listteacher");
         break;
-      case "Total Enrollment Request":
+      case "Enrollment Request":
         navigate("/enrollmentRequest");
         break;
       case "Total Question":
@@ -80,30 +80,26 @@ function AdminDashboard() {
               <h2 className="fw-bold text-left">Admin Dashboard</h2>
             </Row>
 
-            {/* Single Row: Dashboard Cards (8 columns) & Calendar (4 columns) */}
-            <Row className="g-4 align-items-stretch">
-              {/* Left Column: Dashboard Cards */}
-              <div className="col-lg-8 d-flex align-items-stretch">
-                <div className="row  flex-grow-1">
+            {/* Dashboard Cards and Calendar */}
+            <div className="dashboard-calendar-wrapper mb-4">
+              {/* Dashboard Cards Container (75% width on large screens) */}
+              <div className="dashboard-cards-container" style={{ display: "inline-block", width: "75%" }}>
+                <Row className="g-4">
                   {[
-                    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg, route: "/studentList" },
-                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg, route: "/listteacher" },
-                    { label: "Enrollment Request", count: 0, img: enrolImg, route: "/enrollmentRequest" },
-                    { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg, route: "/questionListPage" },
-                    { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg, route: "/quiz" },
-                    { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg, route: "/quizList" }
+                    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg },
+                    { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg },
+                    { label: "Enrollment Request", count: 0, img: enrolImg },
+                    { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg },
+                    { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg },
+                    { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg }
                   ].map((item, index) => (
-                    <div className="col-lg-6 col-md-6 col-sm-12" key={index}>
+                    <div className="col-lg-6 col-md-6 col-sm-12" key={index} style={{padding:"0px", height:"105px"}}>
                       <Card
-                        className="dashboard-card shadow-sm d-flex mb-4"
-                        style={{
-                          minWidth: "340px",
-                          maxWidth: "100%",
-                          minHeight: "105px" // increased card height; adjust this value as needed
-                        }}
+                        className="dashboard-card shadow-sm mb-4"
                         onClick={() => handleCardClick(item.label)}
+                      
                       >
-                        <Card.Body className="d-flex align-items-center">
+                        <Card.Body className="d-flex align-items-center"   style={{height:"100px"}}>
                           <img
                             src={item.img}
                             alt={item.label}
@@ -123,13 +119,13 @@ function AdminDashboard() {
                       </Card>
                     </div>
                   ))}
-                </div>
+                </Row>
               </div>
 
-              {/* Right Column: Calendar Section */}
-              <div className="col-lg-4 d-flex align-items-stretch">
-                <Card className="calendar-card shadow-sm">
-                  <Card.Body>
+              {/* Calendar Container with fixed width and height */}
+              <div className="calendar-container" style={{ width: "450px", height: "350px" }}>
+                <Card className="calendar-card shadow-sm" style={{ height: "100%" }}>
+                  <Card.Body className="calendar-card-body">
                     <h5 className="calendar-heading text-center fw-bold">Calendar</h5>
                     <div className="d-flex justify-content-center">
                       <Calendar className="calender-note" />
@@ -137,32 +133,31 @@ function AdminDashboard() {
                   </Card.Body>
                 </Card>
               </div>
-            </Row>
+            </div>
 
             {/* Filter Options */}
             <Row className="g-4">
               <Col lg={6} md={12} sm={12}>
-                <Card className="filter-card shadow-sm p-4 rounded">
+                <Card className="filter-card shadow-sm rounded">
                   <Card.Body>
                     <h5 className="mb-4 fw-bold">Filter Options</h5>
                     <Row>
                       <Col lg={3} md={6} sm={12}>
                         <Form.Group>
                           <Form.Label>Grade:</Form.Label>
-                          <Form.Select>
-                            <option value="">Select </option>
+                          <Form.Select className="filter-select">
+                            <option value="">Select</option>
                             <option value="grade1">Grade 1</option>
                             <option value="grade2">Grade 2</option>
                             <option value="grade3">Grade 3</option>
                           </Form.Select>
                         </Form.Group>
                       </Col>
-
                       <Col lg={3} md={6} sm={12}>
                         <Form.Group>
                           <Form.Label>Rank:</Form.Label>
-                          <Form.Select>
-                            <option value="">Select </option>
+                          <Form.Select className="filter-select">
+                            <option value="">Select</option>
                             <option value="rank1">Rank 1</option>
                             <option value="rank2">Rank 2</option>
                             <option value="rank3">Rank 3</option>
