@@ -180,7 +180,7 @@ const Attendance = () => {
                 <option value="Absent">Absent</option>
                 <option value="Holiday">Holiday</option>
               </Form.Select>
-              <Button variant="primary" onClick={applyBulkStatus}>
+              <Button variant="success" onClick={applyBulkStatus}>
                 Apply
               </Button>
             </div>

@@ -126,7 +126,7 @@ const AssignClass = () => {
                   className="btn btn-success addbtn"
                   onClick={() => setShowPopup(true)}
                 >
-                  <i className="bi bi-plus"></i> Add
+                  <i className="bi bi-plus"></i> Add Classes
                 </button>
               </div>
               {showPopup && (
@@ -193,55 +193,34 @@ const AssignClass = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            gap: "10px",
+                            gap: "8px",
                             flexWrap: "nowrap",
                           }}
                         >
-                          <button
-                            className="btn btn-primary btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
-                            onClick={() => handleAction("view", classItem)}
-                          >
-                            <i
-                              className="bi bi-eye"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                          </button>
-                          <button
-                            className="btn btn-warning btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
-                            onClick={() => handleAction("edit", classItem)}
-                          >
-                            <i
-                              className="bi bi-pencil"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                          </button>
-                          <button
-                            className="btn btn-danger btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
-                            onClick={() => handleAction("remove", classItem)}
-                          >
-                            <i
-                              className="bi bi-trash"
-                              style={{ fontSize: "16px" }}
-                            ></i>
-                          </button>
+<button
+  className="btn btn-sm"
+  style={{ color: "#198754", background: "transparent" }}
+  onClick={() => handleAction("view", classItem)}
+>
+  <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
+</button>
+
+<button
+  className="btn btn-sm"
+  style={{ color: "#198754", background: "transparent" }}
+  onClick={() => handleAction("edit", classItem)}
+>
+  <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
+</button>
+
+<button
+  className="btn btn-sm"
+  style={{ color: "#198754", background: "transparent" }}
+  onClick={() => handleAction("remove", classItem)}
+>
+  <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
+</button>
+
                         </div>
                       </td>
                     </tr>
