@@ -197,3 +197,12 @@
  
 }
 
+.attendance-list {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.attendance-list table {
+  min-width: 600px; /* Adjust based on your table content */
+  white-space: nowrap;
+}
