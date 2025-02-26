@@ -12,10 +12,12 @@
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  width: 98%;
 }
 
 .table-custom {
   margin-bottom: 0;
+  
 }
 
 .table-custom th {
@@ -48,7 +50,7 @@
 }
 
 .tools-buttons .btn {
-  width: 35px;
+  width: 30px;
   height: 35px;
   padding: 6px;
   margin: 0 2px;

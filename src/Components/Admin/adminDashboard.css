@@ -175,7 +175,6 @@
   .calendar-card,
   .quiz-section {
     width: 90% !important;
-    margin-bottom: 1rem !important;
   }
   .main-container {
     flex-direction: column !important;
@@ -200,5 +199,7 @@
   .calendar-card,
   .quiz-section {
     width: 95% !important;
+    margin-bottom: 20px !important;
+
   }
 }

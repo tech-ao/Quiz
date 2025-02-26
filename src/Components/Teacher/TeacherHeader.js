@@ -17,7 +17,6 @@ import UpdatePassword from "../Student/UpdatePassword";
 
 const TeacherHeader = ({ toggleSidebar }) => {
   const ICON_SIZE = 30;
-
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -37,7 +36,6 @@ const TeacherHeader = ({ toggleSidebar }) => {
   }, []);
 
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
-
   const togglePasswordPopup = () => {
     setShowPasswordPopup((prev) => !prev);
   };
@@ -61,11 +59,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
     <Navbar expand="lg" className="header py-2">
       {/* Desktop Header */}
       <Row className="align-items-center w-100 d-none d-md-flex">
-        <Col
-          md={3}
-          className="d-flex align-items-center"
-          style={{ paddingLeft: "40px" }}
-        >
+        <Col md={3} className="d-flex align-items-center" style={{ paddingLeft: "40px" }}>
           <Link to="/teacherDashboard">
             <img
               className="logo1 me-2"
@@ -84,21 +78,14 @@ const TeacherHeader = ({ toggleSidebar }) => {
           </Navbar.Brand>
         </Col>
         <Col md={5} className="text-center">
-          <span
-            className="fw-bold welcome-message"
-            style={{ fontSize: "20px" }}
-          >
+          <span className="fw-bold welcome-message" style={{ fontSize: "20px" }}>
             Welcome, Teacher{" "}
             <span role="img" aria-label="wave">
               👋
             </span>
           </span>
         </Col>
-        <Col
-          md={4}
-          className="d-flex justify-content-end align-items-center header-icon-group"
-          style={{ paddingRight: "60px" }}
-        >
+        <Col md={4} className="d-flex justify-content-end align-items-center header-icon-group" style={{ paddingRight: "60px" }}>
           <Button
             variant="outlined"
             title="Notification"
@@ -126,7 +113,6 @@ const TeacherHeader = ({ toggleSidebar }) => {
               <RiNotification3Line size={ICON_SIZE} />
             </Badge>
           </Button>
-
           <Button
             variant="outlined"
             title="Website"
@@ -135,7 +121,6 @@ const TeacherHeader = ({ toggleSidebar }) => {
           >
             <RiGlobalLine size={24} />
           </Button>
-
           <div className="position-relative" ref={popupRef}>
             <Button
               variant="link"
@@ -147,12 +132,11 @@ const TeacherHeader = ({ toggleSidebar }) => {
                   fontSize: "24px",
                   marginBottom: "2px",
                   color: "green",
-                  marginTop:'20px'
+                  marginTop: '20px'
                 }}
               />
               <span className="admin-text">Teacher</span>
             </Button>
-
             {showPopup && (
               <div className="admin-popup">
                 <ul className="list-unstyled m-0 p-2">
@@ -226,11 +210,11 @@ const TeacherHeader = ({ toggleSidebar }) => {
             <RiMenu3Line size={ICON_SIZE} />
           </Button>
         </Col>
-
         <Col xs="auto" className="d-flex align-items-center">
           <Button
             variant="link"
             style={{ padding: "5px", marginRight: "10px" }}
+            onClick={() => navigate("/teachernotification")}
           >
             <Badge
               badgeContent={10}
@@ -262,7 +246,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
               style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
             />
           </Button>
-          <div className="position-relative" style={{ marginLeft: "10px" }}>
+          <div className="position-relative" ref={popupRef} style={{ marginLeft: "10px" }}>
             <Button
               variant="link"
               onClick={togglePopup}
@@ -271,15 +255,15 @@ const TeacherHeader = ({ toggleSidebar }) => {
             >
               <RiAdminLine
                 style={{
-                  fontSize: "24px",
+                  fontSize: window.innerWidth <= 767 ? "24px" : "24px",
                   color: "green",
-                  marginTop:'10px'
+                  marginTop: '10px'
                 }}
               />
               <span
                 className="text-success"
                 style={{
-                  fontSize: window.innerWidth <= 767 ? "10px" : "10px",
+                  fontSize: window.innerWidth <= 767 ? "14px" : "10px",
                   marginTop: "2px",
                 }}
               >
@@ -290,35 +274,47 @@ const TeacherHeader = ({ toggleSidebar }) => {
               <div className="admin-popup">
                 <ul className="list-unstyled m-0 p-2">
                   <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => navigate("/TeacherSettings")}
+                    className="dropdown-item px6 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                    onClick={() => {
+                      navigate("/TeacherSettings");
+                      setShowPopup(false);
+                    }}
                   >
                     <RiLockPasswordLine
                       style={{
-                        fontSize: window.innerWidth <= 767 ? "18px" : "24px",
+                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
                       }}
-                      className="me-2"
+                      className="me108"
                     />
                     Profile
                   </li>
                   <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
+                    className="dropdown-item px6 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
                     onClick={() => {
                       togglePasswordPopup();
                       setShowPopup(false);
                     }}
                   >
-                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
+                    <RiRestartLine
+                      style={{
+                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
+                      }}
+                      className="me108"
+                    />
+                    Password
                   </li>
                   <li
-                    className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogoutClick}
+                    className="dropdown-item px6 py-2 fw-bold text-danger d-flex align-items-center menu-item"
+                    onClick={() => {
+                      handleLogoutClick();
+                      setShowPopup(false);
+                    }}
                   >
                     <RiLogoutCircleRLine
                       style={{
-                        fontSize: window.innerWidth <= 767 ? "18px" : "24px",
+                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
                       }}
-                      className="me-2"
+                      className="me108"
                     />
                     Logout
                   </li>
@@ -328,6 +324,8 @@ const TeacherHeader = ({ toggleSidebar }) => {
           </div>
         </Col>
       </Row>
+
+      {/* Password Change Popup */}
       {showPasswordPopup && <UpdatePassword onClose={togglePasswordPopup} />}
 
       {/* Logout Confirmation Popup */}

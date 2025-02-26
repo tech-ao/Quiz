@@ -86,7 +86,7 @@ const Header = ({ toggleSidebar }) => {
   const handleLogout = () => {
     localStorage.removeItem("studentName");
     localStorage.removeItem("studentId");
-    navigate("/");
+    navigate("/adminLogin");
     setShowLogoutConfirm(false);
   };
 
@@ -186,7 +186,7 @@ const Header = ({ toggleSidebar }) => {
             <RiGlobalLine className="header-icon" />
           </Button>
           <div className="position-relative admin-container" ref={popupRef}>
-            <Button variant="link" onClick={togglePopup} className="admin-btn">
+            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{marginTop:"15px"}}>
               <RiAdminLine className="header-icon" />
               <span className="admin-name">{adminFullName}</span>
             </Button>
