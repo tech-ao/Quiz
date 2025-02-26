@@ -3,11 +3,15 @@ import "./aba.css"; // Import the updated CSS file
 import AbacusKit from "./Kit";
 
 const AbacusMath = () => {
+  const [isMinimized, setIsMinimized] = useState(true);
   const [showAbacusKit, setShowAbacusKit] = useState(false);
+  const [showHeadingandIcon,setShowHeadingandIcon]=useState(true);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [openStage, setOpenStage] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null); // State to track selected question
-
+  console.log("the isMinimize state is :",isMinimized);
+  console.log("the showAbacuskit is:",showAbacusKit);
+  console.log("showHeadingandIcon is :",showHeadingandIcon);
   const handleLevelChange = (event) => {
     setSelectedLevel(event.target.value);
     setOpenStage(null); // Reset open stage when level changes
@@ -24,8 +28,23 @@ const AbacusMath = () => {
   };
 
   const handleGoToKit = () => {
+    setShowHeadingandIcon(false)
     setShowAbacusKit(true); // Show AbacusKit inside main content
+    setIsMinimized(false); 
   };
+  const handleMinimize = () => {
+    // setShowAbacusKit(true); 
+    setIsMinimized((prev) => !prev);
+    setShowHeadingandIcon((prev)=>!prev)
+    
+  };
+  const handleClose = () => {
+    setShowHeadingandIcon(true)
+    setShowAbacusKit(false);
+    console.log("Abacus closed");
+    // You can also update a state here if needed to hide the component
+  };
+  
 
   const questions = [
     "Introduction",
@@ -120,21 +139,41 @@ const AbacusMath = () => {
 
       {/* Main Content */}
       <main className="abacus-main-content">
-  {!showAbacusKit ? (
+  {/* {(!showAbacusKit && showHeadingandIcon) ? (
     <>
       <h2>Welcome to Abacus Math! Explore and learn with us.</h2>
     </>
   ) : (
-    <AbacusKit onClose={() => setShowAbacusKit(false)} /> // Pass onClose prop
-  )}
+    // 
+    <AbacusKit
+    isMinimized={isMinimized}
+    onMinimize={handleMinimize}
+    onClose={handleClose}
+  />
+  )} */}
+  {
+    (showHeadingandIcon) && <h2>Welcome to Abacus Math! Explore and learn with us. </h2>
+  }
+  {
+    showAbacusKit &&(<> 
+     <AbacusKit
+    isMinimized={isMinimized}
+    onMinimize={handleMinimize}
+    onClose={handleClose}/>
+    </>) 
+  }
+  {/* Game Icon Button */}
+
 </main>
 
-{/* Game Icon Button */}
-{!showAbacusKit && (
+{/* Minimized Abacus Icon (If minimized, still show an icon to restore) */}
+{showHeadingandIcon && (
   <div className="abacus-game-icon-container" onClick={handleGoToKit}>
     <i className="bi bi-controller" aria-hidden="true"></i> {/* Game icon */}
   </div>
 )}
+
+
 
 </div>
   );

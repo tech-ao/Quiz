@@ -11,6 +11,8 @@ body {
     flex-direction: column;
 }
 
+
+
 /* Header Styles */
 .abacus-header {
     background-color: #4caf50;
@@ -42,7 +44,7 @@ body {
 /* Sidebar Styles */
 .abacus-sidebar {
     width: 250px;
-    background-color: #f4f4f4;
+    background-color: #ccc4c4e3;
     height: calc(100vh - 60px); /* Adjust for header height */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -235,3 +237,95 @@ body {
 }
 
 /* Abacus Styles */
+/* Mobile View (Max width: 768px) */
+@media (max-width: 768px) {
+    
+    /* Adjust container layout for mobile */
+    .abacus-app-container {
+        flex-direction: column; /* Stack elements vertically */
+        height: auto;
+    }
+
+    /* Make header more compact */
+    .abacus-header {
+        flex-direction: column;
+        padding: 8px;
+        text-align: center;
+    }
+
+    /* Adjust level dropdown */
+    .abacus-level-dropdown {
+        width: 50%;
+        font-size: 10px;
+    }
+
+    /* Stack navigation items vertically */
+    .abacus-nav-items {
+        flex-direction: column;
+        align-items: center;
+        margin-right: 5px;
+        margin-top: 12px;
+        gap:3px;
+    }
+
+    .abacus-nav-item {
+        width: 50%;
+        text-align: center;
+        margin-bottom: 5px;
+        font-size: 10px;
+    }
+
+    /* Sidebar becomes a collapsible menu */
+    .abacus-sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        padding: 10px;
+        display: block;
+    }
+
+    /* Hide levels initially and show when selected */
+    /* .abacus-level-section {
+        display: none;
+    } */
+
+    .abacus-sidebar.active .abacus-level-section {
+        display: block;
+    }
+
+    /* Make the sidebar toggle-friendly */
+    .abacus-stage {
+        font-size: 14px;
+    }
+
+    /* Adjust question item styles */
+    .abacus-question-item {
+        font-size: 12px;
+        padding: 8px;
+    }
+.abacus-back-button{
+    font-size: 13px;
+    margin-right:75%;
+    margin-bottom: 2px;
+}
+    /* Expand main content to full width */
+    .abacus-main-content {
+        margin-left: 0;
+        width: 100%;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .abacus-main-content h2 {
+        font-size: 15px;
+    }
+
+    /* Adjust game icon size and placement */
+    .abacus-game-icon-container {
+        font-size: 15px;
+        bottom: 10px;
+        right: 10px;
+    }
+}
+
