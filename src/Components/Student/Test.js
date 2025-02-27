@@ -80,7 +80,7 @@ const Test = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel studyModeId={studentData?.studyModeId} />}
 
-        <Container className="main-container p-4">
+        <Container className="main-container ">
           {loading ? (
             <p>Loading...</p>
           ) : error ? (
@@ -90,7 +90,7 @@ const Test = () => {
               <div className="sticky-header">
                 <Row className="mb-4">
                   <Col>
-                    <h2 className="fw-bold">Test List</h2>
+                    <h2 className="fw-bold">Schedule test</h2>
                   </Col>
                 </Row>
               </div>

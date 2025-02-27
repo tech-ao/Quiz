@@ -87,7 +87,7 @@ const StudentCertificate = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel studyModeId={studentData?.studyModeId} />}
 
-        <Container className="main-container p-4">
+        <Container className="main-container ">
           <div className="sticky-header">
             <Row className="mb-4">
               <Col>

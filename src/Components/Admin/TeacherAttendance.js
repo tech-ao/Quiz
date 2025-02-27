@@ -228,7 +228,7 @@ const TeacherAttendance = ({
                             ))}
                       </Form.Select>
                       {/* Filter Icon */}
-                      <div style={{ position: "relative", marginLeft: "20px" }}>
+                      <div style={{ position: "relative", marginLeft: "25px" }}>
                         <div
                           onClick={() => setShowCalendar(!showCalendar)}
                           style={{ cursor: "pointer" }}

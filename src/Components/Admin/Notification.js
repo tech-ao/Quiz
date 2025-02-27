@@ -83,16 +83,17 @@ function NotificationPage() {
               <Col md={6}>
                 <h2 className="fw-bold">Notifications</h2>
               </Col>
-              <Col md={6} className="d-flex justify-content-end">
+              <Col md={6} className="d-flex justify-content-end" style={{marginTop:"10px"}}>
                 <input
                   type="text"
                   className="form-control search-input"
                   placeholder="Search notifications..."
                   value={searchTerm}
                   onChange={handleSearch}
+                  
                 />
                 <button className="btn btn-light filter-btn" onClick={handleFilterClick}>
-                  <FaFilter style={{ fontSize: "20px" }} />
+                  <FaFilter style={{ fontSize: "30px" }} />
                 </button>
                 {showDatePicker && (
                   <div className="date-picker-container">

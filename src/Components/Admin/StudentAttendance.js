@@ -52,7 +52,7 @@ const StudentAttendance = ({
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [showCalendar, setShowCalendar] = useState(false); // New state for calendar popover
+  const [showCalendar, setShowCalendar] = useState(false);
   const [isSidebarVisible, setSidebarVisible] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const headerHeight = 60;
@@ -172,7 +172,7 @@ const StudentAttendance = ({
               zIndex: 999,
             }}
           >
-            <Table className="table-sm" style={{ width: "40%" }}>
+            <Table className="table-sm" style={{ width: "35%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Level</th>
@@ -219,7 +219,7 @@ const StudentAttendance = ({
                             ))}
                       </Form.Select>
                       {/* Filter Icon and Calendar Popover */}
-                      <div style={{ position: "relative", marginLeft: "20px" }}>
+                      <div style={{ position: "relative", marginLeft: "25px" }}>
                         <div
                           onClick={() => setShowCalendar(!showCalendar)}
                           style={{ cursor: "pointer" }}
@@ -228,12 +228,12 @@ const StudentAttendance = ({
                         </div>
                         {showCalendar && (
                           <div
-                          style={{
-                            position: "absolute",
-                            top: "40px",
-                            right: "100%",
-                            zIndex: 1000,
-                          }}
+                            style={{
+                              position: "absolute",
+                              top: "40px",
+                              right: "100%",
+                              zIndex: 1000,
+                            }}
                           >
                             <Calendar
                               onChange={onCalendarChange}

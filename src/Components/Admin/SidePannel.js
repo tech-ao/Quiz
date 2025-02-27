@@ -206,22 +206,9 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </ul>
           )}
         </li>
+        
 
-        {/* Remove or reposition the original Questions link if not needed */}
-        {/* 
-        <li className="nav-item">
-          <Link
-            to="/questionListPage"
-            className={`nav-link ${location.pathname === "/questionListPage" ? "active" : ""}`}
-            onClick={closeSidePanel}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-journal-text"></i>
-              <span className="nav-text">Questions</span>
-            </div>
-          </Link>
-        </li>
-        */}
+      
 
         {/* Online Menu */}
         <li className="nav-item">

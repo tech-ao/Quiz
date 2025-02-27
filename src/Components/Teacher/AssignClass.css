@@ -4,6 +4,7 @@
 .card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: none;
+  margin-right: 30px;
 }
 
 /* ========================= */
@@ -171,9 +172,7 @@
     min-width: 120px;
   }
 
-  .card-body {
-    padding: 0.5rem;
-  }
+  
 }
 
 /* Mobile (max-width: 320px) */

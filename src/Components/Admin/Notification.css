@@ -37,13 +37,15 @@
 
 /* Date picker container styling */
 .date-picker-container {
-  position: absolute;
-  right: 0;
-  top: 45px;
-  background: #fff;
-  border: 1px solid #ddd;
-  padding: 10px;
-  z-index: 1050;
+  position: absolute !important;
+  top: 100px !important;
+  right: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 10px !important;
+  text-align: center !important;
+  z-index: 1000 !important;
 }
 
 /* Clear filter text styling */
@@ -140,8 +142,15 @@
     flex-direction: column;
     align-items: flex-start;
   }
-  .notification-action {
-    margin-top: 10px;
-    align-self: stretch;
+
+  .filter-container {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+
+  /* Show Calendar to the Left of the Filter Icon on Small Screens */
+  .date-picker-container {
+    right: auto !important;
+    width: 250px !important; /* Adjust width for better fit */
   }
 }
