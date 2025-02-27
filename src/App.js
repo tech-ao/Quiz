@@ -6,6 +6,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import AddQuestion from "./Components/Admin/AddQuestion";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
@@ -86,6 +87,8 @@ function App() {
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
+          <Route path="/AddQuestion" element={<AddQuestion/>}/>
+
           {/* Protected Routes */}
           <Route
             path="/adminDashboard"

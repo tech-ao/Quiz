@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import "./aba.css"; // Import the updated CSS file
+import AbacusKit from "./Kit";
 
 const AbacusMath = () => {
+  const [dummyQuestions, setDummyQuestions] = useState([]); // Stores dummy questions
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const [userAnswer, setUserAnswer] = useState("");
+
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [showAbacusKit, setShowAbacusKit] = useState(false);
+  const [showHeadingandIcon,setShowHeadingandIcon]=useState(true);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [openStage, setOpenStage] = useState(null);
   const [selectedQuestion, setSelectedQuestion] = useState(null); // State to track selected question
-
+  console.log("the isMinimize state is :",isMinimized);
+  console.log("the showAbacuskit is:",showAbacusKit);
+  console.log("showHeadingandIcon is :",showHeadingandIcon);
   const handleLevelChange = (event) => {
     setSelectedLevel(event.target.value);
     setOpenStage(null); // Reset open stage when level changes
@@ -17,13 +27,54 @@ const AbacusMath = () => {
     setSelectedQuestion(null); // Reset selected question when toggling stages
   };
 
-  const handleQuestionClick = (index) => {
-    setSelectedQuestion(index); // Set the selected question index
+  const handleSubmitAnswer = () => {
+    if (currentQuestionIndex < dummyQuestions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1); // Move to next question
+      setUserAnswer(""); // Clear input field
+    } else {
+      alert("You have completed all questions!"); // Notify user when all questions are done
+    }
   };
 
-  const handleGoToKit = () => {
-    window.location.href = "/AbacusKit"; // Navigate to the quiz page
+  const handleQuestionClick = (index) => {
+    setSelectedQuestion(index); // Set selected question index
+    setCurrentQuestionIndex(0); // Reset to first question
+  setUserAnswer(""); // Clear previous input
+  
+    // Define dummy questions based on the selected question
+    const dummyData = {
+      0: ["What is an abacus?", "History of the abacus", "Why use an abacus?"],
+      1: ["1 + 1 = ?", "2 + 3 = ?", "4 + 5 = ?"],
+      2: ["What is addition?", "What is subtraction?", "Simple practice problems"],
+      3: ["How to move fingers?", "Finger positioning tips", "Practice exercises"],
+      4: ["How to visualize numbers?", "Techniques for mental calculation", "Speed improvement tips"],
+      5: ["Why is accuracy important?", "Accuracy vs Speed", "Exercises for accuracy"],
+      6: ["What to expect in future levels?", "Advanced concepts", "Next steps"],
+    };
+  
+    setDummyQuestions(dummyData[index] || []);
   };
+   
+    
+  
+  const handleGoToKit = () => {
+    setShowHeadingandIcon(false)
+    setShowAbacusKit(true); // Show AbacusKit inside main content
+    setIsMinimized(false); 
+  };
+  const handleMinimize = () => {
+    // setShowAbacusKit(true); 
+    setIsMinimized((prev) => !prev);
+    setShowHeadingandIcon((prev)=>!prev)
+    
+  };
+  const handleClose = () => {
+    setShowHeadingandIcon(true)
+    setShowAbacusKit(false);
+    console.log("Abacus closed");
+    // You can also update a state here if needed to hide the component
+  };
+  
 
   const questions = [
     "Introduction",
@@ -118,20 +169,72 @@ const AbacusMath = () => {
 
       {/* Main Content */}
       <main className="abacus-main-content">
-        <h2>Welcome to Abacus Math! Explore and learn with us.</h2>
-        {selectedQuestion !== null && (
-          <div className="abacus-question-image-container">
-            <img src={questionImages[selectedQuestion]} alt={`Question ${selectedQuestion + 1}`} className="abacus-question-image" />
-            <p className="abacus-question-description">This is the description for Question {selectedQuestion + 1}.</p>
-          </div>
-        )}
-      </main>
+  {/* {(!showAbacusKit && showHeadingandIcon) ? (
+    <>
+      <h2>Welcome to Abacus Math! Explore and learn with us.</h2>
+    </>
+  ) : (
+    // 
+    <AbacusKit
+    isMinimized={isMinimized}
+    onMinimize={handleMinimize}
+    onClose={handleClose}
+  />
+  )} */}
+  {
+    (showHeadingandIcon) && <h2>Welcome to Abacus Math! Explore and learn with us. </h2>
+  }
+  {
+    showAbacusKit &&(<> 
+     <AbacusKit
+    isMinimized={isMinimized}
+    onMinimize={handleMinimize}
+    onClose={handleClose}/>
+    </>) 
+  }
+  {/* Game Icon Button */}
+  {/* Display Dummy Questions When a Question is Selected */}
+  {selectedQuestion !== null && (
+  <div 
+  className={`dummy-questions-container 
+    ${isMinimized || !showAbacusKit ? "minimized" : ""} 
+    ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}
+>
+    <h3>Practice Questions:</h3>
+    
+    {dummyQuestions.length > 0 && (
+      <>
+        <p>{dummyQuestions[currentQuestionIndex]}</p> {/* Show current question */}
+        <input 
+          type="text" 
+          value={userAnswer} 
+          onChange={(e) => setUserAnswer(e.target.value)} 
+          placeholder="Enter your answer" 
+          className="answer-input"
+        />
+        <button onClick={handleSubmitAnswer} className="submit-button">Submit</button>
+      </>
+    )}
+  </div>
+)}
 
-      {/* Game Icon Button */}
-      <div className="abacus-game-icon-container" onClick={handleGoToKit}>
-        <i className="bi bi-controller" aria-hidden="true"></i> {/* Game icon */}
-      </div>
-    </div>
+
+</main>
+
+{/* Minimized Abacus Icon (If minimized, still show an icon to restore) */}
+{showHeadingandIcon && (
+  <div 
+    className={`abacus-game-icon-container ${isMinimized ? "minimized" : ""}`} 
+    onClick={handleGoToKit}
+  >
+    <i className="bi bi-controller" aria-hidden="true"></i>
+  </div>
+)}
+
+
+
+
+</div>
   );
 };
 
