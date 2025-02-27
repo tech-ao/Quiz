@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navbar, Container } from "react-bootstrap";
 import "./aba.css"; // Import the updated CSS file
 import AbacusKit from "./Kit";
 
@@ -115,24 +116,35 @@ const [userAnswer, setUserAnswer] = useState("");
           </select>
 
           {/* Navigation Items in Header */}
-          <div className="abacus-nav-items">
-            <div className="abacus-nav-item">
-              <i className="bi-book-fill" style={{ color: "#f31383", marginRight: "6px" }} aria-hidden="true"></i>
-              <span className="abacus-nav-text">Learning path</span>
-            </div>
-            <div className="abacus-nav-item">
-              <i className="bi-file-earmark-text-fill" style={{ color: "#87CEEB", marginRight: "6px" }} aria-hidden="true"></i>
-              <span className="abacus-nav-text">Random Worksheets</span>
-            </div>
-            <div className="abacus-nav-item">
-              <i className="bi-arrow-up" style={{ color: "#00008B", marginRight: "6px" }} aria-hidden="true"></i>
-              <span className="abacus-nav-text">Mental Accelerator</span>
-            </div>
-            <div className="abacus-nav-item">
-              <i className="bi-pencil-square" style={{ color: "#FFA500", marginRight: "6px" }} aria-hidden="true"></i>
-              <span className="abacus-nav-text">Examination</span>
-            </div>
-          </div>
+          <Navbar expand="lg" className="sticky-top">
+  <Container>
+    {/* Hamburger Toggle on Right */}
+    <Navbar.Toggle aria-controls="navbar-content" className="border-0 ms-auto" />
+
+    {/* Sliding Menu on Right */}
+    <Navbar.Collapse id="navbar-content" className="justify-content-end">
+      <div className="abacus-nav-items">
+        <div className="abacus-nav-item">
+          <i className="bi-book-fill" style={{ color: "#f31383", marginRight: "6px" }}></i>
+          <span className="abacus-nav-text">Learning path</span>
+        </div>
+        <div className="abacus-nav-item">
+          <i className="bi-file-earmark-text-fill" style={{ color: "#87CEEB", marginRight: "6px" }}></i>
+          <span className="abacus-nav-text">Random Worksheets</span>
+        </div>
+        <div className="abacus-nav-item">
+          <i className="bi-arrow-up" style={{ color: "#00008B", marginRight: "6px" }}></i>
+          <span className="abacus-nav-text">Mental Accelerator</span>
+        </div>
+        <div className="abacus-nav-item">
+          <i className="bi-pencil-square" style={{ color: "#FFA500", marginRight: "6px" }}></i>
+          <span className="abacus-nav-text">Examination</span>
+        </div>
+      </div>
+    </Navbar.Collapse>
+  </Container>
+</Navbar>
+
         </div>
       </header>
 
@@ -198,8 +210,7 @@ const [userAnswer, setUserAnswer] = useState("");
   <div 
   className={`dummy-questions-container 
     ${isMinimized || !showAbacusKit ? "minimized" : ""} 
-    ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}
->
+    ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}>
     <h3>Practice Questions:</h3>
     
     {dummyQuestions.length > 0 && (

@@ -11,13 +11,23 @@ body {
     flex-direction: column;
 }
 
+.navbar {
+    background-color: transparent !important;
+  }
+  
+  /* Remove white background from expanded navbar in desktop view */
+  .navbar-collapse {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+
 
 
 /* Header Styles */
 .abacus-header {
     background-color: #4caf50;
     color: white;
-    padding: 10px;
+    padding: 18px;
     padding-left: 1%;
     font-size: 10px;
     font-weight: bold;
@@ -45,11 +55,11 @@ body {
 .abacus-sidebar {
     width: 250px;
     background-color: #a09d9de3;
-    height: calc(100vh - 60px); /* Adjust for header height */
+    height: calc(100vh - 64px); /* Adjust for header height */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: fixed;
-    top: 54px; /* Align with header */
+    top: 70px; /* Align with header */
     left: 0;
 }
 
@@ -146,6 +156,7 @@ body {
 
 /* Navigation Items Styles */
 .abacus-nav-items {
+    width: 800px;
     display: flex;
     justify-content: space-around; /* Space items evenly */
     margin-left: 10%; /* Space between dropdown and nav items */
@@ -201,6 +212,7 @@ body {
     align-items: center; /* Center items vertically */
     border-radius: 5px;
 }
+
 
 .abacus-back-button i {
     margin-right: 8px; /* Space between icon and text */
@@ -260,11 +272,11 @@ body {
     transform: none; /* Remove centering */
 }
 
-.dummy-questions-container li{
-    margin-bottom: 20px;
-    margin-top: 10px;
-    margin-left: 10px;
-    font-size: 5px;
+.dummy-questions-container p{
+    font-size: 20px;
+}
+.dummy-questions-container h3{
+    font-weight: bold;
 }
 
 .answer-input {
@@ -302,46 +314,34 @@ body {
     /* Make header more compact */
     .abacus-header {
         flex-direction: column;
-        padding: 8px;
+        padding: 0px;
         text-align: center;
     }
+    
 
     /* Adjust level dropdown */
     .abacus-level-dropdown {
-        width: 50%;
+        max-width: 40%; /* Allow it to shrink */
+        width: auto; /* Ensure it adjusts based on content */
+        min-width: 100px; /* Set a reasonable minimum width */
         font-size: 10px;
+        margin-left:-7px;
     }
 
-    /* Stack navigation items vertically */
-    .abacus-nav-items {
-        flex-direction: column;
-        align-items: center;
-        margin-right: 5px;
-        margin-top: 12px;
-        gap: 3px;
-    }
-
-    .abacus-nav-item {
-        width: 50%;
-        text-align: center;
-        margin-bottom: 5px;
-        font-size:12px ;
-    }
-
+    
     /* Sidebar becomes a collapsible menu */
     .abacus-sidebar {
         width: 100%;
         height: auto;
         position: relative;
         top: 0;
-        padding: 10px;
+        padding: 0px;
         display: block;
     }
 
-    /* Hide levels initially and show when selected */
-    /* .abacus-level-section {
-        display: none;
-    } */
+    .abacus-level-heading h2{
+        font-size: 10px;
+    }
 
     .abacus-sidebar.active .abacus-level-section {
         display: block;
@@ -444,7 +444,52 @@ body {
             font-size: 12px;
             margin: 5px 0;
         }
+        
     
+        .abacus-nav-text {
+            font-size: 12px; /* Reduce text size for mobile */
+            
+          }
+          .navbar-collapse {
+            position: fixed;
+            top: 40px;
+            right: -100%; /* Start fully hidden */
+            width: 110%; /* Adjust width for tablets */
+            transition: right 0.3s ease-in-out;
+            background: #f1eeee; /* Make it visible */
+            padding-top: 20px;
+            color: black;
+            padding-left: 0px;
+          }
+          
+          .navbar-collapse.show {
+            right: 0; /* Slide in from right */
+          }
+          
+          .abacus-nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            
+            padding-left: 30%;
+            background-color: white;
+          }
+          
+          .navbar-toggler {
+            position: absolute; /* Or fixed if you want it to stay even when scrolling */
+            top: 0px;
+            left: 150px; /* Moves the hamburger to the right */
+            z-index: 1050; /* Ensure it stays above */
+            padding-top:1px;
+            padding-bottom: 1px;
+          }
+          
+        
+
+
+        }
+        
+        
     
-}
+
 
