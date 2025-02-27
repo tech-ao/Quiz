@@ -141,7 +141,7 @@ body {
 
 @media (max-width: 767px) {
   .notification-popup {
-    top: 50px !important;
+    top: 80px !important;
     right: 10px !important;
     width: 90% !important;
     left: 5% !important;
