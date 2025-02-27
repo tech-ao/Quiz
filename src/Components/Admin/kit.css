@@ -2,46 +2,21 @@
 .abacus-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: end;
   justify-content: center;
   min-height: 100vh;
   background-color: #d8d5d5;
-  padding: 10px;
-  width: 100%;
+  padding: 0 100px 30px 0!important;
+    width: 100%;
 }
 /* Minimized State */
-.abacus-container.minimized {
-  width: 300px;
-  height: 150px;
-  min-height: 150px;
-  padding: 10px;
-  overflow: hidden;
-  position: fixed;  /* Fix position on screen */
-  top: 55px;    /* Adjust vertical position */
-  right: 10px;     /* Move to right end */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  transition: all 0.3s ease-in-out;
-}
-
-.abacus-container.minimized .abacus-sub-cont {
-  width: 100%;
-  height: 100%;
-  min-height: unset;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
 /* Hide content when minimized except the header */
 .abacus-container.minimized .abacus-frame,
+.abacus-container.minimized .abacus-sub-cont,
+.abacus-container.minimized,
 .abacus-container.minimized .reset-button {
   display: none;
-}
-
-.abacus-container.minimized .abacus-headerss {
-  width: 100%;
 }
 
 
@@ -53,7 +28,7 @@
   min-height: 50vh;
   background-color: #fff;
   padding: 10px;
-  width: 65%;
+  width: 70%;
 }
 
 .abacus-headerss {
@@ -225,8 +200,9 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .abacus-sub-cont {
-    width: 90%;
+    width: 100%;
     min-height: auto;
+    padding: 0px;
   }
   .abacus-headerss {
     width: 100%;
@@ -262,59 +238,50 @@
   }
 }
 
+/* Mobile Responsiveness */
 @media (max-width: 480px) {
   .abacus-sub-cont {
     width: 100%;
-    padding: 5px;
+    padding: 10px;
   }
-  .title {
-    font-size: 8px;
-  }
-  .header-buttons {
-     margin-left: 61%;
-     font-size: 5px;
-  }
-  .abacus-frame {
 
-    height: auto;
-    padding: 0px;
+  .title {
+    font-size: 16px;
   }
-  .abacus-rod {
-    margin: 3px;
-    width: 3px;
-    height: 180px;
+
+  .header-buttons {
+    flex-direction: row;
     gap: 5px;
   }
+
+  .abacus-frame {
+    max-width: 320px;
+  }
+
+  .abacus-rod {
+    width: 4px;
+    height: 180px;
+  }
+
   .abacus-bead {
-    width: 10px;
-    height: 10px;
+    width: 18px;
+    height: 18px;
   }
+
   .abacus-bead.top.active {
-    background-color: #007bff;
-    transform: translateY(35px);
+    transform: translateY(30px);
   }
+
   .abacus-bead.bottom.active {
-    background-color: #007bff;
-    transform: translateY(-30px);
+    transform: translateY(-20px);
   }
-  
-  .abacus-container.minimized {
-    width: 200px;
-    height: 100px;
-    min-height: 80px;
-    padding: 10px;
-    overflow: hidden;
-    position: fixed;  /* Fix position on screen */
-    bottom:-10%;    /* Adjust vertical position */
-    right: 10px;     /* Move to right end */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
-    transition: all 0.3s ease-in-out;
+
+  .reset-button {
+    font-size: 14px;
+    padding: 6px 12px;
   }
-  .abacus-container.minimized .abacus-headerss {
-    width: 100%;
-    font-size: 10px;
-  }
-  
-  
 }
+
+  
+  
+

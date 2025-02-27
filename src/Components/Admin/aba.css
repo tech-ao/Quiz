@@ -44,7 +44,7 @@ body {
 /* Sidebar Styles */
 .abacus-sidebar {
     width: 250px;
-    background-color: #ccc4c4e3;
+    background-color: #a09d9de3;
     height: calc(100vh - 60px); /* Adjust for header height */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -226,6 +226,10 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
     transition: background-color 0.3s; /* Smooth transition */
 }
+.abacus-game-icon-container.minimized {
+    background:linear-gradient(100deg,rgba(4, 167, 243, 0.875),rgb(8, 246, 186),rgb(56, 56, 157));
+    transition: background-color 0.3s;
+}
 
 .abacus-game-icon-container:hover {
     background-color: #45a049; /* Darker shade on hover */
@@ -236,6 +240,55 @@ body {
     font-size: 24px; /* Icon size */
 }
 
+.dummy-questions-container {
+    font-size: 15px;
+    font-weight: bold;
+    position: absolute;
+    top: 35%;
+    left: 60%;
+    transform: translateX(-50%); /* Center horizontally */
+    transition: left 0.3s ease, transform 0.3s ease;
+}
+
+.dummy-questions-container.minimized {
+    left: 60%; /* Center when minimized */
+    transform: translateX(-50%);
+}
+
+.dummy-questions-container.abacus-open {
+    left: 18%; /* Move to left when AbacusKit is open */
+    transform: none; /* Remove centering */
+}
+
+.dummy-questions-container li{
+    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 5px;
+}
+
+.answer-input {
+    width: 60%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .submit-button {
+    background-color: #59b36e;
+    color:black;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .submit-button:hover {
+    background-color: #8bd711;
+  }
+  
 /* Abacus Styles */
 /* Mobile View (Max width: 768px) */
 @media (max-width: 768px) {
@@ -265,14 +318,14 @@ body {
         align-items: center;
         margin-right: 5px;
         margin-top: 12px;
-        gap:3px;
+        gap: 3px;
     }
 
     .abacus-nav-item {
         width: 50%;
         text-align: center;
         margin-bottom: 5px;
-        font-size: 10px;
+        font-size:12px ;
     }
 
     /* Sidebar becomes a collapsible menu */
@@ -327,5 +380,71 @@ body {
         bottom: 10px;
         right: 10px;
     }
+
+   
+        .dummy-questions-container {
+            font-size: 14px;
+            font-weight: bold;
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: left 0.3s ease, transform 0.3s ease;
+            width: 90%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+        }
+    
+        .dummy-questions-container.minimized {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    
+        .dummy-questions-container.abacus-open {
+            left: 15%;
+            transform: none;
+            width: 80%;
+            text-align: left;
+        }
+    
+        .dummy-questions-container h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+    
+        .dummy-questions-container input {
+            width: 90%;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    
+        .dummy-questions-container button {
+            width: 80%;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    
+        .dummy-questions-container button:hover {
+            background: #218838;
+        }
+    
+        .dummy-questions-container li {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+    
+    
 }
 
