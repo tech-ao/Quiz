@@ -86,7 +86,7 @@ const StudentDashboard = () => {
       <StudentHeader toggleSidebar={toggleSidebar} studentName={fullName || "Loading..."} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container ">
 
         <div className="sticky-header" style={{
             position: "sticky",

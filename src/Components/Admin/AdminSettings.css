@@ -13,7 +13,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
-  padding: 20px;
 }
 
 .month-container {
@@ -184,7 +183,6 @@ button {
   .divider-column {
     border-left: none;
     padding: 15px 0;
-    text-align: center;
   }
 
   .admin-info {

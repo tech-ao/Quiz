@@ -52,14 +52,14 @@ const TeacherSettings = () => {
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container">
+          <div className="sub-container" style={{width:"94%"}}>
             <Row className="mb-4">
-              <Col md={8}>
-                <h2 className="fw-bold">Teacher Settings</h2>
+              <Col md={8} style={{marginTop:"25px"}}>
+                <h2 className="fw-bold">Teacher Profile</h2>
               </Col>
             </Row>
-            <Row className='Admin-Name-row'>
-              <Col md={6} className='Admin-Name-row'>
+            <Row className='Admin-Name-row' style={{width:"90px"}}>
+              <Col md={6} className='Admin-Name-row' style={{width:"100px"}}>
                 <Card className="admin-card">
                   <Card.Header className="card-header">Teacher Details</Card.Header>
                   <Card.Body>

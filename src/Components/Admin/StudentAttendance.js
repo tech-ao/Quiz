@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Form, Table } from "react-bootstrap";
+import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
@@ -51,6 +52,7 @@ const StudentAttendance = ({
   const [selectedLevel, setSelectedLevel] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [showCalendar, setShowCalendar] = useState(false);
   const [isSidebarVisible, setSidebarVisible] = useState(true);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const headerHeight = 60;
@@ -86,8 +88,10 @@ const StudentAttendance = ({
     }
   };
 
-  const handleDateChange = (e) => {
-    setSelectedDate(new Date(e.target.value));
+  // When a date is selected from the Calendar popover
+  const onCalendarChange = (date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
   };
 
   const getAttendanceForDate = (date) => {
@@ -166,11 +170,9 @@ const StudentAttendance = ({
               top: `${headerHeight}px`,
               backgroundColor: "white",
               zIndex: 999,
-              padding: "15px",
-              paddingRight: "50px",
             }}
           >
-            <Table className="table-sm" style={{ width: "50%" }}>
+            <Table className="table-sm" style={{ width: "35%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Level</th>
@@ -209,39 +211,36 @@ const StudentAttendance = ({
                         <option value="">Select Student</option>
                         {selectedLevel &&
                           studentList
-                            .filter(
-                              (s) => s.level === Number(selectedLevel)
-                            )
+                            .filter((s) => s.level === Number(selectedLevel))
                             .map((student) => (
                               <option key={student.id} value={student.id}>
                                 {student.name}
                               </option>
                             ))}
                       </Form.Select>
-                      <div
-                        style={{
-                          position: "relative",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <Form.Control
-                          type="date"
-                          onChange={handleDateChange}
-                          value={
-                            selectedDate
-                              ? selectedDate.toISOString().split("T")[0]
-                              : ""
-                          }
-                          style={{
-                            opacity: 0,
-                            position: "absolute",
-                            top: 0,
-                            left: "20px",
-                            zIndex: 2,
-                            width: "100px",
-                          }}
-                        />
-                        <FaFilter style={{ fontSize: "32px" }} />
+                      {/* Filter Icon and Calendar Popover */}
+                      <div style={{ position: "relative", marginLeft: "25px" }}>
+                        <div
+                          onClick={() => setShowCalendar(!showCalendar)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FaFilter style={{ fontSize: "32px" }} />
+                        </div>
+                        {showCalendar && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "40px",
+                              right: "100%",
+                              zIndex: 1000,
+                            }}
+                          >
+                            <Calendar
+                              onChange={onCalendarChange}
+                              value={selectedDate || new Date()}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -262,9 +261,7 @@ const StudentAttendance = ({
               <p
                 style={{
                   marginLeft: "50px",
-                  color: getAttendanceForDate(selectedDate).includes(
-                    selectedPerson.id
-                  )
+                  color: getAttendanceForDate(selectedDate).includes(selectedPerson.id)
                     ? "black"
                     : "red",
                 }}
@@ -284,10 +281,7 @@ const StudentAttendance = ({
 
           {/* Render Yearly Calendar Only When a Student is Selected */}
           {selectedPerson && (
-            <div
-              className="calendar-grid"
-              style={{ margin: "20px", overflowY: "auto" }}
-            >
+            <div className="calendar-grid" style={{ overflowY: "auto" }}>
               {renderYearlyCalendar()}
             </div>
           )}

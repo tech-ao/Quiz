@@ -1,61 +1,76 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
-import TeacherSidePanel from './TeacherSidepannel';
-import TeacherHeader from './TeacherHeader';
-import './Attendance.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import React, { useState, useEffect } from "react";
+import { Container, Row, Col, Table, Form, Button, Dropdown } from "react-bootstrap";
+import { FunnelFill } from "react-bootstrap-icons";
+import TeacherSidePanel from "./TeacherSidepannel";
+import TeacherHeader from "./TeacherHeader";
+import "./Attendance.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Attendance = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  const [selectedClass, setSelectedClass] = useState('');
-  const [selectedSection, setSelectedSection] = useState('');
-  const [attendanceDate, setAttendanceDate] = useState('2024-12-04');
-  const [studentName, setStudentName] = useState('');
-  const [registerNumber, setRegisterNumber] = useState('');
-  const [attendanceStatus, setAttendanceStatus] = useState('Present');
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
-  const [previousRecords, setPreviousRecords] = useState([]);
+  const [attendanceRecords, setAttendanceRecords] = useState([
+    { id: 1, name: "John Doe", registerNumber: "REG001", level: "Level-1", date: "2024-12-04", status: "Present", checked: false },
+    { id: 2, name: "Jane Smith", registerNumber: "REG002", level: "Level-2", date: "2024-12-04", status: "Present", checked: false },
+    { id: 3, name: "Alice Johnson", registerNumber: "REG003", level: "Level-3", date: "2024-12-04", status: "Present", checked: false },
+    { id: 4, name: "Jake", registerNumber: "REG004", level: "Level-4", date: "2024-12-04", status: "Present", checked: false },
+    { id: 5, name: "Jason Smith", registerNumber: "REG005", level: "Level-0", date: "2024-12-04", status: "Present", checked: false },
+    { id: 6, name: "Wilson", registerNumber: "REG006", level: "Level-5", date: "2024-12-04", status: "Present", checked: false },
+  ]);
 
-  // Sidebar toggle function
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [bulkStatus, setBulkStatus] = useState("");
 
-  // Handle window resize for sidebar visibility
   useEffect(() => {
     const handleResize = () => {
       setIsSidebarVisible(window.innerWidth >= 768);
     };
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Handle Attendance Submission
-  const handleSubmit = () => {
-    if (studentName && registerNumber && selectedClass && selectedSection && attendanceDate) {
-      setPreviousRecords([...attendanceRecords]);
-      const newRecord = {
-        id: attendanceRecords.length + 1,
-        name: studentName,
-        registerNumber: registerNumber,
-        class: selectedClass,
-        section: selectedSection,
-        date: attendanceDate,
-        status: attendanceStatus,
-      };
-      setAttendanceRecords([...attendanceRecords, newRecord]);
-      setStudentName('');
-      setRegisterNumber('');
-      setAttendanceStatus('Present');
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
+  };
+
+  const handleCheckboxChange = (index) => {
+    const updatedRecords = [...attendanceRecords];
+    updatedRecords[index].checked = !updatedRecords[index].checked;
+    setAttendanceRecords(updatedRecords);
+  };
+
+  const handleAttendanceChange = (index, value) => {
+    let updatedRecords = [...attendanceRecords];
+
+    if (value === "Holiday") {
+      updatedRecords = updatedRecords.map((record) => ({
+        ...record,
+        status: "Holiday",
+      }));
+    } else {
+      updatedRecords[index].status = value;
+    }
+
+    setAttendanceRecords(updatedRecords);
+  };
+
+  const applyBulkStatus = () => {
+    if (bulkStatus) {
+      setAttendanceRecords(
+        attendanceRecords.map((record) =>
+          record.checked ? { ...record, status: bulkStatus } : record
+        )
+      );
     }
   };
 
-  // Handle Undo Action
-  const handleUndo = () => {
-    if (attendanceRecords.length > 0) {
-      setAttendanceRecords(attendanceRecords.slice(0, -1));
-    }
-  };
+  const filteredRecords = attendanceRecords.filter(
+    (record) =>
+      (record.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        record.registerNumber.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (selectedLevel === "" || record.level === selectedLevel)
+  );
 
   return (
     <div>
@@ -65,101 +80,109 @@ const Attendance = () => {
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container">
             <Row className="align-items-center mb-4 text-center">
-              <Col xs={12}>
-                <h2 className="fw-bold">Attendance</h2>
+              <Col xs={12} className="heading-text">
+                <h2 className="fw-bold">Student Attendance</h2>
               </Col>
             </Row>
 
-            <Row className="filter-section mb-3 text-center">
-              <Col xs={12} sm={6} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Class *</Form.Label>
-                  <Form.Control as="select" value={selectedClass} onChange={(e) => setSelectedClass(e.target.value)}>
-                    <option value="">Select Class</option>
-                    <option value="Class 1">Class 1</option>
-                    <option value="Class 2">Class 2</option>
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col xs={12} sm={6} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Section *</Form.Label>
-                  <Form.Control as="select" value={selectedSection} onChange={(e) => setSelectedSection(e.target.value)}>
-                    <option value="">Select Section</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col xs={12} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Attendance Date *</Form.Label>
-                  <Form.Control type="date" value={attendanceDate} onChange={(e) => setAttendanceDate(e.target.value)} />
-                </Form.Group>
-              </Col>
-            </Row>
+            <div className="d-flex mb-2 filter-box">
+              <Form.Control
+                type="text"
+                placeholder="Search...."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-bar"
+              />
 
-            <Row className="mb-4 justify-content-center text-center">
-              <Col xs={12} sm={6} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Student Name *</Form.Label>
-                  <Form.Control type="text" placeholder="Enter student name" value={studentName} onChange={(e) => setStudentName(e.target.value)} />
-                </Form.Group>
-              </Col>
-              <Col xs={12} sm={6} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Register Number *</Form.Label>
-                  <Form.Control type="text" placeholder="Enter register number" value={registerNumber} onChange={(e) => setRegisterNumber(e.target.value)} />
-                </Form.Group>
-              </Col>
-              <Col xs={12} sm={6} md={4} className="mb-3">
-                <Form.Group>
-                  <Form.Label>Attendance Status *</Form.Label>
-                  <Form.Control as="select" value={attendanceStatus} onChange={(e) => setAttendanceStatus(e.target.value)}>
-                    <option value="Present">Present</option>
-                    <option value="Absent">Absent</option>
-                  </Form.Control>
-                </Form.Group>
-              </Col>
-              <Col xs={12} className="d-flex justify-content-center mt-3">
-                <Button variant="success" className="btn-submit px-3 py-1 me-2" onClick={handleSubmit}>Submit</Button>
-                <Button variant="secondary" className="px-3 py-1" onClick={handleUndo} disabled={attendanceRecords.length === 0}>Undo</Button>
-              </Col>
-            </Row>
+              <Dropdown show={showFilterDropdown} onToggle={setShowFilterDropdown}>
+                <Dropdown.Toggle variant="light" style={{ border: "none", background: "white" }}>
+                  {selectedLevel ? selectedLevel : <FunnelFill style={{ fontSize: "26px" }} />}
+                </Dropdown.Toggle>
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={() => setSelectedLevel("")}>All Levels</Dropdown.Item>
+                  {["Level-0", "Level-1", "Level-2", "Level-3", "Level-4", "Level-5"].map((level) => (
+                    <Dropdown.Item key={level} onClick={() => setSelectedLevel(level)}>
+                      {level}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            </div>
 
             <div className="attendance-list">
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th>
+                      <Form.Check
+                        type="checkbox"
+                        onChange={() =>
+                          setAttendanceRecords((prevRecords) =>
+                            prevRecords.map((record) => ({ ...record, checked: !record.checked }))
+                          )
+                        }
+                      />
+                    </th>
                     <th>Name</th>
                     <th>Register Number</th>
-                    <th>Class</th>
-                    <th>Section</th>
+                    <th>Level</th>
                     <th>Date</th>
                     <th>Attendance</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {attendanceRecords.length > 0 ? (
-                    attendanceRecords.map((record, index) => (
-                      <tr key={index}>
-                        <td>{record.id}</td>
+                  {filteredRecords.length > 0 ? (
+                    filteredRecords.map((record, index) => (
+                      <tr key={record.id}>
+                        <td>
+                          <Form.Check
+                            type="checkbox"
+                            checked={record.checked}
+                            onChange={() => handleCheckboxChange(index)}
+                          />
+                        </td>
                         <td>{record.name}</td>
                         <td>{record.registerNumber}</td>
-                        <td>{record.class}</td>
-                        <td>{record.section}</td>
+                        <td>{record.level}</td>
                         <td>{record.date}</td>
-                        <td>{record.status}</td>
+                        <td >
+                          <Form.Select className="attendance-clmn"
+                            value={record.status}
+                            onChange={(e) => handleAttendanceChange(index, e.target.value)}
+                          >
+                            <option value="Present">Present</option>
+                            <option value="Absent">Absent</option>
+                            <option value="Holiday">Holiday</option>
+                          </Form.Select>
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7" className="text-center">No records found.</td>
+                      <td colSpan="6" className="text-center">
+                        No records found.
+                      </td>
                     </tr>
                   )}
                 </tbody>
               </Table>
+            </div>
+
+            <div className="d-flex mt-3 justify-content-start bulkBtn">
+              <Form.Select
+                value={bulkStatus}
+                onChange={(e) => setBulkStatus(e.target.value)}
+                className="me-2"
+                style={{ width: "150px" }}
+              >
+                <option value="">Select Status</option>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Holiday">Holiday</option>
+              </Form.Select>
+              <Button variant="success" onClick={applyBulkStatus}>
+                Apply
+              </Button>
             </div>
           </div>
         </Container>

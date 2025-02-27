@@ -4,6 +4,7 @@
 .card {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: none;
+  margin-right: 30px;
 }
 
 /* ========================= */
@@ -12,10 +13,12 @@
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  width: 98%;
 }
 
 .table-custom {
   margin-bottom: 0;
+  
 }
 
 .table-custom th {
@@ -48,7 +51,7 @@
 }
 
 .tools-buttons .btn {
-  width: 35px;
+  width: 30px;
   height: 35px;
   padding: 6px;
   margin: 0 2px;
@@ -169,9 +172,7 @@
     min-width: 120px;
   }
 
-  .card-body {
-    padding: 0.5rem;
-  }
+  
 }
 
 /* Mobile (max-width: 320px) */

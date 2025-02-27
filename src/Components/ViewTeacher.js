@@ -86,7 +86,7 @@ const ViewTeacher = ({ show, onClose, studentData }) => {
             <p>{studentData?.address || "N/A"}</p>
           </Col>
         </Row>
-        <div className="d-flex justify-content-end mt-3">
+        <div className="d-flex justify-content-center mt-3">
           <Button variant="success" onClick={handleApprove} className="me-2">
             Approve
           </Button>

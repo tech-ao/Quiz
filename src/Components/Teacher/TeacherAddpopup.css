@@ -12,7 +12,7 @@
 }
 
 .modal-content{
-    padding: 100px 0 0 0;
+    padding: 50px 0 0 0;
     margin-top: 10%;
     /* width: 10px; */
 }
@@ -95,8 +95,8 @@
     .close-btn {
       right: -134px; /* Move close button outside modal on small screens */
       position: absolute;
-        top: 110px;
-        right: -140px;
+        top: 90px;
+        right: 0px;
         background: none;
         border: none;
         /* font-size: 500rem; */
@@ -113,8 +113,8 @@
     }
     .close-btn {
         position: absolute;
-        top: 110px;
-        right: -140px;
+        top: 70px;
+        right: 0px;
         background: none;
         border: none;
         /* font-size: 500rem; */
