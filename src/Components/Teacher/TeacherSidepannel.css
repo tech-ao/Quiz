@@ -134,3 +134,11 @@
     
     
 }
+
+
+/* Add this to your existing TeacherSidepannel.css file */
+.sub-nav .nav-link.active-sub {
+  background-color: rgba(255, 255, 255, 0.1);
+  /* color: #fff; */
+  font-weight: bold;
+}

@@ -6,7 +6,6 @@ import {
   Button,
   Table,
   Form,
-  Alert,
   Modal,
 } from "react-bootstrap";
 import TeacherSidePanel from "./TeacherSidepannel";
@@ -31,35 +30,13 @@ const ApprovalLeave = () => {
   }, []);
 
   const [leaveRequests, setLeaveRequests] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      date: "2025-02-22",
-      reason: "Sick Leave",
-      status: "Pending",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      date: "2025-02-21",
-      reason: "Family Emergency",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      name: "Will Smith",
-      date: "2025-02-21",
-      reason: "Family Emergency",
-      status: "Pending",
-    },{
-      id: 4,
-      name: "Jane Smith",
-      date: "2025-02-21",
-      reason: "Family Emergency",
-      status: "Pending",
-    },    
+    { id: 1, name: "John Doe", date: "2025-02-22", reason: "Sick Leave", status: "Pending" },
+    { id: 2, name: "Jane Smith", date: "2025-02-21", reason: "Family Emergency", status: "Pending" },
+    { id: 3, name: "Will Smith", date: "2025-02-21", reason: "Personal", status: "Pending" },
+    { id: 4, name: "Alice Johnson", date: "2025-02-20", reason: "Vacation", status: "Pending" },
   ]);
 
+  const [searchTerm, setSearchTerm] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [approvalReason, setApprovalReason] = useState("");
@@ -89,25 +66,41 @@ const ApprovalLeave = () => {
     setShowModal(false);
   };
 
+  const filteredRequests = leaveRequests.filter(
+    (request) =>
+      request.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      request.date.includes(searchTerm) ||
+      request.reason.toLowerCase().includes(searchTerm) ||
+      request.status.toLowerCase().includes(searchTerm)
+  );
+
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
-          <Row className="sub-container">
-            <Col md={6} style={{ marginTop: "24px" }}>
-              <h4 className="fw-bold">Approve Leave</h4>
+          <Row className="sub-container approveContainer" style={{width:"98%"}}>
+            <Col md={12} style={{ marginTop: "24px" }}>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <h4 className="fw-bold">Approve Leave</h4>
+              </div>
+
+              <div className="d-flex justify-content-end align-items-center mb-3">
+              <Form.Control
+                  type="text"
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ maxWidth: "200px" }}
+                />
+                </div>
+
               <div className="tableContainer">
-                <Table
-                  striped
-                  bordered
-                  hover
-                  className="scrollable-table"
-                  style={{ width: "198%" }}
-                >
+                <Table striped bordered hover className="scrollable-table">
                   <thead>
                     <tr>
+                      <th>#</th>
                       <th>Name</th>
                       <th>Date</th>
                       <th>Reason</th>
@@ -116,8 +109,9 @@ const ApprovalLeave = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {leaveRequests.map((request) => (
+                    {filteredRequests.map((request, index) => (
                       <tr key={request.id}>
+                        <td>{index + 1}</td>
                         <td>{request.name}</td>
                         <td>{request.date}</td>
                         <td>{request.reason}</td>

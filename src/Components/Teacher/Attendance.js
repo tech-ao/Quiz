@@ -109,7 +109,7 @@ const Attendance = () => {
               </Dropdown>
             </div>
 
-            <div className="attendance-list">
+            <div className="attendance-list" style={{width:"98%"}}>
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>

@@ -16,11 +16,15 @@ import {
   FaPrint,
   FaShareAlt,
 } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "./TeacherDashboard.css";
+import { fetchDashboardContent } from "../../redux/Services/Enum";
 
 const TeacherDashboard = () => {
+  const [dashboardData, setDashboardData] = useState({});
+  const [loading, setLoading] = useState(true);
   const [isSidebarVisible, setIsSidebarVisible] = useState(
     window.innerWidth >= 768
   );
@@ -98,12 +102,35 @@ const TeacherDashboard = () => {
     },
   ]);
 
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchDashboardContent();
+        setDashboardData(data?.data || {});
+      } catch (error) {
+        console.error("Error fetching teacher dashboard data:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDashboardData();
+  }, []);
+  
+  // Stats data with routing paths
   const statsData = [
-    { title: "Total Students", count: "10", icon: FaBook },
-    { title: "Leave Application", count: "05", icon: FaFileAlt },
-    { title: "Upcoming Classes", count: "32", icon: FaCalendar },
-    { title: "Assignment", count: "17", icon: FaBookOpen },
+    { title: "Total Students", count: dashboardData?.studentsCount || 22, icon: FaBook, path: "/studentdata" },
+    { title: "Leave Applications", count: dashboardData?.leaveApplications || 3, icon: FaFileAlt, path: "/approvedleave" },
+    { title: "Upcoming Classes", count: dashboardData?.upcomingClasses || 8, icon: FaCalendar, path: "/assignclass" },
+    { title: "Assignments", count: dashboardData?.assignmentsCount || 10, icon: FaBookOpen, path: "/assignment" },
   ];
+
+  // Handle card click for routing - similar to the AdminDashboard
+  const handleCardClick = (path) => {
+    navigate(path);
+  };
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -148,18 +175,22 @@ const TeacherDashboard = () => {
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 mx-auto">
           <div className="sub-container dashboard-container">
-          <Row className="sticky-title align-items-center mb-4">
-                        <h2 className="fw-bold text-left">Teacher Dashboard</h2>
-                      </Row>
+            <Row className="sticky-title align-items-center mb-4">
+              <h2 className="fw-bold text-left">Teacher Dashboard</h2>
+            </Row>
             <Row
-              className="mt5 g-4"
+              className="mt5 g-4 dashboard-row"
               style={{ paddingRight: "86px" }}
             >
-              {/* Stats Cards */}
+              {/* Stats Cards with onClick handlers for routing */}
               <Col xs={12} lg={5} xl={4} className="box-details">
                 {statsData.map((stat, index) => (
                   <div key={index} className="mb-4 my-1">
-                    <Card className="stats-card border-0">
+                    <Card 
+                      className="stats-card border-0"
+                      onClick={() => handleCardClick(stat.path)}
+                      style={{cursor: "pointer"}}
+                    >
                       <Card.Body className="d-flex align-items-center bg-mint-green rounded p-3">
                         <stat.icon
                           size={24}
@@ -268,7 +299,14 @@ const TeacherDashboard = () => {
                     </div>
 
                     <div className="text-center mt-4">
-                      <a href="#" className="text-primary text-decoration-none">
+                      <a 
+                        href="#" 
+                        className="text-primary text-decoration-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigate("/all-transactions");
+                        }}
+                      >
                         Show All My Transactions
                       </a>
                     </div>

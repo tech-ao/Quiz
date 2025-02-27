@@ -7,7 +7,7 @@
   }
   /* Popup menu styling */
   .teacher-popup {
-      position: absolute;
+  position: absolute;
   top: 100%;
   right: 0;
   width: 200px; /* Adjust width as needed */
@@ -52,13 +52,12 @@
   
   .brandTitle {
     font-size: 24px;
-    /* color: #28a745; */
+    
     line-height: 1;
   }
   
   .brandSubtitle {
     font-size: 15px;
-    /* color: #6c757d; */
   }
   
   /* Media Queries */

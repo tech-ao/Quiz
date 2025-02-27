@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Table, Form } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
-import './Attendance.css'; // Import the CSS file
+import "./AttendacebyDate.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import { styled } from '@mui/material';
 
 const AttendanceDataPage = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
@@ -102,7 +103,7 @@ const AttendanceDataPage = () => {
 
             {/* Search Button */}
             <div className="filter-actions d-flex justify-content-end mb-6"  style={{width:"95%"}}>
-              <Button variant="success" className="btn-search" onClick={() => console.log('Search clicked')}>
+              <Button variant="success" className="btn-search" onClick={() => console.log('Search clicked')} style={{backgroundColor:"green"}}>
                 Search
               </Button>
             </div>

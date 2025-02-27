@@ -27,8 +27,12 @@
       overflow-x: scroll;
       overflow-y: hidden;
       -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+      width: 288%;
     }
-    
+    .approveContainer{
+      width: 10px;
+    }
     .scrollable-table {
       min-width: 600px;
     }

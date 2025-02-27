@@ -14,44 +14,56 @@ import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Components/images/Logo.png";
 import "../Admin/adminHeaderResponsive.css"; // make sure to use the responsive CSS
 import UpdatePassword from "../Student/UpdatePassword";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudent } from "../../redux/Action/StudentAction";
 
 const TeacherHeader = ({ toggleSidebar }) => {
-  const ICON_SIZE = 24;
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
   const [showPasswordPopup, setShowPasswordPopup] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
-  const [selectedNotification, setSelectedNotification] = useState(null);
-  
-  // Sample notifications (replace with your actual data source)
+
+  // Notification state and selected notification for details
   const [notifications, setNotifications] = useState([
-    { id: 1, title: "New assignment created", content: "Details about the new assignment", receivedDate: "2024-02-15", isRead: false },
-    { id: 2, title: "Student submitted work", content: "A student has submitted their homework", receivedDate: "2024-02-16", isRead: false },
-    { id: 3, title: "Parent meeting reminder", content: "Reminder about upcoming parent-teacher meeting", receivedDate: "2024-02-17", isRead: false },
-    { id: 4, title: "System maintenance", content: "The system will be under maintenance tonight", receivedDate: "2024-02-18", isRead: true },
-    { id: 5, title: "Grade submission reminder", content: "Please submit grades by end of week", receivedDate: "2024-02-19", isRead: false },
+    { id: 1, title: "Notification 1", content: "Details of notification 1", receivedDate: "2024-02-15", isRead: false },
+    { id: 2, title: "Notification 2", content: "Details of notification 2", receivedDate: "2024-02-16", isRead: false },
+    { id: 3, title: "Notification 3", content: "Details of notification 3", receivedDate: "2024-02-17", isRead: false },
+    { id: 4, title: "Notification 4", content: "Details of notification 4", receivedDate: "2024-02-18", isRead: true },
+    { id: 5, title: "Notification 5", content: "Details of notification 5", receivedDate: "2024-02-19", isRead: false },
+    { id: 6, title: "Notification 6", content: "Details of notification 6", receivedDate: "2024-02-20", isRead: false },
   ]);
-  
-  // Calculate unread notifications count
-  const unreadCount = notifications.filter(n => !n.isRead).length;
-  
-  // Get the five most recent notifications
-  const lastFiveNotifications = notifications.slice(-5);
-  
-  // Check if we're in mobile view
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
+  // State to detect mobile view (based on width)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const popupRef = useRef(null);
   const notifPopupRef = useRef(null);
-  const navigate = useNavigate();
+
+  const { selectedAdmin } = useSelector((state) => state.admin || {});
+  const adminFullName = selectedAdmin?.data
+    ? `${selectedAdmin.data.firstName} ${selectedAdmin.data.lastName}`
+    : "Admin";
+
+  const togglePopup = () => setShowPopup((prev) => !prev);
+  const togglePasswordPopup = () => setShowPasswordPopup((prev) => !prev);
+  const toggleNotificationPopup = () => setShowNotificationPopup((prev) => !prev);
+
+  // Calculate unread notifications for the badge
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
-    // Update mobile status on window resize
+    // Update isMobile on window resize
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-    
-    // Handle clicks outside popups
+
+    const storedStudentId = localStorage.getItem("studentId");
+    if (storedStudentId) {
+      dispatch(fetchStudent(storedStudentId));
+    }
     const handleClickOutside = (event) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setShowPopup(false);
@@ -60,92 +72,90 @@ const TeacherHeader = ({ toggleSidebar }) => {
         setShowNotificationPopup(false);
       }
     };
-    
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("touchstart", handleClickOutside);
-    
     return () => {
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("touchstart", handleClickOutside);
     };
-  }, []);
-
-  const togglePopup = (event) => {
-    if (event) event.preventDefault();
-    setShowPopup((prev) => !prev);
-  };
-
-  const togglePasswordPopup = () => {
-    setShowPasswordPopup((prev) => !prev);
-  };
-  
-  const toggleNotificationPopup = () => {
-    setShowNotificationPopup((prev) => !prev);
-  };
+  }, [dispatch]);
 
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true);
-    setShowPopup(false);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem("studentName");
+    localStorage.removeItem("studentId");
+    navigate("/");
     setShowLogoutConfirm(false);
-    navigate("/logout");
   };
 
   const handleCancelLogout = () => {
     setShowLogoutConfirm(false);
   };
-  
+
   // Mark all notifications as read
   const handleMarkAsRead = () => {
-    const updatedNotifications = notifications.map(notif => ({
+    const updatedNotifications = notifications.map((notif) => ({
       ...notif,
-      isRead: true
+      isRead: true,
     }));
     setNotifications(updatedNotifications);
   };
-  
-  // Handle clicking on a notification
+
+  // Get the last five notifications (assuming they are sorted by date)
+  const lastFiveNotifications = notifications.slice(-5);
+
+  // Handle clicking on a notification item to show its details
   const handleNotificationClick = (e, notif) => {
     e.stopPropagation();
-    // Mark this notification as read
     if (!notif.isRead) {
       setNotifications(
-        notifications.map(n => 
+        notifications.map((n) =>
           n.id === notif.id ? { ...n, isRead: true } : n
         )
       );
     }
     setSelectedNotification(notif);
-    setShowNotificationPopup(false);
   };
 
   return (
     <Navbar expand="lg" className="header py-2">
       <Row className="align-items-center w-100">
-        {/* Left Section: Logo and Menu Toggle (for mobile) */}
-        <Col xs={4} md={3} className="d-flex align-items-center header-left">
+        {/* Left Section: Logo and (for mobile) menu button */}
+        <Col xs={3} md={3} className="d-flex align-items-center header-left">
           {isMobile ? (
-            <>
-            <Button 
-  variant="link" 
-  onClick={() => {
-    toggleSidebar(); // Add this to toggle the sidebar
-     
-  }} 
-  className="menu-btn"
->
-  <RiMenu3Line size={ICON_SIZE} />
-</Button>
-              <Link to="/teacherDashboard">
-                <img src={logo} alt="Math Gym Logo" className="logo" />
-              </Link>
-            </>
+            isMobileExpanded ? (
+              <>
+                <Link to="/" style={{marginLeft:"-10px"}}>
+                  <img src={logo} alt="Math Gym Logo" className="logo" />
+                </Link>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setIsMobileExpanded(false);
+                    toggleSidebar();
+                  }}
+                  className="menu-btn pe0 px-1" style={{marginLeft:"-10px"}}
+                >
+                  <RiMenu3Line className="header-icon" />
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="link"
+                onClick={() => {
+                  setIsMobileExpanded(true);
+                  toggleSidebar();
+                }}
+                className="menu-btn"
+              >
+                <RiMenu3Line className="header-icon" />
+              </Button>
+            )
           ) : (
             <>
-              <Link to="/teacherDashboard">
+              <Link to="/adminDashboard">
                 <img src={logo} alt="Math Gym Logo" className="logo" />
               </Link>
               <Navbar.Brand className="text-success fw-bold ms-3 brand-info">
@@ -156,7 +166,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
           )}
         </Col>
 
-        {/* Center Section: Welcome Message (Desktop only) */}
+        {/* Center Section: Welcome Message (desktop only) */}
         {!isMobile && (
           <Col md={5} className="text-center">
             <span className="fw-bold welcome-message">
@@ -165,76 +175,43 @@ const TeacherHeader = ({ toggleSidebar }) => {
           </Col>
         )}
 
-        {/* Right Section: Notification and Profile Icons */}
-        <Col className="d-flex justify-content-end align-items-center headerIcon-group" style={{marginRight:"29px"}}>
-          <div className="position-relative" ref={notifPopupRef} >
-            <Button variant="link" title="Notification" onClick={toggleNotificationPopup}>
-              <Badge badgeContent={unreadCount} color="secondary" overlap="circular">
-                <RiNotification3Line size={ICON_SIZE} className="header-icon" />
-              </Badge>
-            </Button>
-            
-            {/* Notification Popup */}
-            {showNotificationPopup && (
-              <div className="notification-popup">
-                <h6 className="mb-2">Recent Notifications</h6>
-                <ul className="list-unstyled notifications-list">
-                  {lastFiveNotifications.length > 0 ? (
-                    lastFiveNotifications.map((notif) => (
-                      <li
-                        key={notif.id}
-                        onClick={(e) => handleNotificationClick(e, notif)}
-                        className="notification-item"
-                      >
-                        <div className="d-flex justify-content-between align-items-center">
-                          <span className={notif.isRead ? "" : "font-bold"}>
-                            {notif.title}
-                          </span>
-                          {!notif.isRead && <span className="unread-dot"></span>}
-                        </div>
-                        <small className="text-muted">{notif.receivedDate}</small>
-                      </li>
-                    ))
-                  ) : (
-                    <li className="text-center py-2">No notifications</li>
-                  )}
-                </ul>
-                <div className="notification-actions">
-                  <Button variant="link" onClick={() => navigate("/teachernotification")}>
-                    Show More
-                  </Button>
-                  <Button variant="link" onClick={handleMarkAsRead}>
-                    Mark as Read
-                  </Button>
-                </div>
-              </div>
-            )}
-          </div>
-          
-          <Button variant="link" title="Website" onClick={() => window.open("https://mathgymint.com", "_blank")}>
-            <RiGlobalLine size={ICON_SIZE} className="header-icon" />
+        {/* Right Section: Icons */}
+        <Col xs={8} md={4} className="d-flex justify-content-end align-items-center header-icon-group" style={{marginLeft:"-19px", gap:"0"}}>
+          <Button variant="link" title="Notification" onClick={toggleNotificationPopup}>
+            <Badge badgeContent={unreadCount} color="secondary" overlap="circular">
+              <RiNotification3Line className="header-icon" />
+            </Badge>
           </Button>
-          
+          <Button variant="link" title="Website" onClick={() => window.open("https://mathgymint.com", "_blank")}>
+            <RiGlobalLine className="header-icon" />
+          </Button>
           <div className="position-relative admin-container" ref={popupRef}>
-            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{textDecoration:'none', top:'10px'}}>
-              <RiAdminLine size={ICON_SIZE} className="header-icon" />
-              <span className="admin-name"><b>Teacher</b></span>
+            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{textDecoration:"none", top:'15px'}}>
+              <RiAdminLine className="header-icon" />
+              <span className="admin-name" style={{color:"#09690c", fontSize:"16px", fontWeight:"bold"}}>Teacher</span>
             </Button>
-            
-            {/* Admin/Teacher Popup Menu */}
             {showPopup && (
-              <div className="admin-popup" style={{width:"150%", lineHeight:'35px'}}>
-                <ul className="list-unstyled m-0 p-2">
-                  <li className="dropdown-item menu-item" onClick={() => navigate("/TeacherSettings")}>
+              <div className="admin-popup" style={{width:"130px", top:"75px"}}>
+                <ul className="list-unstyled m-0 p-2" style={{color:"#09690c",fontSize:"18px", fontWeight:"bold", lineHeight:"40px"}}>
+                  <li
+                    className="dropdown-item menu-item"
+                    onClick={() => navigate("/teachersettings")}
+                  >
                     <RiLockPasswordLine className="popup-icon" /> Profile
                   </li>
-                  <li className="dropdown-item menu-item" onClick={() => {
-                    togglePasswordPopup();
-                    setShowPopup(false);
-                  }}>
+                  <li
+                    className="dropdown-item menu-item"
+                    onClick={() => {
+                      togglePasswordPopup();
+                      setShowPopup(false);
+                    }}
+                  >
                     <RiRestartLine className="popup-icon" /> Password
                   </li>
-                  <li className="dropdown-item menu-item text-danger" onClick={handleLogoutClick}>
+                  <li
+                    className="dropdown-item menu-item text-danger"
+                    onClick={handleLogoutClick}
+                  >
                     <RiLogoutCircleRLine className="popup-icon" /> Logout
                   </li>
                 </ul>
@@ -244,65 +221,58 @@ const TeacherHeader = ({ toggleSidebar }) => {
         </Col>
       </Row>
 
-      {/* Mobile Menu Offcanvas (Bootstrap Component) */}
-      <Offcanvas show={isMobileMenuOpen} onHide={() => setIsMobileMenuOpen(false)} placement="start">
-        <Offcanvas.Header closeButton>
-          <Offcanvas.Title className="text-success">MATH GYM</Offcanvas.Title>
-        </Offcanvas.Header>
-        <Offcanvas.Body>
-          <ul className="list-unstyled">
-            <li className="menu-item p-2 border-bottom" onClick={() => {
-              navigate("/TeacherSettings");
-              setIsMobileMenuOpen(false);
-            }}>
-              <RiLockPasswordLine className="me-2" /> Profile
-            </li>
-            <li className="menu-item p-2 border-bottom" onClick={() => {
-              togglePasswordPopup();
-              setIsMobileMenuOpen(false);
-            }}>
-              <RiRestartLine className="me-2" /> Password
-            </li>
-            <li className="menu-item p-2 border-bottom" onClick={() => {
-              navigate("/teachernotification");
-              setIsMobileMenuOpen(false);
-            }}>
-              <RiNotification3Line className="me-2" /> Notifications
-              {unreadCount > 0 && (
-                <Badge badgeContent={unreadCount} color="secondary" className="ms-1" />
-              )}
-            </li>
-            <li className="menu-item p-2 text-danger" onClick={() => {
-              handleLogoutClick();
-              setIsMobileMenuOpen(false);
-            }}>
-              <RiLogoutCircleRLine className="me-2" /> Logout
-            </li>
+      {/* Notification Popup */}
+      {showNotificationPopup && (
+        <div className="notification-popup" ref={notifPopupRef}>
+          <h6 className="mb-2">Recent Notifications</h6>
+          <ul className="list-unstyled notifications-list">
+            {lastFiveNotifications.map((notif) => (
+              <li
+                key={notif.id}
+                onClick={(e) => handleNotificationClick(e, notif)}
+                className="notification-item"
+              >
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className={notif.isRead ? "" : "font-bold"}>
+                    {notif.title}
+                  </span>
+                  {!notif.isRead && <span className="unread-dot"></span>}
+                </div>
+                <small className="text-muted">{notif.receivedDate}</small>
+              </li>
+            ))}
           </ul>
-        </Offcanvas.Body>
-      </Offcanvas>
-      
-      {/* Logout Confirmation Modal */}
-      <Modal show={showLogoutConfirm} onHide={handleCancelLogout} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Confirm Logout</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you want to logout?</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCancelLogout}>
-            Cancel
-          </Button>
-          <Button variant="danger" onClick={handleLogout}>
-            Logout
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
+          <div className="notification-actions">
+            <Button variant="link" onClick={() => navigate("/teachernotification")}>
+              Show More
+            </Button>
+            <Button variant="link" onClick={handleMarkAsRead}>
+              Mark as Read
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Logout Confirmation Popup */}
+      {showLogoutConfirm && (
+        <div className="logout-confirmation-popup">
+          <div className="popup-content">
+            <h5>Are you sure you want to logout?</h5>
+            <div className="logout-actions">
+              <Button variant="danger" onClick={handleLogout}>
+                Yes
+              </Button>
+              <Button variant="secondary" onClick={handleCancelLogout}>
+                No
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Password Change Popup */}
       {showPasswordPopup && <UpdatePassword onClose={togglePasswordPopup} />}
-      
+
       {/* Notification Details Modal */}
       {selectedNotification && (
         <Modal show onHide={() => setSelectedNotification(null)} centered>

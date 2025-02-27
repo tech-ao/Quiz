@@ -1,21 +1,93 @@
-/* PaymentHistory.css */
+/* =================== Payment History Table =================== */
 .payment-history-table {
-    font-size: 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  font-size: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-collapse: collapse;
+}
+
+.payment-history-table th,
+.payment-history-table td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.payment-history-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* =================== Responsive Design =================== */
+@media (max-width: 768px) {
+  .payment-history-table {
+    font-size: 0.9rem;
   }
-  
-  .payment-history-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-align: center;
-  }
-  
+
+  .payment-history-table th,
   .payment-history-table td {
-    text-align: center;
-    vertical-align: middle;
+    padding: 10px;
   }
-  
- 
-  
+}
+
+@media (max-width: 480px) {
+  .payment-history-table {
+    font-size: 0.8rem;
+  }
+
+  .payment-history-table th,
+  .payment-history-table td {
+    padding: 8px;
+  }
+}
+
+
+/* Default styles for the search input */
+.search-container {
+  display: flex;
+  justify-content: end;
+  width: 60%;
+}
+
+/* Style for input field */
+.search-container input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Style for search icon in mobile view */
+@media (max-width: 500px) {
+  .search-container {
+    width: 100%; /* Full width on mobile */
+  }
+
+  .input-group-text {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-left: none;
+    padding: 8px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+
+  /* Adjusting icon size */
+  .input-group-text svg {
+    font-size: 16px;
+    color: #555;
+  }
+}
+
+
+@media (max-width: 500px) {
+  .searchBar {
+    width: 100% !important;
+    max-width: 280px;
+    display: flex;
+    justify-content: center;
+  }
+}
