@@ -1,207 +1,186 @@
+.logo1 {
+  max-width: 10px;
+}
+button {
+  height: auto;
+}
 
-  .logo1 {
-    max-width: 10px;
-  }
-  button {
-    height: auto;
-  }
-  /* Popup menu styling */
-  .teacher-popup {
+.teacher-popup {
   position: absolute;
   top: 100%;
   right: 0;
-  width: 200px; /* Adjust width as needed */
+  width: 200px;
   z-index: 9999;
-  }
-  .menu-item {
-    cursor: pointer;
-    transition: none !important; /* Remove any hover effect transitions */
-  }
-  /* Styles for the hamburger button */
-  .toggle-button {
-    padding: 0;
-    margin-left: auto;
-  }
-  /* Hide the hamburger icon on desktop */
-  @media (min-width: 768px) {
-    .toggle-button {
-      display: block;
-    }
-  }
-  /* Teacher popup menu styling */
-  .menu-item:hover {
-    background-color: #f0f0f0;
-  }
-  .action-button {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  /* Custom padding classes */
-  .custom-padding-right {
-    padding-right: 100px;
-  }
-  .custom-padding-left {
-    padding-left: 100px;
-  }
-  .brand-info {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-  }
-  
-  .brandTitle {
-    font-size: 24px;
-    
-    line-height: 1;
-  }
-  
-  .brandSubtitle {
-    font-size: 15px;
-  }
-  
-  /* Media Queries */
-  @media (max-width: 992px) {
-    .welcome-message {
-      font-size: 1rem;
-    }
-    .action-button {
-      font-size: 14px;
-    }
-  }
-  .logout-confirmation-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  .popup-content {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    flex-direction: column;
-    align-items: center;
-    width: 300px; /* Adjust the width as needed */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow for better visibility */
-    text-align: center;
-  }
-  .popup-content h5 {
-    margin-bottom: 20px; /* Space between the message and buttons */
-    font-size: 18px;
-    font-weight: bold;
-  }
-  .popup-content button {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 8px;
-    font-size: 16px;
-  }
-  .popup-content button:first-child {
-    background-color: #dc3545; /* Red for 'Yes' button */
-    color: white;
-  }
-  .popup-content button:last-child {
-    background-color: #6c757d; /* Gray for 'No' button */
-    color: white;
-  }
-  .popup-content button:hover {
-    opacity: 0.8; /* Slight fade effect on hover */
-  }
-  @media (max-width: 480px) {
-    .popup-content {
-      width: 90%; /* Make the popup take more width on small screens */
-    }
-  }
-  @media (max-width: 768px) {
-    .logo1 {
-      max-width: 60px;
-    }
-    .welcome-message {
-      display: none;
-    }
-   
-    .teacher-menu {
-      justify-content: center; /* Center the icon */
-    }
-    .headerIcon-group {
-      position: static; /* Fix alignment issues */
-      margin-left: auto;
-      margin-right: 100px;
-    }
-  }
-  /* Apply padding on mobile and desktop */
-  @media (max-width: 768px) {
-    .custom-padding {
-      padding-left: 10px;
-      padding-right: 10px;
-    }
-  }
-  @media (max-width: 768px) {
-    .teacher-popup .me-2 svg {
-      font-size: 20px;
-    }
-  }
-  @media (max-width: 768px) {
-    .teacher-popup {
-      top: 40px;
-      right: 0;
-      width: 200px; /* Or adjust as needed */
-    }
-  }
-  @media (min-width: 768px) {
-    .custom-padding {
-      padding-left: 100px;
-      padding-right: 100px;
-    }
-  }
-  @media (max-width: 576px) {
-    .action-button {
-      font-size: 12px;
-    }
-    .teacher-popup {
-      position: absolute;
-      width: 150px;
-      right: 5px;
-    }
-    .menu-item {
-      font-size: 12px;
-    }
-  }
-  /* Header Profile Color */
-  .teacher-text {
-    color: #198754;
-  }
-  .toggleAdminbut {
-    position: absolute;
-    left: 0;
-  }
-  /* Dark Green Border for Logo */
-  .border-dark-green {
-    border: 2px solid darkgreen;
-    padding: 5px;
-  }
-  .custom-badge .MuiBadge-badge {
-    right: auto !important;  /* Reset right positioning */
-    left: 0 !important;     /* Move badge to the left */
-    transform: translate(-50%, -50%) !important; /* Adjust alignment */
-  }
+}
 
-  .admin-menu {
-    cursor: pointer !important;
+.menu-item {
+  cursor: pointer;
+  transition: none;
+}
+
+.toggle-button {
+  padding: 0;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .toggle-button {
+    display: block;
   }
-  
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.action-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-padding-right {
+  padding-right: 100px;
+}
+
+.custom-padding-left {
+  padding-left: 100px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.brandTitle {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.brandSubtitle {
+  font-size: 15px;
+}
+
+@media (max-width: 992px) {
+  .welcome-message {
+    font-size: 1rem;
+  }
   .action-button {
-    cursor: pointer !important;
+    font-size: 14px;
   }
-  
+}
+
+.logout-confirmation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo1 {
+    max-width: 60px;
+  }
+  .welcome-message {
+    display: none;
+  }
+  .headerIcon-group {
+    position: static;
+    margin-left: auto;
+    margin-right: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-popup {
+    top: 40px;
+    right: 0;
+    width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .action-button {
+    font-size: 12px;
+  }
+  .teacher-popup {
+    width: 150px;
+    right: 5px;
+  }
   .menu-item {
-    cursor: pointer !important;
-    transition: none !important;
+    font-size: 12px;
   }
+}
+
+.teacher-text {
+  color: #198754;
+}
+
+.border-dark-green {
+  border: 2px solid darkgreen;
+  padding: 5px;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 75px;
+  right: 115px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 290px;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .notification-popup {
+    top: 80px;
+    right: -20px;
+    width: 220px;
+    transform: translateY(15px);
+  }
+}
+
+@media (max-width: 368px) {
+  .admin-btn {
+    font-size: 18px;
+  }
+  .admin-btn .header-icon {
+    font-size: 18px;
+    position: relative;
+    top: -2px;
+    font-weight: bolder;
+  }
+  .admin-name {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-btn .header-icon {
+    font-size: 39px;
+  }
+}

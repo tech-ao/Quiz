@@ -58,7 +58,7 @@ const CompletedClass = () => {
           </div>
 
           {/* Table View */}
-          <div className="mb-4 table-container" style={{ width: "94%" }}>
+          <div className="mb-4 table-container" style={{ width: "98%" }}>
             <Table responsive>
               <thead>
                 <tr>

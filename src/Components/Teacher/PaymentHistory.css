@@ -1,5 +1,6 @@
 /* =================== Payment History Table =================== */
-.payment-history-table {
+.paymentTable {
+max-width: 100%;
   width: 90%;
   font-size: 1rem;
   background-color: #fff;
@@ -7,38 +8,41 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-collapse: collapse;
 }
+.paymentTable{
+  width: 80%;
+}
 
-.payment-history-table th,
-.payment-history-table td {
+.paymentTable th,
+.paymentTable td {
   padding: 12px;
   text-align: center;
   border: 1px solid #ddd;
 }
 
-.payment-history-table th {
+.paymentTable th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
 
 /* =================== Responsive Design =================== */
 @media (max-width: 768px) {
-  .payment-history-table {
+  .paymentTable {
     font-size: 0.9rem;
   }
 
-  .payment-history-table th,
-  .payment-history-table td {
+  .paymentTable th,
+  .paymentTable td {
     padding: 10px;
   }
 }
 
 @media (max-width: 480px) {
-  .payment-history-table {
+  .paymentTable {
     font-size: 0.8rem;
   }
 
-  .payment-history-table th,
-  .payment-history-table td {
+  .paymentTable th,
+  .paymentTable td {
     padding: 8px;
   }
 }
@@ -83,11 +87,32 @@
 }
 
 
-@media (max-width: 500px) {
-  .searchBar {
-    width: 100% !important;
-    max-width: 280px;
-    display: flex;
-    justify-content: center;
+/* Default styles (non-mobile) */
+.search-Bar {
+  width: 20% !important;
+  margin-right: 50px !important;
+}
+
+.Filtericon {
+  margin-right: 30px !important;
+}
+
+/* Mobile styles */
+@media (max-width: 360px) {
+  .search-Bar {
+    width: 60% !important;
+    margin-right: 80px !important;
   }
+  
+  .Filtericon {
+    margin-right: 10px !important;
+    position: absolute;
+    right: 0;
+  }
+  
+  /* .d-flex.justify-content-end.align-items-center.mb-3 {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start !important;
+  } */
 }
