@@ -13,6 +13,7 @@ import {
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Components/images/Logo.png";
 import "../Admin/adminHeaderResponsive.css"; // make sure to use the responsive CSS
+import "./TeacherHeader.css";
 import UpdatePassword from "../Student/UpdatePassword";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "../../redux/Action/StudentAction";
@@ -183,12 +184,15 @@ const TeacherHeader = ({ toggleSidebar }) => {
             </Badge>
           </Button>
           <Button variant="link" title="Website" onClick={() => window.open("https://mathgymint.com", "_blank")}>
-            <RiGlobalLine className="header-icon" />
+            <RiGlobalLine className="header-icon"/>
           </Button>
           <div className="position-relative admin-container" ref={popupRef}>
             <Button variant="link" onClick={togglePopup} className="admin-btn" style={{textDecoration:"none", top:'15px'}}>
-              <RiAdminLine className="header-icon" />
-              <span className="admin-name" style={{color:"#09690c", fontSize:"16px", fontWeight:"bold"}}>Teacher</span>
+            <RiAdminLine 
+    className="header-icon" 
+    style={{ fontSize: isMobile ? "30px" : "25px", color: "#09690c" }} 
+  />
+              <span className="admin-name" style={{color:"#09690c", fontSize:"14px", fontWeight:"bold"}}>Teacher</span>
             </Button>
             {showPopup && (
               <div className="admin-popup" style={{width:"130px", top:"75px"}}>
