@@ -279,6 +279,15 @@ const AbacusMath = () => {
             <option value="5">Level 5</option>
           </select>
 
+          <select className="abacus-level-dropdown" onChange={handleLevelChange}>
+            <option value="">Select Stage</option>
+            <option value="1">Stage 1</option>
+            <option value="2">Stage 2</option>
+            <option value="3">Stage 3</option>
+            <option value="4">Stage 4</option>
+            <option value="5">Stage 5</option>
+          </select>
+
           {/* Navigation Items in Header */}
           <Navbar expand="lg" className="sticky-top">
   <Container>
