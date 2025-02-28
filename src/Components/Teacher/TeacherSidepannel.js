@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './TeacherSidepannel.css';
@@ -15,6 +15,23 @@ const TeacherSidePanel = () => {
   });
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // Update openMenus based on current path
+  useEffect(() => {
+    const currentPath = location.pathname;
+    // Auto-expand Online Class menu if on related pages
+    if (currentPath.includes('/assignclass') || currentPath.includes('/completedclass')) {
+      setOpenMenus(prev => ({ ...prev, onlineClass: true }));
+    }
+    // Auto-expand Attendance menu if on related pages
+    if (currentPath.includes('/attendance') || currentPath.includes('/approvedleave') || currentPath.includes('/attendanceData')) {
+      setOpenMenus(prev => ({ ...prev, attendance: true }));
+    }
+    // Auto-expand Lesson Plan menu if on related pages
+    if (currentPath.includes('/syllabus') || currentPath.includes('/topics') || currentPath.includes('/onlineClassShedule')) {
+      setOpenMenus(prev => ({ ...prev, lessonPlan: true }));
+    }
+  }, [location.pathname]);
+
   const toggleMenu = (menuName) => {
     setOpenMenus(prev => ({
       ...prev,
@@ -29,13 +46,18 @@ const TeacherSidePanel = () => {
     navigate("/");
   };
 
+  // Check if current path is active for main or sub items
+  const isPathActive = (path) => {
+    return location.pathname === path;
+  };
+
   return (
     <div className="side-panel">
       <div className="menu-content">
         <div className="menu-section">
           <ul className="nav flex-column">
             <li className="nav-item">
-              <Link to="/teacherDashboard" className={`nav-link ${location.pathname === '/teacherDashboard' ? 'active' : ''}`}>
+              <Link to="/teacherDashboard" className={`nav-link ${isPathActive('/teacherDashboard') ? 'active' : ''}`}>
                 <div className="icon-with-text">
                   <i className="bi bi-grid"></i>
                   <span className="nav-text">Dashboard</span>
@@ -44,7 +66,7 @@ const TeacherSidePanel = () => {
             </li>
 
             <li className="nav-item">
-              <Link to="/studentdata" className={`nav-link ${location.pathname === '/studentdata' ? 'active' : ''}`}>
+              <Link to="/studentdata" className={`nav-link ${isPathActive('/studentdata') ? 'active' : ''}`}>
                 <div className="icon-with-text">
                   <i className="bi bi-person"></i>
                   <span className="nav-text">Student</span>
@@ -54,7 +76,11 @@ const TeacherSidePanel = () => {
 
             {/* Online Class */}
             <li className="nav-item">
-              <div className={`nav-link ${openMenus.onlineClass ? 'active' : ''}`} onClick={() => toggleMenu('onlineClass')} style={{ cursor: 'pointer' }}>
+              <div 
+                className={`nav-link ${openMenus.onlineClass || location.pathname.includes('/assignclass') || location.pathname.includes('/completedclass') ? 'active' : ''}`} 
+                onClick={() => toggleMenu('onlineClass')} 
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="icon-with-text">
                   <i className="bi bi-camera-video"></i>
                   <span className="nav-text">Online Class</span>
@@ -64,12 +90,12 @@ const TeacherSidePanel = () => {
               {openMenus.onlineClass && (
                 <ul className="nav flex-column sub-nav">
                   <li className="nav-item">
-                    <Link to="/assignclass" className="nav-link">
+                    <Link to="/assignclass" className={`nav-link ${isPathActive('/assignclass') ? 'active-sub' : ''}`}>
                       ➤ Assigned Classes
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/completedclass" className="nav-link">
+                    <Link to="/completedclass" className={`nav-link ${isPathActive('/completedclass') ? 'active-sub' : ''}`}>
                       ➤ Complete Classes
                     </Link>
                   </li>
@@ -79,7 +105,11 @@ const TeacherSidePanel = () => {
 
             {/* Attendance */}
             <li className="nav-item">
-              <div className={`nav-link ${openMenus.attendance ? 'active' : ''}`} onClick={() => toggleMenu('attendance')} style={{ cursor: 'pointer' }}>
+              <div 
+                className={`nav-link ${openMenus.attendance || location.pathname.includes('/attendance') || location.pathname.includes('/approvedleave') || location.pathname.includes('/attendanceData') ? 'active' : ''}`} 
+                onClick={() => toggleMenu('attendance')} 
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="icon-with-text">
                   <i className="bi bi-calendar-check"></i>
                   <span className="nav-text">Attendance</span>
@@ -89,17 +119,17 @@ const TeacherSidePanel = () => {
               {openMenus.attendance && (
                 <ul className="nav flex-column sub-nav">
                   <li className="nav-item">
-                    <Link to="/attendance" className="nav-link">
+                    <Link to="/attendance" className={`nav-link ${isPathActive('/attendance') ? 'active-sub' : ''}`}>
                       ➤ Student Attendance
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/approvedleave" className="nav-link">
+                    <Link to="/approvedleave" className={`nav-link ${isPathActive('/approvedleave') ? 'active-sub' : ''}`}>
                       ➤ Approve Leave
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/attendanceData" className="nav-link">
+                    <Link to="/attendanceData" className={`nav-link ${isPathActive('/attendanceData') ? 'active-sub' : ''}`}>
                       ➤ Attendance By Date
                     </Link>
                   </li>
@@ -109,7 +139,11 @@ const TeacherSidePanel = () => {
 
             {/* Lesson Plan */}
             <li className="nav-item">
-              <div className={`nav-link ${openMenus.lessonPlan ? 'active' : ''}`} onClick={() => toggleMenu('lessonPlan')} style={{ cursor: 'pointer' }}>
+              <div 
+                className={`nav-link ${openMenus.lessonPlan || location.pathname.includes('/syllabus') || location.pathname.includes('/topics') || location.pathname.includes('/onlineClassShedule') ? 'active' : ''}`} 
+                onClick={() => toggleMenu('lessonPlan')} 
+                style={{ cursor: 'pointer' }}
+              >
                 <div className="icon-with-text">
                   <i className="bi bi-book"></i>
                   <span className="nav-text">Lesson Plan</span>
@@ -119,17 +153,17 @@ const TeacherSidePanel = () => {
               {openMenus.lessonPlan && (
                 <ul className="nav flex-column sub-nav">
                   <li className="nav-item">
-                    <Link to="/syllabus" className="nav-link">
+                    <Link to="/syllabus" className={`nav-link ${isPathActive('/syllabus') ? 'active-sub' : ''}`}>
                       ➤ Syllabus
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/topics" className="nav-link">
+                    <Link to="/topics" className={`nav-link ${isPathActive('/topics') ? 'active-sub' : ''}`}>
                       ➤ Topic
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <Link to="/onlineClassShedule" className="nav-link">
+                    <Link to="/onlineClassShedule" className={`nav-link ${isPathActive('/onlineClassShedule') ? 'active-sub' : ''}`}>
                       ➤ Lesson Plan
                     </Link>
                   </li>
@@ -139,7 +173,7 @@ const TeacherSidePanel = () => {
 
             {/* Fee's */}
             <li className="nav-item">
-              <Link to="/paymentHistory" className={`nav-link ${location.pathname === '/paymentHistory' ? 'active' : ''}`}>
+              <Link to="/paymentHistory" className={`nav-link ${isPathActive('/paymentHistory') ? 'active' : ''}`}>
                 <div className="icon-with-text">
                   <i className="bi bi-cash"></i>
                   <span className="nav-text">Fee's</span>

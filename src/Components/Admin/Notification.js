@@ -122,7 +122,7 @@ function NotificationPage() {
                   key={notification.id}
                   className={`notification-item ${notification.isRead ? "read" : "unread"}`}
                   onClick={() => handleNotificationClick(notification.id)}
-                  style={{margin:"0 20px 0 10px"}}
+                  style={{margin:"0 15px 0 10px"}}
                 >
                   <div className="notification-title">{notification.title}</div>
                   <small className="text-muted" style={{marginRight:"30px"}}>Received on: {notification.receivedDate}</small>

@@ -74,6 +74,7 @@ const AssignClass = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
   const handleAction = (action, rowData) => {
     setSelectedRow(rowData);
     switch (action) {
@@ -90,6 +91,7 @@ const AssignClass = () => {
         break;
     }
   };
+  
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
@@ -106,6 +108,7 @@ const AssignClass = () => {
                 top: "0",
                 backgroundColor: "white",
                 padding: "10px",
+                zIndex: "1",
               }}
             >
               <h4 className="live-classes-heading">
@@ -153,11 +156,20 @@ const AssignClass = () => {
               </div>
             </div>
 
-            {/* Table Section */}
-            <div className="table-responsive">
-              <table className="table table-bordered table-hover table-custom">
-                <thead>
+            {/* Table Container with Horizontal and Vertical Scrolling */}
+            <div 
+              style={{
+                overflow: "auto",
+                maxHeight: "calc(100vh - 200px)", // Adjust based on your header/search section height
+                marginTop: "15px",
+                border: "1px solid #dee2e6",
+                borderRadius: "4px"
+              }}
+            >
+              <table className="table table-bordered table-hover table-custom m-0">
+                <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
                   <tr>
+                    <th style={{ width: "50px" }}>#</th>
                     <th>Class Title</th>
                     <th>Description</th>
                     <th>Date Time</th>
@@ -169,8 +181,9 @@ const AssignClass = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {classes.map((classItem) => (
+                  {classes.map((classItem, index) => (
                     <tr key={classItem.id}>
+                      <td className="text-center">{index + 1}</td>
                       <td>{classItem.title}</td>
                       <td>{classItem.description}</td>
                       <td>{classItem.dateTime}</td>
@@ -197,30 +210,29 @@ const AssignClass = () => {
                             flexWrap: "nowrap",
                           }}
                         >
-<button
-  className="btn btn-sm"
-  style={{ color: "#198754", background: "transparent" }}
-  onClick={() => handleAction("view", classItem)}
->
-  <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
-</button>
+                          <button
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
+                            onClick={() => handleAction("view", classItem)}
+                          >
+                            <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
+                          </button>
 
-<button
-  className="btn btn-sm"
-  style={{ color: "#198754", background: "transparent" }}
-  onClick={() => handleAction("edit", classItem)}
->
-  <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
-</button>
+                          <button
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
+                            onClick={() => handleAction("edit", classItem)}
+                          >
+                            <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
+                          </button>
 
-<button
-  className="btn btn-sm"
-  style={{ color: "#198754", background: "transparent" }}
-  onClick={() => handleAction("remove", classItem)}
->
-  <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
-</button>
-
+                          <button
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
+                            onClick={() => handleAction("remove", classItem)}
+                          >
+                            <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -231,6 +243,8 @@ const AssignClass = () => {
           </div>
         </div>
       </div>
+      
+      {/* Modals remain unchanged */}
       {showDetails && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">

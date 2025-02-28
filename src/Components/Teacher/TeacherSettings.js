@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
-import './TeacherSettings.css';
+import './TeacherSetting.css';
 import { getStudent } from '../../redux/Services/api'; // Import the getStudent function
 
 const TeacherSettings = () => {

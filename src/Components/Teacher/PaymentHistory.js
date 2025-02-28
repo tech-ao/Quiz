@@ -49,22 +49,22 @@ const PaymentHistory = () => {
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container" style={{ marginRight: '20px' }}>
+          <div className="sub-container" style={{ marginRight: '10px' }}>
             <Row className="align-items-center mb-4">
-              <Col md={6}>
+              <Col md={6} style={{marginTop:"20px"}}>
                 <h2 className="fw-bold">Payment History</h2>
               </Col>
-              <Col md={6} className="d-flex justify-content-end">
+            </Row>
+            <Col md={5} className="d-flex justify-content-end searchBar" style={{marginLeft:"690px"}}>
                 <Form.Control
                   type="text"
-                  placeholder="Search by Student Name"
+                  placeholder="Search here.."
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
                   style={{ width: '60%', marginRight: '20px' }}
                 />
               </Col>
-            </Row>
-            <Table responsive bordered className="payment-history-table">
+            <Table responsive bordered className="payment-history-table" style={{width:"91%"}}>
               <thead>
                 <tr>
                   <th>#</th>

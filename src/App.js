@@ -37,7 +37,7 @@ import StudentNotification from "./Components/Student/StudentNotification";
 import StudentAttendance from "./Components/Admin/StudentAttendance";
 import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
-
+import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import "react-toastify/dist/ReactToastify.css";
 
 // Import Redux Provider and Store
@@ -101,6 +101,10 @@ function App() {
           <Route
             path="/listTeacher"
             element={<ProtectedRoute element={<ListTeacher />} />}
+          />
+          <Route
+            path="/assignment"
+            element={<ProtectedRoute element={<TeacherAssignment />} />}
           />
           <Route
             path="/approvedleave"

@@ -1,3 +1,4 @@
+/* =================== Heading & Layout =================== */
 .heading-text {
   text-align: left;
   margin-top: 23px;
@@ -5,6 +6,7 @@
   position: sticky;
 }
 
+/* =================== Search & Filter Section =================== */
 .search-bar {
   width: 100%;
   max-width: 130px;
@@ -14,12 +16,6 @@
   justify-content: right;
   margin-right: 70px;
   margin-bottom: -17px;
-}
-
-.attendance-list {
-  width: 97%;
-  margin-bottom: -17px;
-  overflow-x: auto;
 }
 
 .filter-section {
@@ -53,7 +49,7 @@
   background-color: #0056b3;
 }
 
-/* Attendance Actions */
+/* =================== Attendance Actions =================== */
 .attendance-actions {
   display: flex;
   justify-content: space-between;
@@ -79,7 +75,13 @@
   background-color: #218838;
 }
 
-/* Attendance Table */
+/* =================== Attendance Table =================== */
+.attendance-list {
+  width: 100%;
+  margin-bottom: -17px;
+  overflow-x: auto;
+}
+
 .table {
   width: 100%;
   background-color: white;
@@ -117,7 +119,7 @@
   width: 90px;
 }
 
-/* Media Queries */
+/* =================== Media Queries =================== */
 @media (max-width: 768px) {
   .filter-section,
   .attendance-actions {
@@ -191,18 +193,19 @@
     margin-top: 20px;
   }
   .attendance-list {
-    padding: 4px 10px 10px 0px;
-    width: 140%;
+    padding: 0;
+    max-width: 100%;
+    overflow-x: auto;
   }
- 
 }
 
+/* =================== Attendance List Scroll Adjustments =================== */
 .attendance-list {
-  width: 100%;
+  width: 98%;
   overflow-x: auto;
 }
 
 .attendance-list table {
-  min-width: 600px; /* Adjust based on your table content */
+  min-width: 69px; /* Adjust based on your table content */
   white-space: nowrap;
 }

@@ -9,7 +9,7 @@ const CompletedClass = () => {
     window.innerWidth >= 768
   );
   const [searchTerm, setSearchTerm] = useState("");
-  
+
   const completedClasses = [
     { id: 1, subject: "History", teacher: "Mr. Brown", date: "Feb 10, 2025" },
     { id: 2, subject: "Geography", teacher: "Ms. White", date: "Feb 15, 2025" },
@@ -30,8 +30,10 @@ const CompletedClass = () => {
 
   const filteredClasses = completedClasses.filter((cls) => {
     const searchLower = searchTerm.toLowerCase();
-    return cls.subject.toLowerCase().includes(searchLower) ||
-           cls.teacher.toLowerCase().includes(searchLower);
+    return (
+      cls.subject.toLowerCase().includes(searchLower) ||
+      cls.teacher.toLowerCase().includes(searchLower)
+    );
   });
 
   return (
@@ -40,33 +42,36 @@ const CompletedClass = () => {
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100 main-box">
-          <h2 className="fw-bold text-start mb-4" style={{marginTop:'24px'}}>Completed Classes</h2>
-          
+          <h2 className="fw-bold text-start mb-4" style={{ marginTop: "24px" }}>
+            Completed Classes
+          </h2>
+
           {/* Search Section */}
-          <div className="d-flex justify-content-end mb-4" style={{width:"40%", marginLeft:"650px"}}>
+          <div className="search-container">
             <Form.Control
               type="text"
               placeholder="Search classes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
-              style={{marginLeft:"90px"}}
+              className="searchInput searchBar"
             />
           </div>
 
           {/* Table View */}
-          <div className="mb-4" style={{width:"94%"}}>
+          <div className="mb-4 table-container" style={{ width: "94%" }}>
             <Table responsive>
               <thead>
                 <tr>
+                  <th>#</th>
                   <th>Subject</th>
                   <th>Teacher</th>
                   <th>Date</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredClasses.map((cls) => (
+                {filteredClasses.map((cls, index) => (
                   <tr key={cls.id}>
+                    <td style={{ textAlign: "center" }}>{index + 1}</td>
                     <td>{cls.subject}</td>
                     <td>{cls.teacher}</td>
                     <td>{cls.date}</td>
