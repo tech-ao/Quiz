@@ -62,7 +62,8 @@
 
 /* Unread notifications: ash color background */
 .notification-item.unread {
-  background-color: #e9ecef; /* Ash/gray color */
+  background-color: #eaebec; /* Ash/gray color */
+  
 }
 
 /* Read notifications: white background */
