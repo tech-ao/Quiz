@@ -53,15 +53,16 @@ body {
 
 /* Sidebar Styles */
 .abacus-sidebar {
-    width: 250px;
+    width:15vw;
     background-color: #a09d9de3;
-    height: calc(100vh - 64px); /* Adjust for header height */
+    height: 100vh ;/* Adjust for header height */
     padding: 20px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     position: fixed;
-    top: 70px; /* Align with header */
+    top: 75px; /* Align with header */
     left: 0;
 }
+
 
 /* Level Section Styles */
 .abacus-level-section {
@@ -242,7 +243,16 @@ body {
     background:linear-gradient(100deg,rgba(4, 167, 243, 0.875),rgb(8, 246, 186),rgb(56, 56, 157));
     transition: background-color 0.3s;
 }
-
+.abacus-game-icon-container.minimized::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%; /* Makes it a circle */
+    position: absolute;
+    top: -1px; /* Adjust position */
+    right: -1px; /* Adjust position */
+}
 .abacus-game-icon-container:hover {
     background-color: #45a049; /* Darker shade on hover */
 }
@@ -252,11 +262,20 @@ body {
     font-size: 24px; /* Icon size */
 }
 
+.questio-wrapp{
+    padding-left: 10%;
+    margin-top: 10px;
+    gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+}
 .dummy-questions-container {
+    width: 88%;
+    padding: 12px;
     font-size: 15px;
     font-weight: bold;
     position: absolute;
-    top: 35%;
+    top: 20%;
     left: 60%;
     transform: translateX(-50%); /* Center horizontally */
     transition: left 0.3s ease, transform 0.3s ease;
@@ -268,8 +287,30 @@ body {
 }
 
 .dummy-questions-container.abacus-open {
+    
     left: 18%; /* Move to left when AbacusKit is open */
+    top:23%;
     transform: none; /* Remove centering */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    width: 20%;
+    height: 500px;
+    padding: 0px;
+    overflow-y: scroll; /* Allow vertical scrolling */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none; 
+}
+.dummy-questions-container.abacus-open h3{
+    background-color: #d8d5d5;
+}
+.dummy-questions-container h3{
+    position: sticky;
+    top: 0;
+    padding: 10px;
+    margin: 0px;
+    z-index: 10;
+   
 }
 
 .dummy-questions-container p{
@@ -290,7 +331,8 @@ body {
   .submit-button {
     background-color: #59b36e;
     color:black;
-    padding: 8px 15px;
+    height: 50px;
+    margin-top: 50px;
     border: none;
     border-radius: 20px;
     font-weight: bold;
@@ -299,6 +341,17 @@ body {
   
   .submit-button:hover {
     background-color: #8bd711;
+  }
+  .abacus-main-content h2{
+    font-size: 4rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #222222, #582605);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    transform: perspective(500px) rotateX(20deg);
+  
   }
   
 /* Abacus Styles */
