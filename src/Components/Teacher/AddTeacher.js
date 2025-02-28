@@ -9,31 +9,29 @@ import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../
 
 const AddTeacher = ({ show, onClose }) => {
     const [formData, setFormData] = useState({
+
         fullName: '',
         dob: '',
-        gender: '',
+        gender: null,
         phoneNumber: '',
         email: '',
+
+        statusId: 2,
         permanentAddress: '',
         currentResidentialAddress: '',
-        nationalityId: '',
+        sameAsPermanentAddress: true,
+        nationalityId: null,
+        availabilityId: 1,
+        teacherModeId: 1,
         preferedCountryId: null,
-        candidatePhoto: null,
-        photoID: null,
-        higherLevelEducation: '',
-        institute: '',
-        degrees: '',
-        subjectSpecialist: '',
-        yearOfGraduation: '',
-        employerName: '',
-        jobTitle: '',
-        yoe: '',
-        availability: '',
-        workSchedule: '',
-        preferredCountries: '',
-        graduationPhoto: null,
-        experienceProof: null,
+        preferedWorkScheduledId: 1,
+        disclaimerContent: "only for test",
+        RegisterNo: '',
+        createdBy: 1
+
+
     });
+
 
     const [errors, setErrors] = useState({});
     const [countries, setCountries] = useState([]);
@@ -139,7 +137,7 @@ const AddTeacher = ({ show, onClose }) => {
                     <Row>
                         <h4>Personal Information</h4>
                         <Col>
-                        
+
                             <Form.Group>
                                 <Form.Label>Full Name</Form.Label>
                                 <Form.Control
@@ -233,15 +231,20 @@ const AddTeacher = ({ show, onClose }) => {
                     <Row>
                         <Col>
                             <Form.Group>
-                                <Form.Label>nationalityId</Form.Label>
-                                <Form.Control
-                                    type="text"
+                                <Form.Label>Nationality</Form.Label>
+                                <Form.Select
                                     name="nationalityId"
                                     value={formData.nationalityId}
                                     onChange={handleChange}
-                                    isInvalid={!!errors.nationalityId}
-                                />
-                                <Form.Control.Feedback type="invalid">{errors.nationalityId}</Form.Control.Feedback>
+                                    required
+                                >
+                                    <option value="">Select Country</option>
+                                    {countries.map((country, index) => (
+                                        <option key={index} value={country.item1}>
+                                            {country.item2}
+                                        </option>
+                                    ))}
+                                </Form.Select>
                             </Form.Group>
                         </Col>
                         <Col>
@@ -348,7 +351,7 @@ const AddTeacher = ({ show, onClose }) => {
                     </Row>
 
                     <Row>
-                        <Col>
+                        {/* <Col>
                             <Form.Group>
                                 <Form.Label>Years of Experience</Form.Label>
                                 <Form.Control
@@ -360,7 +363,7 @@ const AddTeacher = ({ show, onClose }) => {
                                 />
                                 <Form.Control.Feedback type="invalid">{errors.yoe}</Form.Control.Feedback>
                             </Form.Group>
-                        </Col>
+                        </Col> */}
                         <Col>
                             <Form.Group>
                                 <Form.Label>Availability</Form.Label>
@@ -397,12 +400,12 @@ const AddTeacher = ({ show, onClose }) => {
                             <Form.Group>
                                 <Form.Label>prefered Country Name</Form.Label>
                                 <Form.Select
-                                    name="country"
+                                    name="preferedCountryId"
                                     value={formData.preferedCountryId}
                                     onChange={handleChange}
                                     required
                                 >
-                                    <option value="">Select Country</option>
+                                    <option value='' >Select Country</option>
                                     {countries.map((country, index) => (
                                         <option key={index} value={country.item1}>
                                             {country.item2}
