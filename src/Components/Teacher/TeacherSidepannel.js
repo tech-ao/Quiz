@@ -18,14 +18,17 @@ const TeacherSidePanel = () => {
   // Update openMenus based on current path
   useEffect(() => {
     const currentPath = location.pathname;
+    
     // Auto-expand Online Class menu if on related pages
     if (currentPath.includes('/assignclass') || currentPath.includes('/completedclass')) {
       setOpenMenus(prev => ({ ...prev, onlineClass: true }));
     }
+    
     // Auto-expand Attendance menu if on related pages
     if (currentPath.includes('/attendance') || currentPath.includes('/approvedleave') || currentPath.includes('/attendanceData')) {
       setOpenMenus(prev => ({ ...prev, attendance: true }));
     }
+    
     // Auto-expand Lesson Plan menu if on related pages
     if (currentPath.includes('/syllabus') || currentPath.includes('/topics') || currentPath.includes('/onlineClassShedule')) {
       setOpenMenus(prev => ({ ...prev, lessonPlan: true }));
@@ -49,6 +52,11 @@ const TeacherSidePanel = () => {
   // Check if current path is active for main or sub items
   const isPathActive = (path) => {
     return location.pathname === path;
+  };
+
+  // Check if a section is active (parent dropdown)
+  const isSectionActive = (paths) => {
+    return paths.some(path => location.pathname.includes(path));
   };
 
   return (
@@ -77,7 +85,7 @@ const TeacherSidePanel = () => {
             {/* Online Class */}
             <li className="nav-item">
               <div 
-                className={`nav-link ${openMenus.onlineClass || location.pathname.includes('/assignclass') || location.pathname.includes('/completedclass') ? 'active' : ''}`} 
+                className={`nav-link ${isSectionActive(['/assignclass', '/completedclass']) ? 'active' : ''}`} 
                 onClick={() => toggleMenu('onlineClass')} 
                 style={{ cursor: 'pointer' }}
               >
@@ -106,7 +114,7 @@ const TeacherSidePanel = () => {
             {/* Attendance */}
             <li className="nav-item">
               <div 
-                className={`nav-link ${openMenus.attendance || location.pathname.includes('/attendance') || location.pathname.includes('/approvedleave') || location.pathname.includes('/attendanceData') ? 'active' : ''}`} 
+                className={`nav-link ${isSectionActive(['/attendance', '/approvedleave', '/attendanceData']) ? 'active' : ''}`} 
                 onClick={() => toggleMenu('attendance')} 
                 style={{ cursor: 'pointer' }}
               >
@@ -140,7 +148,7 @@ const TeacherSidePanel = () => {
             {/* Lesson Plan */}
             <li className="nav-item">
               <div 
-                className={`nav-link ${openMenus.lessonPlan || location.pathname.includes('/syllabus') || location.pathname.includes('/topics') || location.pathname.includes('/onlineClassShedule') ? 'active' : ''}`} 
+                className={`nav-link ${isSectionActive(['/syllabus', '/topics', '/onlineClassShedule']) ? 'active' : ''}`} 
                 onClick={() => toggleMenu('lessonPlan')} 
                 style={{ cursor: 'pointer' }}
               >

@@ -86,27 +86,27 @@
     }
   
     /* New styles for small screen search container */
-    .search-container {
+    .searchcontainer {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 5px;
-      width: 100%;
+      gap: 10px;
+      width: 10%;
       position: relative;
     }
   
-    .search-container input {
+    .searchcontainer input {
       width: 45%;
     }
   
-    .search-container .filter-icon {
+    .searchcontainer .filter-icon {
       width: 15%;
       text-align: center;
       position: relative;
       z-index: 1050;
     }
   
-    .search-container .add-student-btn {
+    .searchcontainer .add-student-btn {
       width: 40%;
     }
   
@@ -142,8 +142,8 @@
   }
   
   /* Sub-container styling */
-  .sub-container {
+  /* .sub-container {
     margin-bottom: 2rem;
     padding-top: 0;
-  }
+  } */
   

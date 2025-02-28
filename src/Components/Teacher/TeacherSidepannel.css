@@ -1,74 +1,76 @@
 .side-panel {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 230px;
-    background-color: #E7FFEC;
-    overflow-y: hidden; 
-    /* padding: 10px; */
-    position: fixed; /* Fixes the sidebar */
-    top: 100px; 
-    left: 0;
-    background-color: #E7FFEC;
-    overflow: hidden; 
-  }
-  
-  .menu-content {
-    flex: 1;
-    overflow-y: auto;
-   padding-bottom: 8px;
-  }
-  
-  .menu-section {
-    padding: 1rem;
-  }
-  
-  .nav-item {
-    margin-bottom: 0.5rem;
-  }
-  
-  .icon-with-text {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    
-  }
-
-  .log{
-    justify-content: center;
-  }
-  
-  .nav-link {
-    color: #09690c;
-    text-decoration: none;
-  }
-  
-  .nav-link:hover {
-    background-color: rgba(9, 105, 12, 0.1);
-    border-radius: 4px;
-  }
-  
-  .nav-link.active {
-    background-color: rgba(9, 105, 12, 0.1);
-    border-radius: 4px;
-  }
-  
-  .dropdown-icon {
-    margin-left: auto;
-  }
-  
-  .sub-nav {
-    padding-left: 25px;
-    margin-top: 0.5rem;
-  }
-  
-  .sub-nav-text {
-    color: #09690c;
-    display: inline-block;
-  }
-  .menu-content::-webkit-scrollbar {
-    width: 5px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 230px;
+  background-color: #E7FFEC;
+  overflow-y: hidden; 
+  /* padding: 10px; */
+  position: fixed; /* Fixes the sidebar */
+  top: 100px; 
+  left: 0;
+  background-color: #E7FFEC;
+  overflow: hidden; 
 }
+
+.menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 8px;
+}
+
+.menu-section {
+  padding: 1rem;
+}
+
+.nav-item {
+  margin-bottom: 0.5rem;
+}
+
+.icon-with-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.log{
+  justify-content: center;
+}
+
+.nav-link {
+  color: #09690c;
+  text-decoration: none;
+}
+
+.nav-link:hover {
+  background-color: rgba(9, 105, 12, 0.1);
+  border-radius: 4px;
+}
+
+.nav-link.active {
+  background-color: rgba(9, 105, 12, 0.2);
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.dropdown-icon {
+  margin-left: auto;
+}
+
+.sub-nav {
+  padding-left: 25px;
+  margin-top: 0.5rem;
+}
+
+.sub-nav-text {
+  color: #09690c;
+  display: inline-block;
+}
+
+.menu-content::-webkit-scrollbar {
+  width: 5px;
+}
+
 .logout-confirmation-popup {
   position: fixed;
   top: 0;
@@ -96,49 +98,48 @@
   margin-top: 15px;
 }
 
+.logout-section {
+  position: fixed;
+  bottom: 0;
+  width: 230px;
+  background-color: #198754;
+  text-align: center;
+  z-index: 1000;
+}
+
+.menu-content::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-content {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+      width: 200px; /* Reduced width for better fit */
+      top: 100px;
+      height: 100vh;
+      left: 0;
+  }
+
   .logout-section {
-    position: fixed;
-    bottom: 0;
-    width: 230px;
-    background-color: #198754;
-    text-align: center;
-    z-index: 1000;
+      width: 200px; /* Match your sidebar width */
+      left: 0;
+      z-index: 100;
   }
-  
-  .menu-content::-webkit-scrollbar {
-    display: none;
+  .log{
+    justify-content: center;
   }
-  
-  
-  .menu-content {
-    -ms-overflow-style: none;  
-    scrollbar-width: none;  
-  }
-  
-  @media (max-width: 768px) {
-    .side-panel {
-        width: 200px; /* Reduced width for better fit */
-        top: 100px;
-        height: 100vh;
-        left: 0;
-    }
-
-    .logout-section {
-        width: 200px; /* Match your sidebar width */
-        left: 0;
-        z-index: 100;
-        }
-        .log{
-          justify-content: center;
-        }
-    
-    
 }
 
-
-/* Add this to your existing TeacherSidepannel.css file */
+/* Updated submenu active style to match main menu active style */
 .sub-nav .nav-link.active-sub {
-  background-color: rgba(255, 255, 255, 0.1);
-  /* color: #fff; */
-  font-weight: bold;
+  background-color: rgba(9, 105, 12, 0.15);
+  border-radius: 4px;
+  font-weight: 500;
+  padding-left: 10px;
 }
+
+/* Removed the conflicting styles that were added at the bottom */

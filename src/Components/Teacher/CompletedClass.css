@@ -21,7 +21,7 @@
 }
 
 /* Search Section */
-.search-container {
+.searchBox {
   display: flex;
   justify-content: center;
   width: 99%;
@@ -43,6 +43,52 @@
 @media (max-width: 500px) {
   .searchBar {
     width: 2230% !important;
-    margin-left: -69px !important;
+    margin-left: -79px !important;
+    left: 18%;
+  }
+  .filter-icon-container{
+    /* background-color: rgba(9, 105, 12, 0.1); */
+    /* border-radius: 50%; */
+    padding: 2px;
+    left: 300px;
+  }
+  .datepick{
+    left: -190px;
+  }
+  
+}
+
+/* Add these styles to your CompletedClass.css file */
+
+.searchBox {
+  position: relative;
+  margin-bottom: 20px;
+  left: -60px;
+  width: 98%;
+}
+
+.searchBar {
+  padding-right: 40px; /* Make room for the filter icon */
+}
+
+.filter-icon-container {
+  /* background-color: rgba(9, 105, 12, 0.1); */
+  /* border-radius: 50%; */
+  /* padding: 2px; */
+  margin-right: -10px;
+}
+
+.date-filter-popup {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
