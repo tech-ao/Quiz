@@ -89,7 +89,7 @@ const AbacusKit = ({ onClose,isMinimized, onMinimize }) => {
       <div className={`abacus-container ${isMinimized ? "minimized" : ""}`}>
         <div className="abacus-sub-cont">
           <div className="abacus-headerss">
-            <h2 className="title">Interactive Abacus</h2>
+            <h2 className="aba-title">Interactive Abacus</h2>
             <div className="header-buttons">
             <button className="icon-button" onClick={onMinimize}>
               {isMinimized ? "🔼" : "➖"}
