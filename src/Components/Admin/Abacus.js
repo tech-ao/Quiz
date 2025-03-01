@@ -118,6 +118,7 @@ const AbacusMath = () => {
     5: "E",
   };
 
+  
   const questions = [
     "Write The Beads Value",
     "Draw a Beads For the Given Number",
@@ -170,7 +171,7 @@ const AbacusMath = () => {
             </select>
   
             {/* Navigation Items in Header */}
-            <Navbar expand="lg" className="sticky-top">
+            <Navbar expand="lg" className=" abacus-sticky-top ">
               <Container>
                 {/* Hamburger Toggle on Right */}
                 <Navbar.Toggle aria-controls="navbar-content" className="border-0 ms-auto" />
