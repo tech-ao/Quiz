@@ -26,6 +26,15 @@
   
     }
    
+    .plusicon{
+      
+      margin-top: -60px;
+      padding: 9px 8px  !important;
+      color: green;
+      font-weight: bolder;
+    
+      border: 0px solid aliceblue !important;
+    }
   
     .row {
       margin-bottom: 2px !important;  /* Only 5px spacing */

@@ -138,7 +138,7 @@ import AdminHeader from "./AdminHeader";
                 <Form.Label className="fw-bold">Type Question:</Form.Label>
                 <InputGroup>
                   <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)} />
-                  <Button variant="success" onClick={handleStoreNumber}><FaPlus /></Button>
+                  <Button variant="success " className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
                 </InputGroup>
                 {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
               </Col>

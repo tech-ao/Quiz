@@ -4,6 +4,44 @@ body {
     font-family: Arial, sans-serif;
 }
 
+
+.abacus-column {
+    display: flex;
+    flex-direction: column; /* Beads start from the bottom */
+    align-items: center;
+    justify-content: flex-start;
+    width: 50px;
+    height: 130px;
+    border: 2px solid black;
+    margin: 5px;
+    padding: 7px;
+    position: relative;
+    background-color: white;
+  }
+  
+  .bead {
+    width: 13px;
+    height: 13px;
+    background-color: brown;
+    border-radius: 50%;
+    margin-top: 1px;
+    
+  }
+  
+  .stick {
+    width: 40px;
+    height: 2px;
+    background-color: black;
+    position: absolute;
+    top: 10px;
+  }
+  
+
+  .question-number {
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px; /* Adjust spacing as needed */
+  }
 .abacus-app-container {
     display: flex;
     height: 100vh;
@@ -261,14 +299,14 @@ body {
 }
 
 .questio-wrapp{
-    padding-left: 10%;
+    padding: 5%;
     margin-top: 10px;
-    gap: 20px;
+    gap: 40px;
     display: flex;
     flex-wrap: wrap;
 }
 .dummy-questions-container {
-    width: 88%;
+    width: 48%;
     padding: 12px;
     font-size: 15px;
     font-weight: bold;
@@ -286,7 +324,7 @@ body {
 
 .dummy-questions-container.abacus-open {
     
-    left: 18%; /* Move to left when AbacusKit is open */
+    left: 17%; /* Move to left when AbacusKit is open */
     top:23%;
     transform: none; /* Remove centering */
     display: flex;
@@ -301,11 +339,15 @@ body {
 }
 .dummy-questions-container.abacus-open h3{
     background-color: #d8d5d5;
+    width: 100%;
+    font-size: 17px;
+    margin-left: 10px;
+    
 }
 .dummy-questions-container h3{
     position: sticky;
     top: 0;
-    padding: 10px;
+   padding: 10px;
     margin: 0px;
     z-index: 10;
    
@@ -316,14 +358,16 @@ body {
 }
 .dummy-questions-container h3{
     font-weight: bold;
+    margin-left: 50px;
 }
 
 .answer-input {
-    width: 60%;
+    width: 60px;
     padding: 8px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    margin: 5px 0px;
+    border: 1px solid BLACK;
+    border-radius: 5px;
+    background-color: white;
   }
   
   .submit-button {
@@ -462,8 +506,8 @@ body {
             text-align: left;
         }
     
-        .dummy-questions-container h2 {
-            font-size: 16px;
+        .dummy-questions-container h3 {
+            font-size: 10px !important;
             margin-bottom: 10px;
         }
     

@@ -192,14 +192,14 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="/questionPage"
-                  className={`nav-link ${location.pathname === "/questionPage" ? "active" : ""}`}
+                  to="/ImportQuestion"
+                  className={`nav-link ${location.pathname === "/ImportQuestion" ? "active" : ""}`}
                   onClick={closeSidePanel}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
                   <i className="bi bi-upload"></i>
-                    <span className="nav-text">Upload Question</span>
+                    <span className="nav-text">Import Question</span>
                   </div>
                 </Link>
               </li>
