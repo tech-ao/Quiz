@@ -2,13 +2,15 @@ import { createStore, combineReducers, applyMiddleware } from "redux";
 import { thunk } from "redux-thunk";
 import studentReducer from '../Reducer/StudentReducer';
 import profileReducer from '../Reducer/ProfileReducer';
+import teacherReducer from '../Reducer/TeacherReducer';
 import passwordReducer from '../Reducer/PasswordReducer'
 // Import your profile reducer
 
 const rootReducer = combineReducers({
   students: studentReducer,
   profile: profileReducer,
-  passwordChange: passwordReducer
+  passwordChange: passwordReducer,
+  teachers: teacherReducer
    // Include the profile reducer here
 });
 
