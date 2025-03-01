@@ -11,9 +11,7 @@ body {
     flex-direction: column;
 }
 
-.navbar {
-    background-color: transparent !important;
-  }
+
   
   /* Remove white background from expanded navbar in desktop view */
   .navbar-collapse {

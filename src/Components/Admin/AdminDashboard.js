@@ -84,7 +84,7 @@ function AdminDashboard() {
             <div className="dashboard-calendar-wrapper mb-4">
               {/* Dashboard Cards Container (75% width on large screens) */}
               <div className="dashboard-cards-container" style={{ display: "inline-block", width: "75%" }}>
-                <Row className="g-4">
+              <Row className="g-lg-4 g-0">
                   {[
                     { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg },
                     { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg },
@@ -93,7 +93,7 @@ function AdminDashboard() {
                     { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg },
                     { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg }
                   ].map((item, index) => (
-                    <div className="col-lg-6 col-md-6 col-sm-12" key={index} style={{padding:"0px", height:"105px"}}>
+                    <div className="col-lg-6 col-md-6 col-sm-12" key={index} style={{padding:"0px"}}>
                       <Card
                         className="dashboard-card shadow-sm mb-4"
                         onClick={() => handleCardClick(item.label)}
