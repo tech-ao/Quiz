@@ -1,42 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, Row, Col, Card, Table, Form, Button } from "react-bootstrap";
-import TeacherHeader from "./TeacherHeader";
+import { Container, Row, Col, Table, Form } from "react-bootstrap";
+import { FaCalendarAlt } from "react-icons/fa";
 import TeacherSidePanel from "./TeacherSidepannel";
-import "./CompletedClass.css";
-import { BsFilter } from "react-icons/bs";
-import DatePicker from "react-datepicker";
+import TeacherHeader from "./TeacherHeader";
 import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
+
+const completedClasses = [
+  { id: 1, subject: "History", teacher: "Mr. Brown", date: "2025-02-10" },
+  { id: 2, subject: "Geography", teacher: "Ms. White", date: "2025-02-15" },
+  { id: 3, subject: "Physics", teacher: "Dr. Adams", date: "2025-02-18" },
+];
 
 const CompletedClass = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
-  );
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState("");
-  const [showDateFilter, setShowDateFilter] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("");
-  const filterIconRef = useRef(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const datePickerRef = useRef(null);
-
-  const completedClasses = [
-    { id: 1, subject: "History", teacher: "Mr. Brown", date: "2025-02-10" },
-    { id: 2, subject: "Geography", teacher: "Ms. White", date: "2025-02-15" },
-    { id: 3, subject: "Physics", teacher: "Dr. Adams", date: "2025-02-18" },
-  ];
+  const filterIconRef = useRef(null);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
-  };
-
-  const toggleDateFilter = () => {
-    setShowDateFilter((prev) => !prev);
-  };
-
-  const handleDateChange = (e) => {
-    setSelectedDate(e.target.value);
-  };
-
-  const clearDateFilter = () => {
-    setSelectedDate("");
   };
 
   useEffect(() => {
@@ -55,10 +40,9 @@ const CompletedClass = () => {
         filterIconRef.current &&
         !filterIconRef.current.contains(event.target)
       ) {
-        setShowDateFilter(false);
+        setShowDatePicker(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
@@ -68,130 +52,88 @@ const CompletedClass = () => {
     const matchesSearch =
       cls.subject.toLowerCase().includes(searchLower) ||
       cls.teacher.toLowerCase().includes(searchLower);
-    const matchesDate = selectedDate ? cls.date === selectedDate : true;
+    const matchesDate = selectedDate ? cls.date === selectedDate.toISOString().split("T")[0] : true;
     return matchesSearch && matchesDate;
   });
-
-  const formatDisplayDate = (dateString) => {
-    const options = { year: 'numeric', month: 'short', day: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
-  };
 
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex flex-column flex-md-row">
+      <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100 main-box">
-          <h2 className="fw-bold text-start mb-4" style={{ marginTop: "24px" }}>
-            Completed Classes
-          </h2>
-          {/* Search Section with Filter Icon */}
-          <div className="searchBox position-relative">
+        <Container className="main-container p-4 min-vh-100">
+          <Row className="align-items-center mb-4">
+            <Col md={6} style={{ marginTop: "20px" }}>
+              <h2 className="fw-bold">Completed Classes</h2>
+            </Col>
+          </Row>
+          <div className="d-flex justify-content-end align-items-center mb-3" style={{ position: "relative" }}>
             <Form.Control
               type="text"
               placeholder="Search classes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="searchInput searchBar"
+              className="search-Bar"
             />
-            {/* Filter Icon */}
-            <div
-  ref={filterIconRef}
-  className="filter-icon-container"
-  style={{
-    position: "absolute",
-    right: "12px",
-    top: "50%",
-    transform: "translateY(-50%)",
-    cursor: "pointer"
-  }}
->
-  <BsFilter size={24} color="#09690c" 
-    onClick={() => setShowDateFilter(!showDateFilter)}  // Fixed here
-  />
-  {showDateFilter && (
-    <div
-      ref={datePickerRef}
-      className="datepick"
-      style={{
-        position: "absolute",
-        top: "100%",
-        right: "0",
-        zIndex: 1000,
-        background: "white",
-        padding: "6px",
-        borderRadius: "5px",
-        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-        width: "fit-content"
-      }}
-    >
-      <DatePicker
-        selected={selectedDate}
-        onChange={(date) => {
-          setSelectedDate(date);
-          setShowDateFilter(false);
-        }}
-        inline
-      />
-    </div>
-  )}
-</div>
-          </div>
-          {/* Active Filter Indicator */}
-          {selectedDate && (
-            <div className="mt-2 mb-3">
-              <span
-                className="badge rounded-pill"
-                style={{
-                  backgroundColor: "#E7FFEC",
-                  color: "#09690c",
-                  padding: "8px 12px",
-                  fontSize: "0.9rem"
-                }}
-              >
-                Date: {formatDisplayDate(selectedDate)}
-                <span
-                  className="ms-2"
-                  onClick={clearDateFilter}
-                  style={{ cursor: "pointer" }}
+            <div ref={filterIconRef} className="Filtericon" style={{ position: "relative", marginLeft: "10px" }}>
+              <FaCalendarAlt
+                size={24}
+                style={{ cursor: "pointer", color: "green" }}
+                onClick={() => setShowDatePicker(!showDatePicker)}
+              />
+              {showDatePicker && (
+                <div
+                  ref={datePickerRef}
+                  className="datepick"
+                  style={{
+                    position: "absolute",
+                    top: "100%",
+                    right: "0",
+                    zIndex: 1000,
+                    background: "white",
+                    padding: "6px",
+                    borderRadius: "5px",
+                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  }}
                 >
-                  ×
-                </span>
-              </span>
+                  <DatePicker
+                    selected={selectedDate}
+                    onChange={(date) => {
+                      setSelectedDate(date);
+                      setShowDatePicker(false);
+                    }}
+                    inline
+                  />
+                </div>
+              )}
             </div>
-          )}
-          {/* Table View */}
-          <div className="mb-4 table-container" style={{ width: "98%" }}>
-            <Table responsive>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Subject</th>
-                  <th>Teacher</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredClasses.length > 0 ? (
-                  filteredClasses.map((cls, index) => (
-                    <tr key={cls.id}>
-                      <td style={{ textAlign: "center" }}>{index + 1}</td>
-                      <td>{cls.subject}</td>
-                      <td>{cls.teacher}</td>
-                      <td>{formatDisplayDate(cls.date)}</td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="4" className="text-center py-3">
-                      No classes found matching your criteria
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </Table>
           </div>
+          <Table responsive bordered style={{ width: "98%" }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Teacher</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredClasses.length > 0 ? (
+                filteredClasses.map((cls, index) => (
+                  <tr key={cls.id}>
+                    <td>{index + 1}</td>
+                    <td>{cls.subject}</td>
+                    <td>{cls.teacher}</td>
+                    <td>{cls.date}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center py-3">No classes found matching your criteria</td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
         </Container>
       </div>
     </div>

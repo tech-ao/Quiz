@@ -180,7 +180,8 @@ button {
 }
 
 @media (max-width: 767px) {
-  .admin-btn .header-icon {
+  .admin-btn .headericon {
     font-size: 39px;
+    height: 0%;
   }
 }

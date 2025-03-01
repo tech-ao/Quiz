@@ -27,12 +27,48 @@ const TeacherHeader = ({ toggleSidebar }) => {
 
   // Notification state and selected notification for details
   const [notifications, setNotifications] = useState([
-    { id: 1, title: "Notification 1", content: "Details of notification 1", receivedDate: "2024-02-15", isRead: false },
-    { id: 2, title: "Notification 2", content: "Details of notification 2", receivedDate: "2024-02-16", isRead: false },
-    { id: 3, title: "Notification 3", content: "Details of notification 3", receivedDate: "2024-02-17", isRead: false },
-    { id: 4, title: "Notification 4", content: "Details of notification 4", receivedDate: "2024-02-18", isRead: true },
-    { id: 5, title: "Notification 5", content: "Details of notification 5", receivedDate: "2024-02-19", isRead: false },
-    { id: 6, title: "Notification 6", content: "Details of notification 6", receivedDate: "2024-02-20", isRead: false },
+    {
+      id: 1,
+      title: "Notification 1",
+      content: "Details of notification 1",
+      receivedDate: "2024-02-15",
+      isRead: false,
+    },
+    {
+      id: 2,
+      title: "Notification 2",
+      content: "Details of notification 2",
+      receivedDate: "2024-02-16",
+      isRead: false,
+    },
+    {
+      id: 3,
+      title: "Notification 3",
+      content: "Details of notification 3",
+      receivedDate: "2024-02-17",
+      isRead: false,
+    },
+    {
+      id: 4,
+      title: "Notification 4",
+      content: "Details of notification 4",
+      receivedDate: "2024-02-18",
+      isRead: true,
+    },
+    {
+      id: 5,
+      title: "Notification 5",
+      content: "Details of notification 5",
+      receivedDate: "2024-02-19",
+      isRead: false,
+    },
+    {
+      id: 6,
+      title: "Notification 6",
+      content: "Details of notification 6",
+      receivedDate: "2024-02-20",
+      isRead: false,
+    },
   ]);
   const [selectedNotification, setSelectedNotification] = useState(null);
 
@@ -51,7 +87,8 @@ const TeacherHeader = ({ toggleSidebar }) => {
 
   const togglePopup = () => setShowPopup((prev) => !prev);
   const togglePasswordPopup = () => setShowPasswordPopup((prev) => !prev);
-  const toggleNotificationPopup = () => setShowNotificationPopup((prev) => !prev);
+  const toggleNotificationPopup = () =>
+    setShowNotificationPopup((prev) => !prev);
 
   // Calculate unread notifications for the badge
   const unreadCount = notifications.filter((n) => !n.isRead).length;
@@ -69,7 +106,10 @@ const TeacherHeader = ({ toggleSidebar }) => {
       if (popupRef.current && !popupRef.current.contains(event.target)) {
         setShowPopup(false);
       }
-      if (notifPopupRef.current && !notifPopupRef.current.contains(event.target)) {
+      if (
+        notifPopupRef.current &&
+        !notifPopupRef.current.contains(event.target)
+      ) {
         setShowNotificationPopup(false);
       }
     };
@@ -128,7 +168,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
           {isMobile ? (
             isMobileExpanded ? (
               <>
-                <Link to="/" style={{marginLeft:"-10px"}}>
+                <Link to="/" style={{ marginLeft: "-10px" }}>
                   <img src={logo} alt="Math Gym Logo" className="logo" />
                 </Link>
                 <Button
@@ -137,7 +177,8 @@ const TeacherHeader = ({ toggleSidebar }) => {
                     setIsMobileExpanded(false);
                     toggleSidebar();
                   }}
-                  className="menu-btn pe0 px-1" style={{marginLeft:"-10px"}}
+                  className="menu-btn pe0 px-1"
+                  style={{ marginLeft: "-10px" }}
                 >
                   <RiMenu3Line className="header-icon" />
                 </Button>
@@ -171,56 +212,102 @@ const TeacherHeader = ({ toggleSidebar }) => {
         {!isMobile && (
           <Col md={5} className="text-center">
             <span className="fw-bold welcome-message">
-              Welcome, Teacher <span role="img" aria-label="wave">👋</span>
+              Welcome, Teacher{" "}
+              <span role="img" aria-label="wave">
+                👋
+              </span>
             </span>
           </Col>
         )}
 
         {/* Right Section: Icons */}
-        <Col xs={8} md={4} className="d-flex justify-content-end align-items-center header-icon-group" style={{marginLeft:"-19px", gap:"0"}}>
-          <Button variant="link" title="Notification" onClick={toggleNotificationPopup}>
-            <Badge badgeContent={unreadCount} color="secondary" overlap="circular">
+        <Col
+          xs={8}
+          md={4}
+          className="d-flex justify-content-end align-items-center header-icon-group"
+          style={{ marginLeft: "-19px", gap: "0" }}
+        >
+          <Button
+            variant="link"
+            title="Notification"
+            onClick={toggleNotificationPopup}
+          >
+            <Badge
+              badgeContent={unreadCount}
+              color="secondary"
+              overlap="circular"
+            >
               <RiNotification3Line className="header-icon" />
             </Badge>
           </Button>
-          <Button variant="link" title="Website" onClick={() => window.open("https://mathgymint.com", "_blank")}>
-            <RiGlobalLine className="header-icon"/>
+          <Button
+            variant="link"
+            title="Website"
+            onClick={() => window.open("https://mathgymint.com", "_blank")}
+          >
+            <RiGlobalLine className="header-icon" />
           </Button>
           <div className="position-relative admin-container" ref={popupRef}>
-            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{textDecoration:"none", top:'15px'}}>
-            <RiAdminLine 
-    className="header-icon" 
-    style={{ fontSize: isMobile ? "30px" : "25px", color: "#09690c" }} 
-  />
-              <span className="admin-name" style={{color:"#09690c", fontSize:"14px", fontWeight:"bold"}}>Teacher</span>
+            <Button
+              variant="link"
+              onClick={togglePopup}
+              className="admin-btn"
+              style={{ textDecoration: "none", top: "10px" }}
+            >
+              <RiAdminLine className="headericon" style={{fontSize:"24px",height: isMobile ? "25px" : "25px"}}/>
+              <span className="admin-name" style={{ color: "#09690c" }}>
+                Teacher
+              </span>
             </Button>
             {showPopup && (
-              <div className="admin-popup" style={{width:"130px", top:"75px"}}>
-                <ul className="list-unstyled m-0 p-2" style={{color:"#09690c",fontSize:"18px", fontWeight:"bold", lineHeight:"40px"}}>
-                  <li
-                    className="dropdown-item menu-item"
-                    onClick={() => navigate("/teachersettings")}
-                  >
-                    <RiLockPasswordLine className="popup-icon" /><b> Profile</b>
-                  </li>
-                  <li
-                    className="dropdown-item menu-item"
-                    onClick={() => {
-                      togglePasswordPopup();
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiRestartLine className="popup-icon" /> <b>Password</b>
-                  </li>
-                  <li
-                    className="dropdown-item menu-item text-danger"
-                    onClick={handleLogoutClick}
-                  >
-                    <RiLogoutCircleRLine className="popup-icon" /><b> Logout</b>
-                  </li>
-                </ul>
-              </div>
-            )}
+  <div
+    className="admin-popup"
+    style={{ width: "140px", top: "75px" }}
+  >
+    <ul
+      className="list-unstyled m-0 p-2"
+      style={{
+        color: "#09690c",
+        fontSize: isMobile ? "18px":"18px",
+        lineHeight: "40px",
+      }}
+    >
+      <li
+        className="dropdown-item menu-item"
+        onClick={() => navigate("/teachersettings")}
+      >
+        <RiLockPasswordLine 
+          className="popup-icon" 
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        />
+        <b> Profile</b>
+      </li>
+      <li
+        className="dropdown-item menu-item"
+        onClick={() => {
+          togglePasswordPopup();
+          setShowPopup(false);
+        }}
+      >
+        <RiRestartLine 
+          className="popup-icon" 
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        /> 
+        <b>Password</b>
+      </li>
+      <li
+        className="dropdown-item menu-item text-danger"
+        onClick={handleLogoutClick}
+      >
+        <RiLogoutCircleRLine 
+          className="popup-icon"
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        />
+        <b> Logout</b>
+      </li>
+    </ul>
+  </div>
+)}
           </div>
         </Col>
       </Row>
@@ -247,7 +334,10 @@ const TeacherHeader = ({ toggleSidebar }) => {
             ))}
           </ul>
           <div className="notification-actions">
-            <Button variant="link" onClick={() => navigate("/teachernotification")}>
+            <Button
+              variant="link"
+              onClick={() => navigate("/teachernotification")}
+            >
               Show More
             </Button>
             <Button variant="link" onClick={handleMarkAsRead}>
@@ -285,10 +375,15 @@ const TeacherHeader = ({ toggleSidebar }) => {
           </Modal.Header>
           <Modal.Body>
             <p>{selectedNotification.content}</p>
-            <small className="text-muted">{selectedNotification.receivedDate}</small>
+            <small className="text-muted">
+              {selectedNotification.receivedDate}
+            </small>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={() => setSelectedNotification(null)}>
+            <Button
+              variant="secondary"
+              onClick={() => setSelectedNotification(null)}
+            >
               Close
             </Button>
           </Modal.Footer>
