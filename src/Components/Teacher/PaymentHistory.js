@@ -192,31 +192,34 @@ const PaymentHistory = () => {
                   onClick={() => setShowDatePicker(!showDatePicker)}
                 />
                 {showDatePicker && (
-                  <div
-                    ref={datePickerRef}
-                    className="datepick"
-                    style={{
-                      position: "absolute",
-                      top: "100%",
-                      right: "0",
-                      zIndex: 1000,
-                      background: "white",
-                      padding: "6px",
-                      borderRadius: "5px",
-                      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                      width: "fit-content",
-                    }}
-                  >
-                    <DatePicker
-                      selected={selectedDate}
-                      onChange={(date) => {
-                        setSelectedDate(date);
-                        setShowDatePicker(false);
-                      }}
-                      inline
-                    />
-                  </div>
-                )}
+  <div
+    ref={datePickerRef}
+    className="datepick"
+    style={{
+      position: "absolute",
+      top: "100%",
+      right: "0",
+      zIndex: 1000,
+      background: "white",
+      padding: "6px",
+      borderRadius: "5px",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      width: "fit-content",
+      maxHeight: "250px",  // Limits height so it stays visible
+      overflowY: "auto",  // Enables scrolling if needed
+    }}
+  >
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date) => {
+        setSelectedDate(date);
+        setShowDatePicker(false);
+      }}
+      inline
+    />
+  </div>
+)}
+
               </div>
             </div>
             <Table responsive bordered style={{ width: "98%" }}>

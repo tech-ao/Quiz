@@ -201,7 +201,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
                     className="dropdown-item menu-item"
                     onClick={() => navigate("/teachersettings")}
                   >
-                    <RiLockPasswordLine className="popup-icon" /> Profile
+                    <RiLockPasswordLine className="popup-icon" /><b> Profile</b>
                   </li>
                   <li
                     className="dropdown-item menu-item"
@@ -210,13 +210,13 @@ const TeacherHeader = ({ toggleSidebar }) => {
                       setShowPopup(false);
                     }}
                   >
-                    <RiRestartLine className="popup-icon" /> Password
+                    <RiRestartLine className="popup-icon" /> <b>Password</b>
                   </li>
                   <li
                     className="dropdown-item menu-item text-danger"
                     onClick={handleLogoutClick}
                   >
-                    <RiLogoutCircleRLine className="popup-icon" /> Logout
+                    <RiLogoutCircleRLine className="popup-icon" /><b> Logout</b>
                   </li>
                 </ul>
               </div>

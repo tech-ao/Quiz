@@ -12,6 +12,7 @@ max-width: 100%;
   width: 80%;
 }
 
+
 .paymentTable th,
 .paymentTable td {
   padding: 12px;
@@ -97,6 +98,11 @@ max-width: 100%;
   margin-right: 30px !important;
 }
 
+@media (max-width: 360px) {
+  .table-subcontainer{
+    background-color: black;
+  }
+}
 /* Mobile styles */
 @media (max-width: 360px) {
   .search-Bar {
@@ -115,4 +121,21 @@ max-width: 100%;
     flex-direction: column;
     align-items: flex-start !important;
   } */
+}
+
+@media (max-width: 576px) {
+  .datepick {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 9999;
+    background: white;
+    padding: 6px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: auto;
+    max-width: 95vw; /* Ensures it doesn’t exceed the screen */
+    min-width: 250px; /* Prevents it from being too small */
+    overflow-y: auto; /* Enables scrolling inside */
+  }
 }
