@@ -14,7 +14,7 @@ const getHeaders = () => ({
   ...COMMON_HEADERS,
 });
 
-export const fetchTeachers = async (paginationDetail = { pageSize: 10, pageNumber: 1 }) => {
+export const fetchTeachers = async (paginationDetail) => {
   console.log("📤 pagination in service:",paginationDetail)
   const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListTeacher`, {
     method: "POST",
@@ -100,7 +100,7 @@ export const editTeacher = async (TeacherData) => {
 };
 
 export const getTeacher = async (TeacherId) => {
-  const response = await fetch(`${BASE_URL}/Teacher/GetUserById?UserId=${TeacherId}`, {
+  const response = await fetch(`${BASE_URL}/Teacher/GetByTeacherid?TeacherId=${TeacherId}`, {
     method: "GET",
     headers: getHeaders(),
   });

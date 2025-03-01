@@ -1,23 +1,33 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Offcanvas, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
-const ViewTeacher = ({ show, onClose, studentData }) => {
+const ViewTeacher = ({ show, onClose, teacherData }) => {
+  console.log("this is from view teaches",teacherData)
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Format date of birth if available
+  const formatDate = (dob) => {
+    return dob ? new Date(dob).toLocaleDateString() : "N/A";
+  };
+
+  // Update status for the teacher (1: Approved, 2: Rejected)
   const updateStatus = async (statusEnum) => {
     try {
-      if (!studentData || !studentData.studentId) {
-        toast.error("No student data available.");
+      if (!teacherData || !teacherData.teacherId) {
+        toast.error("No teacher data available.");
         return;
       }
       const requestBody = {
         statusEnum,
-        studentIdList: [studentData.studentId],
+        teacherIdList: [teacherData.teacherId],
       };
 
-      await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
+      await axios.post(`${BASE_URL}/Teacher/UpdateTeacherStatus`, requestBody, {
         headers: {
           Accept: "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
@@ -41,49 +51,53 @@ const ViewTeacher = ({ show, onClose, studentData }) => {
   return (
     <Offcanvas show={show} onHide={onClose} placement="end">
       <Offcanvas.Header closeButton>
-        <Offcanvas.Title>View Student Details</Offcanvas.Title>
+        <Offcanvas.Title>View Teacher Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
         <Row className="mb-3">
           <Col>
-            <strong>First Name:</strong>
-            <p>{studentData?.firstName || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Last Name:</strong>
-            <p>{studentData?.lastName || "N/A"}</p>
+            <strong>Full Name:</strong>
+            <p>{teacherData?.fullName || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">
           <Col>
             <strong>Email:</strong>
-            <p>{studentData?.email || "N/A"}</p>
+            <p>{teacherData?.email || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">
           <Col>
             <strong>Phone Number:</strong>
             <p>
-              {studentData?.countryCode || ""} {studentData?.phoneNumber || "N/A"}
+              {teacherData?.countryCode || ""} {teacherData?.phoneNumber || "N/A"}
             </p>
           </Col>
-        </Row>
-        <Row className="mb-3">
           <Col>
             <strong>Date of Birth:</strong>
-            <p>{studentData?.dob || "N/A"}</p>
+            <p>{formatDate(teacherData?.dob) || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">
           <Col>
-            <strong>Grade:</strong>
-            <p>{studentData?.grade || "N/A"}</p>
+            <strong>Gender:</strong>
+            <p>{teacherData?.genderName || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Register Number:</strong>
+            <p>{teacherData?.teacherRegno || "N/A"}</p>
           </Col>
         </Row>
         <Row className="mb-3">
           <Col>
-            <strong>Address:</strong>
-            <p>{studentData?.address || "N/A"}</p>
+            <strong>Status:</strong>
+            <p>{teacherData?.statusName || "N/A"}</p>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <strong>Teaching Mode:</strong>
+            <p>{teacherData?.teachingModeName || "N/A"}</p>
           </Col>
         </Row>
         <div className="d-flex justify-content-center mt-3">
