@@ -27,7 +27,7 @@ const AddTeacher = ({ show, onClose }) => {
         disclaimerContent: "test",
         createdBy: 1,
         nationalityId: '',
-        preferedCountryId: '',
+        preferedCountryId: 1,
         candidatePhoto: null,
         photoID: null,
         higherLevelEducation: '',

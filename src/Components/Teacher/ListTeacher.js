@@ -81,17 +81,28 @@ const ListTeacher = () => {
     setSelectedTeacherId(null);
   };
 
-  const handleOpenViewTeacher = (teacherId) => {
+  const handleOpenViewTeacher = async (teacherId) => {
     setSelectedTeacherId(teacherId);
-    dispatch(fetchTeacher(teacherId)) // Fetch the teacher details
-      .then((response) => {
-        setTeacherData(response.data); // Set the teacher data from the response
+  
+    try {
+      const response = await dispatch(fetchTeacher(teacherId));
+  
+      console.log("Teacher API Response:", response);
+  
+      if (response && response.data) {
+        setTeacherData(response.data);
         setShowViewTeacher(true);
-      })
-      .catch((err) => {
-        toast.error("Failed to fetch teacher details.");
-      });
+      } else {
+        toast.error("Invalid API response format.");
+      }
+    } catch (error) {
+      console.error("Error fetching teacher details:", error);
+      toast.error("Failed to fetch teacher details.");
+    }
   };
+  
+  
+  
 
   const handleCloseViewTeacher = () => {
     setShowViewTeacher(false);
