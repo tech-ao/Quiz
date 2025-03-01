@@ -167,12 +167,12 @@ const ViewStudentPanel = ({ show, onClose }) => {
           </Col>
         </Row>
         {/* Approve and Reject Buttons */}
-        <div className="d-flex justify-content-end mt-3">
-          <Button variant="success" onClick={handleApprove} className="me-2">
-            Approve
+        <div className="d-flex justify-content-center mt-3">
+          <Button variant="success"  className="me-2">
+            Attendace
           </Button>
-          <Button variant="danger" onClick={handleDeny}>
-            Reject
+          <Button variant="success" >
+            Fees
           </Button>
         </div>
       </Offcanvas.Body>

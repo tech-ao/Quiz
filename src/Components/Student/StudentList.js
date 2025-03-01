@@ -246,8 +246,13 @@ const StudentList = () => {
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Date of Birth</th>
-                    <th>Grade</th>
+                    <th>Level</th>
                     <th>Status</th>
+                    <th>Centre Name</th>
+                    <th>Place</th>
+                    <th>Joining Date</th>
+                    <th>Current Level</th>
+                    <th>Completed Level</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -265,11 +270,17 @@ const StudentList = () => {
                           <td>{student.phoneNumber}</td>
                           <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                           <td>{student.gradeName}</td>
+                        
                           <td>
                             <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
                               {student.statusName}
                             </Badge>
                           </td>
+                          <td>{student.centreName}</td>
+<td>{student.centrePlace}</td>
+<td>{student.joiningDate ? new Date(student.joiningDate).toLocaleDateString('en-GB') : ''}</td>
+<td>{student.currentLevel}</td>
+<td>{student.completedLevel}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>

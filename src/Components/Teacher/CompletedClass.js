@@ -5,6 +5,7 @@ import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import "./CompletedClass.css";
 
 const completedClasses = [
   { id: 1, subject: "History", teacher: "Mr. Brown", date: "2025-02-10" },
@@ -61,8 +62,8 @@ const CompletedClass = () => {
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100">
-          <Row className="align-items-center mb-4">
+        <Container className="main-container p-4 min-vh-100 container-sub">
+          <Row className="sub-container align-items-center mb-4">
             <Col md={6} style={{ marginTop: "20px" }}>
               <h2 className="fw-bold">Completed Classes</h2>
             </Col>

@@ -6,6 +6,8 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import ImportQuestion from "./Components/Admin/ImportQuestion";
+import AddQuestion from "./Components/Admin/AddQuestion";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
@@ -60,6 +62,8 @@ import AbacusKit from "./Components/Admin/Kit";
 import AbacusSidePanel from "./Components/Admin/AbacusSidePannel";
 import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
+import CompletedTest from "./Components/Student/completedtest";
+
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -84,6 +88,9 @@ function App() {
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
+          <Route path="/AddQuestion" element={<AddQuestion/>}/>
+          <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+
           {/* Protected Routes */}
           <Route
             path="/adminDashboard"
@@ -227,6 +234,10 @@ function App() {
           <Route
             path="/AbacusKit"
             element={<ProtectedRoute element={<AbacusKit />} />}
+          />
+           <Route
+            path="/completedtest"
+            element={<ProtectedRoute element={<CompletedTest />} />}
           />
         </Routes>
       </Router>

@@ -98,7 +98,7 @@ const AssignClass = () => {
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <div className="assign-class main-container">
-          <div className="container sub-container">
+          <div className="sub-container assign-container">
             {/* Header Section */}
             <div
               className="d-flex justify-content-between align-items-center header-section"
