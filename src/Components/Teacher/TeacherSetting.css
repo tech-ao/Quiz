@@ -233,10 +233,6 @@ button {
     padding: 2px;
   }
   
-  .position-relative .btn-link svg {
-    width: 14px;
-    height: 14px;
-  }
 }
 
 /* Enhanced readability for mobile */
