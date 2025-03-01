@@ -79,20 +79,20 @@ const LoginPage = () => {
     }
 
     try {
-      const updateApiUrl = `${BASE_URL}/UpdatePassword`;
+      const updateApiUrl = `${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${studentId}&OldPassword=${encodeURIComponent(oldPassword)}&Password=${encodeURIComponent(newPassword)}`;
+
+      console.log("Sending request to:", updateApiUrl);
+  
       const response = await fetch(updateApiUrl, {
-        method: "POST",
+        method: "POST", 
         headers: {
-          "Content-Type": "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-          AccessToken: "123",
+          "AccessToken": "123",
         },
-        body: JSON.stringify({
-          studentId: studentId,
-          oldPassword: oldPassword,
-          newPassword: newPassword,
-        }),
       });
+  
+      console.log("Response status:", response.status);
+
 
       const result = await response.json();
       console.log("Password Update Response:", result);
