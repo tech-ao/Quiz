@@ -4,6 +4,21 @@
 button {
   height: auto;
 }
+.header {
+  background-color: #E7FFEC !important;
+  width: 100%;
+  min-height: 100px;
+  padding: 0 !important; /* Remove default padding */
+  margin: 0 !important; /* Remove default margin */
+}
+
+.head-container {
+  background-color: #E7FFEC !important;
+  min-height: 100px;
+  width: 100% !important;
+  margin: 0 !important; /* Remove default margin */
+  padding: 0 15px !important; /* Add horizontal padding inside instead */
+}
 
 .teacher-popup {
   position: absolute;
@@ -185,3 +200,6 @@ button {
     height: 0%;
   }
 }
+
+
+

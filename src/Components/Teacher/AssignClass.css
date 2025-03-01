@@ -250,4 +250,9 @@
     font-size: 20px; /* Reduce font size further for tiny screens */
   }
 }
-
+@media (max-width: 500px) {
+  .assign-container{
+    width: 100%;
+    margin-left: 7px;
+  } 
+}

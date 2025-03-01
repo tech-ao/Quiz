@@ -37,3 +37,13 @@
       min-width: 600px;
     }
   }
+
+  @media (max-width: 500px) {
+    .tableContainer {
+      overflow-x: scroll;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      max-width: 118%;
+      width: 109%; 
+  }
+  }

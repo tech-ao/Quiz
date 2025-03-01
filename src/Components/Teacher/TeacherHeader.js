@@ -162,7 +162,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
 
   return (
     <Navbar expand="lg" className="header py-2">
-      <Row className="align-items-center w-100">
+      <Row className="align-items-center w-100 head-container">
         {/* Left Section: Logo and (for mobile) menu button */}
         <Col xs={3} md={3} className="d-flex align-items-center header-left">
           {isMobile ? (

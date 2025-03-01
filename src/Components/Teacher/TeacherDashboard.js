@@ -304,7 +304,7 @@ const TeacherDashboard = () => {
                         className="text-primary text-decoration-none"
                         onClick={(e) => {
                           e.preventDefault();
-                          navigate("/all-transactions");
+                          navigate("/paymentHistory");
                         }}
                       >
                         Show All My Transactions
