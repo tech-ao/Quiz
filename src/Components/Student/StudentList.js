@@ -277,10 +277,10 @@ const StudentList = () => {
                             </Badge>
                           </td>
                           <td>{student.centreName}</td>
-<td>{student.centrePlace}</td>
-<td>{student.joiningDate ? new Date(student.joiningDate).toLocaleDateString('en-GB') : ''}</td>
-<td>{student.currentLevel}</td>
-<td>{student.completedLevel}</td>
+                          <td>{student.centrePlace}</td>
+                          <td>{student.joiningDate ? new Date(student.joiningDate).toLocaleDateString('en-GB') : ''}</td>
+                          <td>{student.currentLevel}</td>
+                          <td>{student.completedLevel}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>
@@ -310,7 +310,9 @@ const StudentList = () => {
                   )}
                 </tbody>
               </Table>
-              <div className="d-flex justify-content-center mt-4">
+             
+            </div>
+            <div className="d-flex justify-content-center mt-4">
                 <ReactPaginate
                   pageCount={totalPages}
                   pageRangeDisplayed={10}
@@ -328,7 +330,6 @@ const StudentList = () => {
                   nextLinkClassName="page-link"
                 />
               </div>
-            </div>
           </div>
         </Container>
       </div>
