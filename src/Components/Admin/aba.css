@@ -88,6 +88,12 @@ body {
     font-size: 16px;
     cursor: pointer;
 }
+.abacus-sticky-top{
+
+    position: sticky;
+    z-index: 1000;
+    top:0;
+}
 
 /* Sidebar Styles */
 .abacus-sidebar {
