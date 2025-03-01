@@ -17,6 +17,7 @@ export const fetchTeacher = (TeacherId)=>async (dispatch)=>{
   try{
     const Teacher = await getTeacher(TeacherId);
     dispatch ({type:"FETCH_Teacher_SUCCESS", payload: Teacher})
+    return Teacher;
    
   }catch(error){
     dispatch({type:"FETCH_Teacher_FAILURE" , payload:error.message})
