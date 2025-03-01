@@ -36,11 +36,13 @@ const ImportQuestion = () => {
   <div className="d-flex">
     {isSidebarVisible && <Sidebar />}
     <Container className="main-container" >
-      <div className="sub-container" ></div>
+      <div className="sub-container" >
       <main className="import-questions-container">
+      <div class="sticky-head">
       <h2 className="title">
         Import Questions <span className="subtitle">upload using CSV file</span>
       </h2>
+      </div>
       <div className="Content-box">
       <div className="upload-box">
         <label htmlFor="csvFile">CSV Questions file</label>
@@ -71,7 +73,7 @@ const ImportQuestion = () => {
       </div>
       </div>
     </main>
-
+    </div>
     </Container>
   </div>
 </div>
