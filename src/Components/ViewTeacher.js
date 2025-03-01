@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
 const ViewTeacher = ({ show, onClose, teacherData }) => {
-  console.log("this is from view teaches",teacherData)
+  console.log("this is from view teachers",teacherData)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
