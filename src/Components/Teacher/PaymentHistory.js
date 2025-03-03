@@ -64,13 +64,12 @@ const PaymentHistory = () => {
   };
 
   const filteredPayments = paymentHistory
-  .filter((payment) => payment.studentName.toLowerCase().includes(filter.toLowerCase()))
-  .filter((payment) => {
-    if (!selectedDate) return true;
-    const selectedDateFormatted = selectedDate.toLocaleDateString("en-CA"); // YYYY-MM-DD format
-    return payment.date === selectedDateFormatted;
-  });
-
+    .filter((payment) => payment.studentName.toLowerCase().includes(filter.toLowerCase()))
+    .filter((payment) => {
+      if (!selectedDate) return true;
+      const selectedDateFormatted = selectedDate.toLocaleDateString("en-CA"); // YYYY-MM-DD format
+      return payment.date === selectedDateFormatted;
+    });
 
   return (
     <div>
@@ -98,35 +97,43 @@ const PaymentHistory = () => {
                 onClick={() => setShowDatePicker(!showDatePicker)}
               />
               {showDatePicker && (
-                <div
-                  ref={datePickerRef}
-                  className="datepick"
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    right: "0",
-                    zIndex: 1000,
-                    background: "white",
-                    padding: "6px",
-                    borderRadius: "5px",
-                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => {
-                      setSelectedDate(date);
-                      setShowDatePicker(false);
-                    }}
-                    inline
-                  />
-                  <Button variant="danger" size="sm" className="mt-2" onClick={() => setSelectedDate(null)}>
-                    Clear
-                  </Button>
-                </div>
-              )}
+  <div
+    ref={datePickerRef}
+    className="datepick"
+    style={{
+      position: "absolute",
+      top: "100%",
+      right: "0",
+      zIndex: 1000,
+      background: "white",
+      padding: "6px",
+      borderRadius: "5px",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    }}
+  >
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date) => {
+        setSelectedDate(date);
+        setShowDatePicker(false);
+      }}
+      inline
+    />
+    <p 
+      className="text-center mt-2" 
+      style={{ cursor: "pointer", color: "green", fontWeight: "bold" }} 
+      onClick={() => setSelectedDate(null)}
+    >
+      Clear
+    </p>
+  </div>
+)}
+
             </div>
           </div>
+          
+         
+
           <Table responsive bordered style={{ width: "98%" }}>
             <thead>
               <tr>
@@ -139,16 +146,22 @@ const PaymentHistory = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredPayments.map((payment) => (
-                <tr key={payment.id}>
-                  <td>{payment.id}</td>
-                  <td>{payment.studentName}</td>
-                  <td>{payment.amount}</td>
-                  <td>{payment.date}</td>
-                  <td>{payment.mode}</td>
-                  <td>{renderStatusBadge(payment.status)}</td>
+              {filteredPayments.length > 0 ? (
+                filteredPayments.map((payment) => (
+                  <tr key={payment.id}>
+                    <td>{payment.id}</td>
+                    <td>{payment.studentName}</td>
+                    <td>{payment.amount}</td>
+                    <td>{payment.date}</td>
+                    <td>{payment.mode}</td>
+                    <td>{renderStatusBadge(payment.status)}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center py-3">No payment data found matching your criteria</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </Table>
         </Container>

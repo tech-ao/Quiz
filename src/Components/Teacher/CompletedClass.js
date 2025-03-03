@@ -92,38 +92,38 @@ const CompletedClass = () => {
                 onClick={() => setShowDatePicker(!showDatePicker)}
               />
               {showDatePicker && (
-                <div
-                  ref={datePickerRef}
-                  className="datepick"
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    right: "0",
-                    zIndex: 1000,
-                    background: "white",
-                    padding: "6px",
-                    borderRadius: "5px",
-                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => {
-                      setSelectedDate(date);
-                      setShowDatePicker(false);
-                    }}
-                    inline
-                  />
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    className="mt-2"
-                    onClick={clearFilters}
-                  >
-                    Clear
-                  </Button>
-                </div>
-              )}
+  <div
+    ref={datePickerRef}
+    className="datepick"
+    style={{
+      position: "absolute",
+      top: "100%",
+      right: "0",
+      zIndex: 1000,
+      background: "white",
+      padding: "6px",
+      borderRadius: "5px",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+    }}
+  >
+    <DatePicker
+      selected={selectedDate}
+      onChange={(date) => {
+        setSelectedDate(date);
+        setShowDatePicker(false);
+      }}
+      inline
+    />
+    <p 
+      className="text-center mt-2" 
+      style={{ cursor: "pointer", color: "green", fontWeight: "bold" }} 
+      onClick={clearFilters}
+    >
+      Clear
+    </p>
+  </div>
+)}
+
             </div>
           </div>
           <Table responsive bordered style={{ width: "98%" }}>

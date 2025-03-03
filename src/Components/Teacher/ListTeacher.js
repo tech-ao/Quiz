@@ -24,6 +24,8 @@ const ListTeacher = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTeacherId, setSelectedTeacherId] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  
 
   const TeachersPerPage = 10;
 
@@ -155,10 +157,10 @@ const ListTeacher = () => {
         <Container className="main-container">
           <div className="sub-container">
             <Row className="align-items-center mt-2">
-              <Col md={6}>
+              <Col  xs={12} sm={12} md={isTablet ? 4 : 6}>
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
-              <Col md={6} className="d-flex" style={{ marginTop: isMobile ? "10px" : "30px" }}>
+              <Col  xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex" style={{ marginTop: isMobile ? "10px" : "30px" }}>
                 <InputGroup style={{ maxWidth: isMobile ? "55%" : "400px", marginRight: '35px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"

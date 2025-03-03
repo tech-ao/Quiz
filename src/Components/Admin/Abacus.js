@@ -294,7 +294,7 @@ const handleLevelChange = (event) => {
   </div>
 )}
           {/* Result Modal */}
-          <Modal show={showResultModal} onHide={() => setShowResultModal(false)} centered>
+          <Modal show={showResultModal} onHide={() => setShowResultModal(false)} centered className="modal-popup">
             <Modal.Header closeButton>
               <Modal.Title>Quiz Result</Modal.Title>
             </Modal.Header>
