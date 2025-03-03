@@ -12,6 +12,7 @@ const AbacusMath = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false); // State for sidebar visibility
   const [showAbacusKit, setShowAbacusKit] = useState(false);
   const [showHeadingandIcon, setShowHeadingandIcon] = useState(true);
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -19,11 +20,12 @@ const AbacusMath = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null); // State to track selected question
   const [currentPage, setCurrentPage] = useState(0); // State for pagination
 
-  const handleLevelChange = (event) => {
-    setSelectedLevel(event.target.value);
-    setOpenStage(null); // Reset open stage when level changes
-    setSelectedQuestion(null); // Reset selected question
-  };
+const handleLevelChange = (event) => {
+  setSelectedLevel(event.target.value);
+  setOpenStage(null); // Reset open stage when level changes
+  setSelectedQuestion(null); // Reset selected question
+  setIsSidebarVisible(true); // Show sidebar when a level is selected
+};
 
   const toggleStage = (stage) => {
     setOpenStage(openStage === stage ? null : stage);
@@ -110,6 +112,8 @@ const AbacusMath = () => {
       correctAnswers: ["6", "1", "1", "2", "0", "3", "4", "4", "4", "0"], // Correct answers for Q6
     },
   };
+
+  
   const Alphabhets = {
     1: "A",
     2: "B",
@@ -155,55 +159,66 @@ const AbacusMath = () => {
       <div className="abacus-app-container">
         {/* Header */}
         <header className="abacus-header">
-          <a href="/adminDashboard" className="abacus-back-button">
-            <i className="bi-arrow-left" aria-hidden="true"></i> {/* Back icon */}
-            Back
-          </a>
-          <div className="abacus-header-content">
-            <select className="abacus-level-dropdown" onChange={handleLevelChange}>
-              <option value="">Select Level</option>
-              <option value="0">Level 0</option>
-              <option value="1">Level 1</option>
-              <option value="2">Level 2</option>
-              <option value="3">Level 3</option>
-              <option value="4">Level 4</option>
-              <option value="5">Level 5</option>
-            </select>
-  
-            {/* Navigation Items in Header */}
-            <Navbar expand="lg" className=" abacus-sticky-top ">
-              <Container>
-                {/* Hamburger Toggle on Right */}
-                <Navbar.Toggle aria-controls="navbar-content" className="border-0 ms-auto" />
-  
-                {/* Sliding Menu on Right */}
-                <Navbar.Collapse id="navbar-content" className="justify-content-end">
-                  <div className="abacus-nav-items">
-                    <div className="abacus-nav-item">
-                      <i className="bi-book-fill" style={{ color: "#f31383", marginRight: "6px" }}></i>
-                      <span className="abacus-nav-text">Learning path</span>
-                    </div>
-                    <div className="abacus-nav-item">
-                      <i className="bi-file-earmark-text-fill" style={{ color: "#87CEEB", marginRight: "6px" }}></i>
-                      <span className="abacus-nav-text">Random Worksheets</span>
-                    </div>
-                    <div className="abacus-nav-item">
-                      <i className="bi-arrow-up" style={{ color: "#00008B", marginRight: "6px" }}></i>
-                      <span className="abacus-nav-text">Mental Accelerator</span>
-                    </div>
-                    <div className="abacus-nav-item">
-                      <i className="bi-pencil-square" style={{ color: "#FFA500", marginRight: "6px" }}></i>
-                      <span className="abacus-nav-text">Examination</span>
-                    </div>
-                  </div>
-                </Navbar.Collapse>
-              </Container>
-            </Navbar>
+  <a href="/adminDashboard" className="abacus-back-button">
+    <i className="bi-arrow-left" aria-hidden="true"></i> {/* Back icon */}
+    Back
+  </a>
+  <div className="abacus-header-content">
+    <select
+      className="abacus-level-dropdown"
+      onChange={(e) => {
+        handleLevelChange(e); // Handle level change
+        setIsSidebarVisible(true); // Show sidebar when a level is selected
+      }}
+    >
+      <option value="">Select Level</option>
+      <option value="0">Level 0</option>
+      <option value="1">Level 1</option>
+      <option value="2">Level 2</option>
+      <option value="3">Level 3</option>
+      <option value="4">Level 4</option>
+      <option value="5">Level 5</option>
+    </select>
+
+    {/* Navigation Items in Header */}
+    <Navbar expand="lg" className="abacus-sticky-top">
+      <Container>
+        {/* Hamburger Toggle on Right */}
+        <Navbar.Toggle aria-controls="navbar-content" className="border-0 ms-auto" />
+
+        {/* Sliding Menu on Right */}
+        <Navbar.Collapse id="navbar-content" className="justify-content-end">
+          <div className="abacus-nav-items">
+            <div className="abacus-nav-item">
+              <i className="bi-book-fill" style={{ color: "#f31383", marginRight: "6px" }}></i>
+              <span className="abacus-nav-text">Learning path</span>
+            </div>
+            <div className="abacus-nav-item">
+              <i className="bi-file-earmark-text-fill" style={{ color: "#87CEEB", marginRight: "6px" }}></i>
+              <span className="abacus-nav-text">Random Worksheets</span>
+            </div>
+            <div className="abacus-nav-item">
+              <i className="bi-arrow-up" style={{ color: "#00008B", marginRight: "6px" }}></i>
+              <span className="abacus-nav-text">Mental Accelerator</span>
+            </div>
+            <div className="abacus-nav-item">
+              <i className="bi-pencil-square" style={{ color: "#FFA500", marginRight: "6px" }}></i>
+              <span className="abacus-nav-text">Examination</span>
+            </div>
           </div>
-        </header>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  </div>
+</header>
   
         {/* Sidebar */}
-        <aside className="abacus-sidebar">
+        <aside className={`abacus-sidebar ${isSidebarVisible ? 'active' : ''}`}>
+  {/* Close Icon for Mobile View */}
+  <div className="sidebar-close-icon" onClick={() => setIsSidebarVisible(false)}>
+    <i className="bi bi-x"></i> {/* Close icon */}
+  </div>
+
   {selectedLevel !== null && (
     <div className="abacus-level-section">
       <h2 className="abacus-level-heading">Level {selectedLevel}</h2>
@@ -232,7 +247,6 @@ const AbacusMath = () => {
     </div>
   )}
 </aside>
-  
         {/* Main Content */}
         <main className="abacus-main-content">
           {showHeadingandIcon && <h2>Welcome to Abacus Math! Explore and learn with us. </h2>}
@@ -308,13 +322,13 @@ const AbacusMath = () => {
         </main>
         {/* Minimized Abacus Icon (If minimized, still show an icon to restore) */}
         {showHeadingandIcon && (
-          <div
-            className={`abacus-game-icon-container ${isMinimized ? "minimized" : ""}`}
-            onClick={handleGoToKit}
-          >
-            <i className="bi bi-controller" aria-hidden="true"></i>
-          </div>
-        )}
+  <div
+    className={`abacus-game-icon-container ${isMinimized ? "minimized" : ""}`}
+    onClick={handleGoToKit}
+  >
+    <i className="bi bi-controller" aria-hidden="true"></i> {/* Game icon */}
+  </div>
+)}
       </div>
     );
 };
