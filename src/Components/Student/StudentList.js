@@ -30,6 +30,7 @@ const getStatusColor = (status) => {
 const StudentList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
 
   const toggleSidebar = () => {
@@ -199,10 +200,10 @@ const StudentList = () => {
               </>
             ) : (
               <Row>
-                <Col md={6}>
+                 <Col xs={12} sm={12} md={isTablet ? 4 : 6}>
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
-                <Col md={6} className="d-flex align-items-center">
+                <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
                   <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"

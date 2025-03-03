@@ -117,6 +117,36 @@
   }
 }
 
+/* Tablet Responsive */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .main-container {
+    margin-left: 200px !important;
+    width: calc(100% - 200px) !important;
+  }
+  
+
+  .input-group {
+    max-width: 350px !important;
+    margin-right: 10px !important;
+  }
+  
+  .search-container input {
+    width: 50% !important;
+  }
+  
+  .search-container .filter-icon {
+    width: 40% !important;
+  }
+  
+  .search-container .add-student-btn {
+    width: 30% !important;
+  }
+  
+  .sticky-top {
+    padding-top: 15px !important;
+  }
+}
+
 /* Search bar and button styling */
 .input-group {
   display: flex;
