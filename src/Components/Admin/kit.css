@@ -5,8 +5,8 @@
   align-items: end;
   justify-content: center;
   min-height: 100vh;
-  background-color: #d8d5d5;
-  padding: 0 100px 30px 0;
+  background-color:white;
+  padding: 0 100px 0px 0;
     width: 100%;
 }
 /* Minimized State */
@@ -196,101 +196,171 @@
   border-top: 3px solid #fff;
   border-bottom: 3px solid #fff;
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .abacus-container{
-    padding: 0px;
-  }
-  .abacus-sub-cont {
-    width: 100%;
-    min-height: auto;
-    padding: 0px;
-  }
-  .abacus-headerss {
-    width: 100%;
+@media (max-width: 320px) {
+  .abacus-container {
+    display: flex;
     flex-direction: column;
-    text-align: center;
-    padding: 10px;
-  }
-  .aba-title {
-    font-size: 18px;
-    text-align: center;
-  }
-  .header-buttons {
-    justify-content: center;
-    margin-top: 10px;
-  }
-  .abacus-frame {
+    align-items: center;
     width: 100%;
+  }
+
+  .abacus-frame {
+    width: 100%; /* Make it take full width */
+    max-width: 320px; /* Ensure it doesn't shrink too much */
     height: auto;
-    padding: 10px;
+    border: 10px;
+   
   }
-  .aba-frame {
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
+
   .abacus-rod {
-    margin: 0px;
-    width: 2px;
-    height: 200px;
+    width: 1px; /* Slightly wider rods for better visibility */
+    height: 80px; /* Reduce height to prevent stretching */
   }
+
   .abacus-bead {
-    width: 10px;
+    width: 10px; /* Make beads slightly bigger */
     height: 10px;
+    margin: 2px 0; /* Adjust spacing */
+  }
+
+  .horizontal-line {
+    top: 45%; /* Shift it slightly down */
+    height: 3px;
+  }
+
+  .header-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .reset-button {
+    font-size: 14px;
+    padding: 10px 14px;
+    background-color: red;
+    border-radius: 8px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px; /* Ensure spacing below the abacus */
   }
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 480px) {
+
+
+@media (max-width: 768px) {
+  .abacus-container {
+    padding: 0 20px;
+  }
+  
   .abacus-sub-cont {
     width: 100%;
-    padding: 1px;
+    
+  }
+
+  .abacus-headerss {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
   }
 
   .aba-title {
-    
-    position: absolute;
-    right: 30%;
-    top:20px;
-    
+    font-size: 15px;
+    text-align: left;
+    margin-left: 40px;
   }
 
   .header-buttons {
     flex-direction: row;
     gap: 5px;
-    margin-left: 75%;
+    margin-right: 20px;
   }
 
   .abacus-frame {
-    max-width: 320px;
+    height: auto;
+    max-width: 380px;
+  }
+
+  .abacus-rod {
+    width: 6px;
+    height: 250px;
+    margin: 10px;
+  }
+
+  .abacus-bead {
+    width: 18px;
+    height: 18px;
+  }
+
+  .horizontal-line {
+    top: 40%;
+  }
+}
+
+/* Mobile View - 425px */
+@media (max-width: 425px) {
+  .abacus-container {
+    padding: 0px;
+  }
+
+  .abacus-sub-cont {
+    width: 100%;
+    min-height: auto;
+    padding: 0px;
+  }
+
+  .abacus-headerss {
+    width: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding: 2px;
+  }
+
+  .aba-title {
+    font-size: 12px;
+  }
+
+  .header-buttons {
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    margin-top: 5px;
+  }
+
+  .abacus-frame {
+    width: 100%;
+    height: auto;
+    padding: 5px;
+  }
+
+  .aba-frame {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .abacus-rod {
     width: 4px;
     height: 180px;
+    margin: 6px;
   }
 
   .abacus-bead {
-    width: 11px;
-    height: 11px;
+    width: 13px;
+    height: 13px;
   }
 
-  .abacus-bead.top.active {
-    transform: translateY(30px);
-  }
-
-  .abacus-bead.bottom.active {
-    transform: translateY(-20px);
+  .horizontal-line {
+    top: 42%;
   }
 
   .reset-button {
-    font-size: 12px;
-    padding: 6px 12px;
-    margin-bottom: 5px;
+    font-size: 14px;
+    padding: 8px 16px;
   }
 }
-
-  
-  
-
+@media((min-width:375)and (max-width:425px)){
+      .abacus-frame{
+        margin-right: 20px !important;
+      }
+}

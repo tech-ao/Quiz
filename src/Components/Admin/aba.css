@@ -1,10 +1,21 @@
-/* General Styles */
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-
-
+.number-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:50px;
+    height:50px;
+    border: 2px solid #000;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    margin: 5px;
+  }
 .abacus-column {
     display: flex;
     flex-direction: column; /* Beads start from the bottom */
@@ -18,16 +29,13 @@ body {
     position: relative;
     background-color: white;
   }
-  
   .bead {
     width: 13px;
     height: 13px;
     background-color: brown;
     border-radius: 50%;
     margin-top: 1px;
-    
   }
-  
   .stick {
     width: 40px;
     height: 2px;
@@ -35,8 +43,6 @@ body {
     position: absolute;
     top: 10px;
   }
-  
-
   .question-number {
     font-weight: bold;
     text-align: center;
@@ -52,13 +58,7 @@ body {
 
   
   /* Remove white background from expanded navbar in desktop view */
-  .navbar-collapse {
-    background-color: transparent !important;
-    box-shadow: none !important;
-  }
-
-
-
+  
 /* Header Styles */
 .abacus-header {
     background-color: #4caf50;
@@ -70,16 +70,18 @@ body {
     display: flex;
     align-items: center; /* Align items vertically */
 }
-
 /* Header Content Styles */
 .abacus-header-content {
     display: flex;
     align-items: center; /* Align dropdown and nav items vertically */
+    justify-content: space-between;
     width: 100%; /* Ensure it takes full width */
 }
-
 /* Dropdown Styles */
 .abacus-level-dropdown {
+  max-width: 80%; /* Allow it to shrink */
+  width: 200px; /* Ensure it adjusts based on content */
+  min-width: 100px;
     background-color: #f4f4f4;
     border: none;
     padding: 5px;
@@ -92,33 +94,17 @@ body {
     z-index: 1000;
     top:0;
 }
-
-/* Sidebar Styles */
-.abacus-sidebar {
-    width:15vw;
-    background-color: #a09d9de3;
-    height: 100vh ;/* Adjust for header height */
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 75px; /* Align with header */
-    left: 0;
-}
-
-
 /* Level Section Styles */
 .abacus-level-section {
     margin-top: 20px;
 }
 
-/* Level Heading Styles */
 .abacus-level-heading {
     font-weight: bold;
     font-size: 18px; /* Increase heading size */
     margin-bottom: 10px;
     color: black; /* Set text color to black */
 }
-
 /* Stage Styles */
 .abacus-stage {
     cursor: pointer;
@@ -128,19 +114,16 @@ body {
     display: flex; /* Use flexbox for alignment */
     align-items: center; /* Center items vertically */
 }
-
 /* Icon Styles */
 .abacus-stage i {
     margin-left: 16px; /* Add space between stage text and icon */
     font-size: 16px; /* Adjust icon size if needed */
 }
-
 /* Questions Styles */
 .abacus-questions {
     margin-left: 20px; /* Indent questions */
     margin-top: 5px;
 }
-
 /* Question Item Styles */
 .abacus-question-item {
     display: flex; /* Use flexbox for alignment */
@@ -152,7 +135,6 @@ body {
     padding: 5px; /* Add padding for better click area */
     transition: background-color 0.3s; /* Smooth transition for background color */
 }
-
 /* Hover Effect */
 .abacus-question-item:hover,
 .abacus-question-item.active {
@@ -166,37 +148,21 @@ body {
     color: #4caf50; /* Set icon color (adjust as needed) */
     font-size: 16px; /* Adjust icon size if needed */
 }
-
-.abacus-sidebar ul li {
-    margin: 15px 0;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.abacus-sidebar ul li:hover {
-    color: #4caf50;
-    font-weight: bold;
-}
-
 /* Main Content Styles */
 .abacus-main-content {
     margin-left: 250px; /* Match sidebar width */
     padding: 10px;
     flex: 1;
     background-color: #fafafa;
-    min-height: calc(100vh - 60px);
+    min-height: 80vh;
     box-sizing: border-box;
     display: flex;
     flex-direction: column; /* Stack content vertically */
     align-items: center; /* Center content horizontally */
 }
-
 .abacus-main-content p{
-
    font-size: 25px;
-
   }
-
 /* Navigation Items Styles */
 .abacus-nav-items {
     width: 800px;
@@ -204,7 +170,6 @@ body {
     justify-content: space-around; /* Space items evenly */
     margin-left: 10%; /* Space between dropdown and nav items */
 }
-
 .abacus-nav-item {
     display: flex;
     align-items: center;
@@ -212,7 +177,6 @@ body {
     margin-right: 20px; /* Add gap between nav items */
     font-size: 16px; /* Increase text size */
 }
-
 .abacus-nav-item:hover {
     color: #393a39;
     font-weight: bold;
@@ -223,7 +187,6 @@ body {
     margin-top: 20px; /* Space above the image */
     text-align: center; /* Center the text */
 }
-
 /* Fixed size for the question image */
 .abacus-question-image {
     width: 900px; /* Set a fixed width */
@@ -344,7 +307,7 @@ body {
     -ms-overflow-style: none; 
 }
 .dummy-questions-container.abacus-open h3{
-    background-color: #d8d5d5;
+    background-color: white;
     width: 100%;
     font-size: 17px;
     margin-left: 10px;
@@ -391,6 +354,7 @@ body {
     background-color: #8bd711;
   }
   .abacus-main-content h2{
+    
     font-size: 4rem;
     font-weight: bold;
     color: white;
@@ -401,196 +365,323 @@ body {
     transform: perspective(500px) rotateX(20deg);
   
   }
-  
-/* Abacus Styles */
-/* Mobile View (Max width: 768px) */
-@media (max-width: 768px) {
-    
-    /* Adjust container layout for mobile */
-    .abacus-app-container {
-        flex-direction: column; /* Stack elements vertically */
-        height: auto;
-    }
-
-    /* Make header more compact */
-    .abacus-header {
-        flex-direction: column;
-        padding: 0px;
-        text-align: center;
-    }
-    
-
-    /* Adjust level dropdown */
-    .abacus-level-dropdown {
-        max-width: 40%; /* Allow it to shrink */
-        width: auto; /* Ensure it adjusts based on content */
-        min-width: 100px; /* Set a reasonable minimum width */
-        font-size: 10px;
-        margin-left:-7px;
-    }
-
-    
-    /* Sidebar becomes a collapsible menu */
-    .abacus-sidebar {
-        width: 100%;
-        height: auto;
-        position: relative;
-        top: 0;
-        padding: 0px;
-        display: block;
-    }
-
-    .abacus-level-heading h2{
-        font-size: 10px;
-    }
-
-    .abacus-sidebar.active .abacus-level-section {
-        display: block;
-    }
-
-    /* Make the sidebar toggle-friendly */
-    .abacus-stage {
-        font-size: 14px;
-    }
-
-    /* Adjust question item styles */
-    .abacus-question-item {
-        font-size: 12px;
-        padding: 8px;
-    }
-.abacus-back-button{
-    font-size: 13px;
-    margin-right:75%;
-    margin-bottom: 2px;
+/* Sidebar Styling */
+/* Sidebar Fix */
+.abacus-sidebar {
+  position: absolute; /* Keeps the sidebar floating */
+  top:76px;
+  left: 0;
+  width: 180px;
+  height: 100vh;
+  background-color: rgb(163, 158, 158);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  transform: translateX(-100%); /* Initially hidden */
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000; /* Ensures sidebar is on top */
 }
-    /* Expand main content to full width */
-    .abacus-main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 15px;
-        text-align: center;
-    }
 
-    .abacus-main-content h2 {
-        font-size: 15px;
-    }
+.abacus-sidebar.active {
+  transform: translateX(0); /* Show sidebar */
+}
 
-    /* Adjust game icon size and placement */
-    .abacus-game-icon-container {
-        font-size: 15px;
-        bottom: 10px;
-        right: 10px;
-    }
 
+
+/* Ensure the sidebar does NOT push content */
+/* Small Phones (up to 375px) */
+@media (max-width: 375px) {
+  .abacus-main-content {
+    height: auto;
+    padding: 10px;
+  }
+  .abacus-sidebar {
+    width: 50%;
+  }
+  .dummy-questions-container {
+    height: 280px;
+    width: 60% !important;
+  }
+}
+
+/* Medium Phones (375px - 425px) */
+@media (max-width: 425px) {
+  .abacus-main-content {
+    height: auto; /* Allow natural height */
+    padding: 15px;
+  }
+
+  .abacus-level-dropdown {
+    max-width: 130px !important;
+    font-size: 14px;
+  }
+  .dummy-questions-container h3 {
+    width: 250px!important;
+  }
+
+  .dummy-questions-container {
+    height: 300px;
+    width: 60% !important;
+  }
+
+  .abacus-sidebar {
+    width: 60%;
+  }
+  
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+  /* Adjust container layout for mobile */
+  .abacus-app-container {
+    flex-direction: column; /* Stack elements vertically */
+    height: auto;
+  }
+  .abacus-game-icon-container{
+    height: 30px;
+    width: 30px;
+  }
+
+  /* Make header more compact */
+  .abacus-header {
+    flex-direction: column;
+    padding: 5px;
+    text-align: center;
+  }
+
+  /* Adjust level dropdown */
+  .abacus-level-dropdown {
+    max-width: 80%; /* Allow it to shrink */
+    width: 200px; /* Ensure it adjusts based on content */
+    min-width: 100px; /* Set a reasonable minimum width */
+    font-size: 12px;
+    margin: 5px 0;
+    margin-left: -10px;
+  }
+
+  /* Sidebar becomes a collapsible menu */
+  .abacus-sidebar {
+    width: 200px!important;
+    height: auto;
+    position: fixed;
+    top: 73px;
+    z-index: 1000;
+    padding: 10px;
+    display: none; /* Hide by default */
+  }
+
+  .abacus-sidebar.active {
+    display: block; /* Show when active */
+  }
+
+  .abacus-level-heading h2 {
+    font-size: 15px;
+  }
+
+  /* Make the sidebar toggle-friendly */
+  .abacus-stage {
+    font-size: 14px;
+  }
+
+  /* Adjust question item styles */
+  .abacus-question-item {
+    font-size: 12px;
    
-        .dummy-questions-container {
-            font-size: 14px;
-            font-weight: bold;
-            position: absolute;
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            transition: left 0.3s ease, transform 0.3s ease;
-            width: 90%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 10;
-        }
-    
-        .dummy-questions-container.minimized {
-            left: 50%;
-            transform: translateX(-50%);
-        }
-    
-        .dummy-questions-container.abacus-open {
-            left: 15%;
-            transform: none;
-            width: 80%;
-            text-align: left;
-        }
-    
-        .dummy-questions-container h3 {
-            font-size: 10px !important;
-            margin-bottom: 10px;
-        }
-    
-        .dummy-questions-container input {
-            width: 90%;
-            padding: 8px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    
-        .dummy-questions-container button {
-            width: 80%;
-            padding: 8px;
-            font-size: 14px;
-            border: none;
-            background: #28a745;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-    
-        .dummy-questions-container button:hover {
-            background: #218838;
-        }
-    
-        .dummy-questions-container li {
-            font-size: 12px;
-            margin: 5px 0;
-        }
-        
-    
-        .abacus-nav-text {
-            font-size: 12px; /* Reduce text size for mobile */
-            
-          }
-          .navbar-collapse {
-            position: fixed;
-            top: 40px;
-            right: -100%; /* Start fully hidden */
-            width: 110%; /* Adjust width for tablets */
-            transition: right 0.3s ease-in-out;
-            background: #f1eeee; /* Make it visible */
-            padding-top: 20px;
-            color: black;
-            padding-left: 0px;
-          }
-          
-          .navbar-collapse.show {
-            right: 0; /* Slide in from right */
-          }
-          
-          .abacus-nav-items {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            
-            padding-left: 30%;
-            background-color: white;
-          }
-          
-          .navbar-toggler {
-            position: absolute; /* Or fixed if you want it to stay even when scrolling */
-            top: 0px;
-            left: 150px; /* Moves the hamburger to the right */
-            z-index: 1050; /* Ensure it stays above */
-            padding-top:1px;
-            padding-bottom: 1px;
-          }
-          
-        
+  }
 
+  .abacus-back-button {
+    font-size: 12px;
+    margin: 5px 0;
+    margin-top: -3px;
+    margin-right: 80%;
+  }
 
-        }
-        
-        
-    
+  /* Expand main content to full width */
+  .abacus-main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+    height: 40% !important;
+    text-align: center;
+    z-index: 1;
+    position: relative;
+  }
 
+  .abacus-main-content h2 {
+    font-size: 20px;
+  }
 
+  /* Adjust game icon size and placement */
+  .abacus-game-icon-container {
+    font-size: 15px;
+    bottom: 10px;
+    right: 30px;
+  }
+
+  /* Dummy Questions Container for Mobile */
+  .dummy-questions-container {
+    font-size: 10px;
+    font-weight: bold;
+    position: absolute;
+    top: 15%;
+    left: 50% !important;
+    transform: translateX(-50%);
+    transition: left 0.3s ease, transform 0.3s ease;
+    width: 80%;
+    max-width: 300px;
+    transform: none; /* Remove centering */
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    padding: 0px;
+    overflow-y: scroll; /* Allow vertical scrolling */
+    scrollbar-width: none; /* Hide scrollbar in Firefox */
+    -ms-overflow-style: none; 
+    height:520px ;
+    background:white;
+    border-radius: 10px;
+    text-align: center;
+    align-items: center;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+  }
+  .dummy-questions-container.minimized {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .dummy-questions-container.abacus-open {
+    left: 10% !important;
+    transform: none;
+    width: 80%;
+    top: 4% !important;
+
+  }
+
+  .dummy-questions-container h3 {
+    font-size: 11px !important;
+    margin-bottom: 10px;
+    background-color: white;
+    width:  400px!important;
+    margin-left: 0px !important;
+    padding: 5px;
+  }
+
+  .dummy-questions-container input {
+    width: 30% !important;
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .dummy-questions-container button {
+    width: 40%;
+    padding: 3px;
+    font-size: 14px;
+    border: none;
+    background: #28a745;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .dummy-questions-container button:hover {
+    background: #218838;
+  }
+
+  .dummy-questions-container li {
+    font-size: 12px;
+    margin: 5px 0;
+  }
+
+  /* Navigation Items for Mobile */
+  .abacus-nav-text {
+    font-size: 12px; /* Reduce text size for mobile */
+  }
+ .navbar-collapse {
+    position: fixed;
+    top: 60px; /* Adjust based on header height */
+    right: -100%; /* Start fully hidden */
+    width: 100%; /* Full width for mobile */
+    transition: right 0.3s ease-in-out;
+    background: #f1eeee; /* Make it visible */
+    padding-top: 20px;
+    color: black;
+    padding-left: 0px;
+  }
+
+  .navbar-collapse.show {
+    right: 0; /* Slide in from right */
+  }
+
+  .abacus-nav-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 20px;
+    background-color: white;
+  }
+
+  .navbar-toggler {
+    position: absolute; /* Or fixed if you want it to stay even when scrolling */
+    bottom: -10px;
+    left: 0px !important; /* Moves the hamburger to the right */
+    z-index: 1050; /* Ensure it stays above */
+    padding: 5px;
+  }
+
+  /* Adjust Abacus Kit for Mobile */
+  .abacus-column {
+    width: 30px; /* Reduce width for mobile */
+    height: 80px; /* Reduce height for mobile */
+    margin-left: 100px;
+  }
+  .bead {
+    width: 8px; /* Reduce bead size for mobile */
+    height: 8px;
+  }
+  .stick {
+    width: 25px; /* Reduce stick width for mobile */
+  }
+
+  .number-box {
+    width: 30px; /* Reduce number box size for mobile */
+    height: 30px;
+    font-size: 12px;
+
+  }
+
+  .question-number {
+    font-size: 10px; /* Reduce question number size for mobile */
+    margin-left: 30px;
+  }
+
+  .answer-input {
+    width: 30px; /* Reduce input width for mobile */
+    font-size: 11px;
+    margin-left: 20px;
+  }
+
+  .submit-button {
+    width: 80%; /* Full width for mobile */
+    font-size: 11px;
+  }
+  
+  .abacus-sidebar {
+    width: 60%; /* Full width for mobile */
+    left: -100%; /* Hide sidebar by default */
+  }
+
+  .abacus-sidebar.active {
+    left: 0; /* Show sidebar when active */
+  }
+
+  .sidebar-close-icon {
+    display: block; /* Show only in mobile view */
+  }
+
+}
