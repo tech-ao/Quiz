@@ -58,10 +58,7 @@ body {
     background-color: transparent !important;
   }
   /* Remove white background from expanded navbar in desktop view */
-  .navbar-collapse {
-    background-color: transparent !important;
-    box-shadow: none !important;
-  }
+  
 /* Header Styles */
 .abacus-header {
     background-color: #4caf50;
@@ -77,10 +74,14 @@ body {
 .abacus-header-content {
     display: flex;
     align-items: center; /* Align dropdown and nav items vertically */
+    justify-content: space-between;
     width: 100%; /* Ensure it takes full width */
 }
 /* Dropdown Styles */
 .abacus-level-dropdown {
+  max-width: 80%; /* Allow it to shrink */
+  width: 200px; /* Ensure it adjusts based on content */
+  min-width: 100px;
     background-color: #f4f4f4;
     border: none;
     padding: 5px;
@@ -393,7 +394,11 @@ body {
     padding: 10px;
   }
   .abacus-sidebar {
-    width: 70%;
+    width: 50%;
+  }
+  .dummy-questions-container {
+    height: 280px;
+    width: 60% !important;
   }
 }
 
@@ -405,49 +410,24 @@ body {
   }
 
   .abacus-level-dropdown {
-    max-width: 80%;
+    max-width: 130px !important;
     font-size: 14px;
+  }
+  .dummy-questions-container h3 {
+    width: 250px!important;
   }
 
   .dummy-questions-container {
     height: 300px;
-    width: 85%;
+    width: 60% !important;
   }
 
   .abacus-sidebar {
     width: 60%;
   }
+  
 }
 
-/* Tablets (426px - 768px) */
-@media (max-width: 768px) {
-  .abacus-app-container {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .abacus-main-content {
-    margin-left: 0;
-    width: 100%;
-    height: auto;
-    padding: 20px;
-  }
-
-  .abacus-sidebar {
-    width: 50%;
-    left: -100%;
-    transition: left 0.3s ease-in-out;
-  }
-
-  .abacus-sidebar.active {
-    left: 0;
-  }
-
-  .dummy-questions-container {
-    height: 350px;
-    width: 70%;
-  }
-}
 
 
 
@@ -473,8 +453,8 @@ body {
 
   /* Adjust level dropdown */
   .abacus-level-dropdown {
-    max-width: 60%; /* Allow it to shrink */
-    width: auto; /* Ensure it adjusts based on content */
+    max-width: 80%; /* Allow it to shrink */
+    width: 200px; /* Ensure it adjusts based on content */
     min-width: 100px; /* Set a reasonable minimum width */
     font-size: 12px;
     margin: 5px 0;
@@ -483,7 +463,7 @@ body {
 
   /* Sidebar becomes a collapsible menu */
   .abacus-sidebar {
-    width: 50%;
+    width: 200px!important;
     height: auto;
     position: fixed;
     top: 73px;
@@ -508,13 +488,13 @@ body {
   /* Adjust question item styles */
   .abacus-question-item {
     font-size: 12px;
-    padding: 8px;
+   
   }
 
   .abacus-back-button {
     font-size: 12px;
     margin: 5px 0;
-    margin-top: -5px;
+    margin-top: -3px;
     margin-right: 80%;
   }
 
@@ -550,7 +530,7 @@ body {
     transform: translateX(-50%);
     transition: left 0.3s ease, transform 0.3s ease;
     width: 80%;
-    max-width: 400px;
+    max-width: 300px;
     transform: none; /* Remove centering */
     display: flex;
     flex-direction: column;
@@ -559,10 +539,11 @@ body {
     overflow-y: scroll; /* Allow vertical scrolling */
     scrollbar-width: none; /* Hide scrollbar in Firefox */
     -ms-overflow-style: none; 
-    height:400px ;
-    background: rgba(141, 139, 139, 0.9);
+    height:520px ;
+    background:white;
     border-radius: 10px;
     text-align: center;
+    align-items: center;
     z-index: 10;
     display: flex;
     flex-direction: column;
@@ -580,11 +561,12 @@ body {
   }
 
   .dummy-questions-container h3 {
-    font-size: 13px !important;
+    font-size: 11px !important;
     margin-bottom: 10px;
     background-color: white;
-    width:  260px!important;
+    width:  400px!important;
     margin-left: 0px !important;
+    padding: 5px;
   }
 
   .dummy-questions-container input {
@@ -647,7 +629,7 @@ body {
   .navbar-toggler {
     position: absolute; /* Or fixed if you want it to stay even when scrolling */
     bottom: -10px;
-    left: 90px; /* Moves the hamburger to the right */
+    left: 0px !important; /* Moves the hamburger to the right */
     z-index: 1050; /* Ensure it stays above */
     padding: 5px;
   }

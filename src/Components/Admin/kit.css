@@ -254,7 +254,7 @@
   }
   
   .abacus-sub-cont {
-    width: 90%;
+    width: 100%;
     
   }
 
@@ -279,7 +279,7 @@
 
   .abacus-frame {
     height: auto;
-    max-width: 400px;
+    max-width: 380px;
   }
 
   .abacus-rod {
@@ -330,7 +330,6 @@
 
   .abacus-frame {
     width: 100%;
-    
     height: auto;
     padding: 5px;
   }
@@ -359,4 +358,9 @@
     font-size: 14px;
     padding: 8px 16px;
   }
+}
+@media((min-width:375)and (max-width:425px)){
+      .abacus-frame{
+        margin-right: 20px !important;
+      }
 }
