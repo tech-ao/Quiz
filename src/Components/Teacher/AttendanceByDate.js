@@ -107,8 +107,11 @@ const AttendanceDataPage = () => {
           </h2>
           <div className="sub-container">
             {/* Class, Section, and Attendance Date on Same Row */}
-            <Row className="filter-section mb-4" style={{ width: "98%" }}>
-              <Col md={4}>
+            <Row
+              className="filter-section mb-4 d-flex align-items-center"
+              style={{ width: "98%" }}
+            >
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Level *</Form.Label>
                   <Form.Control
@@ -126,7 +129,7 @@ const AttendanceDataPage = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Attendance Date *</Form.Label>
                   <Form.Control
@@ -136,22 +139,19 @@ const AttendanceDataPage = () => {
                   />
                 </Form.Group>
               </Col>
-            </Row>
 
-            {/* Search Button */}
-            <div
-              className="filter-actions d-flex justify-content-end mb-6"
-              style={{ width: "95%" }}
-            >
-              <Button
-                variant="success"
-                className="btn-search"
-                onClick={() => console.log("Search clicked")}
-                style={{ backgroundColor: "green" }}
-              >
-                Search
-              </Button>
-            </div>
+              {/* Search Button in Same Line */}
+              <Col md={2} className="d-flex align-items-end">
+                <Button
+                  variant="success"
+                  className="btn-search"
+                  onClick={() => console.log("Search clicked")}
+                  style={{ backgroundColor: "green", height: "38px", marginTop:"30px" }}
+                >
+                  Search
+                </Button>
+              </Col>
+            </Row>
 
             {/* Attendance Table */}
             <div className="attendance-list" style={{ width: "98%" }}>
