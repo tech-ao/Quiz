@@ -63,9 +63,14 @@ const PaymentHistory = () => {
     }
   };
 
-  const filteredPayments = paymentHistory.filter((payment) =>
-    payment.studentName.toLowerCase().includes(filter.toLowerCase())
-  ).filter((payment) => !selectedDate || payment.date === selectedDate.toISOString().split("T")[0]);
+  const filteredPayments = paymentHistory
+  .filter((payment) => payment.studentName.toLowerCase().includes(filter.toLowerCase()))
+  .filter((payment) => {
+    if (!selectedDate) return true;
+    const selectedDateFormatted = selectedDate.toLocaleDateString("en-CA"); // YYYY-MM-DD format
+    return payment.date === selectedDateFormatted;
+  });
+
 
   return (
     <div>
@@ -81,7 +86,7 @@ const PaymentHistory = () => {
           <div className="d-flex justify-content-end align-items-center mb-3" style={{ position: "relative" }}>
             <Form.Control
               type="text"
-              placeholder="Search here.."
+              placeholder="Search Name...."
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
               className="search-Bar"
@@ -115,6 +120,9 @@ const PaymentHistory = () => {
                     }}
                     inline
                   />
+                  <Button variant="danger" size="sm" className="mt-2" onClick={() => setSelectedDate(null)}>
+                    Clear
+                  </Button>
                 </div>
               )}
             </div>

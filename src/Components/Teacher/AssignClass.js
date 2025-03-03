@@ -10,9 +10,10 @@ const AssignClass = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [classes] = useState([
+  const [allClasses] = useState([
     {
       id: 1,
       title: "Online Course Class",
@@ -58,6 +59,9 @@ const AssignClass = () => {
       status: "Awaited",
     },
   ]);
+  
+  // Filtered classes based on search term
+  const [filteredClasses, setFilteredClasses] = useState(allClasses);
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(
     window.innerWidth >= 768
@@ -74,6 +78,27 @@ const AssignClass = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  
+  // Handle search functionality
+  useEffect(() => {
+    if (searchTerm.trim() === "") {
+      setFilteredClasses(allClasses);
+      return;
+    }
+    
+    const lowercasedSearch = searchTerm.toLowerCase();
+    const filtered = allClasses.filter(
+      (classItem) =>
+        classItem.title.toLowerCase().includes(lowercasedSearch) ||
+        classItem.description.toLowerCase().includes(lowercasedSearch) ||
+        classItem.createdBy.toLowerCase().includes(lowercasedSearch) ||
+        classItem.createdFor.toLowerCase().includes(lowercasedSearch) ||
+        classItem.status.toLowerCase().includes(lowercasedSearch) ||
+        classItem.classes.some(cls => cls.toLowerCase().includes(lowercasedSearch))
+    );
+    
+    setFilteredClasses(filtered);
+  }, [searchTerm, allClasses]);
   
   const handleAction = (action, rowData) => {
     setSelectedRow(rowData);
@@ -124,6 +149,8 @@ const AssignClass = () => {
                   className="form-control search-box"
                   style={{ width: "20%" }}
                   placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button
                   className="btn btn-success addbtn"
@@ -181,7 +208,7 @@ const AssignClass = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {classes.map((classItem, index) => (
+                  {filteredClasses.map((classItem, index) => (
                     <tr key={classItem.id}>
                       <td className="text-center">{index + 1}</td>
                       <td>{classItem.title}</td>
@@ -237,6 +264,14 @@ const AssignClass = () => {
                       </td>
                     </tr>
                   ))}
+                  
+                  {filteredClasses.length === 0 && (
+                    <tr>
+                      <td colSpan="9" className="text-center py-3">
+                        No classes found matching your search criteria.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -420,4 +455,4 @@ const AssignClass = () => {
   );
 };
 
-export default AssignClass;
+export default AssignClass; 

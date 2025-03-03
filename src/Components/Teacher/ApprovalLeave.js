@@ -89,7 +89,7 @@ const ApprovalLeave = () => {
               <div className="d-flex justify-content-end align-items-center mb-3">
               <Form.Control
                   type="text"
-                  placeholder="Search..."
+                  placeholder="Search Name..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   style={{ maxWidth: "200px" }}
