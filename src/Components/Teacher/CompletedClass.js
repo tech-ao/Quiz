@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, Row, Col, Table, Form } from "react-bootstrap";
+import { Container, Row, Col, Table, Form, Button } from "react-bootstrap";
 import { FaCalendarAlt } from "react-icons/fa";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
@@ -48,14 +48,23 @@ const CompletedClass = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedDate(null);
+  };
+
   const filteredClasses = completedClasses.filter((cls) => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch =
       cls.subject.toLowerCase().includes(searchLower) ||
       cls.teacher.toLowerCase().includes(searchLower);
-    const matchesDate = selectedDate ? cls.date === selectedDate.toISOString().split("T")[0] : true;
-    return matchesSearch && matchesDate;
+  
+    if (!selectedDate) return matchesSearch;
+  
+    const selectedDateFormatted = selectedDate.toLocaleDateString("en-CA"); // YYYY-MM-DD format
+    return matchesSearch && cls.date === selectedDateFormatted;
   });
+  
 
   return (
     <div>
@@ -71,7 +80,7 @@ const CompletedClass = () => {
           <div className="d-flex justify-content-end align-items-center mb-3" style={{ position: "relative" }}>
             <Form.Control
               type="text"
-              placeholder="Search classes..."
+              placeholder="Search subject...."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="search-Bar"
@@ -105,6 +114,14 @@ const CompletedClass = () => {
                     }}
                     inline
                   />
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    className="mt-2"
+                    onClick={clearFilters}
+                  >
+                    Clear
+                  </Button>
                 </div>
               )}
             </div>
