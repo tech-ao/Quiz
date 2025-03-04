@@ -160,6 +160,7 @@ body {
     display: flex;
     flex-direction: column; /* Stack content vertically */
     align-items: center; /* Center content horizontally */
+    justify-content: space-around;
     z-index: 1;
 }
 .abacus-main-content p{
@@ -277,6 +278,7 @@ body {
     gap: 40px;
     display: flex;
     flex-wrap: wrap;
+    height: 500px;
 }
 .dummy-questions-container {
     width: 50%;
@@ -284,6 +286,7 @@ body {
     font-size: 15px;
     font-weight: bold;
     position: absolute;
+    background-color: white;
     top: 20%;
     left: 60%;
     transform: translateX(-50%); /* Center horizontally */
@@ -298,7 +301,7 @@ body {
 .dummy-questions-container.abacus-open {
     
     left: 19%; /* Move to left when AbacusKit is open */
-    top:23%;
+    top:15%;
     transform: none; /* Remove centering */
     display: flex;
     flex-direction: column;
@@ -567,7 +570,8 @@ body {
     left: 1% !important;
     transform: none;
     width: 80%;
-    top: 4% !important;
+    /* top: % !important; */
+    height: 400px;
 
   }
 
