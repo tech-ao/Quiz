@@ -400,6 +400,17 @@ body {
     height: 280px;
     width: 60% !important;
   }
+  .abacus-column {
+    width: 30px; /* Reduce width for mobile */
+    height: 80px; /* Reduce height for mobile */
+    margin-left: 80px !important;
+  }
+  .answer-input{
+    margin-left: 20px !important;
+  }
+  .question-number{
+    margin-left: 30px !important;
+  }
 }
 
 /* Medium Phones (375px - 425px) */
@@ -638,7 +649,7 @@ body {
   .abacus-column {
     width: 30px; /* Reduce width for mobile */
     height: 80px; /* Reduce height for mobile */
-    margin-left: 100px;
+    margin-left: 130px;
   }
   .bead {
     width: 8px; /* Reduce bead size for mobile */
@@ -657,13 +668,13 @@ body {
 
   .question-number {
     font-size: 10px; /* Reduce question number size for mobile */
-    margin-left: 30px;
+    margin-left: 58px;
   }
 
   .answer-input {
     width: 30px; /* Reduce input width for mobile */
     font-size: 11px;
-    margin-left: 20px;
+    margin-left: 50px;
   }
 
   .submit-button {
