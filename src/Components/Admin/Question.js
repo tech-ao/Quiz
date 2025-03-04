@@ -13,9 +13,9 @@ import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
 const QuestionListPage = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
-  );
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [questions, setQuestions] = useState([
     { id: 1, level: 1, details: [{ question: "1 + 5 + 3", options: ["7", "12", "9", "10"], answer: "9" }] },
     { id: 2, level: 2, details: [] },

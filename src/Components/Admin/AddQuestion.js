@@ -8,7 +8,9 @@ import AdminHeader from "./AdminHeader";
 
 
  const AddQuestion = () => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+ const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [questions, setQuestions] = useState([]);
   const [filterLevel, setFilterLevel] = useState("All");
   const [currentNumber, setCurrentNumber] = useState("");
