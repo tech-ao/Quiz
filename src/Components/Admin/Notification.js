@@ -115,13 +115,14 @@ function NotificationPage() {
           </div>
 
           {/* Notification List */}
-          <ListGroup className="notification-list">
+          <ListGroup className="notification-list" >
             {filteredNotifications.length > 0 ? (
               filteredNotifications.map((notification) => (
                 <ListGroup.Item
                   key={notification.id}
                   className={`notification-item ${notification.isRead ? "read" : "unread"}`}
                   onClick={() => handleNotificationClick(notification.id)}
+                  style={{margin:"0 15px 0 10px"}}
                 >
                   <div className="notification-title">{notification.title}</div>
                   <small className="text-muted" style={{marginRight:"30px"}}>Received on: {notification.receivedDate}</small>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+ import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import { useDispatch } from "react-redux";
@@ -14,10 +14,20 @@ const AddTeacher = ({ show, onClose }) => {
         gender: '',
         phoneNumber: '',
         email: '',
+        registerNo:'',
+        isFirstLogin: true,
+        isAgree: true,
+        statusId: 2,
         permanentAddress: '',
-        currentResidentialAddress: '',
+        currentResidentialAddress: 'test',
+        sameAsPermanentAddress: true,
+        availabilityId: 1,
+        teacherModeId: 1,
+        preferedWorkScheduledId: 1,
+        disclaimerContent: "test",
+        createdBy: 1,
         nationalityId: '',
-        preferedCountryId: null,
+        preferedCountryId: 1,
         candidatePhoto: null,
         photoID: null,
         higherLevelEducation: '',
@@ -235,7 +245,7 @@ const AddTeacher = ({ show, onClose }) => {
                             <Form.Group>
                                 <Form.Label>nationalityId</Form.Label>
                                 <Form.Control
-                                    type="text"
+                                    type="number"
                                     name="nationalityId"
                                     value={formData.nationalityId}
                                     onChange={handleChange}

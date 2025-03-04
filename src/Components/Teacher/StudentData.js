@@ -167,7 +167,7 @@ const StudentData = () => {
                 </Row>
                 {/* Row 2: Search bar, Filter Icon, and Add Student Button in the same row */}
                 <Row className="mt-2">
-                  <Col className="search-container">
+                  <Col className="searchcontainer">
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}

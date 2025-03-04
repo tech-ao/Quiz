@@ -91,7 +91,7 @@
     margin-left: 0;
     padding: 0;
     width: 150%;
-    max-width: 540px;
+    max-width: 500px;
     margin: auto;
     margin-left: -22px;
     justify-content: center;
@@ -531,8 +531,29 @@
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 500px) { 
   .table_container {
-    max-height: 250px; /* Adjust height on smaller screens */
+    max-height: 240px; /* Adjust height on smaller screens */
+  }
+  .payment-card {
+    width: 92% !important;
+    margin-left: 8px !important;
   }
 }
+
+@media (max-width: 360px) {
+
+.box-details, .payment-card {
+  width: 80% !important;
+  margin-left: 26px !important;
+}
+}
+
+@media (max-width: 360px) {
+
+  .box-details, .payment-card {
+    width: 80% !important;
+    margin-left: 26px !important;
+  }
+  }
+  

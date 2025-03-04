@@ -1,6 +1,5 @@
 /* General header styles */
 .header {
-  background-color: #fff;
   border-bottom: 1px solid #ddd;
 }
 
@@ -171,7 +170,7 @@ button {
 
 @media (max-width: 768px) {
   .admin-popup {
-    top: 50px;
+    top: 80px;
     right: 0;
     width: 200px; /* Or adjust as needed */
   }

@@ -26,8 +26,13 @@ const AddStudentPanel = ({ show, onClose }) => {
     gender: null,
     studyModeId: null,
     country: null,
+    centreName: "",       // New field: Centre Name
+    centrePlace: "",      // New field: Place
+    joiningDate: "",      // New field: Joining Date
+    currentLevel: "",     // New field: Current Level
+    completedLevel: "",   // New field: Completed Level
     statusId: 1,
-    createdBy:1,
+    createdBy: 1,
     profile: {
       name: "",
       extension: "",
@@ -244,7 +249,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             <Form.Label>Gender</Form.Label>
             <Row>
               {genders.map((gender, index) => (
-                <Col key={index} md={4}>  {/* Adjust the width of each radio button */}
+                <Col key={index} md={4}>
                   <Form.Check
                     type="radio"
                     label={gender.item2}
@@ -264,7 +269,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             <Form.Label>Class Mode</Form.Label>
             <Row>
               {classModes.map((mode, index) => (
-                <Col key={index} md={4}>  {/* Adjust the width of each radio button */}
+                <Col key={index} md={4}>
                   <Form.Check
                     type="radio"
                     label={mode.item2}
@@ -279,8 +284,6 @@ const AddStudentPanel = ({ show, onClose }) => {
               ))}
             </Row>
           </Form.Group>
-
-
 
           <Form.Group className="mb-3" controlId="formCountry">
             <Form.Label>Country</Form.Label>
@@ -307,6 +310,66 @@ const AddStudentPanel = ({ show, onClose }) => {
               rows={3}
               placeholder="Enter address"
               value={formData.address}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          {/* New Input Groups for Centre Details */}
+          <Form.Group className="mb-3" controlId="formCentreName">
+            <Form.Label>Centre Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="centreName"
+              placeholder="Enter centre name"
+              value={formData.centreName}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCentrePlace">
+            <Form.Label>Place</Form.Label>
+            <Form.Control
+              type="text"
+              name="centrePlace"
+              placeholder="Enter place"
+              value={formData.centrePlace}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formJoiningDate">
+            <Form.Label>Joining Date</Form.Label>
+            <Form.Control
+              type="date"
+              name="joiningDate"
+              value={formData.joiningDate}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCurrentLevel">
+            <Form.Label>Current Level</Form.Label>
+            <Form.Control
+              type="text"
+              name="currentLevel"
+              placeholder="Enter current level"
+              value={formData.currentLevel}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCompletedLevel">
+            <Form.Label>Completed Level</Form.Label>
+            <Form.Control
+              type="text"
+              name="completedLevel"
+              placeholder="Enter completed level"
+              value={formData.completedLevel}
               onChange={handleInputChange}
               required
             />

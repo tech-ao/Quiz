@@ -6,8 +6,9 @@
   justify-content: center;
   min-height: 100vh;
   background-color:white;
-  padding: 0 100px 0px 0;
+  /* padding: 0 100px 0px 0; */
     width: 100%;
+    padding-right: 15px;
 }
 /* Minimized State */
 
@@ -25,19 +26,19 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
+  min-height: 60vh;
   background-color: #fff;
   padding: 10px;
   width: 70%;
+  margin-bottom: 10%;
 }
 
 .abacus-headerss {
-  width: 750px;
+  width: 550px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
-  padding: 10px 20px;
   border-radius: 10px 10px 0 0;
   position: relative;
 }
@@ -54,7 +55,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 8px;
+  gap: 5px;
 }
 
 .icon-button {
@@ -79,13 +80,14 @@
   border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3),
     inset 0 -4px 8px rgba(255, 255, 255, 0.2);
-  width: 750px;
+  width: 550px;
   height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  padding-right: 10px;
 }
 
 .aba-frame {
@@ -94,6 +96,7 @@
   align-items: center;
   width: 100%;
   position: relative;
+  
 }
 
 .abacus-rod {
@@ -101,17 +104,17 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  width: 15px;
+  width: 11px;
   height: 280px;
   background-color: #000;
-  margin: 19px;
+  margin: 13px;
 }
 
 .abacus-bead {
-  width: 28px;
-  height: 28px;
+  width: 25px;
+  height: 25px;
   border-radius: 20%;
-  margin: 8px 0;
+  margin: 6px 0;
   cursor: pointer;
   transition: transform 0.3s, background-color 0.3s;
 }
@@ -250,11 +253,12 @@
 
 @media (max-width: 768px) {
   .abacus-container {
-    padding: 0 20px;
+    padding-right: 5px!important;
+    padding-left: 45px;
   }
   
   .abacus-sub-cont {
-    width: 100%;
+    
     
   }
 
@@ -279,13 +283,13 @@
 
   .abacus-frame {
     height: auto;
-    max-width: 380px;
+    max-width: 400px;
   }
 
   .abacus-rod {
-    width: 6px;
+    width: 5px;
     height: 250px;
-    margin: 10px;
+    margin: 8px;
   }
 
   .abacus-bead {
@@ -364,3 +368,11 @@
         margin-right: 20px !important;
       }
 }
+@media(min-width:950px) and  (max-width:1280px)
+  {
+
+    .reset-button {
+      margin-top: 2%;
+    }
+   
+  }

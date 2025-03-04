@@ -85,13 +85,13 @@ const Attendance = () => {
               </Col>
             </Row>
 
-            <div className="d-flex mb-2 filter-box">
+            <div className=" mb-2 filter-box">
               <Form.Control
                 type="text"
-                placeholder="Search...."
+                placeholder="Search Name (or) Register number...."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-bar"
+                className="searchbox"
               />
 
               <Dropdown show={showFilterDropdown} onToggle={setShowFilterDropdown}>
@@ -109,7 +109,7 @@ const Attendance = () => {
               </Dropdown>
             </div>
 
-            <div className="attendance-list">
+            <div className="attendance-list" style={{width:"98%"}}>
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>

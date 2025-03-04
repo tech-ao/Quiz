@@ -30,6 +30,7 @@ const getStatusColor = (status) => {
 const StudentList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
 
   const toggleSidebar = () => {
@@ -199,10 +200,10 @@ const StudentList = () => {
               </>
             ) : (
               <Row>
-                <Col md={6}>
+                 <Col xs={12} sm={12} md={isTablet ? 4 : 6}>
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
-                <Col md={6} className="d-flex align-items-center">
+                <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
                   <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
@@ -246,8 +247,13 @@ const StudentList = () => {
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Date of Birth</th>
-                    <th>Grade</th>
+                    <th>Level</th>
                     <th>Status</th>
+                    <th>Centre Name</th>
+                    <th>Place</th>
+                    <th>Joining Date</th>
+                    <th>Current Level</th>
+                    <th>Completed Level</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -265,11 +271,17 @@ const StudentList = () => {
                           <td>{student.phoneNumber}</td>
                           <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                           <td>{student.gradeName}</td>
+                        
                           <td>
                             <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
                               {student.statusName}
                             </Badge>
                           </td>
+                          <td>{student.centreName}</td>
+                          <td>{student.centrePlace}</td>
+                          <td>{student.joiningDate ? new Date(student.joiningDate).toLocaleDateString('en-GB') : ''}</td>
+                          <td>{student.currentLevel}</td>
+                          <td>{student.completedLevel}</td>
                           <td>
                             <Dropdown>
                               <Dropdown.Toggle size="sm" id={`dropdown-${student.studentId}`}>
@@ -299,7 +311,9 @@ const StudentList = () => {
                   )}
                 </tbody>
               </Table>
-              <div className="d-flex justify-content-center mt-4">
+             
+            </div>
+            <div className="d-flex justify-content-center mt-4">
                 <ReactPaginate
                   pageCount={totalPages}
                   pageRangeDisplayed={10}
@@ -317,7 +331,6 @@ const StudentList = () => {
                   nextLinkClassName="page-link"
                 />
               </div>
-            </div>
           </div>
         </Container>
       </div>

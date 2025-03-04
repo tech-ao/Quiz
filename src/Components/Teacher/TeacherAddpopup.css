@@ -19,7 +19,7 @@
 
 .close-btn {
     position: absolute;
-    top: 40px;
+    top: 14px;
     right: 15px;
     background: none;
     border: none;
@@ -113,8 +113,8 @@
     }
     .close-btn {
         position: absolute;
-        top: 70px;
-        right: 0px;
+        top: 40px;
+        right: 10px;
         background: none;
         border: none;
         /* font-size: 500rem; */

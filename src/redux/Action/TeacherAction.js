@@ -4,6 +4,7 @@ import { fetchTeachers, addTeacher, editTeacher ,getTeacher , deleteTeacher } fr
 export const getTeachers = (paginationDetail) => async (dispatch) => {
   dispatch({ type: "FETCH_TeacherS_REQUEST" });
   try {
+    console.log("in action",paginationDetail)
     const Teachers = await fetchTeachers(paginationDetail);
     dispatch({ type: "FETCH_TeacherS_SUCCESS", payload: Teachers });
   } catch (error) {
@@ -16,6 +17,7 @@ export const fetchTeacher = (TeacherId)=>async (dispatch)=>{
   try{
     const Teacher = await getTeacher(TeacherId);
     dispatch ({type:"FETCH_Teacher_SUCCESS", payload: Teacher})
+    return Teacher;
    
   }catch(error){
     dispatch({type:"FETCH_Teacher_FAILURE" , payload:error.message})

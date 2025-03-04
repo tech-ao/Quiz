@@ -1,0 +1,99 @@
+/* =================== Table & Search Bar Styling =================== */
+
+/* Ensure table container is scrollable in all directions */
+.table-container {
+  max-height: 300px;
+  overflow: auto;
+  width: 99%;
+  max-width: 100%;
+  margin-right: 10%;
+}
+
+/* Responsive table adjustments */
+@media (max-width: 500px) {
+  .table-container {
+    max-height: 500px;
+    overflow: auto;
+    width: 100%;
+    max-width: 200%;
+    margin-right: 1%;
+  }
+}
+
+/* Search Section */
+.searchBox {
+  display: flex;
+  justify-content: center;
+  width: 99%;
+  padding: 0 10px 10px;
+}
+
+.searchBar {
+  /* width: 99%; */
+  max-width: 200px;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 18px;
+}
+
+/* Adjust search bar for smaller screens */
+@media (max-width: 500px) {
+  .searchBar {
+    width: 2230% !important;
+    margin-left: -79px !important;
+    left: 18%;
+  }
+  .filter-icon-container{
+    /* background-color: rgba(9, 105, 12, 0.1); */
+    /* border-radius: 50%; */
+    padding: 2px;
+    left: 300px;
+  }
+  .datepick{
+    left: -190px;
+  }
+  
+}
+
+/* Add these styles to your CompletedClass.css file */
+
+.searchBox {
+  position: relative;
+  margin-bottom: 20px;
+  left: -60px;
+  width: 98%;
+}
+
+.searchBar {
+  padding-right: 40px; /* Make room for the filter icon */
+}
+
+.filter-icon-container {
+  /* background-color: rgba(9, 105, 12, 0.1); */
+  /* border-radius: 50%; */
+  /* padding: 2px; */
+  margin-right: -10px;
+}
+
+.date-filter-popup {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 500px) {
+  .container-sub{
+    margin-left: 3%;
+  }
+}

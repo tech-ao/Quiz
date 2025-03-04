@@ -15,6 +15,7 @@ const getHeaders = () => ({
 });
 
 export const fetchTeachers = async (paginationDetail) => {
+  console.log("📤 pagination in service:",paginationDetail)
   const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListTeacher`, {
     method: "POST",
     headers: getHeaders(),
@@ -24,16 +25,69 @@ export const fetchTeachers = async (paginationDetail) => {
   return await response.json();
 };
 
-
 export const addTeacher = async (TeacherData) => {
-  const response = await fetch(`${BASE_URL}/Teacher/Create`, {
-    method: "POST",
-    headers: getHeaders(),
-    body: JSON.stringify(TeacherData),
-  });
-  if (!response.ok) throw new Error("Failed to add Teacher");
-  return await response.json();
+  console.log("📤 Sending request to API:", `${BASE_URL}/Teacher/Create`);
+  console.log("📄 Request Body:", JSON.stringify(TeacherData));
+
+  try {
+    const response = await fetch(`${BASE_URL}/Teacher/Create`, {
+      method: "POST",
+      headers: getHeaders(),
+      body: JSON.stringify(TeacherData),
+    });
+
+    console.log("📥 Response Status:", response.status);
+
+    const responseText = await response.text(); // Read raw response text
+    console.log("📝 Raw Response:", responseText);
+
+    if (!response.ok) {
+      throw new Error(`❌ API Error: ${response.status} - ${response.statusText}`);
+    }
+
+    const jsonResponse = responseText ? JSON.parse(responseText) : {}; // Handle empty responses
+    console.log("✅ Parsed Response:", jsonResponse);
+
+    return jsonResponse;
+  } catch (error) {
+    console.error("🚨 Error in addTeacher:", error);
+    throw error;
+  }
 };
+
+
+// export const addTeacher = async (TeacherData) => {
+//   const response = await fetch(`${BASE_URL}/Teacher/Create`, {
+//     method: "POST",
+//     headers: getHeaders(),
+//     body: JSON.stringify(TeacherData),
+//   });
+//   if (!response.ok) throw new Error("Failed to add Teacher");
+//   return await response.json();
+// };
+// export const addTeacher = async (TeacherData) => {
+//   console.log("Sending request to API:", `${BASE_URL}/Teacher/Create`);
+//   console.log("Request Body:", JSON.stringify(TeacherData));
+
+//   try {
+//     const response = await fetch(`${BASE_URL}/Teacher/Create`, {
+//       method: "POST",
+//       headers: getHeaders(), // Ensure this function includes "Content-Type: application/json"
+//       body: JSON.stringify(TeacherData),
+//     });
+
+//     console.log("Response Status:", response.status);
+//     const text = await response.text(); // Read raw response
+//     console.log("Raw Response:", text);
+
+//     if (!response.ok) throw new Error("Failed to add Teacher");
+
+//     return text ? JSON.parse(text) : {}; // Handle empty responses
+//   } catch (error) {
+//     console.error("Error in addTeacher:", error);
+//     throw error;
+//   }
+// };
 
 export const editTeacher = async (TeacherData) => {
   const response = await fetch(`${BASE_URL}/Teacher/Update`, {
@@ -46,7 +100,7 @@ export const editTeacher = async (TeacherData) => {
 };
 
 export const getTeacher = async (TeacherId) => {
-  const response = await fetch(`${BASE_URL}/Teacher/GetUserById?UserId=${TeacherId}`, {
+  const response = await fetch(`${BASE_URL}/Teacher/GetByTeacherid?TeacherId=${TeacherId}`, {
     method: "GET",
     headers: getHeaders(),
   });
