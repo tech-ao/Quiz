@@ -35,8 +35,9 @@ const Header = ({ toggleSidebar }) => {
   ]);
   const [selectedNotification, setSelectedNotification] = useState(null);
 
-  // State to detect mobile view (based on width)
+  // State to detect mobile view (width < 768) and mobile/tablet view (width < 1024)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -56,8 +57,11 @@ const Header = ({ toggleSidebar }) => {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
-    // Update isMobile on window resize
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    // Update isMobile and isMobileOrTablet on window resize
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsMobileOrTablet(window.innerWidth < 1024);
+    };
     window.addEventListener("resize", handleResize);
 
     const storedStudentId = localStorage.getItem("studentId");
@@ -122,9 +126,9 @@ const Header = ({ toggleSidebar }) => {
   return (
     <Navbar expand="lg" className="header py-2">
       <Row className="align-items-center w-100">
-        {/* Left Section: Logo and (for mobile) menu button */}
+        {/* Left Section: Logo and (for mobile/tablet) menu button */}
         <Col xs={4} md={3} className="d-flex align-items-center header-left">
-          {isMobile ? (
+          {isMobileOrTablet ? (
             isMobileExpanded ? (
               <>
                 <Link to="/adminDashboard">
@@ -167,7 +171,7 @@ const Header = ({ toggleSidebar }) => {
         </Col>
 
         {/* Center Section: Welcome Message (desktop only) */}
-        {!isMobile && (
+        {!isMobileOrTablet && (
           <Col md={5} className="text-center">
             <span className="fw-bold welcome-message">
               Welcome, {adminFullName} <span role="img" aria-label="wave">👋</span>
@@ -186,41 +190,40 @@ const Header = ({ toggleSidebar }) => {
             <RiGlobalLine className="header-icon" />
           </Button>
           <div className="position-relative admin-container" ref={popupRef}>
-            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{marginTop:"15px"}}>
+            <Button variant="link" onClick={togglePopup} className="admin-btn" style={{ marginTop:"15px" }}>
               <RiAdminLine className="header-icon" />
               <span className="admin-name">{adminFullName}</span>
             </Button>
             {showPopup && (
-  <div className="admin-popup">
-    <ul className="list-unstyled m-0 p-2">
-      <li
-        className="dropdown-item menu-item"
-        style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
-        onClick={() => navigate("/adminSettings")}
-      >
-        <RiLockPasswordLine className="popup-icon" /> Profile
-      </li>
-      <li
-        className="dropdown-item menu-item"
-        style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
-        onClick={() => {
-          togglePasswordPopup();
-          setShowPopup(false);
-        }}
-      >
-        <RiRestartLine className="popup-icon" /> Password
-      </li>
-      <li
-        className="dropdown-item menu-item text-danger"
-        style={{ display: "flex", alignItems: "center", gap: "10px" }}
-        onClick={handleLogoutClick}
-      >
-        <RiLogoutCircleRLine className="popup-icon" /> Logout
-      </li>
-    </ul>
-  </div>
-)}
-
+              <div className="admin-popup">
+                <ul className="list-unstyled m-0 p-2">
+                  <li
+                    className="dropdown-item menu-item"
+                    style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
+                    onClick={() => navigate("/adminSettings")}
+                  >
+                    <RiLockPasswordLine className="popup-icon" /> Profile
+                  </li>
+                  <li
+                    className="dropdown-item menu-item"
+                    style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}
+                    onClick={() => {
+                      togglePasswordPopup();
+                      setShowPopup(false);
+                    }}
+                  >
+                    <RiRestartLine className="popup-icon" /> Password
+                  </li>
+                  <li
+                    className="dropdown-item menu-item text-danger"
+                    style={{ display: "flex", alignItems: "center", gap: "10px" }}
+                    onClick={handleLogoutClick}
+                  >
+                    <RiLogoutCircleRLine className="popup-icon" /> Logout
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
         </Col>
       </Row>
