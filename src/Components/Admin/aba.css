@@ -376,7 +376,7 @@ body {
 /* Sidebar Fix */
 .abacus-sidebar {
   position: absolute; /* Keeps the sidebar floating */
-  top:76px;
+  top:73px;
   left: 0;
   width: 180px;
   height: 100vh;
