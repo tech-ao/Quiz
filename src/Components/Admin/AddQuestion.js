@@ -21,6 +21,8 @@ import AdminHeader from "./AdminHeader";
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [questionSetId, setQuestionSetId] = useState("");
+  const [no, setNo] = useState("");
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -85,12 +87,15 @@ import AdminHeader from "./AdminHeader";
     console.log("Stored Numbers:", storedNumbers); 
     console.log("Answer:", answer); 
 
-    if (storedNumbers.length > 0 && answer.trim() !== "") {
+    if (storedNumbers.length > 0 && answer.trim() !== "" && questionSetId.trim() !== "" && no.trim() !== "") {
       const newQuestion = {
-        questionSetId: 1, 
-        no: storedNumbers.length.toString(), 
+        questionSetId: parseInt(questionSetId), 
+        no: parseInt(no), 
         questions: storedNumbers.join(", "),
         answer: parseInt(answer), 
+        level: level,
+        note: note,
+        image: imagePreview,
       };
 
       try {
@@ -118,12 +123,14 @@ import AdminHeader from "./AdminHeader";
         setNote("");
         setImage(null);
         setImagePreview(null);
+        setQuestionSetId("");
+        setNo("");
       } catch (error) {
         console.error("Error adding question:", error);
         alert("Failed to add question. Please try again.");
       }
     } else {
-      alert("Please enter a question and answer."); // Alert if fields are empty
+      alert("Please fill all fields."); // Alert if fields are empty
     }
   };
 
@@ -180,6 +187,17 @@ import AdminHeader from "./AdminHeader";
 
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
+                  <Form.Label className="fw-bold">Question Set ID:</Form.Label>
+                  <Form.Control type="number" placeholder="Enter Question Set ID" value={questionSetId} onChange={(e) => setQuestionSetId(e.target.value)} />
+                </Col>
+                <Col xs={12} md={6}>
+                  <Form.Label className="fw-bold">No:</Form.Label>
+                  <Form.Control type="number" placeholder="Enter No" value={no} onChange={(e) => setNo(e.target.value)} />
+                </Col>
+              </Row>
+
+              <Row className="g-4 mt-0">
+                <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
                     <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)} />
@@ -208,7 +226,7 @@ import AdminHeader from "./AdminHeader";
 
               <div className="d-flex justify-content-end mt-5 gap-3 flex-wrap fw-bold">
                 <Button variant="success" onClick={handleSubmitQuestion}>Submit</Button>
-                <Button variant="outline-secondary" onClick={() => { setStoredNumbers([]); setAnswer(""); setNote(""); }}>Reset</Button>
+                <Button variant="outline-secondary" onClick={() => { setStoredNumbers([]); setAnswer(""); setNote(""); setQuestionSetId(""); setNo(""); }}>Reset</Button>
                 <Button variant="danger" onClick={() => setStoredNumbers([])}>Cancel</Button>
               </div>
             </Card.Body>
@@ -229,10 +247,11 @@ import AdminHeader from "./AdminHeader";
                 <Table striped bordered hover responsive>
                   <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
                     <tr className="fw-bold">
-                      <th>#</th>
+                     {/* Changed from # to Question ID */}
+                      <th>#</th> {/* Added Question Set ID */}
                       <th>Level</th>
-                      <th>Title</th>
-                      <th>Description</th>
+                      <th>Question</th> {/* Changed from Title to Question */}
+                      <th>Answer</th> {/* Changed from Description to Answer */}
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -240,10 +259,11 @@ import AdminHeader from "./AdminHeader";
                     {filteredQuestions.length > 0 ? (
                       filteredQuestions.map((q, index) => (
                         <tr key={q.id}>
-                          <td>{index + 1}</td>
+                          {/* Display Question ID */}
+                          <td>{q.questionSetId}</td> {/* Display Question Set ID */}
                           <td>{q.level}</td>
-                          <td>{q.title}</td>
-                          <td>{q.description}</td>
+                          <td>{q.questions}</td> {/* Display Question */}
+                          <td>{q.answer}</td> {/* Display Answer */}
                           <td className="py-3">
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}><FaEdit /></Button>
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}><FaTrash /></Button>
@@ -252,7 +272,7 @@ import AdminHeader from "./AdminHeader";
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="5" className="text-center">No Data found for the selected level.</td>
+                        <td colSpan="6" className="text-center">No Data found for the selected level.</td>
                       </tr>
                     )}
                   </tbody>
@@ -274,12 +294,12 @@ import AdminHeader from "./AdminHeader";
                     </Form.Select>
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label className="fw-bold">Title:</Form.Label>
-                    <Form.Control type="text" value={selectedQuestion?.title || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, title: e.target.value })} />
+                    <Form.Label className="fw-bold">Question:</Form.Label>
+                    <Form.Control type="text" value={selectedQuestion?.questions || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, questions: e.target.value })} />
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label className="fw-bold">Description:</Form.Label>
-                    <Form.Control as="textarea" rows={2} value={selectedQuestion?.description || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, description: e.target.value })} />
+                    <Form.Label className="fw-bold">Answer:</Form.Label>
+                    <Form.Control as="textarea" rows={2} value={selectedQuestion?.answer || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, answer: e.target.value })} />
                   </Form.Group>
                   <div className="d-flex justify-content-end mt-3">
                     <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
