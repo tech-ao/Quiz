@@ -163,6 +163,16 @@ body {
     justify-content: space-around;
     z-index: 1;
 }
+
+
+.welcome-heading.at-top {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-20%);
+  width: 100%;
+ 
+}
 .abacus-main-content p{
    font-size: 25px;
   }
@@ -453,6 +463,13 @@ body {
     flex-direction: column; /* Stack elements vertically */
     height: auto;
   }
+  
+.welcome-heading.at-top {
+  font-size: 13px !important;
+  transform: translateX(-45%) !important;
+  top: 14%;
+ 
+}
   .abacus-game-icon-container{
     height: 30px;
     width: 30px;
