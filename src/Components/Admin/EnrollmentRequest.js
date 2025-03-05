@@ -30,6 +30,8 @@ const EnrollmentRequestList = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
+  
+
   useEffect(() => {
     const handleResize = () => {
       // Sidebar visible only for screens 1024px and above

@@ -22,18 +22,25 @@ const StudentSettings = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [studentId, setStudentId] = useState(null);
 
-  const [isSidebarVisible, setSidebarVisible] = useState(window.innerWidth >= 768);
+const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
 
   useEffect(() => {
     const handleResize = () => {
-      setSidebarVisible(window.innerWidth >= 768);
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+ 
+
   const toggleSidebar = () => {
-    setSidebarVisible((prev) => !prev);
+    setIsSidebarVisible((prev) => !prev);
   };
 
   const handleCloseEditStudent = () => {

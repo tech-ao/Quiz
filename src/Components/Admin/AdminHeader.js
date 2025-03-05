@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
 
   // State to detect mobile view (width < 768) and mobile/tablet view (width < 1024)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 992);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
