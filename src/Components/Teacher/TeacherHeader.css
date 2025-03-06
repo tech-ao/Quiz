@@ -173,8 +173,6 @@ button {
 @media (max-width: 768px) {
   .notification-popup {
     top: 80px;
-    right: -20px;
-    width: 220px;
     transform: translateY(15px);
   }
 }

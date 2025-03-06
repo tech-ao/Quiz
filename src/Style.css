@@ -127,7 +127,7 @@ body {
   position: fixed;
   top: 100px;
   left: 250px;
-  
+  overflow-y: hidden;
   width: calc(100% - 250px);
   height: calc(100vh - 100px);
   transition: left 0.3s ease-in-out, width 0.3s ease-in-out;

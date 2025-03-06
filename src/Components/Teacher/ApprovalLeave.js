@@ -15,19 +15,25 @@ import "./Approved.css";
 
 const ApprovalLeave = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
+    window.innerWidth >= 1024
   );
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
+const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
 
   const [leaveRequests, setLeaveRequests] = useState([
     { id: 1, name: "John Doe", date: "2025-02-22", reason: "Sick Leave", status: "Pending" },

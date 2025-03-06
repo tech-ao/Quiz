@@ -169,7 +169,7 @@ const ListTeacher = () => {
                     onChange={handleSearch}
                   />
                 </InputGroup>
-                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px" }}>
+                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>

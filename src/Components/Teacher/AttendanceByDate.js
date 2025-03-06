@@ -8,7 +8,7 @@ import { styled } from "@mui/material";
 
 const AttendanceDataPage = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
+    window.innerWidth >= 1024
   );
   const [classSelected, setClassSelected] = useState("Class 1");
   const [sectionSelected, setSectionSelected] = useState("A");
@@ -69,13 +69,20 @@ const AttendanceDataPage = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+ 
+   useEffect(() => {
+     const handleResize = () => {
+       // Sidebar visible only for screens 1024px and above
+       setIsSidebarVisible(window.innerWidth >= 1024);
+       setIsSmallScreen(window.innerWidth < 768);
+       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
+ 
 
   // Function to render chip with different colors for status
   const renderStatusChip = (status) => {
@@ -101,7 +108,7 @@ const AttendanceDataPage = () => {
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container ">
           <h2 className="fw-bold text-start mb-4" style={{ marginTop: "24px" }}>
             Attendance By Date
           </h2>
