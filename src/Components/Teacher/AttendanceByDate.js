@@ -8,7 +8,7 @@ import { styled } from "@mui/material";
 
 const AttendanceDataPage = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
+    window.innerWidth >= 1024
   );
   const [classSelected, setClassSelected] = useState("Class 1");
   const [sectionSelected, setSectionSelected] = useState("A");
@@ -69,13 +69,20 @@ const AttendanceDataPage = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+ 
+   useEffect(() => {
+     const handleResize = () => {
+       // Sidebar visible only for screens 1024px and above
+       setIsSidebarVisible(window.innerWidth >= 1024);
+       setIsSmallScreen(window.innerWidth < 768);
+       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
+ 
 
   // Function to render chip with different colors for status
   const renderStatusChip = (status) => {
@@ -101,14 +108,17 @@ const AttendanceDataPage = () => {
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100">
+        <Container className="main-container ">
           <h2 className="fw-bold text-start mb-4" style={{ marginTop: "24px" }}>
             Attendance By Date
           </h2>
           <div className="sub-container">
             {/* Class, Section, and Attendance Date on Same Row */}
-            <Row className="filter-section mb-4" style={{ width: "98%" }}>
-              <Col md={4}>
+            <Row
+              className="filter-section mb-4 d-flex align-items-center"
+              style={{ width: "98%" }}
+            >
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Level *</Form.Label>
                   <Form.Control
@@ -126,7 +136,7 @@ const AttendanceDataPage = () => {
                 </Form.Group>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <Form.Group>
                   <Form.Label>Attendance Date *</Form.Label>
                   <Form.Control
@@ -136,22 +146,19 @@ const AttendanceDataPage = () => {
                   />
                 </Form.Group>
               </Col>
-            </Row>
 
-            {/* Search Button */}
-            <div
-              className="filter-actions d-flex justify-content-end mb-6"
-              style={{ width: "95%" }}
-            >
-              <Button
-                variant="success"
-                className="btn-search"
-                onClick={() => console.log("Search clicked")}
-                style={{ backgroundColor: "green" }}
-              >
-                Search
-              </Button>
-            </div>
+              {/* Search Button in Same Line */}
+              <Col md={2} className="d-flex align-items-end">
+                <Button
+                  variant="success"
+                  className="btn-search"
+                  onClick={() => console.log("Search clicked")}
+                  style={{ backgroundColor: "green", height: "38px", marginTop:"30px" }}
+                >
+                  Search
+                </Button>
+              </Col>
+            </Row>
 
             {/* Attendance Table */}
             <div className="attendance-list" style={{ width: "98%" }}>

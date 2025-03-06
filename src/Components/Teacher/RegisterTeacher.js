@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../../redux/Services/Enum";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
-import './RegisterTeacher.css'
+import './RegisterTeacher.css';
+import { fetchGenders } from "../../redux/Services/Enum"; // Added import for fetchGenders
+
 const RegisterTeacher = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -13,25 +14,33 @@ const RegisterTeacher = () => {
     gender: "",
     phoneNumber: "",
     email: "",
-    country: "",
-    classMode: "",
-    qualification: "",
-    experience: "",
+    permanentAddress: "",
+    currentAddress: "",
+    nationality: "",
+    candidatePhoto: null,
+    photoId: null,
+    highestQualification: "",
+    institutionsAttended: "",
+    degreesCertifications: "",
+    subjectSpecialization: "",
+    graduationCertificate: null,
+    employer: "",
+    jobTitle: "",
+    experienceCertificate: null,
     teacherResume: null,
-    teacherIdProof: null,
   });
 
   const [genders, setGenders] = useState([]);
-  const [countries, setCountries] = useState([]);
-  const [classModes, setClassModes] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dispatch = useDispatch();
 
+  // Handle input changes, including checkbox if needed
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, type, value, checked } = e.target;
+    const fieldValue = type === "checkbox" ? checked : value;
+    setFormData({ ...formData, [name]: fieldValue });
   };
 
   const handleFileChange = (e) => {
@@ -42,14 +51,9 @@ const RegisterTeacher = () => {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        const countriesData = await fetchCountries();
-        setCountries(countriesData);
-
+        // Assuming a fetchGenders function exists.
         const gendersData = await fetchGenders();
         setGenders(gendersData);
-
-        const classModesData = await fetchStudentMode();
-        setClassModes(classModesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
         toast.error("Failed to load form data.");
@@ -62,17 +66,48 @@ const RegisterTeacher = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required.";
+    // Personal Information validations
+    if (!formData.fullName.trim()) newErrors.fullName = "Name is required.";
     if (!formData.dob) newErrors.dob = "Date of Birth is required.";
     if (!formData.gender) newErrors.gender = "Gender is required.";
-    if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = "Phone Number must be 10 digits.";
-    if (!formData.email.match(/^\S+@\S+\.\S+$/)) newErrors.email = "Invalid Email Address.";
-    if (!formData.country.trim()) newErrors.country = "Nationality is required.";
-    if (!formData.classMode) newErrors.classMode = "Class Mode is required.";
-    if (!formData.qualification.trim()) newErrors.qualification = "Qualification is required.";
-    if (!formData.experience.trim()) newErrors.experience = "Experience is required.";
-    if (!formData.teacherResume) newErrors.teacherResume = "Teacher Resume is required.";
-    if (!formData.teacherIdProof) newErrors.teacherIdProof = "Teacher ID Proof is required.";
+    if (!formData.phoneNumber.match(/^\d{10}$/))
+      newErrors.phoneNumber = "Phone Number must be 10 digits.";
+    if (!formData.email.match(/^\S+@\S+\.\S+$/))
+      newErrors.email = "Invalid Email Address.";
+    if (!formData.permanentAddress.trim())
+      newErrors.permanentAddress = "Permanent Address is required.";
+    if (!formData.currentAddress.trim())
+      newErrors.currentAddress = "Current Residential Address is required.";
+    if (!formData.nationality.trim())
+      newErrors.nationality = "Nationality is required.";
+    if (!formData.candidatePhoto)
+      newErrors.candidatePhoto = "Candidate Photo is required.";
+    if (!formData.photoId)
+      newErrors.photoId = "Photo ID is required.";
+
+    // Educational Qualifications validations
+    if (!formData.highestQualification.trim())
+      newErrors.highestQualification = "Highest Qualification is required.";
+    if (!formData.institutionsAttended.trim())
+      newErrors.institutionsAttended = "Institution(s) Attended is required.";
+    if (!formData.degreesCertifications.trim())
+      newErrors.degreesCertifications = "Degrees/Certifications are required.";
+    if (!formData.subjectSpecialization.trim())
+      newErrors.subjectSpecialization = "Subject Specialization is required.";
+    if (!formData.graduationCertificate)
+      newErrors.graduationCertificate = "Graduation Certificate is required.";
+
+    // Professional Experience validations
+    if (!formData.employer.trim())
+      newErrors.employer = "Current/Previous Employer is required.";
+    if (!formData.jobTitle.trim())
+      newErrors.jobTitle = "Job Title is required.";
+    if (!formData.experienceCertificate)
+      newErrors.experienceCertificate = "Experience Certificate is required.";
+
+    // Resume upload validation
+    if (!formData.teacherResume)
+      newErrors.teacherResume = "Resume is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -99,10 +134,12 @@ const RegisterTeacher = () => {
     <Container className="register-teacher-container">
       <h3 className="mb-4">Register Teacher</h3>
       <Form noValidate>
+        {/* Personal Information */}
+        <h5 className="mb-3">Personal Information</h5>
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="fullName">
-              <Form.Label>Full Name</Form.Label>
+              <Form.Label>Name</Form.Label>
               <Form.Control
                 type="text"
                 name="fullName"
@@ -134,7 +171,6 @@ const RegisterTeacher = () => {
           </Col>
         </Row>
 
-        {/* Gender */}
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="gender">
@@ -158,8 +194,6 @@ const RegisterTeacher = () => {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-
-          {/* Phone Number */}
           <Col md={6}>
             <Form.Group controlId="phoneNumber">
               <Form.Label>Phone Number</Form.Label>
@@ -178,7 +212,6 @@ const RegisterTeacher = () => {
           </Col>
         </Row>
 
-        {/* Email */}
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="email">
@@ -197,104 +230,249 @@ const RegisterTeacher = () => {
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group controlId="country">
-              <Form.Label>Country</Form.Label>
-              <Form.Select
-                name="country"
-                value={formData.country}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select Country</option>
-                {countries.map((country, index) => (
-                  <option key={index} value={country.item1}>
-                    {country.item2}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          
-
-        </Row>
-
-        {/* Current Residential Address */}
-        <Row className="mb-3">
-
-         
-          {/* Class Mode */}
-          <Col md={6}>
-            <Form.Group controlId="classMode">
-              <Form.Label>Class Mode</Form.Label>
-              <Form.Select
-                name="classMode"
-                value={formData.classMode}
-                onChange={handleInputChange}
-                isInvalid={!!errors.classMode}
-                required
-              >
-                <option value="">Select Class Mode</option>
-                {classModes.map((mode, index) => (
-                  <option key={index} value={mode.item1}>
-                    {mode.item2}
-                  </option>
-                ))}
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                {errors.classMode}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-        </Row>
-
-       
-        <Row className="mb-3">
-          <Col md={6}>
-            <Form.Group controlId="qualification">
-              <Form.Label>Qualification</Form.Label>
+            <Form.Group controlId="nationality">
+              <Form.Label>Nationality</Form.Label>
               <Form.Control
                 type="text"
-                name="qualification"
-                value={formData.qualification}
+                name="nationality"
+                value={formData.nationality}
                 onChange={handleInputChange}
-                isInvalid={!!errors.qualification}
+                isInvalid={!!errors.nationality}
                 required
               />
               <Form.Control.Feedback type="invalid">
-                {errors.qualification}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
-
-          {/* Experience */}
-          <Col md={6}>
-            <Form.Group controlId="experience">
-              <Form.Label>Experience</Form.Label>
-              <Form.Control
-                type="text"
-                name="experience"
-                value={formData.experience}
-                onChange={handleInputChange}
-                isInvalid={!!errors.experience}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.experience}
+                {errors.nationality}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
 
-        {/* File Uploads */}
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="permanentAddress">
+              <Form.Label>Permanent Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="permanentAddress"
+                value={formData.permanentAddress}
+                onChange={handleInputChange}
+                isInvalid={!!errors.permanentAddress}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.permanentAddress}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="currentAddress">
+              <Form.Label>Current Residential Address</Form.Label>
+              <Form.Control
+                type="text"
+                name="currentAddress"
+                value={formData.currentAddress}
+                onChange={handleInputChange}
+                isInvalid={!!errors.currentAddress}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.currentAddress}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="candidatePhoto">
+              <Form.Label>Candidate Photo</Form.Label>
+              <Form.Control
+                type="file"
+                name="candidatePhoto"
+                onChange={handleFileChange}
+                isInvalid={!!errors.candidatePhoto}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.candidatePhoto}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="photoId">
+              <Form.Label>Photo ID</Form.Label>
+              <Form.Control
+                type="file"
+                name="photoId"
+                onChange={handleFileChange}
+                isInvalid={!!errors.photoId}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.photoId}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Educational Qualifications */}
+        <h5 className="mb-3">Educational Qualifications</h5>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="highestQualification">
+              <Form.Label>Highest Level of Qualification</Form.Label>
+              <Form.Control
+                type="text"
+                name="highestQualification"
+                value={formData.highestQualification}
+                onChange={handleInputChange}
+                isInvalid={!!errors.highestQualification}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.highestQualification}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="institutionsAttended">
+              <Form.Label>Institution(s) Attended</Form.Label>
+              <Form.Control
+                type="text"
+                name="institutionsAttended"
+                value={formData.institutionsAttended}
+                onChange={handleInputChange}
+                isInvalid={!!errors.institutionsAttended}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.institutionsAttended}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="degreesCertifications">
+              <Form.Label>Degrees/Certifications</Form.Label>
+              <Form.Control
+                type="text"
+                name="degreesCertifications"
+                value={formData.degreesCertifications}
+                onChange={handleInputChange}
+                isInvalid={!!errors.degreesCertifications}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.degreesCertifications}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="subjectSpecialization">
+              <Form.Label>Subject Specialization</Form.Label>
+              <Form.Control
+                type="text"
+                name="subjectSpecialization"
+                value={formData.subjectSpecialization}
+                onChange={handleInputChange}
+                isInvalid={!!errors.subjectSpecialization}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.subjectSpecialization}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="graduationCertificate">
+              <Form.Label>Year of Graduation (Upload Certificate)</Form.Label>
+              <Form.Control
+                type="file"
+                name="graduationCertificate"
+                onChange={handleFileChange}
+                isInvalid={!!errors.graduationCertificate}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.graduationCertificate}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Professional Experience */}
+        <h5 className="mb-3">Professional Experience</h5>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="employer">
+              <Form.Label>Current/Previous Employer</Form.Label>
+              <Form.Control
+                type="text"
+                name="employer"
+                value={formData.employer}
+                onChange={handleInputChange}
+                isInvalid={!!errors.employer}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.employer}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="jobTitle">
+              <Form.Label>Job Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="jobTitle"
+                value={formData.jobTitle}
+                onChange={handleInputChange}
+                isInvalid={!!errors.jobTitle}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.jobTitle}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="experienceCertificate">
+              <Form.Label>Year of Experience (Upload Certificate)</Form.Label>
+              <Form.Control
+                type="file"
+                name="experienceCertificate"
+                onChange={handleFileChange}
+                isInvalid={!!errors.experienceCertificate}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.experienceCertificate}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Resume Upload */}
+        <h5 className="mb-3">Resume</h5>
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="teacherResume">
-              <Form.Label>Teacher Resume</Form.Label>
+              <Form.Label>Upload Resume</Form.Label>
               <Form.Control
                 type="file"
                 name="teacherResume"
                 onChange={handleFileChange}
                 isInvalid={!!errors.teacherResume}
+                accept="application/pdf, image/*"
                 required
               />
               <Form.Control.Feedback type="invalid">
@@ -302,26 +480,8 @@ const RegisterTeacher = () => {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-
-          {/* Teacher ID Proof */}
-          <Col md={6}>
-            <Form.Group controlId="teacherIdProof">
-              <Form.Label>Teacher ID Proof</Form.Label>
-              <Form.Control
-                type="file"
-                name="teacherIdProof"
-                onChange={handleFileChange}
-                isInvalid={!!errors.teacherIdProof}
-                required
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.teacherIdProof}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
         </Row>
 
-        {/* Submit Button */}
         <Button variant="primary" onClick={handleRegister} disabled={isSubmitting}>
           Register
         </Button>

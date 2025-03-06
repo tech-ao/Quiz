@@ -28,8 +28,10 @@ const getStatusColor = (status) => {
 };
 
 const StudentList = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  // For tablet view (768px to 1023px), sidebar is hidden by default (only shown for widths >=1024px)
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
 
   const toggleSidebar = () => {
@@ -38,8 +40,10 @@ const StudentList = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      // Show sidebar only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
       setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -174,8 +178,8 @@ const StudentList = () => {
                       onChange={handleSearch}
                     />
                     <Dropdown className="filter-icon">
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{backgroundColor:"transparent" }}>
-                      <FaFilter style={{ fontSize: "30px", }} />
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ backgroundColor: "transparent" }}>
+                        <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="dropdown-menu-custom">
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>Clear Filter</Dropdown.Item>
@@ -190,7 +194,7 @@ const StudentList = () => {
                       variant="outline-success"
                       className="add-student-btn"
                       onClick={handleOpenAddStudent}
-                     
+                      style={{width:"250px"}}
                     >
                       <i className="bi bi-person-plus me-2"></i> Add Student
                     </Button>
@@ -199,10 +203,10 @@ const StudentList = () => {
               </>
             ) : (
               <Row>
-                <Col md={6}>
+                <Col xs={12} sm={12} md={isTablet ? 4 : 6}>
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
-                <Col md={6} className="d-flex align-items-center">
+                <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
                   <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
@@ -210,8 +214,8 @@ const StudentList = () => {
                       onChange={handleSearch}
                     />
                     <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px",backgroundColor:"transparent" }}>
-                        <FaFilter style={{ fontSize: "30px" }}  />
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px", backgroundColor: "transparent" }}>
+                        <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>
@@ -225,7 +229,7 @@ const StudentList = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}>
+                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
                     <i className="bi bi-person-plus me-2"></i> Add Student
                   </Button>
                 </Col>
@@ -270,7 +274,6 @@ const StudentList = () => {
                           <td>{student.phoneNumber}</td>
                           <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                           <td>{student.gradeName}</td>
-                        
                           <td>
                             <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
                               {student.statusName}
@@ -310,26 +313,25 @@ const StudentList = () => {
                   )}
                 </tbody>
               </Table>
-             
             </div>
             <div className="d-flex justify-content-center mt-4">
-                <ReactPaginate
-                  pageCount={totalPages}
-                  pageRangeDisplayed={10}
-                  marginPagesDisplayed={2}
-                  onPageChange={(e) => handlePageChange(e.selected + 1)}
-                  containerClassName="pagination"
-                  activeClassName="active"
-                  pageClassName="page-item"
-                  pageLinkClassName="page-link"
-                  previousLabel="&laquo;"
-                  nextLabel="&raquo;"
-                  previousClassName="page-item"
-                  nextClassName="page-item"
-                  previousLinkClassName="page-link"
-                  nextLinkClassName="page-link"
-                />
-              </div>
+              <ReactPaginate
+                pageCount={totalPages}
+                pageRangeDisplayed={10}
+                marginPagesDisplayed={2}
+                onPageChange={(e) => handlePageChange(e.selected + 1)}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousLabel="&laquo;"
+                nextLabel="&raquo;"
+                previousClassName="page-item"
+                nextClassName="page-item"
+                previousLinkClassName="page-link"
+                nextLinkClassName="page-link"
+              />
+            </div>
           </div>
         </Container>
       </div>

@@ -44,7 +44,7 @@
 }
 
 /* Media Queries for Small Screens */
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .dashboard-calendar-wrapper {
     flex-direction: column;
   }
@@ -207,7 +207,7 @@
   .dashboard-card,
   .calendar-card,
   .quiz-section {
-    width: 90% !important;
+    width: 100% !important;
     margin-bottom: 1rem !important;
   }
   .main-container {

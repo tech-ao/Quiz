@@ -72,3 +72,84 @@
     width: 100% !important;
   }
 }
+/* Sticky Header */
+.header-container {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background-color: white !important;
+  padding: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  height: 80px !important;
+  width: 100% !important;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Remove space between .main-container and .sub-container */
+.main-container {
+  padding: 0px !important;
+  margin: 0px !important;
+  overflow: hidden !important;
+}
+
+/* Ensure .sub-container starts from top: 0 */
+.sub-container {
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+  position: relative !important;
+  width: 100% !important;
+}
+
+/* Title */
+.sticky-title {
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+}
+
+/* Search Box */
+.sticky-search {
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: 100% !important;
+}
+
+/* Search Bar & Button */
+.search-box {
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.search-input {
+  height: 38px !important;
+  max-width: 250px !important;
+}
+
+.add-teacher-btn {
+  min-width: 150px !important;
+  height: 38px !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column !important;
+    height: auto !important;
+  }
+
+  .sticky-search {
+    justify-content: flex-start !important;
+  }
+
+  .search-box {
+    width: 100% !important;
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .main-container {
+    margin-left: 200px !important;
+  }
+}

@@ -14,7 +14,6 @@ import { toast } from 'react-toastify';
 const ListTeacher = () => {
   const dispatch = useDispatch();
 
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [teacherData, setTeacherData] = useState(null); // State to hold selected teacher data
@@ -23,7 +22,10 @@ const ListTeacher = () => {
   const [showAddTeacher, setShowAddTeacher] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTeacherId, setSelectedTeacherId] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  
 
   const TeachersPerPage = 10;
 
@@ -41,14 +43,15 @@ const ListTeacher = () => {
   }, [dispatch, currentPage]);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+     const handleResize = () => {
+       // Sidebar visible only for screens 1024px and above
+       setIsSidebarVisible(window.innerWidth >= 1024);
+       setIsSmallScreen(window.innerWidth < 768);
+       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -155,18 +158,18 @@ const ListTeacher = () => {
         <Container className="main-container">
           <div className="sub-container">
             <Row className="align-items-center mt-2">
-              <Col md={6}>
+              <Col  xs={12} sm={12} md={isTablet ? 4 : 6}>
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
-              <Col md={6} className="d-flex" style={{ marginTop: isMobile ? "10px" : "30px" }}>
-                <InputGroup style={{ maxWidth: isMobile ? "55%" : "400px", marginRight: '35px' }}>
+              <Col  xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex" style={{ marginTop: isSmallScreen ? "10px" : "30px" }}>
+                <InputGroup style={{ maxWidth: isSmallScreen ? "55%" : "400px", marginRight: '35px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
                   />
                 </InputGroup>
-                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isMobile ? "45%" : "200px" }}>
+                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>

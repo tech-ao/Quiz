@@ -20,7 +20,9 @@ const teachers = [
 ];
 
 const OnlineClass = () => {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [newClass, setNewClass] = useState({
     name: '',
     date: '',
@@ -32,23 +34,18 @@ const OnlineClass = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 768) {
-        setSidebarVisible(true); // Show sidebar by default on desktop
-      } else {
-        setSidebarVisible(false); // Hide sidebar by default on mobile
-      }
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
-
     window.addEventListener("resize", handleResize);
-    handleResize(); // Call once to adjust initial state
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Corrected toggleSidebar function using setIsSidebarVisible
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible(!isSidebarVisible);
   };
 
   const handleChange = (e) => {
@@ -72,13 +69,11 @@ const OnlineClass = () => {
       <div className="d-flex">
         {isSidebarVisible && <SidePannel />}
         <Container className="main-container ">
-        <div className="online-sticky-header">
-        <h2>Schedule Class</h2>
-        </div>
-
+          <div className="online-sticky-header">
+            <h2>Schedule Class</h2>
+          </div>
           <div className="sub-container">
             {/* Teacher's New Class Schedule Form */}
-           
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col md={6} className="mb-3">
@@ -137,7 +132,6 @@ const OnlineClass = () => {
                   </Form.Control>
                 </Col>
               </Row>
-
               {/* Teacher Name Selection (only visible if Teacher is selected) */}
               {newClass.userType === 'Teacher' && (
                 <Row>
@@ -159,7 +153,6 @@ const OnlineClass = () => {
                   </Col>
                 </Row>
               )}
-
               <Button variant="success" type="submit">
                 Schedule Class
               </Button>
