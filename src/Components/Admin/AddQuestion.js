@@ -142,9 +142,31 @@ import AdminHeader from "./AdminHeader";
     setImage(null);
     setImagePreview(null);
   };
-  const handleDeleteQuestion = (id) => {
-    const updatedQuestions = questions.filter((q) => q.id !== id);
-    setQuestions(updatedQuestions);
+
+  const handleDeleteQuestion = async (id) => {
+    try {
+      const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/DeleteQuestion/${id}`, {
+        method: "DELETE",
+        headers: {
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete question");
+      }
+
+      const result = await response.json();
+      console.log("Question deleted successfully:", result);
+      
+      // Update local state
+      const updatedQuestions = questions.filter((q) => q.id !== id);
+      setQuestions(updatedQuestions);
+    } catch (error) {
+      console.error("Error deleting question:", error);
+      alert("Failed to delete question. Please try again.");
+    }
   };
 
   const handleEditQuestion = (question) => {
@@ -160,13 +182,36 @@ import AdminHeader from "./AdminHeader";
     }
   };
 
-  const handleSaveEdit = () => {
+  const handleSaveEdit = async () => {
     if (selectedQuestion) {
-      const updatedQuestions = questions.map((q) =>
-        q.id === selectedQuestion.id ? selectedQuestion : q
-      );
-      setQuestions(updatedQuestions);
-      setShowModal(false);
+      try {
+        const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/UpdateQuestion/${selectedQuestion.id}`, {
+          method: "PUT",
+          headers: {
+            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "Content-Type": "application/json",
+            AccessToken: "123",
+          },
+          body: JSON.stringify(selectedQuestion),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update question");
+        }
+
+        const result = await response.json();
+        console.log("Question updated successfully:", result);
+
+        // Update local state
+        const updatedQuestions = questions.map((q) =>
+          q.id === selectedQuestion.id ? selectedQuestion : q
+        );
+        setQuestions(updatedQuestions);
+        setShowModal(false);
+      } catch (error) {
+        console.error("Error updating question:", error);
+        alert("Failed to update question. Please try again.");
+      }
     }
   };
 

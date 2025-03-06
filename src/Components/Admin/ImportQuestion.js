@@ -14,7 +14,10 @@ import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
 const ImportQuestion = () => {
+  const [csvFile, setCsvFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
 
+  
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -32,92 +35,105 @@ const ImportQuestion = () => {
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
       }, []);
-  
-    
-    
-  
+
+  const handleFileChange = (event) => {
+    setCsvFile(event.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!csvFile) {
+      alert("Please select a CSV file to upload.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const fileContent = e.target.result;
+      const questionBase64 = btoa(fileContent);
+
+      const requestBody = {
+        questionBase64: questionBase64,
+        title: "Your Title Here", 
+        level: 1, 
+        description: "Your Description Here", 
+      };
+
+      try {
+        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/ImportQuestion", {
+          method: "POST",
+          headers: {
+            accept: "text/plain",
+            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to upload questions");
+        }
+
+        const result = await response.json();
+        setUploadStatus("Questions uploaded successfully!");
+        console.log("Upload result:", result);
+      } catch (error) {
+        console.error("Error uploading questions:", error);
+        setUploadStatus("Failed to upload questions. Please try again.");
+      }
+    };
+
+    reader.readAsText(csvFile);
+  };
+
   return (
     <div>
-  <AdminHeader toggleSidebar={toggleSidebar} />
-  <div className="d-flex">
-    {isSidebarVisible && <Sidebar />}
-    <Container className="main-container" >
-      <div className="sub-container" >
-      <main className="import-questions-container">
-      <div class="sticky-head">
-      <h2 className="title">
-        Import Questions <span className="subtitle">upload using CSV file</span>
-      </h2>
-      </div>
-      <div className="Content-box">
-      <div className="upload-box">
-        <label htmlFor="csvFile">CSV Questions file</label>
-        <input type="file" id="csvFile" />
-        <div className="button-group">
-          <button className="upload-btn">  <FaFileUpload />Upload CSV file</button>
-          <button className="download-btn"> <FaDownload /> Download Sample File</button>
-        </div>
-      </div>
+      <AdminHeader toggleSidebar={toggleSidebar} />
+      <div className="d-flex">
+        {isSidebarVisible && <Sidebar />}
+        <Container className="main-container">
+          <div className="sub-container">
+            <main className="import-questions-container">
+              <div className="sticky-head">
+                <h2 className="title">
+                  Import Questions <span className="subtitle">upload using CSV file</span>
+                </h2>
+              </div>
+              <div className="Content-box">
+                <div className="upload-box">
+                  <label htmlFor="csvFile">CSV Questions file</label>
+                  <input type="file" id="csvFile" accept=".csv" onChange={handleFileChange} />
+                  <div className="button-group">
+                    <button className="upload-btn" onClick={handleUpload}>Upload CSV file</button>
+                    <button className="download-btn">📥 Download Sample File</button>
+                  </div>
+                </div>
 
-      <Row className=" ms-2 align-items-center">
-  {/* Level Select */}
-  <Col xs={12} md={4}>
-    <Form.Label className="fw-bold ">Select Level:</Form.Label>
-    <Form.Select value="" className="w-60">
-      {[...Array(6).keys()].map((i) => (
-        <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>
-      ))}
-    </Form.Select>
-  </Col>
+                {uploadStatus && <p>{uploadStatus}</p>}
 
-  {/* Title Input */}
-  <Col xs={12} md={4}>
-    <Form.Label className="fw-bold">Title:</Form.Label>
-    <Form.Control
-      type="number"
-      placeholder="Enter the answer"
-      value=""
-      className="w-60"
-    />
-  </Col>
-
-  {/* Description Textarea */}
-  <Col xs={12} md={4}>
-    <Form.Label className="fw-bold">Description:</Form.Label>
-    <Form.Control
-      as="textarea"
-      rows={2}
-      placeholder="Add a note"
-      value=""
-      className="w-60"
-    />
-  </Col>
-</Row>
-
-      <div className="instructions">
-        <h3>How to convert CSV into Unicode (For Non-English)</h3>
-        <ol>
-          <li>Fill the data in an Excel sheet with the given format.</li>
-          <li>
-            Save the file as <strong>Unicode Text (*.txt)</strong>.
-          </li>
-          <li>Open the .txt file in Notepad.</li>
-          <li>Replace Tab space with a comma ( , ).</li>
-          <li>
-            Save the file again with a .txt extension and change encoding to{" "}
-            <strong>UTF-8</strong>.
-          </li>
-          <li>Change the file extension from .txt to .csv.</li>
-          <li>Now, use this file to import questions.</li>
-        </ol>
-        <a href="#" className="more-info">For more info</a>
+                <div className="instructions">
+                  <h3>How to convert CSV into Unicode (For Non-English)</h3>
+                  <ol>
+                    <li>Fill the data in an Excel sheet with the given format.</li>
+                    <li>
+                      Save the file as <strong>Unicode Text (*.txt)</strong>.
+                    </li>
+                    <li>Open the .txt file in Notepad.</li>
+                    <li>Replace Tab space with a comma ( , ).</li>
+                    <li>
+                      Save the file again with a .txt extension and change encoding to{" "}
+                      <strong>UTF-8</strong>.
+                    </li>
+                    <li>Change the file extension from .txt to .csv.</li>
+                    <li>Now, use this file to import questions.</li>
+                  </ol>
+                  <a href="#" className="more-info ">For more info</a>
+                </div>
+              </div>
+            </main>
+          </div>
+        </Container>
       </div>
-      </div>
-    </main>
     </div>
-    </Container>
-  </div>
-</div>
   );
 };
 
