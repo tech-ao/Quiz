@@ -1,6 +1,6 @@
 // AbacusQuestion.js
 import React, { useState } from "react";
-import "./AbacusQuestion.css";
+
 
 export const questionsData = {
   0: {
@@ -8,16 +8,16 @@ export const questionsData = {
     correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
   1: {
-    beadCounts: [2, 4, 6, 8, 0, 2, 4, 6, 8, 0],
-    correctAnswers: ["2", "4", "6", "8", "0", "2", "4", "6", "8", "0"],
+    beadCounts: [2, 4, 6, 7, 0, 2, 4, 6, 7, 0],
+    correctAnswers: ["2", "4", "6", "7", "0", "2", "4", "6", "7", "0"],
   },
   2: {
-    beadCounts: [3, 6, 4, 2, 5, 8, 1, 4, 2, 3],
-    correctAnswers: ["3", "6", "4", "2", "5", "8", "1", "4", "2", "3"],
+    beadCounts: [3, 6, 4, 2, 5, 7, 1, 4, 2, 3],
+    correctAnswers: ["3", "6", "4", "2", "5", "7", "1", "4", "2", "3"],
   },
   3: {
-    beadCounts: [4, 8, 2, 6, 2, 4, 2, 3, 6, 4],
-    correctAnswers: ["4", "8", "2", "6", "2", "4", "2", "3", "6", "4"],
+    beadCounts: [4, 7, 2, 6, 2, 4, 2, 3, 6, 4],
+    correctAnswers: ["4", "7", "2", "6", "2", "4", "2", "3", "6", "4"],
   },
   4: {
     beadCounts: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
@@ -36,49 +36,15 @@ export const Alphabhets = {
   4: "D",
   5: "E",
 };
-export const questions = {
-    A: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    B: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    C: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    D: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    E: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-  };
-  
+
+export const questions = [
+  "Write The Beads Value",
+  "Draw a Beads For the Given Number",
+  "Write The Value For the Given Beads",
+  "Show the Beads Value",
+  "Addition and Subtraction",
+  "Practice Question",
+];
 
 export const useAbacusQuestion = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
