@@ -3,51 +3,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
 }
-.number-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width:50px;
-    height:50px;
-    border: 2px solid #000;
-    border-radius: 5px;
-    font-size: 18px;
-    font-weight: bold;
-    background-color: #f0f0f0;
-    margin: 5px;
-  }
-.abacus-column {
-    display: flex;
-    flex-direction: column; /* Beads start from the bottom */
-    align-items: center;
-    justify-content: flex-start;
-    width: 50px;
-    height: 130px;
-    border: 2px solid black;
-    margin: 5px;
-    padding: 7px;
-    position: relative;
-    background-color: white;
-  }
-  .bead {
-    width: 13px;
-    height: 13px;
-    background-color: brown;
-    border-radius: 50%;
-    margin-top: 1px;
-  }
-  .stick {
-    width: 40px;
-    height: 2px;
-    background-color: black;
-    position: absolute;
-    top: 10px;
-  }
-  .question-number {
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 5px; /* Adjust spacing as needed */
-  }
+
 .abacus-app-container {
     display: flex;
     height: 100vh;
@@ -55,6 +11,91 @@ body {
     flex-direction: column;
 }
   
+
+
+/* AbacusQuestion.css */
+.number-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border: 2px solid #000;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  margin: 5px;
+}
+
+.abacus {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Beads start from the bottom */
+  width: 50px;
+  height: 130px;
+  border: 2px solid black;
+  margin: 5px;
+  padding: 7px;
+  position: relative;
+  background-color: white;
+}
+
+.bead {
+  width: 13px;
+  height: 13px;
+  background-color: brown;
+  border-radius: 50%;
+  margin-top: 1px;
+  position: relative;
+  top: 11%;
+}
+
+.stick {
+  width: 30px;
+  height: 2px;
+  background-color: black;
+  position: absolute;
+  top: 15%;
+}
+
+.question-number {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px; /* Adjust spacing as needed */
+}
+
+.answer-input {
+  width: 50px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.question-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.questio-wrapp {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.submit-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
 .abacus-header {
     background-color: #4caf50;
     color: white;
@@ -385,12 +426,12 @@ body {
 /* Sidebar Styling */
 /* Sidebar Fix */
 .abacus-sidebar {
-  position: absolute; /* Keeps the sidebar floating */
+  position: fixed; /* Keeps the sidebar floating */
   top:73px;
   left: 0;
-  width: 180px;
+  width: 17%;
   height: 100vh;
-  background-color: rgb(163, 158, 158);
+  background-color: #e8ffed;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
   transform: translateX(-100%); /* Initially hidden */
   transition: transform 0.3s ease-in-out;
@@ -418,16 +459,34 @@ body {
     width: 60% !important;
   }
   .abacus-column {
-    width: 30px; /* Reduce width for mobile */
-    height: 80px; /* Reduce height for mobile */
-    margin-left: 80px !important;
-  }
-  .answer-input{
-    margin-left: 20px !important;
-  }
-  .question-number{
-    margin-left: 30px !important;
-  }
+  width: 30px;
+  height: 80px;
+}
+
+.bead {
+  width: 8px;
+  height: 8px;
+}
+
+.stick {
+  width: 25px;
+}
+
+.number-box {
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.question-number {
+  font-size: 10px;
+}
+
+.answer-input {
+  width: 30px;
+  font-size: 11px;
+}
+ 
 }
 
 /* Medium Phones (375px - 425px) */
@@ -458,6 +517,36 @@ body {
 
 
 @media (max-width: 768px) {
+
+  .abacus-column {
+    width: 30px;
+    height: 80px;
+}
+
+.bead {
+    width: 8px;
+    height: 8px;
+}
+
+.stick {
+    width: 20px;
+}
+
+.number-box {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+}
+
+.question-number {
+    font-size: 10px;
+}
+
+.answer-input {
+    width: 30px;
+    font-size: 11px;
+}
+
   /* Adjust container layout for mobile */
   .abacus-app-container {
     flex-direction: column; /* Stack elements vertically */
@@ -667,37 +756,7 @@ body {
     padding: 5px;
   }
 
-  /* Adjust Abacus Kit for Mobile */
-  .abacus-column {
-    width: 30px; /* Reduce width for mobile */
-    height: 80px; /* Reduce height for mobile */
-    margin-left: 130px;
-  }
-  .bead {
-    width: 8px; /* Reduce bead size for mobile */
-    height: 8px;
-  }
-  .stick {
-    width: 25px; /* Reduce stick width for mobile */
-  }
-
-  .number-box {
-    width: 30px; /* Reduce number box size for mobile */
-    height: 30px;
-    font-size: 12px;
-
-  }
-
-  .question-number {
-    font-size: 10px; /* Reduce question number size for mobile */
-    margin-left: 58px;
-  }
-
-  .answer-input {
-    width: 30px; /* Reduce input width for mobile */
-    font-size: 11px;
-    margin-left: 50px;
-  }
+  
 
   .submit-button {
     width: 80%; /* Full width for mobile */

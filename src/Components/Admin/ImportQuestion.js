@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { FaFileUpload, FaDownload } from "react-icons/fa";
 import {
   Container,
   Row,
@@ -53,10 +54,45 @@ const ImportQuestion = () => {
         <label htmlFor="csvFile">CSV Questions file</label>
         <input type="file" id="csvFile" />
         <div className="button-group">
-          <button className="upload-btn">Upload CSV file</button>
-          <button className="download-btn">📥 Download Sample File</button>
+          <button className="upload-btn">  <FaFileUpload />Upload CSV file</button>
+          <button className="download-btn"> <FaDownload /> Download Sample File</button>
         </div>
       </div>
+
+      <Row className=" ms-2 align-items-center">
+  {/* Level Select */}
+  <Col xs={12} md={4}>
+    <Form.Label className="fw-bold ">Select Level:</Form.Label>
+    <Form.Select value="" className="w-60">
+      {[...Array(6).keys()].map((i) => (
+        <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>
+      ))}
+    </Form.Select>
+  </Col>
+
+  {/* Title Input */}
+  <Col xs={12} md={4}>
+    <Form.Label className="fw-bold">Title:</Form.Label>
+    <Form.Control
+      type="number"
+      placeholder="Enter the answer"
+      value=""
+      className="w-60"
+    />
+  </Col>
+
+  {/* Description Textarea */}
+  <Col xs={12} md={4}>
+    <Form.Label className="fw-bold">Description:</Form.Label>
+    <Form.Control
+      as="textarea"
+      rows={2}
+      placeholder="Add a note"
+      value=""
+      className="w-60"
+    />
+  </Col>
+</Row>
 
       <div className="instructions">
         <h3>How to convert CSV into Unicode (For Non-English)</h3>

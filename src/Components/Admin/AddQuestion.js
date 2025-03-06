@@ -21,8 +21,8 @@ import AdminHeader from "./AdminHeader";
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [questionSetId, setQuestionSetId] = useState("");
-  const [no, setNo] = useState("");
+  // const [questionSetId, setQuestionSetId] = useState("");
+  // const [no, setNo] = useState("");
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -63,6 +63,12 @@ import AdminHeader from "./AdminHeader";
     }
   };
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleStoreNumber();
+    }
+  }
+
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
@@ -84,20 +90,18 @@ import AdminHeader from "./AdminHeader";
   };
 
   const handleSubmitQuestion = async () => {
-    console.log("Stored Numbers:", storedNumbers); 
-    console.log("Answer:", answer); 
-
-    if (storedNumbers.length > 0 && answer.trim() !== "" && questionSetId.trim() !== "" && no.trim() !== "") {
+    console.log("Stored Numbers:", storedNumbers);
+    console.log("Answer:", answer);
+  
+    if (storedNumbers.length > 0 && answer.trim() !== "") {
       const newQuestion = {
-        questionSetId: parseInt(questionSetId), 
-        no: parseInt(no), 
         questions: storedNumbers.join(", "),
-        answer: parseInt(answer), 
+        answer: parseInt(answer),
         level: level,
         note: note,
         image: imagePreview,
       };
-
+  
       try {
         const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/CreateNewQuestion", {
           method: "POST",
@@ -108,14 +112,14 @@ import AdminHeader from "./AdminHeader";
           },
           body: JSON.stringify(newQuestion),
         });
-
+  
         if (!response.ok) {
           throw new Error("Failed to add question");
         }
-
+  
         const result = await response.json();
         console.log("Question added successfully:", result);
-
+  
         // Update local state
         setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
         setStoredNumbers([]);
@@ -123,17 +127,21 @@ import AdminHeader from "./AdminHeader";
         setNote("");
         setImage(null);
         setImagePreview(null);
-        setQuestionSetId("");
-        setNo("");
       } catch (error) {
         console.error("Error adding question:", error);
         alert("Failed to add question. Please try again.");
       }
     } else {
-      alert("Please fill all fields."); // Alert if fields are empty
+      alert("Please fill all fields.");
     }
   };
-
+  const handleReset = () => {
+    setStoredNumbers([]);
+    setAnswer("");
+    setNote("");
+    setImage(null);
+    setImagePreview(null);
+  };
   const handleDeleteQuestion = (id) => {
     const updatedQuestions = questions.filter((q) => q.id !== id);
     setQuestions(updatedQuestions);
@@ -185,23 +193,14 @@ import AdminHeader from "./AdminHeader";
                 {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
               </Form.Select>
 
-              <Row className="g-4 mt-0">
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">Question Set ID:</Form.Label>
-                  <Form.Control type="number" placeholder="Enter Question Set ID" value={questionSetId} onChange={(e) => setQuestionSetId(e.target.value)} />
-                </Col>
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">No:</Form.Label>
-                  <Form.Control type="number" placeholder="Enter No" value={no} onChange={(e) => setNo(e.target.value)} />
-                </Col>
-              </Row>
+             
 
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
-                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)} />
-                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
+                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)}  onKeyDown={handleKeyPress} />
+                    <Button variant="success" className="plusicon"   onKeyPress={handleKeyPress}  onClick={handleStoreNumber}><FaPlus /></Button>
                   </InputGroup>
                   {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
                 </Col>
@@ -216,7 +215,7 @@ import AdminHeader from "./AdminHeader";
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Set Answer:</Form.Label>
-                  <Form.Control type="text" placeholder="Enter the answer" value={answer} onChange={(e) => setAnswer(e.target.value)} />
+                  <Form.Control type="number" placeholder="Enter the answer" value={answer} onChange={(e) => setAnswer(e.target.value)} />
                 </Col>
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Note:</Form.Label>
@@ -226,7 +225,7 @@ import AdminHeader from "./AdminHeader";
 
               <div className="d-flex justify-content-end mt-5 gap-3 flex-wrap fw-bold">
                 <Button variant="success" onClick={handleSubmitQuestion}>Submit</Button>
-                <Button variant="outline-secondary" onClick={() => { setStoredNumbers([]); setAnswer(""); setNote(""); setQuestionSetId(""); setNo(""); }}>Reset</Button>
+                <Button variant="outline-secondary" onClick={handleReset}>Reset</Button>
                 <Button variant="danger" onClick={() => setStoredNumbers([])}>Cancel</Button>
               </div>
             </Card.Body>
@@ -248,7 +247,7 @@ import AdminHeader from "./AdminHeader";
                   <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
                     <tr className="fw-bold">
                      {/* Changed from # to Question ID */}
-                      <th>#</th> {/* Added Question Set ID */}
+                      <th>S.no</th> {/* Added Question Set ID */}
                       <th>Level</th>
                       <th>Question</th> {/* Changed from Title to Question */}
                       <th>Answer</th> {/* Changed from Description to Answer */}
@@ -260,7 +259,7 @@ import AdminHeader from "./AdminHeader";
                       filteredQuestions.map((q, index) => (
                         <tr key={q.id}>
                           {/* Display Question ID */}
-                          <td>{q.questionSetId}</td> {/* Display Question Set ID */}
+                          <td>{index+1}</td> {/* Display Question Set ID */}
                           <td>{q.level}</td>
                           <td>{q.questions}</td> {/* Display Question */}
                           <td>{q.answer}</td> {/* Display Answer */}
