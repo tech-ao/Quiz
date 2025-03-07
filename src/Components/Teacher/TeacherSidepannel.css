@@ -15,7 +15,7 @@
 
 .menu-content {
   flex: 1;
-  overflow-y: auto;
+
   padding-bottom: 8px;
 }
 
@@ -101,7 +101,7 @@
 .logout-section {
   position: fixed;
   bottom: 0;
-  width: 230px;
+  width: 20%;
   background-color: #198754;
   text-align: center;
   z-index: 1000;

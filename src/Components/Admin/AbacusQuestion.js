@@ -1,34 +1,39 @@
 // AbacusQuestion.js
 import React, { useState } from "react";
-import "./AbacusQuestion.css";
+
 
 export const questionsData = {
   0: {
     beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
+    beadUpper: [], // Add empty array for consistency
+    beadLower: [], // Add empty array for consistency
     correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
   1: {
-    beadCounts: [2, 4, 6, 8, 0, 2, 4, 6, 8, 0],
-    correctAnswers: ["2", "4", "6", "8", "0", "2", "4", "6", "8", "0"],
+    beadCounts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    beadUpper: [], // Add empty array for consistency
+    beadLower: [], // Add empty array for consistency
+    correctAnswers: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
   },
   2: {
-    beadCounts: [3, 6, 4, 2, 5, 8, 1, 4, 2, 3],
-    correctAnswers: ["3", "6", "4", "2", "5", "8", "1", "4", "2", "3"],
+    beadCounts: [0, 6, 0, 0, 5, 0, 1, 4, 0, 3],
+    beadUpper: [], // Add empty array for consistency
+    beadLower: [], // Add empty array for consistency
+    correctAnswers: ["0", "6", "0", "0", "5", "0", "1", "4", "0", "3"],
   },
   3: {
-    beadCounts: [4, 8, 2, 6, 2, 4, 2, 3, 6, 4],
-    correctAnswers: ["4", "8", "2", "6", "2", "4", "2", "3", "6", "4"],
+    beadUpper: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
+    beadLower: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    correctAnswers: ["6", "3", "8", "6", "10", "6", "12", "8", "14", "15"],
   },
-  4: {
-    beadCounts: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
-    correctAnswers: ["5", "1", "5", "2", "5", "0", "5", "0", "5", "5"],
+  4:{
+    beadUpper: [6, 5, 10, 8, 5, 3, 9, 4, 8, 10],
+    beadLower: [-1, -2, -3, -4, -5, -3, -2, -4, 9, -9],
+    beadCounts: [], // Add empty array for consistency
+    correctAnswers: ["5", "3", "7", "4", "0", "0","6", "2",  "4", "0"],
   },
-  5: {
-    beadCounts: [6, 1, 1, 2, 0, 3, 2, 4, 4, 0],
-    correctAnswers: ["6", "1", "1", "2", "0", "3", "4", "4", "4", "0"],
-  },
+   
 };
-
 export const Alphabhets = {
   1: "A",
   2: "B",
@@ -36,49 +41,14 @@ export const Alphabhets = {
   4: "D",
   5: "E",
 };
-export const questions = {
-    A: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    B: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    C: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    D: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-    E: [
-      "Write The Beads Value",
-      "Draw a Beads For the Given Number",
-      "Write The Value For the Given Beads",
-      "Show the Beads Value",
-      "Addition and Subtraction",
-      "Practice Question",
-    ],
-  };
-  
+
+export const questions = [
+  "Write The Beads Value",
+  "Draw a Beads For the Given Number",
+  "Draw and write the beads value",
+  "Addition",
+  "Subtraction",
+];
 
 export const useAbacusQuestion = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
@@ -90,23 +60,30 @@ export const useAbacusQuestion = () => {
     setSelectedQuestion(index);
     setUserAnswers(Array(10).fill(""));
     setScore({ correct: 0, incorrect: 0 });
-
-    const { beadCounts } = questionsData[index] || { beadCounts: [] };
-    setDummyQuestions(beadCounts.map((count) => `🟤`.repeat(count)));
-  };
+  
+    const { beadCounts, beadUpper, beadLower } = questionsData[index] || {};
+  
+    // Initialize dummyQuestions based on the question type
+    if (questions[index] === "Addition" || questions[index] === "Subtraction") {
+      // For Addition/Subtraction, create pairs of beadUpper and beadLower
+      setDummyQuestions(beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] })));
+    } else {
+      // For other questions, use beadCounts
+      setDummyQuestions(beadCounts.map((count) => `🟤`.repeat(count)));
+    }
+  };  
 
   const handleAnswerChange = (index, value) => {
     const newAnswers = [...userAnswers];
     newAnswers[index] = value;
     setUserAnswers(newAnswers);
   };
-
   const handleSubmitAnswer = () => {
     const correctAnswers = questionsData[selectedQuestion].correctAnswers;
-
+  
     let correctCount = 0;
     let incorrectCount = 0;
-
+  
     userAnswers.forEach((answer, index) => {
       if (answer.trim() === correctAnswers[index]) {
         correctCount++;
@@ -114,9 +91,10 @@ export const useAbacusQuestion = () => {
         incorrectCount++;
       }
     });
-
-    setScore({ correct: correctCount, incorrect: incorrectCount });
-    return { correct: correctCount, incorrect: incorrectCount };
+  
+    const scoreResult = { correct: correctCount, incorrect: incorrectCount };
+    setScore(scoreResult); // Update the score state
+    return scoreResult; // Return the score for immediate use
   };
 
   return {
@@ -127,6 +105,7 @@ export const useAbacusQuestion = () => {
     dummyQuestions,
     userAnswers,
     score,
+    setScore,
     handleQuestionClick,
     handleAnswerChange,
     handleSubmitAnswer,

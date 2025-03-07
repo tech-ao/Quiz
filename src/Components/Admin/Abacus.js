@@ -1,4 +1,3 @@
-// AbacusMath.js
 import React, { useState } from "react";
 import { Navbar, Container, Modal, Button } from "react-bootstrap";
 import "./aba.css";
@@ -14,6 +13,7 @@ const AbacusMath = () => {
     dummyQuestions,
     userAnswers,
     score,
+    setScore,
     handleQuestionClick,
     handleAnswerChange,
     handleSubmitAnswer,
@@ -32,13 +32,12 @@ const AbacusMath = () => {
   const handleLevelChange = (event) => {
     setSelectedLevel(event.target.value);
     setOpenStage(null);
-    // setSelectedQuestion(null);
     setIsSidebarVisible(true);
   };
 
   const toggleStage = (stage) => {
     setOpenStage(openStage === stage ? null : stage);
-    // setSelectedQuestion(null);
+    handleQuestionClick(stage - 1); // stage 1 corresponds to index 0, stage 2 to index 1, etc.
   };
 
   const handleGoToKit = () => {
@@ -138,16 +137,13 @@ const AbacusMath = () => {
                 </div>
                 {openStage === stage && (
                   <div className="abacus-questions">
-                    {questions.map((question, index) => (
-                      <div
-                        key={index}
-                        className={`abacus-question-item ${selectedQuestion === index ? 'active' : ''}`}
-                        onClick={() => handleQuestionClick(index)}
-                      >
-                        <i className="bi-check-circle" aria-hidden="true"></i>
-                        {question}
-                      </div>
-                    ))}
+                    <div
+                      className={`abacus-question-item ${selectedQuestion === stage - 1 ? 'active' : ''}`}
+                      onClick={() => handleQuestionClick(stage - 1)}
+                    >
+                      <i className="bi-check-circle" aria-hidden="true"></i>
+                      {questions[stage - 1]} {/* Display only the question for this stage */}
+                    </div>
                   </div>
                 )}
               </div>
@@ -158,81 +154,104 @@ const AbacusMath = () => {
 
       {/* Main Content */}
       <main className="abacus-main-content">
-        {showHeadingandIcon && (
-          <h2 className={`welcome-heading ${isHeadingAtTop ? "at-top" : "centered"}`}>
-            Welcome to Abacus Math! Explore and learn with us.
-          </h2>
-        )}
-        {showAbacusKit && (
-          <>
-            <AbacusKit
-              isMinimized={isMinimized}
-              onMinimize={handleMinimize}
-              onClose={handleClose}
-            />
-          </>
-        )}
-        {selectedQuestion !== null && (
-          <div
-            className={`dummy-questions-container 
-              ${isMinimized || !showAbacusKit ? "minimized" : ""} 
-              ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}
-          >
-            <h3>{questions[selectedQuestion]}</h3>
-            <div className="questio-wrapp">
-              {dummyQuestions
-                .slice(currentPage * beadsPerPage, (currentPage + 1) * beadsPerPage)
-                .map((question, index) => (
-                  <div key={index} className="question-item">
-                    <div className="question-number">
-                      {currentPage * beadsPerPage + index + 1}
-                    </div>
-                    <div className="abacus">
-                      <div className="stick"></div>
-                      {Array.from({ length: questionsData[selectedQuestion].beadCounts[index] }, (_, i) => (
-                        <div key={i} className="bead"></div>
-                      ))}
-                    </div>
-                    <input
-                      type="text"
-                      value={userAnswers[currentPage * beadsPerPage + index]}
-                      onChange={(e) => handleAnswerChange(currentPage * beadsPerPage + index, e.target.value)}
-                      placeholder=""
-                      className="answer-input"
-                    />
+  {showHeadingandIcon && (
+    <h2
+      className={`welcome-heading ${
+        selectedQuestion !== null ? "at-top" : isHeadingAtTop ? "at-top" : "centered"
+      }`}
+    >
+      Welcome to Abacus Math! Explore and learn with us.
+    </h2>
+  )}
+  {showAbacusKit && (
+    <>
+      <AbacusKit
+        isMinimized={isMinimized}
+        onMinimize={handleMinimize}
+        onClose={handleClose}
+      />
+    </>
+  )}
+{selectedQuestion !== null && (
+  <div
+    className={`dummy-questions-container 
+      ${isMinimized || !showAbacusKit ? "minimized" : ""} 
+      ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}
+  >
+    <h3>{questions[selectedQuestion]}</h3>
+    <div className="questio-wrapp">
+      {dummyQuestions
+        .slice(currentPage * beadsPerPage, (currentPage + 1) * beadsPerPage)
+        .map((question, index) => (
+          <div key={index} className="question-item">
+            <div className="question-number">
+              {currentPage * beadsPerPage + index + 1}
+            </div>
+            <div className="abacus">
+              <div className="stick"></div>
+              {/* Render numbers for Addition, otherwise render beads */}
+              {questions[selectedQuestion] === "Addition" || questions[selectedQuestion] === "Subtraction"  ? (
+                <div className="addition-grid">
+                  <div className="addition-row">
+                    <span>{question.upper}</span>
                   </div>
-                ))}
-              <button onClick={() => setShowResultModal(true)} className="submit-button">
-                Submit
-              </button>
+                  <div className="addition-row">
+                    <span>{question.lower}</span>
+                  </div>
+                </div>
+              ) : (
+                Array.from({ length: questionsData[selectedQuestion].beadCounts[index] }, (_, i) => (
+                  <div key={i} className="bead"></div>
+                ))
+              )}
             </div>
+            <input
+              type="text"
+              value={userAnswers[currentPage * beadsPerPage + index]}
+              onChange={(e) => handleAnswerChange(currentPage * beadsPerPage + index, e.target.value)}
+              placeholder=""
+              className="answer-input"
+            />
           </div>
-        )}
-        <Modal show={showResultModal} onHide={() => setShowResultModal(false)} centered className="modal-popup">
-          <Modal.Header closeButton>
-            <Modal.Title>Quiz Result</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div style={{ textAlign: "center" }}>
-              <h4 style={{ color: score?.correct > 0 ? "green" : "red" }}>
-                {score?.correct > 0 ? "Correct! 🎉" : "Incorrect! 😞"}
-              </h4>
-              <div style={{ marginTop: "20px" }}>
-                <p style={{ color: "green", fontWeight: "bold" }}>
-                  Correct Answers: {score?.correct}
-                </p>
-                <p style={{ color: "red", fontWeight: "bold" }}>
-                  Incorrect Answers: {score?.incorrect}
-                </p>
-              </div>
-            </div>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" onClick={() => setShowResultModal(false)}>
-              Close
-            </Button>
-          </Modal.Footer>
-        </Modal>
+        ))}
+  <button
+  onClick={() => {
+    const scoreResult = handleSubmitAnswer(); // Calculate the score
+    setScore(scoreResult); // Update the score state
+    setShowResultModal(true); // Show the modal
+  }}
+  className="submit-button"
+>
+  Submit
+</button>
+    </div>
+  </div>
+)}
+   <Modal show={showResultModal} onHide={() => setShowResultModal(false)} centered className="modal-popup">
+  <Modal.Header closeButton>
+    <Modal.Title>Quiz Result</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <div style={{ textAlign: "center" }}>
+      <h4 style={{ color: score?.correct > 0 ? "green" : "red" }}>
+        {score?.correct > 0 ? "Correct! 🎉" : "Incorrect! 😞"}
+      </h4>
+      <div style={{ marginTop: "20px" }}>
+        <p style={{ color: "green", fontWeight: "bold" }}>
+          Correct Answers: {score?.correct}
+        </p>
+        <p style={{ color: "red", fontWeight: "bold" }}>
+          Incorrect Answers: {score?.incorrect}
+        </p>
+      </div>
+    </div>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="primary" onClick={() => setShowResultModal(false)}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
       </main>
       {showHeadingandIcon && (
         <div
