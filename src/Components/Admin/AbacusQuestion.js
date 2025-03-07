@@ -4,33 +4,33 @@ import React, { useState } from "react";
 
 export const questionsData = {
   0: {
-    beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
+    beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5,1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
     beadUpper: [], // Add empty array for consistency
     beadLower: [], // Add empty array for consistency
-    correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
+    correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5","1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
   1: {
-    beadCounts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    beadCounts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     beadUpper: [], // Add empty array for consistency
     beadLower: [], // Add empty array for consistency
-    correctAnswers: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    correctAnswers: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0","0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
   },
   2: {
-    beadCounts: [0, 6, 0, 0, 5, 0, 1, 4, 0, 3],
+    beadCounts: [0, 6, 0, 0, 5, 0, 1, 4, 0, 3,0, 6, 0, 0, 5, 0, 1, 4, 0, 3],
     beadUpper: [], // Add empty array for consistency
     beadLower: [], // Add empty array for consistency
-    correctAnswers: ["0", "6", "0", "0", "5", "0", "1", "4", "0", "3"],
+    correctAnswers: ["0", "6", "0", "0", "5", "0", "1", "4", "0", "3","0", "6", "0", "0", "5", "0", "1", "4", "0", "3"],
   },
   3: {
-    beadUpper: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
-    beadLower: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    correctAnswers: ["6", "3", "8", "6", "10", "6", "12", "8", "14", "15"],
+    beadUpper: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5,1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    beadLower: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
+    correctAnswers: ["6", "3", "8", "6", "10", "6", "12", "8", "14", "15","6", "3", "8", "6", "10", "6", "12", "8", "14", "15"],
   },
   4:{
-    beadUpper: [6, 5, 10, 8, 5, 3, 9, 4, 8, 10],
-    beadLower: [-1, -2, -3, -4, -5, -3, -2, -4, 9, -9],
+    beadUpper: [6, 5, 10, 8, 5, 3, 9, 4, 8, 10,6, 5, 10, 8, 5, 3, 9, 4, 8, 10],
+    beadLower: [-1, -2, -3, -4, -5, -3, -2, -4, 9, -9,-1, -2, -3, -4, -5, -3, -2, -4, 9, -9],
     beadCounts: [], // Add empty array for consistency
-    correctAnswers: ["5", "3", "7", "4", "0", "0","6", "2",  "4", "0"],
+    correctAnswers: ["5", "3", "7", "4", "0", "0","6", "2",  "4", "0","5", "3", "7", "4", "0", "0","6", "2",  "4", "0"],
   },
    
 };
@@ -53,12 +53,12 @@ export const questions = [
 export const useAbacusQuestion = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);
   const [dummyQuestions, setDummyQuestions] = useState([]);
-  const [userAnswers, setUserAnswers] = useState(Array(10).fill(""));
+  const [userAnswers, setUserAnswers] = useState(Array(20).fill(""));
   const [score, setScore] = useState(null);
 
   const handleQuestionClick = (index) => {
     setSelectedQuestion(index);
-    setUserAnswers(Array(10).fill(""));
+    setUserAnswers(Array(20).fill(""));
     setScore({ correct: 0, incorrect: 0 });
   
     const { beadCounts, beadUpper, beadLower } = questionsData[index] || {};

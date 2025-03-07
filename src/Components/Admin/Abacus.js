@@ -57,7 +57,7 @@ const AbacusMath = () => {
     console.log("Abacus closed");
   };
 
-  const beadsPerPage = 10;
+  const beadsPerPage = 20;
   const totalPages = Math.ceil(dummyQuestions.length / beadsPerPage);
 
   const handleNextPage = () => {
@@ -81,7 +81,9 @@ const AbacusMath = () => {
             onChange={(e) => {
               handleLevelChange(e);
               setIsSidebarVisible(true);
+            
             }}
+            
           >
             <option value="">Select Level</option>
             <option value="0">Level 0</option>
@@ -122,14 +124,14 @@ const AbacusMath = () => {
 
       {/* Sidebar */}
       <aside className={`abacus-sidebar ${isSidebarVisible ? 'active' : ''}`}>
-        <div className="sidebar-close-icon" onClick={() => setIsSidebarVisible(false)}>
+        <div className="sidebar-close-icon" onClick={() => setIsSidebarVisible((prev)=>!prev)}>
           <i className="bi bi-x"></i>
         </div>
 
         {selectedLevel !== null && (
           <div className="abacus-level-section">
             <h2 className="abacus-level-heading">Level {selectedLevel}</h2>
-            {[1, 2, 3, 4, 5].map((stage) => (
+            {selectedLevel && [1, 2, 3, 4, 5].map((stage) => (
               <div key={stage}>
                 <div className="abacus-stage" onClick={() => toggleStage(stage)}>
                   Level {selectedLevel} ({Alphabhets[stage]})
