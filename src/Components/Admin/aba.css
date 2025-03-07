@@ -506,12 +506,8 @@ body {
     
     font-size: 4rem;
     font-weight: bold;
-    color: white;
-    background: linear-gradient(45deg, #222222, #582605);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-    transform: perspective(500px) rotateX(20deg);
+    color: black;
+    background: white;
    
     
   
