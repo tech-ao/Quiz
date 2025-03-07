@@ -10,7 +10,84 @@ body {
     overflow: hidden;
     flex-direction: column;
 }
+
+
+/*Addition Beads*/
+.beads-column-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+}
+
+.beads-column-row span {
+  font-size: 20px; /* Adjust the size of the symbol */
+  font-weight: bold; /* Make the symbol bold */
+  color: #333; /* Adjust the color of the symbol */
   
+}
+
+.beads-column-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  max-width: 150px;
+}
+
+.beads-column-row {
+  display: flex;
+  gap: 10px;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+}
+
+.beads-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  align-items: center;
+}
+
+.koodu {
+  height: 2px;
+  width: 20px;
+  background-color: #000;
+}
+
+.bead {
+  width: 20px;
+  height: 20px;
+  background-color: #ffcc00;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.beads-column-input input {
+  width: 50px;
+  padding: 5px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.questio-wrapp {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
 
 
 /* AbacusQuestion.css */
@@ -104,23 +181,6 @@ body {
   flex-direction: column;
   align-items: center;
   margin: 10px;
-}
-
-.questio-wrapp {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.submit-button {
-  margin-top: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .abacus-header {
@@ -361,7 +421,7 @@ body {
     gap: 3px;
     display: flex;
     flex-wrap: wrap;
-    height: 500px;
+    height: auto;
 }
 .dummy-questions-container {
     width: 70%;
@@ -429,17 +489,15 @@ body {
     border-radius: 5px;
     background-color: white;
   }
-  
-  .submit-button {
-    background-color: #59b36e;
-    color:black;
-    height: 50px;
-    margin-top: 10%;
-    border: none;
+  .submit-button{
+    background-color: #28a745;
     border-radius: 10px;
+    border: none;
+    color: white;
     font-weight: bold;
-    cursor: pointer;
+    margin-left: 40%;
   }
+
   
   .submit-button:hover {
     background-color: #8bd711;
@@ -585,7 +643,7 @@ body {
   /* Adjust container layout for mobile */
   .abacus-app-container {
     flex-direction: column; /* Stack elements vertically */
-    height: auto;
+    height: 100vh;
   }
   
 .welcome-heading.at-top {
@@ -695,7 +753,7 @@ body {
     scrollbar-width: none; /* Hide scrollbar in Firefox */
     -ms-overflow-style: none; 
     height:400px ;
-    background:white;
+    background:rgb(250, 250, 250);
     border-radius: 10px;
     text-align: center;
     align-items: center;
@@ -726,7 +784,7 @@ body {
   }
 
   .dummy-questions-container input {
-    width: 30% !important;
+    width: 50% !important;
     padding: 5px;
     font-size: 14px;
     border-radius: 5px;
@@ -735,15 +793,15 @@ body {
 
   .dummy-questions-container button {
     width: 30%;
-    padding: 1px;
+    padding: 5px;
     font-size: 14px;
     border: none;
     background: #28a745;
     color: white;
     border-radius: 15px;
     cursor: pointer;
-    margin-top:10%;
-    margin-left: 25%;
+    
+    margin-left: 8%;
     
   }
 
