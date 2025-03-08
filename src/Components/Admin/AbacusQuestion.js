@@ -11,10 +11,12 @@ export const questionsData = {
     correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5", "1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
   1: { // Level B
-    beadCounts: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    beadUpper: [], // Add empty array for consistency
-    beadLower: [], // Add empty array for consistency
-    correctAnswers: ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    givenNumber: [5, 3, 7, 2, 4, 6, 1, 8, 9, 10, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1], // Example numbers for Level B
+    beadCounts: [], // Not needed for this level
+    beadUpper: [], // Not needed for this level
+    beadLower: [], // Not needed for this level
+    correctAnswers: ["5", "3", "7", "2", "4", "6", "1", "8", "9", "10","3", "2", "4", "2", "1", "3", "2", "4", "5", "1",], // Correct answers for validation
+  
   },
   2: { // Level C
     beadCounts: [0, 6, 0, 0, 5, 0, 1, 4, 0, 3, 0, 6, 0, 0, 5, 0, 1, 4, 0, 3],
@@ -29,8 +31,8 @@ export const questionsData = {
   },
   4: { // Level D - Addition Beads
     beadCounts1: [1, 3, 2,  1, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
-    beadCounts2: [1, 3, 2, 2, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
-    correctAnswers: ["2", "6", "4", "3", "4", "2", "6", "4", "8", "10", "2", "6", "4", "8", "4", "2", "6", "4", "8", "10"],
+    beadCounts2: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5, 1, 2, 3, 4, 5, 6, 5, 3, 1, 6],
+    correctAnswers: ["6", "4", "7", "3", "7", "1", "8", "2", "9", "10", "2", "5", "5", "8", "7", "7", "8", "5", "5", "11"],
   },
   5: { // Level E - Subtraction
     beadUpper: [6, 5, 10, 8, 5, 3, 9, 4, 8, 10, 6, 5, 10, 8, 5, 3, 9, 4, 8, 10],
@@ -62,6 +64,7 @@ export const questions = [
   "Subtraction", // Level E
   "Subtraction Beads", // Level E
 ];
+
 
 export const useAbacusQuestion = () => {
   const [selectedQuestion, setSelectedQuestion] = useState(null);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navbar, Container, Modal, Button } from "react-bootstrap";
 import "./aba.css";
+import BeadDrawer from "./AbacusBeadsDraw"; 
 import AbacusKit from "./Kit";
 import { useAbacusQuestion } from "./AbacusQuestion";
 
@@ -128,10 +129,10 @@ const AbacusMath = () => {
     <i className="bi bi-x"></i>
   </div>
 
-  {selectedLevel !== null && (
+  {selectedLevel && (
     <div className="abacus-level-section">
-      <h2 className="abacus-level-heading">Level {selectedLevel}</h2>
-      {[1, 2, 3, 4, 5].map((stage) => (
+    { selectedLevel&&( <h2 className="abacus-level-heading">Level {selectedLevel}</h2>)}
+      { selectedLevel &&[1, 2, 3, 4, 5].map((stage) => (
         <div key={stage}>
           <div className="abacus-stage" onClick={() => toggleStage(stage)}>
             Level {selectedLevel} ({Alphabhets[stage]})
@@ -213,6 +214,7 @@ const AbacusMath = () => {
       ))}
     </div>
   )}
+
 </aside>
       {/* Main Content */}
       <main className="abacus-main-content">
@@ -244,42 +246,56 @@ const AbacusMath = () => {
     <div className="questio-wrapp">
       {questions[selectedQuestion] === "Addition Beads" || questions[selectedQuestion] === "Subtraction Beads" ? (
         // Specific layout for "Addition Beads" and "Subtraction Beads"
-        
-          <div className="beads-column-content">
-            {dummyQuestions.map((question, index) => (
-              <div key={index} className="beads-column-item">
-                <div className="beads-column-row">
-                  <div className="beads-column">
+        <div className="beads-column-content">
+        {dummyQuestions.map((question, index) => (
+          <div key={index} className="beads-column-wrapper">
+            {/* Serial Number Outside the Beads Column */}
+            <div className="Serial-number-Addition">
+              {currentPage * beadsPerPage + index + 1}
+            </div>
+            <div className="beads-column-item">
+              <div className="beads-column-row">
+                <div className="beads-column">
                   <div className="koodu"></div>
-                    {Array.from({ length: question.upper }, (_, i) => (
-                      <>
-                    
-                      <div key={i} className="bead"></div>
-                      </>
-                    ))}
-                  </div>
-                  <span>
-                  {questions[selectedQuestion] === "Addition Beads" ? "+" : "-"}
-                  </span>
-                  <div className="beads-column">
-                  <div className="koodu"></div>
-                    {Array.from({ length: question.lower }, (_, i) => (
-                      <div key={i} className="bead"></div>
-                    ))}
-                  </div>
+                  {Array.from({ length: question.upper }, (_, i) => (
+                    <div key={i} className="bead"></div>
+                  ))}
                 </div>
-                <div className="beads-column-input">
-                  <input
-                    type="text"
-                    value={userAnswers[index] || ""}
-                    onChange={(e) => handleAnswerChange(index, e.target.value)}
-                    placeholder=""
-                  />
+                <span>
+                  {questions[selectedQuestion] === "Addition Beads" ? "+" : "-"}
+                </span>
+                <div className="beads-column">
+                  <div className="koodu"></div>
+                  {Array.from({ length: question.lower }, (_, i) => (
+                    <div key={i} className="bead"></div>
+                  ))}
                 </div>
               </div>
-            ))}
+              <div className="beads-column-input">
+                <input
+                  type="text"
+                  value={userAnswers[index] || ""}
+                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  placeholder=""
+                />
+              </div>
+            </div>
           </div>
-    
+        ))}
+      </div>
+    )  :questions[selectedQuestion] === "Draw a Beads For the Given Number" ? (
+        // Render BeadDrawer for Level B
+        questionsData[selectedQuestion].givenNumber.map((number, index) => (
+          <div key={index} className="bead-draw-question">
+            <div className="serial-number">
+               {currentPage * beadsPerPage + index + 1}
+              </div>
+            <BeadDrawer
+              givenNumber={number}
+              onBeadDraw={(drawnNumber) => handleAnswerChange(index, drawnNumber.toString())}
+            />
+          </div>
+        ))
       ) : (
         // Default layout for other questions
         dummyQuestions && dummyQuestions.length > 0
