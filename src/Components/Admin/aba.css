@@ -9,9 +9,91 @@ body {
     height: 100vh;
     overflow: hidden;
     flex-direction: column;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
+/* BeadsDraw */
+.bead-drawer {
+  margin-bottom: 30px;
+  margin-left: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.serial-number {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 10px; /* Space below the serial number */
+  text-align: center; /* Center the serial number */
+  margin-left: 15px;
+}
+
+.beads-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 120px;
+  width: 50px;
+  background-color: whitesmoke;
+  border: 2px solid black;
+  margin-bottom: 10px;
+}
+
+.D-bead {
+  width: 13px;
+  height: 13px;
+  background-color: brown;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.D-stick{
+  height: 2px;
+  width: 30px;
+  background-color: #000;
+  margin-top:10px;
+}
+
+.h4-beads{
+
+  width: 60px;
+  padding: 3px;
+  margin: 5px 0px;
+  border: 1px solid BLACK;
+  border-radius: 5px;
+  background-color: white;
+  text-align: center;
+}
+.beads-button-container {
+  display: flex;
+  gap: 5px; /* Space between buttons */
+  justify-content: start; /* Center buttons horizontally */
+}
+
+.add-bead-button,
+.remove-bead-button {
+  padding: 3px 8px;
+  background-color: #4CAF50; /* Green for plus button */
+  color: rgb(12, 1, 1);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bolder;
+}
+
+.remove-bead-button {
+  background-color: #f44336; /* Red for minus button */
+}
+
+.add-bead-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.remove-bead-button:hover {
+  background-color: #d32f2f; /* Darker red on hover */
+}
 /*Addition Beads*/
 .beads-column-content {
   display: flex;
@@ -20,7 +102,13 @@ body {
   width: 100%;
   justify-content: center;
 }
-
+.Serial-number-Addition {
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center; /* Center the serial number */
+  margin-top: 10px; /* Space below the serial number */
+  width: 100%; /* Ensure it spans the full width */
+}
 .beads-column-row span {
   font-size: 20px; /* Adjust the size of the symbol */
   font-weight: bold; /* Make the symbol bold */
@@ -46,13 +134,14 @@ body {
   gap: 10px;
   height: 100px;
   justify-content: center;
-  align-items: center;
+  align-items: start;
+  margin-top: 10px;
+  
 }
 
 .beads-column {
   display: flex;
   flex-direction: column;
-  gap: 1px;
   align-items: center;
 }
 
@@ -62,16 +151,6 @@ body {
   background-color: #000;
 }
 
-.bead {
-  width: 20px;
-  height: 20px;
-  background-color: #ffcc00;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-}
 
 .beads-column-input input {
   width: 50px;
@@ -86,7 +165,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
 }
 
 
@@ -151,7 +230,6 @@ body {
   height: 13px;
   background-color: brown;
   border-radius: 50%;
-  margin-top: 1px;
   position: relative;
   top: 11%;
 }
@@ -645,7 +723,7 @@ body {
 .welcome-heading.at-top {
   font-size: 13px !important;
   transform: translateX(-45%) !important;
-  top: 14%;
+  top: 13%;
  
 }
   .abacus-game-icon-container{
@@ -673,9 +751,9 @@ body {
   /* Sidebar becomes a collapsible menu */
   .abacus-sidebar {
     width: 200px!important;
-    height: auto;
+    height: 100vh;
     position: fixed;
-    top: 73px;
+    top: 82px;
     z-index: 1000;
     padding: 10px;
     display: none; /* Hide by default */
@@ -716,10 +794,6 @@ body {
     text-align: center;
     z-index: 1;
     position: relative;
-  }
-
-  .abacus-main-content h2 {
-    font-size: 20px;
   }
 
   /* Adjust game icon size and placement */
