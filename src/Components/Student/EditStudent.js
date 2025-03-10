@@ -3,7 +3,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { editStudentAction, getStudents } from "../../redux/Action/StudentAction";
-import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from '../../redux/Services/Enum';
+import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../../redux/Services/Enum";
 
 const EditStudent = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
@@ -21,7 +21,12 @@ const EditStudent = ({ show, onClose }) => {
     address: "",
     country: null,
     gender: null,
-    statusId: null
+    statusId: null,
+    centreName: "",      // New field: Centre Name
+    centrePlace: "",     // New field: Place
+    joiningDate: "",     // New field: Joining Date
+    currentLevel: "",    // New field: Current Level
+    completedLevel: ""   // New field: Completed Level
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -75,7 +80,12 @@ const EditStudent = ({ show, onClose }) => {
         address: selectedStudent.data.address || "",
         country: selectedStudent.data.country || null,
         gender: selectedStudent.data.gender || null,
-        statusId: selectedStudent.data.statusId || 1
+        statusId: selectedStudent.data.statusId || 1,
+        centreName: selectedStudent.data.centreName || "",
+        centrePlace: selectedStudent.data.centrePlace || "",
+        joiningDate: selectedStudent.data.joiningDate ? selectedStudent.data.joiningDate.split("T")[0] : "",
+        currentLevel: selectedStudent.data.currentLevel || "",
+        completedLevel: selectedStudent.data.completedLevel || ""
       });
     }
   }, [selectedStudent]);
@@ -105,9 +115,6 @@ const EditStudent = ({ show, onClose }) => {
     pageNumber: 1,
     pageSize: 15,
   });
-
-  console.log(formData);
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -222,7 +229,6 @@ const EditStudent = ({ show, onClose }) => {
             </Form.Select>
           </Form.Group>
 
-
           <Row className="mb-3">
             <Col>
               <Form.Group controlId="formGender">
@@ -255,12 +261,12 @@ const EditStudent = ({ show, onClose }) => {
                       label={mode.item2}
                       name="studyModeId"
                       value={mode.item1}
-                      checked={formData.studyModeId === mode.item1} // Compare integers directly
+                      checked={formData.studyModeId === mode.item1}
                       onChange={(e) =>
                         handleInputChange({
                           target: {
                             name: e.target.name,
-                            value: parseInt(e.target.value, 10), // Convert the value to an integer
+                            value: parseInt(e.target.value, 10),
                           },
                         })
                       }
@@ -269,8 +275,6 @@ const EditStudent = ({ show, onClose }) => {
                   ))}
                 </div>
               </Form.Group>
-
-
             </Col>
           </Row>
 
@@ -279,7 +283,9 @@ const EditStudent = ({ show, onClose }) => {
             <Form.Select
               name="country"
               value={formData.country || ""}
-              onChange={(e) => setFormData({ ...formData, country: parseInt(e.target.value, 10) })}
+              onChange={(e) =>
+                setFormData({ ...formData, country: parseInt(e.target.value, 10) })
+              }
               required
             >
               <option value="">Select Country</option>
@@ -299,6 +305,66 @@ const EditStudent = ({ show, onClose }) => {
               name="address"
               placeholder="Enter address"
               value={formData.address}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          {/* New Input Groups for Centre Details */}
+          <Form.Group className="mb-3" controlId="formCentreName">
+            <Form.Label>Centre Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="centreName"
+              placeholder="Enter centre name"
+              value={formData.centreName}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCentrePlace">
+            <Form.Label>Place</Form.Label>
+            <Form.Control
+              type="text"
+              name="centrePlace"
+              placeholder="Enter place"
+              value={formData.centrePlace}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formJoiningDate">
+            <Form.Label>Joining Date</Form.Label>
+            <Form.Control
+              type="date"
+              name="joiningDate"
+              value={formData.joiningDate}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCurrentLevel">
+            <Form.Label>Current Level</Form.Label>
+            <Form.Control
+              type="text"
+              name="currentLevel"
+              placeholder="Enter current level"
+              value={formData.currentLevel}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="formCompletedLevel">
+            <Form.Label>Completed Level</Form.Label>
+            <Form.Control
+              type="text"
+              name="completedLevel"
+              placeholder="Enter completed level"
+              value={formData.completedLevel}
               onChange={handleInputChange}
               required
             />

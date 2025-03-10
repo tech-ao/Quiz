@@ -6,6 +6,7 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
+import ImportQuestion from "./Components/Admin/ImportQuestion";
 import AddQuestion from "./Components/Admin/AddQuestion";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
@@ -37,7 +38,7 @@ import StudentNotification from "./Components/Student/StudentNotification";
 import StudentAttendance from "./Components/Admin/StudentAttendance";
 import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
-
+import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import "react-toastify/dist/ReactToastify.css";
 
 // Import Redux Provider and Store
@@ -61,6 +62,8 @@ import AbacusKit from "./Components/Admin/Kit";
 import AbacusSidePanel from "./Components/Admin/AbacusSidePannel";
 import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
+import CompletedTest from "./Components/Student/completedtest";
+
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -86,6 +89,7 @@ function App() {
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
+          <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
 
           {/* Protected Routes */}
           <Route
@@ -99,6 +103,10 @@ function App() {
           <Route
             path="/listTeacher"
             element={<ProtectedRoute element={<ListTeacher />} />}
+          />
+          <Route
+            path="/assignment"
+            element={<ProtectedRoute element={<TeacherAssignment />} />}
           />
           <Route
             path="/approvedleave"
@@ -226,6 +234,10 @@ function App() {
           <Route
             path="/AbacusKit"
             element={<ProtectedRoute element={<AbacusKit />} />}
+          />
+           <Route
+            path="/completedtest"
+            element={<ProtectedRoute element={<CompletedTest />} />}
           />
         </Routes>
       </Router>

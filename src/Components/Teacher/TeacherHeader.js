@@ -1,52 +1,133 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Badge } from "@mui/material";
-import { RiAdminLine } from "react-icons/ri";
-import { Navbar, Row, Col, Button } from "react-bootstrap";
+import { Navbar, Row, Col, Button, Modal, Offcanvas } from "react-bootstrap";
 import {
   RiLockPasswordLine,
   RiLogoutCircleRLine,
   RiNotification3Line,
+  RiAdminLine,
   RiGlobalLine,
   RiMenu3Line,
   RiRestartLine,
 } from "react-icons/ri";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../../Components/images/Logo.png";
-import "../Admin/adminHeader.css";
+import "../Admin/adminHeaderResponsive.css"; // make sure to use the responsive CSS
+import "./TeacherHeader.css";
 import UpdatePassword from "../Student/UpdatePassword";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudent } from "../../redux/Action/StudentAction";
 
 const TeacherHeader = ({ toggleSidebar }) => {
-  const ICON_SIZE = 30;
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
-  const popupRef = useRef(null);
+  const [showPasswordPopup, setShowPasswordPopup] = useState(false);
+  const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+
+  // Notification state and selected notification for details
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      title: "Notification 1",
+      content: "Details of notification 1",
+      receivedDate: "2024-02-15",
+      isRead: false,
+    },
+    {
+      id: 2,
+      title: "Notification 2",
+      content: "Details of notification 2",
+      receivedDate: "2024-02-16",
+      isRead: false,
+    },
+    {
+      id: 3,
+      title: "Notification 3",
+      content: "Details of notification 3",
+      receivedDate: "2024-02-17",
+      isRead: false,
+    },
+    {
+      id: 4,
+      title: "Notification 4",
+      content: "Details of notification 4",
+      receivedDate: "2024-02-18",
+      isRead: true,
+    },
+    {
+      id: 5,
+      title: "Notification 5",
+      content: "Details of notification 5",
+      receivedDate: "2024-02-19",
+      isRead: false,
+    },
+    {
+      id: 6,
+      title: "Notification 6",
+      content: "Details of notification 6",
+      receivedDate: "2024-02-20",
+      isRead: false,
+    },
+  ]);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
+   // Responsive state: "isMobileOrTablet" is true if width < 992px
+   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+   const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 992);
+
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const popupRef = useRef(null);
+  const notifPopupRef = useRef(null);
+
+  const { selectedAdmin } = useSelector((state) => state.admin || {});
+  const adminFullName = selectedAdmin?.data
+    ? `${selectedAdmin.data.firstName} ${selectedAdmin.data.lastName}`
+    : "Admin";
 
   const togglePopup = () => setShowPopup((prev) => !prev);
+  const togglePasswordPopup = () => setShowPasswordPopup((prev) => !prev);
+  const toggleNotificationPopup = () =>
+    setShowNotificationPopup((prev) => !prev);
+
+  // Calculate unread notifications for the badge
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        setShowPopup(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const [showPasswordPopup, setShowPasswordPopup] = useState(false);
-  const togglePasswordPopup = () => {
-    setShowPasswordPopup((prev) => !prev);
-  };
+     // Update isMobile and isMobileOrTablet on window resize
+     const handleResize = () => {
+       setIsMobile(window.innerWidth < 768);
+       setIsMobileOrTablet(window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+ 
+     const storedStudentId = localStorage.getItem("studentId");
+     if (storedStudentId) {
+       dispatch(fetchStudent(storedStudentId));
+     }
+     const handleClickOutside = (event) => {
+       if (popupRef.current && !popupRef.current.contains(event.target)) {
+         setShowPopup(false);
+       }
+       if (notifPopupRef.current && !notifPopupRef.current.contains(event.target)) {
+         setShowNotificationPopup(false);
+       }
+     };
+     document.addEventListener("mousedown", handleClickOutside);
+     return () => {
+       window.removeEventListener("resize", handleResize);
+       document.removeEventListener("mousedown", handleClickOutside);
+     };
+   }, [dispatch]);
 
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("teacherName");
-    localStorage.removeItem("teacherId");
+    localStorage.removeItem("studentName");
+    localStorage.removeItem("studentId");
     navigate("/");
     setShowLogoutConfirm(false);
   };
@@ -55,319 +136,259 @@ const TeacherHeader = ({ toggleSidebar }) => {
     setShowLogoutConfirm(false);
   };
 
+  // Mark all notifications as read
+  const handleMarkAsRead = () => {
+    const updatedNotifications = notifications.map((notif) => ({
+      ...notif,
+      isRead: true,
+    }));
+    setNotifications(updatedNotifications);
+  };
+
+  // Get the last five notifications (assuming they are sorted by date)
+  const lastFiveNotifications = notifications.slice(-5);
+
+  // Handle clicking on a notification item to show its details
+  const handleNotificationClick = (e, notif) => {
+    e.stopPropagation();
+    if (!notif.isRead) {
+      setNotifications(
+        notifications.map((n) =>
+          n.id === notif.id ? { ...n, isRead: true } : n
+        )
+      );
+    }
+    setSelectedNotification(notif);
+  };
+
   return (
     <Navbar expand="lg" className="header py-2">
-      {/* Desktop Header */}
-      <Row className="align-items-center w-100 d-none d-md-flex">
-        <Col md={3} className="d-flex align-items-center" style={{ paddingLeft: "40px" }}>
-          <Link to="/teacherDashboard">
-            <img
-              className="logo1 me-2"
-              src={logo}
-              alt="Math Gym Logo"
-              style={{
-                cursor: "pointer",
-                maxWidth: "80px",
-                border: "1px solid #000",
-                borderRadius: "5px",
-              }}
-            />
-          </Link>
-          <Navbar.Brand className="text-success fw-bold ms-2">
-            MATH GYM
-          </Navbar.Brand>
-        </Col>
-        <Col md={5} className="text-center">
-          <span className="fw-bold welcome-message" style={{ fontSize: "20px" }}>
-            Welcome, Teacher{" "}
-            <span role="img" aria-label="wave">
-              👋
-            </span>
-          </span>
-        </Col>
-        <Col md={4} className="d-flex justify-content-end align-items-center header-icon-group" style={{ paddingRight: "60px" }}>
-          <Button
-            variant="outlined"
-            title="Notification"
-            className="me-2 action-button"
-            onClick={() => navigate("/teachernotification")}
-          >
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              style={{
-                position: "relative",
-              }}
-              componentsProps={{
-                badge: {
-                  style: {
-                    right: "auto",
-                    left: 0,
-                    transform: "translate(80%, -45%)",
-                  },
-                },
-              }}
-            >
-              <RiNotification3Line size={ICON_SIZE} />
-            </Badge>
-          </Button>
-          <Button
-            variant="outlined"
-            title="Website"
-            className="me-2 action-button"
-            onClick={() => window.open("https://mathgymint.com", "_blank")}
-          >
-            <RiGlobalLine size={24} />
-          </Button>
-          <div className="position-relative" ref={popupRef}>
-            <Button
-              variant="link"
-              onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex flex-column align-items-center admin-menu admin-text"
-            >
-              <RiAdminLine
-                style={{
-                  fontSize: "24px",
-                  marginBottom: "2px",
-                  color: "green",
-                  marginTop: '20px'
+      <Row className="align-items-center w-100 head-container">
+        {/* Left Section: Logo and (for mobile) menu button */}
+        <Col xs={3} md={3} className="d-flex align-items-center header-left">
+          {isMobileOrTablet? (
+            isMobileExpanded ? (
+              <>
+                <Link to="/" style={{ marginLeft: "-10px" }}>
+                  <img src={logo} alt="Math Gym Logo" className="logo" />
+                </Link>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setIsMobileExpanded(false);
+                    toggleSidebar();
+                  }}
+                  className="menu-btn pe0 px-1"
+                  style={{ marginLeft: "-10px" }}
+                >
+                  <RiMenu3Line className="header-icon" />
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="link"
+                onClick={() => {
+                  setIsMobileExpanded(true);
+                  toggleSidebar();
                 }}
-              />
-              <span className="admin-text">Teacher</span>
-            </Button>
-            {showPopup && (
-              <div className="admin-popup">
-                <ul className="list-unstyled m-0 p-2">
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => navigate("/TeacherSettings")}
-                  >
-                    <RiLockPasswordLine size={ICON_SIZE} className="me-2" />{" "}
-                    Profile
-                  </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => {
-                      togglePasswordPopup();
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiRestartLine size={ICON_SIZE} className="me-2" /> Password
-                  </li>
-                  <li
-                    className="dropdown-item px-3 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={handleLogoutClick}
-                  >
-                    <RiLogoutCircleRLine size={ICON_SIZE} className="me-2" />{" "}
-                    Logout
-                  </li>
-                </ul>
-              </div>
-            )}
-          </div>
-        </Col>
-      </Row>
-
-      {/* Mobile Header */}
-      <Row
-        className="align-items-center w-100 d-flex d-md-none"
-        style={{
-          padding: "0 5px",
-          justifyContent: "space-between",
-          marginRight: "15px",
-        }}
-      >
-        <Col
-          xs="auto"
-          className="d-flex align-items-center"
-          style={{ paddingLeft: "20px" }}
-        >
-          {isMobileExpanded && (
-            <Link to="/teacherDashboard">
-              <img
-                className="logo1 me-2"
-                src={logo}
-                alt="Math Gym Logo"
-                style={{
-                  cursor: "pointer",
-                  maxWidth: "60px",
-                  border: "1px solid #000",
-                  borderRadius: "5px",
-                }}
-              />
-            </Link>
-          )}
-          <Button
-            variant="link"
-            onClick={() => {
-              setIsMobileExpanded((prev) => !prev);
-              toggleSidebar();
-            }}
-            style={{ padding: "0" }}
-          >
-            <RiMenu3Line size={ICON_SIZE} />
-          </Button>
-        </Col>
-        <Col xs="auto" className="d-flex align-items-center">
-          <Button
-            variant="link"
-            style={{ padding: "5px", marginRight: "10px" }}
-            onClick={() => navigate("/teachernotification")}
-          >
-            <Badge
-              badgeContent={10}
-              color="secondary"
-              overlap="circular"
-              anchorOrigin={{ vertical: "top", horizontal: "right" }}
-              style={{
-                position: "relative",
-              }}
-              componentsProps={{
-                badge: {
-                  style: {
-                    right: "auto",
-                    left: 0,
-                    transform: "translate(80%, -45%)",
-                  },
-                },
-              }}
-            >
-              <RiNotification3Line size={ICON_SIZE} />
-            </Badge>
-          </Button>
-          <Button
-            variant="link"
-            onClick={() => window.open("https://mathgymint.com", "_blank")}
-            style={{ padding: "0", marginLeft: "10px" }}
-          >
-            <RiGlobalLine
-              style={{ fontSize: window.innerWidth <= 767 ? "24px" : "24px" }}
-            />
-          </Button>
-          <div className="position-relative" ref={popupRef} style={{ marginLeft: "10px" }}>
-            <Button
-              variant="link"
-              onClick={togglePopup}
-              className="text-decoration-none fw-bold d-flex flex-column align-items-center"
-              style={{ padding: "0" }}
-            >
-              <RiAdminLine
-                style={{
-                  fontSize: window.innerWidth <= 767 ? "24px" : "24px",
-                  color: "green",
-                  marginTop: '10px'
-                }}
-              />
-              <span
-                className="text-success"
-                style={{
-                  fontSize: window.innerWidth <= 767 ? "14px" : "10px",
-                  marginTop: "2px",
-                }}
+                className="menu-btn"
               >
+                <RiMenu3Line className="header-icon" />
+              </Button>
+            )
+          ) : (
+            <>
+              <Link to="/adminDashboard">
+                <img src={logo} alt="Math Gym Logo" className="logo" />
+              </Link>
+              <Navbar.Brand className="text-success fw-bold ms-3 brand-info">
+                <div className="brand-title">MATH GYM</div>
+                <div className="brand-subtitle">Flex Your Brain</div>
+              </Navbar.Brand>
+            </>
+          )}
+        </Col>
+
+        {/* Center Section: Welcome Message (desktop only) */}
+        {!isMobileOrTablet && (
+          <Col md={5} className="text-center">
+            <span className="fw-bold welcome-message">
+              Welcome, Teacher{" "}
+              <span role="img" aria-label="wave">
+                👋
+              </span>
+            </span>
+          </Col>
+        )}
+
+        {/* Right Section: Icons */}
+        <Col
+          xs={8}
+          md={4}
+          className="d-flex justify-content-end align-items-center header-icon-group"
+          style={{ marginLeft: "-19px", gap: "0" }}
+        >
+          <Button
+            variant="link"
+            title="Notification"
+            onClick={toggleNotificationPopup}
+          >
+            <Badge
+              badgeContent={unreadCount}
+              color="secondary"
+              overlap="circular"
+            >
+              <RiNotification3Line className="header-icon" />
+            </Badge>
+          </Button>
+          <Button
+            variant="link"
+            title="Website"
+            onClick={() => window.open("https://mathgymint.com", "_blank")}
+          >
+            <RiGlobalLine className="header-icon" />
+          </Button>
+          <div className="position-relative admin-container" ref={popupRef}>
+            <Button
+              variant="link"
+              onClick={togglePopup}
+              className="admin-btn"
+              style={{ textDecoration: "none", top: "10px" }}
+            >
+              <RiAdminLine className="headericon" style={{fontSize:"24px",height: isMobile ? "25px" : "25px"}}/>
+              <span className="admin-name" style={{ color: "#09690c" }}>
                 Teacher
               </span>
             </Button>
             {showPopup && (
-              <div className="admin-popup">
-                <ul className="list-unstyled m-0 p-2">
-                  <li
-                    className="dropdown-item px6 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => {
-                      navigate("/TeacherSettings");
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiLockPasswordLine
-                      style={{
-                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
-                      }}
-                      className="me108"
-                    />
-                    Profile
-                  </li>
-                  <li
-                    className="dropdown-item px6 py-2 fw-bold text-secondary d-flex align-items-center menu-item"
-                    onClick={() => {
-                      togglePasswordPopup();
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiRestartLine
-                      style={{
-                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
-                      }}
-                      className="me108"
-                    />
-                    Password
-                  </li>
-                  <li
-                    className="dropdown-item px6 py-2 fw-bold text-danger d-flex align-items-center menu-item"
-                    onClick={() => {
-                      handleLogoutClick();
-                      setShowPopup(false);
-                    }}
-                  >
-                    <RiLogoutCircleRLine
-                      style={{
-                        fontSize: window.innerWidth <= 767 ? "24px" : "24px",
-                      }}
-                      className="me108"
-                    />
-                    Logout
-                  </li>
-                </ul>
-              </div>
-            )}
+  <div
+    className="admin-popup"
+    style={{ width: "140px", top: "75px" }}
+  >
+    <ul
+      className="list-unstyled m-0 p-2"
+      style={{
+        color: "#09690c",
+        fontSize: isMobile ? "18px":"18px",
+        lineHeight: "40px",
+      }}
+    >
+      <li
+        className="dropdown-item menu-item"
+        onClick={() => navigate("/teachersettings")}
+      >
+        <RiLockPasswordLine 
+          className="popup-icon" 
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        />
+        <b> Profile</b>
+      </li>
+      <li
+        className="dropdown-item menu-item"
+        onClick={() => {
+          togglePasswordPopup();
+          setShowPopup(false);
+        }}
+      >
+        <RiRestartLine 
+          className="popup-icon" 
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        /> 
+        <b>Password</b>
+      </li>
+      <li
+        className="dropdown-item menu-item text-danger"
+        onClick={handleLogoutClick}
+      >
+        <RiLogoutCircleRLine 
+          className="popup-icon"
+          style={{ fontSize: isMobile ? "26px" : "24px" }}
+        />
+        <b> Logout</b>
+      </li>
+    </ul>
+  </div>
+)}
           </div>
         </Col>
       </Row>
 
-      {/* Password Change Popup */}
-      {showPasswordPopup && <UpdatePassword onClose={togglePasswordPopup} />}
+      {/* Notification Popup */}
+      {showNotificationPopup && (
+        <div className="notification-popup" ref={notifPopupRef}>
+          <h6 className="mb-2">Recent Notifications</h6>
+          <ul className="list-unstyled notifications-list">
+            {lastFiveNotifications.map((notif) => (
+              <li
+                key={notif.id}
+                onClick={(e) => handleNotificationClick(e, notif)}
+                className="notification-item"
+              >
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className={notif.isRead ? "" : "font-bold"}>
+                    {notif.title}
+                  </span>
+                  {!notif.isRead && <span className="unread-dot"></span>}
+                </div>
+                <small className="text-muted">{notif.receivedDate}</small>
+              </li>
+            ))}
+          </ul>
+          <div className="notification-actions">
+            <Button
+              variant="link"
+              onClick={() => navigate("/teachernotification")}
+            >
+              Show More
+            </Button>
+            <Button variant="link" onClick={handleMarkAsRead}>
+              Mark as Read
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Logout Confirmation Popup */}
       {showLogoutConfirm && (
         <div className="logout-confirmation-popup">
-          <div
-            className="popup-content"
-            style={{
-              width: "300px",
-              margin: "0 auto",
-              padding: "20px",
-              background: "#fff",
-              borderRadius: "8px",
-              textAlign: "center",
-            }}
-          >
+          <div className="popup-content">
             <h5>Are you sure you want to logout?</h5>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-                marginTop: "15px",
-              }}
-            >
-              <Button
-                variant="danger"
-                style={{ width: "100%" }}
-                onClick={handleLogout}
-              >
+            <div className="logout-actions">
+              <Button variant="danger" onClick={handleLogout}>
                 Yes
               </Button>
-              <Button
-                variant="secondary"
-                style={{ width: "100%" }}
-                onClick={handleCancelLogout}
-              >
+              <Button variant="secondary" onClick={handleCancelLogout}>
                 No
               </Button>
             </div>
           </div>
         </div>
+      )}
+
+      {/* Password Change Popup */}
+      {showPasswordPopup && <UpdatePassword onClose={togglePasswordPopup} />}
+
+      {/* Notification Details Modal */}
+      {selectedNotification && (
+        <Modal show onHide={() => setSelectedNotification(null)} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>{selectedNotification.title}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>{selectedNotification.content}</p>
+            <small className="text-muted">
+              {selectedNotification.receivedDate}
+            </small>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="secondary"
+              onClick={() => setSelectedNotification(null)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       )}
     </Navbar>
   );

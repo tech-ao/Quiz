@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Form, Table } from "react-bootstrap";
+import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./AdminAttendance.css";
 import SidePannel from "./SidePannel";
@@ -14,8 +15,10 @@ const TeacherAttendance = ({
   const [selectedTeacherType, setSelectedTeacherType] = useState("");
   const [selectedPerson, setSelectedPerson] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
 
   const headerHeight = 60;
 
@@ -54,20 +57,18 @@ const TeacherAttendance = ({
 
   useEffect(() => {
     const handleResize = () => {
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
       setIsSmallScreen(window.innerWidth < 768);
-      setSidebarVisible(window.innerWidth >= 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
-
     window.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Corrected the setter call here
   const toggleSidebar = () => {
-    setSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible(!isSidebarVisible);
   };
 
   const handleTeacherSelect = (e) => {
@@ -79,8 +80,9 @@ const TeacherAttendance = ({
     }
   };
 
-  const handleDateChange = (e) => {
-    setSelectedDate(new Date(e.target.value));
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    setShowCalendar(false);
   };
 
   const renderAttendanceList = () => {
@@ -181,11 +183,9 @@ const TeacherAttendance = ({
               top: `${headerHeight}px`,
               backgroundColor: "white",
               zIndex: 999,
-              padding: "15px",
-              paddingRight: "50px",
             }}
           >
-            <Table className="table-sm" style={{ width: "40%" }}>
+            <Table className="table-sm" style={{ width: "35%" }}>
               <thead>
                 <tr>
                   <th style={{ width: "25%" }}>Type</th>
@@ -213,7 +213,7 @@ const TeacherAttendance = ({
                       <Form.Select
                         onChange={handleTeacherSelect}
                         value={selectedPerson?.id || ""}
-                        style={{ width: "150px",marginLeft:"20px" }}
+                        style={{ width: "150px", marginLeft: "20px" }}
                         disabled={!selectedTeacherType}
                       >
                         <option value="">Select teacher</option>
@@ -226,30 +226,29 @@ const TeacherAttendance = ({
                               </option>
                             ))}
                       </Form.Select>
-                      <div
-                        style={{
-                          position: "relative",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <Form.Control
-                          type="date"
-                          onChange={handleDateChange}
-                          value={
-                            selectedDate
-                              ? selectedDate.toISOString().split("T")[0]
-                              : ""
-                          }
-                          style={{
-                            opacity: 0,
-                            position: "absolute",
-                            top: 0,
-                            left: "20px",
-                            zIndex: 2,
-                            width: "100px",
-                          }}
-                        />
-                        <FaFilter style={{ fontSize: "32px" }} />
+                      {/* Filter Icon */}
+                      <div style={{ position: "relative", marginLeft: "25px" }}>
+                        <div
+                          onClick={() => setShowCalendar(!showCalendar)}
+                          style={{ cursor: "pointer" }}
+                        >
+                          <FaFilter style={{ fontSize: "32px" }} />
+                        </div>
+                        {showCalendar && (
+                          <div
+                            style={{
+                              position: "absolute",
+                              top: "40px",
+                              right: "100%",
+                              zIndex: 1000,
+                            }}
+                          >
+                            <Calendar
+                              onChange={handleDateChange}
+                              value={selectedDate || new Date()}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </td>
@@ -261,9 +260,9 @@ const TeacherAttendance = ({
           {/* Attendance list if a date is chosen */}
           {selectedPerson && selectedDate && renderAttendanceList()}
 
-          {/* Render calendar only when a teacher has been selected */}
+          {/* Render calendar view for yearly attendance if a teacher has been selected */}
           {selectedPerson && (
-            <div className="calendar-grid" style={{ overflowY:"auto" }}>
+            <div className="calendar-grid" style={{ overflowY: "auto" }}>
               {renderYearlyCalendar()}
             </div>
           )}

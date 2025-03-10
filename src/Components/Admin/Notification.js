@@ -8,7 +8,9 @@ import AdminHeader from "./AdminHeader";
 import Sidebar from "./SidePannel";
 
 function NotificationPage() {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -28,7 +30,10 @@ function NotificationPage() {
   
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -76,23 +81,24 @@ function NotificationPage() {
       <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container">
+        <Container className="main-container" style={{overflowY:"auto"}}>
           {/* Sticky Header */}
           <div className="sticky-header">
             <Row className="align-items-center">
               <Col md={6}>
                 <h2 className="fw-bold">Notifications</h2>
               </Col>
-              <Col md={6} className="d-flex justify-content-end">
+              <Col md={6} className="d-flex justify-content-end" style={{marginTop:"10px"}}>
                 <input
                   type="text"
                   className="form-control search-input"
                   placeholder="Search notifications..."
                   value={searchTerm}
                   onChange={handleSearch}
+                  
                 />
                 <button className="btn btn-light filter-btn" onClick={handleFilterClick}>
-                  <FaFilter style={{ fontSize: "20px" }} />
+                  <FaFilter style={{ fontSize: "30px" }} />
                 </button>
                 {showDatePicker && (
                   <div className="date-picker-container">
@@ -114,13 +120,14 @@ function NotificationPage() {
           </div>
 
           {/* Notification List */}
-          <ListGroup className="notification-list">
+          <ListGroup className="notification-list" >
             {filteredNotifications.length > 0 ? (
               filteredNotifications.map((notification) => (
                 <ListGroup.Item
                   key={notification.id}
                   className={`notification-item ${notification.isRead ? "read" : "unread"}`}
                   onClick={() => handleNotificationClick(notification.id)}
+                  style={{margin:"0 15px 0 10px"}}
                 >
                   <div className="notification-title">{notification.title}</div>
                   <small className="text-muted" style={{marginRight:"30px"}}>Received on: {notification.receivedDate}</small>

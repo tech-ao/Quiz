@@ -1,0 +1,203 @@
+.logo1 {
+  max-width: 10px;
+}
+button {
+  height: auto;
+}
+.header {
+  background-color: #E7FFEC !important;
+  width: 100%;
+  min-height: 100px;
+  padding: 0 !important; /* Remove default padding */
+  margin: 0 !important; /* Remove default margin */
+}
+
+.head-container {
+  background-color: #E7FFEC !important;
+  min-height: 100px;
+  width: 100% !important;
+  margin: 0 !important; /* Remove default margin */
+  padding: 0 15px !important; /* Add horizontal padding inside instead */
+}
+
+.teacher-popup {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 200px;
+  z-index: 9999;
+}
+
+.menu-item {
+  cursor: pointer;
+  transition: none;
+}
+
+.toggle-button {
+  padding: 0;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .toggle-button {
+    display: block;
+  }
+}
+
+.menu-item:hover {
+  background-color: #f0f0f0;
+}
+
+.action-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.custom-padding-right {
+  padding-right: 100px;
+}
+
+.custom-padding-left {
+  padding-left: 100px;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.brandTitle {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.brandSubtitle {
+  font-size: 15px;
+}
+
+@media (max-width: 992px) {
+  .welcome-message {
+    font-size: 1rem;
+  }
+  .action-button {
+    font-size: 14px;
+  }
+}
+
+.logout-confirmation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .logo1 {
+    max-width: 60px;
+  }
+  .welcome-message {
+    display: none;
+  }
+  .headerIcon-group {
+    position: static;
+    margin-left: auto;
+    margin-right: 100px;
+  }
+}
+
+@media (max-width: 768px) {
+  .teacher-popup {
+    top: 40px;
+    right: 0;
+    width: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .action-button {
+    font-size: 12px;
+  }
+  .teacher-popup {
+    width: 150px;
+    right: 5px;
+  }
+  .menu-item {
+    font-size: 12px;
+  }
+}
+
+.teacher-text {
+  color: #198754;
+}
+
+.border-dark-green {
+  border: 2px solid darkgreen;
+  padding: 5px;
+}
+
+.notification-popup {
+  position: absolute;
+  top: 75px;
+  right: 115px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 290px;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .notification-popup {
+    top: 80px;
+    transform: translateY(15px);
+  }
+}
+
+@media (max-width: 368px) {
+  .admin-btn {
+    font-size: 18px;
+  }
+  .admin-btn .header-icon {
+    font-size: 18px;
+    position: relative;
+    top: -2px;
+    font-weight: bolder;
+  }
+  .admin-name {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-btn .headericon {
+    font-size: 39px;
+    height: 0%;
+  }
+}
+
+
+

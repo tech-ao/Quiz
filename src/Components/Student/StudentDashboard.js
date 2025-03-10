@@ -20,19 +20,27 @@ const StudentDashboard = () => {
   const [error, setError] = useState(null);
 
   const profile = useSelector((state) => state.profile);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        // Sidebar visible only for screens 1024px and above
+        setIsSidebarVisible(window.innerWidth >= 1024);
+        setIsSmallScreen(window.innerWidth < 768);
+        setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+ 
 
   // Set studentId immediately from localStorage or location.state
   useEffect(() => {
@@ -86,7 +94,7 @@ const StudentDashboard = () => {
       <StudentHeader toggleSidebar={toggleSidebar} studentName={fullName || "Loading..."} />
       <div className="d-flex">
         {isSidebarVisible && <StudentSidePannel studyModeId={studentData?.studyModeId} />}
-        <Container className="main-container p-4 ">
+        <Container className="main-container ">
 
         <div className="sticky-header" style={{
             position: "sticky",

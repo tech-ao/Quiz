@@ -1,21 +1,141 @@
-/* PaymentHistory.css */
-.payment-history-table {
-    font-size: 1rem;
+/* =================== Payment History Table =================== */
+.paymentTable {
+max-width: 100%;
+  width: 90%;
+  font-size: 1rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-collapse: collapse;
+}
+.paymentTable{
+  width: 80%;
+}
+
+
+.paymentTable th,
+.paymentTable td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.paymentTable th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+/* =================== Responsive Design =================== */
+@media (max-width: 768px) {
+  .paymentTable {
+    font-size: 0.9rem;
+  }
+
+  .paymentTable th,
+  .paymentTable td {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .paymentTable {
+    font-size: 0.8rem;
+  }
+
+  .paymentTable th,
+  .paymentTable td {
+    padding: 8px;
+  }
+}
+
+
+/* Default styles for the search input */
+.search-container {
+  display: flex;
+  justify-content: end;
+  width: 60%;
+}
+
+/* Style for input field */
+.search-container input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+/* Style for search icon in mobile view */
+@media (max-width: 500px) {
+  .search-container {
+    width: 100%; /* Full width on mobile */
+  }
+
+  .input-group-text {
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc;
+    border-left: none;
+    padding: 8px;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+
+  /* Adjusting icon size */
+  .input-group-text svg {
+    font-size: 16px;
+    color: #555;
+  }
+}
+
+
+/* Default styles (non-mobile) */
+.search-Bar {
+  width: 20% !important;
+  margin-right: 50px !important;
+}
+
+.Filtericon {
+  margin-right: 55px !important;
+}
+
+@media (max-width: 360px) {
+  .table-subcontainer{
+    background-color: black;
+  }
+}
+/* Mobile styles */
+@media (max-width: 360px) {
+  .search-Bar {
+    width: 60% !important;
+    margin-right: 80px !important;
   }
   
-  .payment-history-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
-    text-align: center;
+  .Filtericon {
+    margin-right: 10px !important;
+    position: absolute;
+    right: 0;
   }
   
-  .payment-history-table td {
-    text-align: center;
-    vertical-align: middle;
+  /* .d-flex.justify-content-end.align-items-center.mb-3 {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start !important;
+  } */
+}
+
+@media (max-width: 576px) {
+  .datepick {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 9999;
+    background: white;
+    padding: 6px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    width: auto;
+    max-width: 95vw; /* Ensures it doesn’t exceed the screen */
+    min-width: 250px; /* Prevents it from being too small */
+    overflow-y: auto; /* Enables scrolling inside */
   }
-  
- 
-  
+}

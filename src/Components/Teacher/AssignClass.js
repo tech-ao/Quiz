@@ -10,9 +10,10 @@ const AssignClass = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [classes] = useState([
+  const [allClasses] = useState([
     {
       id: 1,
       title: "Online Course Class",
@@ -58,22 +59,54 @@ const AssignClass = () => {
       status: "Awaited",
     },
   ]);
+  
+  // Filtered classes based on search term
+  const [filteredClasses, setFilteredClasses] = useState(allClasses);
 
   const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
+    window.innerWidth >= 1024
   );
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
+ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+ 
+   useEffect(() => {
+     const handleResize = () => {
+       // Sidebar visible only for screens 1024px and above
+       setIsSidebarVisible(window.innerWidth >= 1024);
+       setIsSmallScreen(window.innerWidth < 768);
+       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
+ 
+  
+  // Handle search functionality
   useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    if (searchTerm.trim() === "") {
+      setFilteredClasses(allClasses);
+      return;
+    }
+    
+    const lowercasedSearch = searchTerm.toLowerCase();
+    const filtered = allClasses.filter(
+      (classItem) =>
+        classItem.title.toLowerCase().includes(lowercasedSearch) ||
+        classItem.description.toLowerCase().includes(lowercasedSearch) ||
+        classItem.createdBy.toLowerCase().includes(lowercasedSearch) ||
+        classItem.createdFor.toLowerCase().includes(lowercasedSearch) ||
+        classItem.status.toLowerCase().includes(lowercasedSearch) ||
+        classItem.classes.some(cls => cls.toLowerCase().includes(lowercasedSearch))
+    );
+    
+    setFilteredClasses(filtered);
+  }, [searchTerm, allClasses]);
+  
   const handleAction = (action, rowData) => {
     setSelectedRow(rowData);
     switch (action) {
@@ -90,13 +123,14 @@ const AssignClass = () => {
         break;
     }
   };
+  
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <div className="assign-class main-container">
-          <div className="container sub-container">
+          <div className="sub-container assign-container">
             {/* Header Section */}
             <div
               className="d-flex justify-content-between align-items-center header-section"
@@ -106,6 +140,7 @@ const AssignClass = () => {
                 top: "0",
                 backgroundColor: "white",
                 padding: "10px",
+                zIndex: "1",
               }}
             >
               <h4 className="live-classes-heading">
@@ -121,12 +156,14 @@ const AssignClass = () => {
                   className="form-control search-box"
                   style={{ width: "20%" }}
                   placeholder="Search..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 <button
                   className="btn btn-success addbtn"
                   onClick={() => setShowPopup(true)}
                 >
-                  <i className="bi bi-plus"></i> Add
+                  <i className="bi bi-plus"></i> Add Classes
                 </button>
               </div>
               {showPopup && (
@@ -153,11 +190,20 @@ const AssignClass = () => {
               </div>
             </div>
 
-            {/* Table Section */}
-            <div className="table-responsive">
-              <table className="table table-bordered table-hover table-custom">
-                <thead>
+            {/* Table Container with Horizontal and Vertical Scrolling */}
+            <div 
+              style={{
+                overflow: "auto",
+                maxHeight: "calc(100vh - 200px)", // Adjust based on your header/search section height
+                marginTop: "15px",
+                border: "1px solid #dee2e6",
+                borderRadius: "4px"
+              }}
+            >
+              <table className="table table-bordered table-hover table-custom m-0">
+                <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
                   <tr>
+                    <th style={{ width: "50px" }}>#</th>
                     <th>Class Title</th>
                     <th>Description</th>
                     <th>Date Time</th>
@@ -169,8 +215,9 @@ const AssignClass = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {classes.map((classItem) => (
+                  {filteredClasses.map((classItem, index) => (
                     <tr key={classItem.id}>
+                      <td className="text-center">{index + 1}</td>
                       <td>{classItem.title}</td>
                       <td>{classItem.description}</td>
                       <td>{classItem.dateTime}</td>
@@ -193,65 +240,53 @@ const AssignClass = () => {
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            gap: "10px",
+                            gap: "8px",
                             flexWrap: "nowrap",
                           }}
                         >
                           <button
-                            className="btn btn-primary btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("view", classItem)}
                           >
-                            <i
-                              className="bi bi-eye"
-                              style={{ fontSize: "16px" }}
-                            ></i>
+                            <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
                           </button>
+
                           <button
-                            className="btn btn-warning btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("edit", classItem)}
                           >
-                            <i
-                              className="bi bi-pencil"
-                              style={{ fontSize: "16px" }}
-                            ></i>
+                            <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
                           </button>
+
                           <button
-                            className="btn btn-danger btn-sm"
-                            style={{
-                              width: "40px",
-                              height: "30px",
-                              borderRadius: "50%",
-                              padding: "0",
-                            }}
+                            className="btn btn-sm"
+                            style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("remove", classItem)}
                           >
-                            <i
-                              className="bi bi-trash"
-                              style={{ fontSize: "16px" }}
-                            ></i>
+                            <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
                           </button>
                         </div>
                       </td>
                     </tr>
                   ))}
+                  
+                  {filteredClasses.length === 0 && (
+                    <tr>
+                      <td colSpan="9" className="text-center py-3">
+                        No classes found matching your search criteria.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Modals remain unchanged */}
       {showDetails && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
@@ -427,4 +462,4 @@ const AssignClass = () => {
   );
 };
 
-export default AssignClass;
+export default AssignClass; 

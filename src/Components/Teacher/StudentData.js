@@ -28,7 +28,7 @@ const getStatusColor = (status) => {
 };
 
 const StudentData = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
 
@@ -36,14 +36,19 @@ const StudentData = () => {
     setIsSidebarVisible(prev => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-      setIsSmallScreen(window.innerWidth < 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        // Sidebar visible only for screens 1024px and above
+        setIsSidebarVisible(window.innerWidth >= 1024);
+        setIsSmallScreen(window.innerWidth < 768);
+        setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
 
   const { students, loading, error } = useSelector((state) => state.students);
   const dispatch = useDispatch();
@@ -167,7 +172,7 @@ const StudentData = () => {
                 </Row>
                 {/* Row 2: Search bar, Filter Icon, and Add Student Button in the same row */}
                 <Row className="mt-2">
-                  <Col className="search-container">
+                  <Col className="searchcontainer">
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}

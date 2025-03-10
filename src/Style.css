@@ -127,7 +127,7 @@ body {
   position: fixed;
   top: 100px;
   left: 250px;
-  
+  overflow-y: hidden;
   width: calc(100% - 250px);
   height: calc(100vh - 100px);
   transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -141,7 +141,7 @@ body {
 
 @media (max-width: 767px) {
   .notification-popup {
-    top: 50px !important;
+    top: 80px !important;
     right: 10px !important;
     width: 90% !important;
     left: 5% !important;
@@ -156,17 +156,36 @@ body {
 
 
 /* Responsive Design */
-@media only screen and (max-width: 1024px) {
-  .side-panel {
-    width: 200px;
-  }
+
+@media screen and (min-width: 992px) and (max-width: 1024px) {
   .main-container {
-    left: 200px;
-    width: calc(100% - 200px);
+    left: 0;
+    margin-left: 25% !important;
+    width: 75% !important;
+    background-color: white;
+  }
+  
+}
+@media only screen and (min-width: 992px)
+{
+  .main-container{
+    left: 0;
+    margin-left: 20% !important;
+    width: 80% !important;
+    background-color: white;
+  
+  }
+  .side-panel{
+    width: 20% !important;
   }
 }
 
-
+@media only screen and (min-width: 768px)
+{
+  .container{
+    max-width: 100% !important;
+  }
+}
 @media only screen and (max-width: 1024px) {
   .side-panel {
     width: 180px;

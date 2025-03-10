@@ -7,7 +7,7 @@ import "./Attendance.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Attendance = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [attendanceRecords, setAttendanceRecords] = useState([
     { id: 1, name: "John Doe", registerNumber: "REG001", level: "Level-1", date: "2024-12-04", status: "Present", checked: false },
     { id: 2, name: "Jane Smith", registerNumber: "REG002", level: "Level-2", date: "2024-12-04", status: "Present", checked: false },
@@ -22,13 +22,20 @@ const Attendance = () => {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [bulkStatus, setBulkStatus] = useState("");
 
+const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -85,13 +92,13 @@ const Attendance = () => {
               </Col>
             </Row>
 
-            <div className="d-flex mb-2 filter-box">
+            <div className=" mb-2 filter-box">
               <Form.Control
                 type="text"
-                placeholder="Search...."
+                placeholder="Search Name (or) Register number...."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-bar"
+                className="searchbox"
               />
 
               <Dropdown show={showFilterDropdown} onToggle={setShowFilterDropdown}>
@@ -109,7 +116,7 @@ const Attendance = () => {
               </Dropdown>
             </div>
 
-            <div className="attendance-list">
+            <div className="attendance-list" style={{width:"98%"}}>
               <Table responsive striped bordered hover>
                 <thead>
                   <tr>
@@ -180,7 +187,7 @@ const Attendance = () => {
                 <option value="Absent">Absent</option>
                 <option value="Holiday">Holiday</option>
               </Form.Select>
-              <Button variant="primary" onClick={applyBulkStatus}>
+              <Button variant="success" onClick={applyBulkStatus}>
                 Apply
               </Button>
             </div>

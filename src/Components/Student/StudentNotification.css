@@ -1,40 +1,9 @@
-/* Sticky Header for Notifications */
-.sticky-header {
-  position: sticky !important;
-  top: 0 !important;
-  background: #fff !important;
-  z-index: 1000 !important;
-  padding: 10px 0 !important;
-  margin-top: 0 !important;
-     max-height: 80px !important; /* Adjusted height for small screens */
-    align-items: center;
-
-}
-
-/* Ensure Notifications title is aligned to the top */
-.sticky-header h2 {
-  margin: 0 !important;
-  padding: 10px 0 !important;
-}
-
-/* Ensure no extra padding on the main container */
-.main-container {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* Ensure sub-container doesn’t push content down */
-.sub-container {
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
-
-/* Notification Page Styles */
+/* Page Background */
 .notification-page {
   background-color: #f8f9fa !important;
 }
 
-/* Notification Card Styles */
+/* Notification Card Styling */
 .notification-card {
   border-radius: 8px !important;
   border: none !important;
@@ -55,31 +24,146 @@
   color: #6c757d !important;
 }
 
-/* Small Button Styles */
 .btn-sm {
   font-size: 0.85rem !important;
 }
 
-/* Responsive Styling */
-@media (max-width: 575.98px) {
-  .sticky-header{
-      max-height: 80px !important; /* Adjusted height for small screens */
-  }
-  .sticky-header h2 {
-    font-size: 1.25rem !important;
-    padding: 25px 0 0 0 !important;
-
-  }
+.view-btn {
+  min-width: 80px !important;
+  text-align: center !important;
+  height: 40px;
+  margin-top: 10px;
 }
 
-@media (min-width: 576px) and (max-width: 767.98px) {
-  .sticky-header h2 {
-    font-size: 1.375rem !important;
-  }
+/* Sticky Header (100% width) */
+.sticky-header {
+  position: sticky !important;
+  top: 0 !important;
+  width: 100% !important;
+  background: white !important;
+  z-index: 1000 !important;
+  padding: 10px 0 !important;
 }
 
-@media (min-width: 768px) {
-  .sticky-header h2 {
-    font-size: 1.5rem !important;
+/* Search Input (Reduced Width & Fixed Height) */
+.search-input {
+  width: 60% !important; /* Reduced width */
+  height: 35px !important; /* Fixed height */
+  margin-right: 10px !important;
+}
+
+/* Filter Icon Container */
+.filter-container {
+  position: relative !important;
+  margin-left: 15px !important; /* Space between search input & filter icon */
+  margin-right: 20px !important; /* Space between filter icon & screen edge */
+  margin-bottom: 10px !important; /* Added bottom margin for icons */
+}
+
+/* Filter Icon Button */
+.filter-btn {
+  border: none !important;
+  background: transparent !important;
+  font-size: 1.2rem !important;
+  cursor: pointer !important;
+  padding: 5px 10px !important;
+  margin-left: 15px !important; /* Keep icon 15px right to the search bar */
+}
+
+/* Date Picker Popup */
+.date-picker-container {
+  position: absolute !important;
+  top: 100px !important;
+  right: 0 !important;
+  background: white !important;
+  border-radius: 8px !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1) !important;
+  padding: 10px !important;
+  text-align: center !important;
+  z-index: 1000 !important;
+}
+
+/* Clear Filter Text */
+.clear-filter-text {
+  display: block !important;
+  text-align: center !important;
+  margin-top: 5px !important;
+  color: red !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+}
+
+.clear-filter-text:hover {
+  text-decoration: underline !important;
+}
+
+/* Date Picker Styling */
+.react-datepicker {
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+}
+
+.react-datepicker__header {
+  background-color: white !important;
+  color: black !important;
+  border-bottom: 1px solid #ddd !important;
+}
+
+.react-datepicker__day--selected {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.react-datepicker__day:hover {
+  background-color: #0056b3 !important;
+  color: white !important;
+}
+
+/* Allow Year Selection */
+.react-datepicker__year-dropdown {
+  background: white !important;
+  border: 1px solid #ccc !important;
+}
+
+.react-datepicker__year-option {
+  padding: 5px 10px !important;
+  cursor: pointer !important;
+}
+
+.react-datepicker__year-option:hover {
+  background: #007bff !important;
+  color: white !important;
+}
+
+/* No Notifications Found Text */
+.no-notifications {
+  margin-top: 20px !important;
+  text-align: center !important;
+  font-size: 16px !important;
+  color: #6c757d !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .search-input {
+    width: 100% !important;
+    height: 35px !important; /* Keep same height on small screens */
+    margin-right: 0 !important;
+  }
+
+  .view-btn {
+    width: 80px !important;
+  }
+
+  .filter-container {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
+
+  /* Show Calendar to the Left of the Filter Icon on Small Screens */
+  .date-picker-container {
+    right: auto !important;
+    width: 250px !important; /* Adjust width for better fit */
   }
 }

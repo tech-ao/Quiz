@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./kit.css";
 
-const AbacusKit = ({ onClose }) => {
+const AbacusKit = ({ onClose,isMinimized, onMinimize }) => {
   const columns = 17;
   const bottomBeads = 4;
 
@@ -10,6 +10,8 @@ const AbacusKit = ({ onClose }) => {
     top: Array(columns).fill(false),
     bottom: Array(columns).fill(Array(bottomBeads).fill(false)),
   });
+
+  // const [isMinimized, setIsMinimized] = useState(false);
 
   const toggleTopBead = (colIndex) => {
     setBeadState((prevState) => {
@@ -84,45 +86,58 @@ const AbacusKit = ({ onClose }) => {
   };
 
   return (
-    <div className="abacus-container">
-      <h2 className="title">Interactive Abacus</h2>
-      <div className="abacus-frame">
-        <div className="horizontal-line"></div>
-        <div className="aba-frame">
-          {Array.from({ length: columns }).map((_, colIndex) => (
-            <div key={colIndex} className="abacus-rod">
-              <div className="abacus-center-bar">
-                <div className="tb">
-                  <div
-                    className={`abacus-bead top ${beadState.top[colIndex] ? "active" : ""}`}
-                    onClick={() => toggleTopBead(colIndex)}
-                  ></div>
-                </div>
-
-                <div className="bb">
-                  {Array.from({ length: bottomBeads }).map((_, beadIndex) => (
-                    <div
-                      key={beadIndex}
-                      className={`abacus-bead bottom bead-${colIndex}-${beadIndex} ${
-                        beadState.bottom[colIndex][beadIndex] ? "active" : ""
-                      }`}
-                      onClick={() => toggleBottomBead(colIndex, beadIndex)}
-                    ></div>
+      <div className={`abacus-container ${isMinimized ? "minimized" : ""}`}>
+        <div className="abacus-sub-cont">
+          <div className="abacus-headerss">
+            <h2 className="aba-title">Interactive Abacus</h2>
+            <div className="header-buttons">
+            <button className="icon-button" onClick={onMinimize}>
+              {isMinimized ? "🔼" : "➖"}
+            </button>
+            <button className="icon-button" onClick={onClose}>
+              ❌
+            </button>
+            </div>
+          </div>
+    
+          {/* Abacus Frame (Hidden when minimized) */}
+          {!isMinimized && (
+            <>
+              <div className="abacus-frame">
+                <div className="horizontal-line"></div>
+                <div className="aba-frame">
+                  {Array.from({ length: columns }).map((_, colIndex) => (
+                    <div key={colIndex} className="abacus-rod">
+                      <div className="abacus-center-bar">
+                        <div className="tb">
+                          <div
+                            className={`abacus-bead top ${beadState.top[colIndex] ? "active" : ""}`}
+                            onClick={() => toggleTopBead(colIndex)}
+                          ></div>
+                        </div>
+                        <div className="bb">
+                          {Array.from({ length: bottomBeads }).map((_, beadIndex) => (
+                            <div
+                              key={beadIndex}
+                              className={`abacus-bead bottom bead-${colIndex}-${beadIndex} ${
+                                beadState.bottom[colIndex][beadIndex] ? "active" : ""
+                              }`}
+                              onClick={() => toggleBottomBead(colIndex, beadIndex)}
+                            ></div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
-            </div>
-          ))}
+    
+              <button className="reset-button" onClick={resetBeads}>Reset</button>
+            </>
+          )}
         </div>
       </div>
-      <button className="reset-button" onClick={resetBeads}>
-        Reset
-      </button>
-      <button className="reset-button" onClick={onClose}>
-        Close
-      </button>
-    </div>
-  );
-};
-
+    );
+    
+  };
 export default AbacusKit;

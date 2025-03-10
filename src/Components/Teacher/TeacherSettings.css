@@ -4,7 +4,9 @@
   color: #fff;
   font-weight: bold;
 }
-
+.Admin-Name-row{
+  width: 100px;
+}
 .admin-info {
   display: flex;
   align-items: center;

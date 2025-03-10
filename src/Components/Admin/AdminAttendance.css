@@ -102,7 +102,6 @@
 .calendar-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
   justify-content: space-between;
 }
 
@@ -206,9 +205,6 @@
     margin-top: -8px;
   }
 
-  .calendar-grid {
-    gap: 15px;
-  }
 
   .attendance-box {
     width: 80%;
@@ -226,9 +222,7 @@
     margin-top: -8px;
   }
 
-  .calendar-grid {
-    gap: 15px;
-  }
+
 
   .attendance-box {
     width: 80%;
@@ -247,9 +241,7 @@
     margin-top: -5px;
   }
 
-  .calendar-grid {
-    gap: 10px;
-  }
+
 
   .attendance-box {
     width: 90%;
@@ -297,9 +289,6 @@ body {
     width: 95%;
   }
 
-  .calendar-grid {
-    gap: 5px;
-  }
 
   .month-container {
     flex: 1 1 100%;

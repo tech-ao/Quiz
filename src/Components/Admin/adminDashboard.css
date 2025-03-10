@@ -5,10 +5,10 @@
   position: sticky !important;
   top: 0 !important;
   background-color: #fff !important;
-  padding: 20px 20px !important; /* Increased padding for height */
-  height: 80px !important; /* Increased height */
+  padding: 20px 20px !important;
+  height: 80px !important;
   display: flex !important;
-  align-items: center !important; /* Vertically center text */
+  align-items: center !important;
   text-align: left !important;
   z-index: 10 !important;
   font-size: 24px !important;
@@ -24,8 +24,40 @@
   border: 1px solid #ccc !important;
 }
 
-/* Media Queries for Various Screen Sizes */
+/* Dashboard & Calendar Wrapper */
+.dashboard-calendar-wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
 
+/* Dashboard Cards Container (75% width on large screens) */
+.dashboard-cards-container {
+  display: inline-block;
+  width: 75%;
+}
+
+/* Calendar Container fixed size */
+.calendar-container {
+  width: 450px;
+  height: 350px;
+}
+
+/* Media Queries for Small Screens */
+@media (max-width: 768px) {
+  .dashboard-calendar-wrapper {
+    flex-direction: column;
+  }
+  .dashboard-cards-container,
+  .calendar-container {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* Additional existing styles... */
+
+/* Main Container Adjustments */
 .main-container-p-4 {
   height: 850px;
   padding-top: 3%;
@@ -65,6 +97,7 @@
 
 .card-body {
   background-color: #bdfdd9;
+
 }
 
 .calender-note {
@@ -102,14 +135,14 @@
 .main-container {
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* Prevents horizontal scrolling */
-  padding-right: 15px; /* Prevents content from touching the edge */
+  overflow-x: hidden;
+  padding-right: 15px;
 }
 
 /* Ensure the dashboard cards fit properly */
 .dashboard-card {
   width: 100%;
-  max-width: calc(100% - 20px); /* Prevents right-side overflow */
+  max-width: calc(100% - 20px);
 }
 
 /* Prevent sidebar from causing overflow */
@@ -133,7 +166,7 @@
 /* Ensure calendar, quiz, and filter cards fit properly */
 .calendar-card, .quiz-section, .filter-card {
   width: 100%;
-  max-width: calc(100% - 20px); /* Prevents right-side overflow */
+  max-width: calc(100% - 20px);
 }
 
 /* Responsive Styles */
@@ -174,7 +207,8 @@
   .dashboard-card,
   .calendar-card,
   .quiz-section {
-    width: 90% !important;
+    width: 100% !important;
+    margin-bottom: 1rem !important;
   }
   .main-container {
     flex-direction: column !important;
@@ -199,7 +233,5 @@
   .calendar-card,
   .quiz-section {
     width: 95% !important;
-    margin-bottom: 20px !important;
-
   }
 }
