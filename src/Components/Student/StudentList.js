@@ -194,6 +194,7 @@ const StudentList = () => {
                       variant="outline-success"
                       className="add-student-btn"
                       onClick={handleOpenAddStudent}
+                      style={{width:"250px"}}
                     >
                       <i className="bi bi-person-plus me-2"></i> Add Student
                     </Button>
@@ -228,7 +229,7 @@ const StudentList = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}>
+                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
                     <i className="bi bi-person-plus me-2"></i> Add Student
                   </Button>
                 </Col>

@@ -1,631 +1,756 @@
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
 .abacus-app-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    flex-direction: column;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* BeadsDraw */
 .bead-drawer {
-  margin-bottom: 30px;
-  margin-left: 28px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+margin-bottom: 30px;
+margin-left: 28px;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .serial-number {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px; /* Space below the serial number */
-  text-align: center; /* Center the serial number */
-  margin-left: 15px;
+font-weight: bold;
+font-size: 18px;
+margin-bottom: 10px; /* Space below the serial number */
+text-align: center; /* Center the serial number */
+margin-left: 15px;
 }
 
 .beads-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: 120px;
-  width: 50px;
-  background-color: whitesmoke;
-  border: 2px solid black;
-  margin-bottom: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 120px;
+width: 50px;
+background-color: whitesmoke;
+border: 2px solid black;
+margin-bottom: 10px;
 }
 
 .D-bead {
-  width: 13px;
-  height: 13px;
-  background-color: brown;
-  border-radius: 50%;
-  cursor: pointer;
+width: 13px;
+height: 13px;
+background-color: brown;
+border-radius: 50%;
+cursor: pointer;
 }
 .D-stick{
-  height: 2px;
-  width: 30px;
-  background-color: #000;
-  margin-top:10px;
+height: 2px;
+width: 30px;
+background-color: #000;
+margin-top:10px;
 }
 
 .h4-beads{
 
-  width: 60px;
-  padding: 3px;
-  margin: 5px 0px;
-  border: 1px solid BLACK;
-  border-radius: 5px;
-  background-color: white;
-  text-align: center;
+width: 60px;
+padding: 3px;
+margin: 5px 0px;
+border: 1px solid BLACK;
+border-radius: 5px;
+background-color: white;
+text-align: center;
 }
 .beads-button-container {
   display: flex;
-  gap: 5px; /* Space between buttons */
-  justify-content: start; /* Center buttons horizontally */
+  justify-content: center; 
+  align-items: center;
+  gap: 5px; 
+  margin: 0;
+  padding: 0;
 }
 
 .add-bead-button,
 .remove-bead-button {
-  padding: 3px 8px;
-  background-color: #4CAF50; /* Green for plus button */
-  color: rgb(12, 1, 1);
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 18px;
-  font-weight: bolder;
+    padding: 0;
+    height: 15px;
+    width: 25px;
+    font-size: 18px;
+    font-weight: bolder;
+    border-radius: 3px !important;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    text-align: center; 
+    border: none;
+    background-color: #45a049;
 }
 
 .remove-bead-button {
-  background-color: #f44336; /* Red for minus button */
+background-color: #f44336; 
 }
 
 .add-bead-button:hover {
-  background-color: #45a049; /* Darker green on hover */
+background-color: #45a049; 
 }
 
 .remove-bead-button:hover {
-  background-color: #d32f2f; /* Darker red on hover */
+background-color: #d32f2f;
 }
+
+
 /*Addition Beads*/
 .beads-column-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  width: 100%;
-  justify-content: center;
+display: flex;
+flex-wrap: wrap;
+gap: 15px;
+width: 100%;
+justify-content: center;
 }
+
 .Serial-number-Addition {
-  font-weight: bold;
-  font-size: 16px;
-  text-align: center; /* Center the serial number */
-  margin-top: 10px; /* Space below the serial number */
-  width: 100%; /* Ensure it spans the full width */
+font-weight: bold;
+font-size: 16px;
+text-align: center; 
+margin-top: 10px; 
+width: 100%; 
 }
+
 .beads-column-row span {
-  font-size: 20px; /* Adjust the size of the symbol */
-  font-weight: bold; /* Make the symbol bold */
-  color: #333; /* Adjust the color of the symbol */
-  
+font-size: 20px;
+font-weight: bold; 
+color: #333; 
 }
 
 .beads-column-item {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 15px;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  width: 100%;
-  max-width: 150px;
+display: flex;
+flex-direction: row;
+align-items: center;
+gap: 15px;
+padding: 10px;
+background-color: #fff;
+border: 1px solid #ddd;
+border-radius: 5px;
+width: 100%;
+max-width: 150px;
 }
 
 .beads-column-row {
-  display: flex;
-  gap: 10px;
-  height: 100px;
-  justify-content: center;
-  align-items: start;
-  margin-top: 10px;
-  
+display: flex;
+gap: 10px;
+height: 100px;
+justify-content: center;
+align-items: start;
+margin-top: 10px;
 }
 
 .beads-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .koodu {
-  height: 2px;
-  width: 20px;
-  background-color: #000;
+height: 2px;
+width: 20px;
+background-color: #000;
 }
 
 
 .beads-column-input input {
-  width: 50px;
-  padding: 5px;
-  font-size: 14px;
-  text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+width: 50px;
+padding: 5px;
+font-size: 14px;
+text-align: center;
+border: 1px solid #ccc;
+border-radius: 4px;
 }
 
 .questio-wrapp {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 15px;
 }
 
 
 /* AbacusQuestion.css */
 .number-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 50px;
-  height: 50px;
-  border: 2px solid #000;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #f0f0f0;
-  margin: 5px;
+display: flex;
+justify-content: center;
+align-items: center;
+width: 50px;
+height: 50px;
+border: 2px solid #000;
+border-radius: 5px;
+font-size: 18px;
+font-weight: bold;
+background-color: #f0f0f0;
+margin: 5px;
 }
 .number {
-  font-size: 20px;
-  font-weight: bold;
-  color: #000;
+font-size: 20px;
+font-weight: bold;
+color: #000;
 }
 
 
 .addition-grid {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-top: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+margin-top: 20px;
 }
 
 .addition-row {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  gap: 10px;
+display: flex;
+justify-content: space-between;
+width: 100%;
+gap: 10px;
 }
 
 .addition-row span {
-  flex: 1;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
+flex: 1;
+text-align: center;
+font-size: 18px;
+font-weight: bold;
 }
+
 .abacus {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Beads start from the bottom */
-  width: 50px;
-  height: 120px;
-  border: 2px solid black;
-  margin: 2px;
-  padding: 7px;
-  position: relative;
-  background-color: white;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start; 
+width: 50px;
+height: 120px;
+border: 2px solid black;
+margin: 2px;
+padding: 7px;
+position: relative;
+background-color: white;
 }
 
 .bead {
-  width: 13px;
-  height: 13px;
-  background-color: brown;
-  border-radius: 50%;
-  position: relative;
-  top: 11%;
+width: 13px;
+height: 13px;
+background-color: brown;
+border-radius: 50%;
+position: relative;
+top: 11%;
 }
 
 .stick {
-  width: 30px;
-  height: 2px;
-  background-color: black;
-  position: absolute;
-  top: 15%;
+width: 30px;
+height: 2px;
+background-color: black;
+position: absolute;
+top: 15%;
 }
 
 .question-number {
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 5px; /* Adjust spacing as needed */
+font-weight: bold;
+text-align: center;
+margin-bottom: 5px; 
 }
 
 .answer-input {
-  width: 50px;
-  margin-top: 5px;
-  text-align: center;
+width: 50px;
+margin-top: 5px;
+text-align: center;
 }
 
 .question-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 10px;
 }
 
 .abacus-header {
-    background-color: #4caf50;
-    color: white;
-    padding: 18px;
-    padding-left: 1%;
-    font-size: 10px;
-    font-weight: bold;
-    display: flex;
-    align-items: center; 
-    position: fixed;
-    width: 100%;
-    top:0px;
-    z-index: 999;
+  background-color: #4caf50;
+  color: white;
+  padding: 18px;
+  padding-left: 1%;
+  font-size: 10px;
+  font-weight: bold;
+  display: flex;
+  align-items: center; 
+  position: fixed;
+  width: 100%;
+  top:0px;
+  z-index: 999;
 }
 
 .abacus-header-content {
-    display: flex;
-    align-items: center; 
-    justify-content: space-between;
-    padding-right: 5%;
-    width: 100%; 
+  display: flex;
+  align-items: center; 
+  justify-content: space-between;
+  padding-right: 5%;
+  width: 100%; 
 }
+
+
 /* Dropdown Styles */
 .abacus-level-dropdown {
-  max-width: 80%;
-  width: 200px; 
-  min-width: 100px;
-    background-color: #f4f4f4;
-    border: none;
-    padding: 3px;
-    font-size: 16px;
-    cursor: pointer;
-    
+max-width: 80%;
+width: 200px; 
+min-width: 100px;
+  background-color: #f4f4f4;
+  border: none;
+  padding: 3px;
+  font-size: 16px;
+  cursor: pointer;
+  
 }
 .abacus-sticky-top{
 
-    position: sticky;
-    z-index: 1000;
-    top:0;
+  position: sticky;
+  z-index: 1000;
+  top:0;
 }
 
 .abacus-level-section {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .abacus-level-heading {
-    font-weight: bold;
-    font-size: 18px; 
-    margin-bottom: 10px;
-    color: black; 
+  font-weight: bold;
+  font-size: 18px; 
+  margin-bottom: 10px;
+  color: black; 
 }
 .abacus-stage {
-    cursor: pointer;
-    margin: 15px 0 0 10px;
-    font-size: 16px; 
-    color: black;
-    display: flex; 
-    align-items: center;
+  cursor: pointer;
+  margin: 15px 0 0 10px;
+  font-size: 16px; 
+  color: black;
+  display: flex; 
+  align-items: center;
 }
+
+
 /* Icon Styles */
 .abacus-stage i {
-    margin-left: 16px; 
-    font-size: 16px; 
+  margin-left: 16px; 
+  font-size: 16px; 
 }
+
+
 /* Questions Styles */
 .abacus-questions {
-    margin-left: 20px; /* Indent questions */
-    margin-top: 5px;
+  margin-left: 20px;
+  margin-top: 5px;
 }
+
+
 /* Question Item Styles */
 .abacus-question-item {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center items vertically */
-    font-size: 14px; /* Question text size */
-    margin: 5px 0; /* Space between questions */
-    color: black; /* Set text color to black */
-    cursor: pointer; /* Change cursor to pointer */
-    padding: 5px; /* Add padding for better click area */
-    transition: background-color 0.3s; /* Smooth transition for background color */
+  display: flex; 
+  align-items: center; 
+  font-size: 14px; 
+  margin: 5px 0;
+  color: black;
+  cursor: pointer; 
+  padding: 5px; 
+  transition: background-color 0.3s;
 }
+
+
 /* Hover Effect */
 .abacus-question-item:hover,
 .abacus-question-item.active {
-    background-color: #e0e0e0; /* Change background color on hover or when active */
-    border-radius: 5px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
 }
+
 
 /* Task Icon Styles */
 .abacus-question-item i {
-    margin-right: 8px; /* Add space between icon and question text */
-    color: #4caf50; /* Set icon color (adjust as needed) */
-    font-size: 16px; /* Adjust icon size if needed */
+  margin-right: 8px; 
+  color: #4caf50;
+  font-size: 16px; 
 }
+
+
 /* Main Content Styles */
 .abacus-main-content {
-    margin-left: 250px; /* Match sidebar width */
-    padding: 10px;
-    margin-top: 70px;
-    flex: 1;
-    background-color: #fafafa;
-    min-height: 70vh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column; /* Stack content vertically */
-    align-items: center; /* Center content horizontally */
-    justify-content: space-around;
-    z-index: 200;
+  margin-left: 250px; 
+  padding: 10px;
+  margin-top: 70px;
+  flex: 1;
+  min-height: 70vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: space-around;
+  z-index: 200;
 }
 
 
 .welcome-heading.at-top {
-  position: fixed;
-  top: 9%; /* Adjust this value to position the heading under the menu bar */
-  left: 50%;
-  display: flex;
-  justify-content: center;
-  transform: translateX(-50%); /* Center the heading horizontally */
-  width: 100%; /* Adjust width to fit the content */
-  padding: 20px 20px; /* Add padding for better visibility */
-  z-index: 200; /* Ensure the heading is above other content */
-  background-color: white; /* Apply background color */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for better visibility */
+position: fixed;
+top: 9%; 
+left: 50%;
+display: flex;
+justify-content: center;
+transform: translateX(-50%); 
+width: 100%; 
+padding: 20px 20px; 
+z-index: 200; 
+background-color: white;
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
+
 .abacus-main-content p{
-   font-size: 25px;
-  }
+ font-size: 25px;
+}
+
 /* Navigation Items Styles */
 .abacus-nav-items {
-    width: 800px;
-    display: flex;
-    justify-content: space-evenly; /* Space items evenly */
-    
-    margin-right: 10%;
+  width: 800px;
+  display: flex;
+  justify-content: space-evenly; 
+  
+  margin-right: 10%;
 }
 .abacus-nav-item {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    margin-right:5%; /* Add gap between nav items */
-    font-size: 14px; /* Increase text size */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-right:5%;
+  font-size: 14px;
 }
+
 .abacus-nav-item:hover {
-    color: #393a39;
-    font-weight: bold;
+  color: #393a39;
+  font-weight: bold;
 }
 
 /* Question Image Container Styles */
 .abacus-question-image-container {
-    margin-top: 20px; /* Space above the image */
-    text-align: center; /* Center the text */
+  margin-top: 20px; 
+  text-align: center; 
 }
+
 /* Fixed size for the question image */
 .abacus-question-image {
-    width: 900px; /* Set a fixed width */
-    height: 500px; /* Set a fixed height */
-    object-fit: cover; /* Maintain aspect ratio and cover the area */
-    margin-bottom: 10px; /* Space below the image */
-    border-radius: 15px; /* Set rounded corners */
+  width: 900px; 
+  height: 500px; 
+  object-fit: cover; 
+  margin-bottom: 10px; 
+  border-radius: 15px; 
 }
 
 /* Question Description Styles */
 .abacus-question-description {
-    font-size: 18px; /* Increase font size for description */
-    color: black; /* Set text color to black */
-    margin-top: 10px; /* Space above the description */
+  font-size: 18px; 
+  color: black;
+  margin-top: 10px; 
 }
 
 /* Back to Dashboard Button Styles */
 .abacus-back-button {
-    background-color: #7bdd7e; /* Button background color */
-    color: white; /* Text color */
-    border: none; /* Remove border */
-    padding: 5px 20px; /* Padding for the button */
-    margin-right: 5%; /* Space between button and dropdown */
-    margin-left: 2%;
-    cursor: pointer; /* Pointer cursor on hover */
-    font-size: 16px; /* Font size */
-    text-decoration: none; /* Remove underline */
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Center items vertically */
-    border-radius: 5px;
+  background-color: #7bdd7e; 
+  color: white; 
+  border: none; 
+  padding: 5px 20px; 
+  margin-right: 5%; 
+  margin-left: 2%;
+  cursor: pointer; 
+  font-size: 16px; 
+  text-decoration: none;
+  display: flex;
+  align-items: center; 
+  border-radius: 5px;
 }
 
 
 .abacus-back-button i {
-    margin-right: 8px; /* Space between icon and text */
+  margin-right: 8px; 
 }
 
 .abacus-back-button:hover {
-    color: #444a44; /* Darker shade on hover */
+  color: #444a44; 
 }
+
+
 
 /* Game Icon Button Styles */
 .abacus-game-icon-container {
-    position: fixed; /* Fix position to the bottom right corner */
-    z-index: 1001;
-    bottom: 20px; /* Distance from the bottom */
-    right: 20px; /* Distance from the right */
-    background-color: #4caf50; /* Green background */
-    border-radius: 50%; /* Make it round */
-    width: 60px; /* Width of the button */
-    height: 60px; /* Height of the button */
-    display: flex; /* Use flexbox for centering */
-    align-items: center; /* Center icon vertically */
-    justify-content: center; /* Center icon horizontally */
-    cursor: pointer; /* Pointer cursor on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for depth */
-    transition: background-color 0.3s; /* Smooth transition */
+  position: fixed; 
+  z-index: 1001;
+  bottom: 20px;
+  right: 20px; 
+  background-color: #4caf50;
+  border-radius: 50%;
+  width: 60px; 
+  height: 60px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  cursor: pointer; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  transition: background-color 0.3s; 
 }
 .abacus-game-icon-container.minimized {
-    background:linear-gradient(100deg,rgba(4, 167, 243, 0.875),rgb(8, 246, 186),rgb(56, 56, 157));
-    transition: background-color 0.3s;
+  background:linear-gradient(100deg,rgba(4, 167, 243, 0.875),rgb(8, 246, 186),rgb(56, 56, 157));
+  transition: background-color 0.3s;
 }
 .abacus-game-icon-container.minimized::after {
-    content: "";
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%; /* Makes it a circle */
-    position: absolute;
-    top: -1px; /* Adjust position */
-    right: -1px; /* Adjust position */
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  top: -1px; 
+  right: -1px; 
 }
 .abacus-game-icon-container:hover {
-    background-color: #45a049; /* Darker shade on hover */
+  background-color: #45a049;
 }
 
 .abacus-game-icon-container i {
-    color: white; /* Icon color */
-    font-size: 24px; /* Icon size */
+  color: white; 
+  font-size: 24px; 
 }
 
 .questio-wrapp{
-    padding: 5%;
-    margin-top: 10px;
-    gap: 3px;
-    display: flex;
-    flex-wrap: wrap;
-    height: auto;
+  padding: 5%;
+  margin-top: 10px;
+  gap: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
 }
 .dummy-questions-container {
-    width: 70%;
-    padding: 12px;
-    font-size: 15px;
-    font-weight: bold;
-    position: absolute;
-    background-color: white;
-    top: 20%;
-    left: 60%;
-    transform: translateX(-50%); /* Center horizontally */
-    transition: left 0.3s ease, transform 0.3s ease;
-    z-index: 5;
+  width: 70%;
+  padding: 12px;
+  font-size: 15px;
+  font-weight: bold;
+  position: absolute;
+  background-color: white;
+  top: 20%;
+  left: 60%;
+  transform: translateX(-50%); /* Center horizontally */
+  transition: left 0.3s ease, transform 0.3s ease;
+  z-index: 5;
 }
 
 .dummy-questions-container.minimized {
-    left: 60%; /* Center when minimized */
-    transform: translateX(-50%);
+  left: 60%;
+  transform: translateX(-50%);
 }
 
 .dummy-questions-container.abacus-open {
-    
-    left: 19%; /* Move to left when AbacusKit is open */
-    top:15%;
-    transform: none; /* Remove centering */
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    width: 20%;
-    height: 500px;
-    padding: 0px;
-    overflow-y: scroll; /* Allow vertical scrolling */
-    scrollbar-width: none; /* Hide scrollbar in Firefox */
-    -ms-overflow-style: none; 
+  
+  left: 19%; 
+  top:15%;
+  transform: none; 
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width: 20%;
+  height: 500px;
+  padding: 0px;
+  overflow-y: scroll; 
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; 
 }
 .dummy-questions-container.abacus-open h3{
-    background-color: white;
-    width: 100%;
-    font-size: 17px;
-    margin-left: 10px;
-    
+  background-color: white;
+  width: 100%;
+  font-size: 17px;
+  margin-left: 10px;
+  
 }
 .dummy-questions-container h3{
-    position: sticky;
-    top: 0;
-   padding: 10px;
-    margin: 0px;
-    z-index: 10;
-   
+  position: sticky;
+  top: 0;
+ padding: 10px;
+  margin: 0px;
+  z-index: 10;
+ 
 }
 
 .dummy-questions-container p{
-    font-size: 20px;
+  font-size: 20px;
 }
 .dummy-questions-container h3{
-    font-weight: bold;
-    margin-left: 50px;
+  font-weight: bold;
+  margin-left: 50px;
 }
 
 .answer-input {
-    width: 60px;
-    padding: 8px;
-    margin: 5px 0px;
-    border: 1px solid BLACK;
-    border-radius: 5px;
-    background-color: white;
-  }
-  .submit-button{
-    background-color: #28a745;
-    border-radius: 10px;
-    border: none;
-    color: white;
-    font-weight: bold;
-    margin-left: 40%;
-  }
+  width: 60px;
+  padding: 8px;
+  margin: 5px 0px;
+  border: 1px solid BLACK;
+  border-radius: 5px;
+  background-color: white;
+}
+.submit-button{
+  background-color: #28a745;
+  border-radius: 10px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  margin-left: 40%;
+}
 
+
+.submit-button:hover {
+  background-color: #8bd711;
+}
+.abacus-main-content h2{
   
-  .submit-button:hover {
-    background-color: #8bd711;
-  }
-  .abacus-main-content h2{
-    
-    font-size: 4rem;
-    font-weight: bold;
-    color: black;
-    background: white;
-   
-    
+  font-size: 4rem;
+  font-weight: bold;
+  color: black;
+  background: white;
+ 
   
-  }
-/* Sidebar Styling */
+
+}
+
 /* Sidebar Fix */
 .abacus-sidebar {
-  position: fixed; /* Keeps the sidebar floating */
-  top:73px;
-  left: 0;
-  width: 17%;
-  height: 100vh;
-  background-color: #e8ffed;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-  transform: translateX(-100%); /* Initially hidden */
-  transition: transform 0.3s ease-in-out;
-  z-index: 777; /* Ensures sidebar is on top */
+position: fixed; /* Keeps the sidebar floating */
+top:73px;
+left: 0;
+width: 17%;
+height: 100vh;
+background-color: #e8ffed;
+box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+transform: translateX(-100%); /* Initially hidden */
+transition: transform 0.3s ease-in-out;
+z-index: 777;
 }
 
 .abacus-sidebar.active {
-  transform: translateX(0); /* Show sidebar */
+transform: translateX(0); 
+}
+
+.sidebar-close-icon {
+  display: none; 
 }
 
 
-
-/* Ensure the sidebar does NOT push content */
 /* Small Phones (up to 375px) */
 @media (max-width: 375px) {
-  .abacus-main-content {
-    height: auto;
-    padding: 10px;
-  }
-  .abacus-sidebar {
-    width: 50%;
-  }
-  .dummy-questions-container {
-    height: 280px;
-    width: 60% !important;
-  }
-  .abacus-column {
+.abacus-main-content {
+  height: auto;
+  padding: 10px;
+}
+.abacus-sidebar {
+  width: 50%;
+}
+.dummy-questions-container {
+  height: 280px;
+  width: 60% !important;
+}
+.abacus-column {
+width: 30px;
+height: 80px;
+}
+
+.bead {
+width: 8px;
+height: 8px;
+}
+
+.stick {
+width: 25px;
+}
+
+.number-box {
+width: 30px;
+height: 30px;
+font-size: 12px;
+}
+
+.question-number {
+font-size: 10px;
+}
+
+.answer-input {
+width: 30px;
+font-size: 11px;
+}
+
+}
+
+
+/* Medium Phones (375px - 425px) */
+@media (max-width: 425px) {
+.abacus-main-content {
+  height: auto;
+  padding: 15px;
+}
+
+.abacus-level-dropdown {
+  max-width: 130px !important;
+  font-size: 14px;
+}
+.dummy-questions-container h3 {
+  width: 250px!important;
+}
+
+.dummy-questions-container {
+  height: 300px;
+  width: 60% !important;
+}
+
+.abacus-sidebar {
+  width: 60%;
+}
+
+}
+
+
+@media (max-width: 768px) {
+
+  /*drew beads*/
+  .bead-drawer {
+    margin-left: 10px; 
+}
+
+.serial-number {
+    font-size: 16px; 
+    margin-left: 10px; 
+}
+
+.beads-container {
+    width: 40px; 
+    height: 100px;
+}
+
+.D-bead {
+    width: 10px; 
+    height: 10px;
+}
+
+.D-stick {
+    width: 25px; 
+}
+
+.h4-beads {
+    width: 50px; 
+}
+
+.remove-bead-button{
+  background-color: red !important;
+}
+
+
+/*Addition beads*/
+.abacus-column {
   width: 30px;
   height: 80px;
 }
@@ -636,7 +761,7 @@ body {
 }
 
 .stick {
-  width: 25px;
+  width: 20px;
 }
 
 .number-box {
@@ -653,290 +778,219 @@ body {
   width: 30px;
   font-size: 11px;
 }
- 
+
+/* Adjust container layout for mobile */
+.abacus-app-container {
+  flex-direction: column; 
+  height: 100vh;
 }
 
-/* Medium Phones (375px - 425px) */
-@media (max-width: 425px) {
-  .abacus-main-content {
-    height: auto; /* Allow natural height */
-    padding: 15px;
-  }
-
-  .abacus-level-dropdown {
-    max-width: 130px !important;
-    font-size: 14px;
-  }
-  .dummy-questions-container h3 {
-    width: 250px!important;
-  }
-
-  .dummy-questions-container {
-    height: 300px;
-    width: 60% !important;
-  }
-
-  .abacus-sidebar {
-    width: 60%;
-  }
-  
-}
-
-
-@media (max-width: 768px) {
-
-  .abacus-column {
-    width: 30px;
-    height: 80px;
-}
-
-.bead {
-    width: 8px;
-    height: 8px;
-}
-
-.stick {
-    width: 20px;
-}
-
-.number-box {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-}
-
-.question-number {
-    font-size: 10px;
-}
-
-.answer-input {
-    width: 30px;
-    font-size: 11px;
-}
-
-  /* Adjust container layout for mobile */
-  .abacus-app-container {
-    flex-direction: column; /* Stack elements vertically */
-    height: 100vh;
-  }
-  
 .welcome-heading.at-top {
-  font-size: 13px !important;
-  transform: translateX(-45%) !important;
-  top: 13%;
+font-size: 13px !important;
+
+top: 13%;
+
+}
+.abacus-game-icon-container{
+  height: 30px;
+  width: 30px;
+}
+
+/* Make header more compact */
+.abacus-header {
+  flex-direction: column;
+  padding: 5px;
+  text-align: center;
+}
+
+/* Adjust level dropdown */
+.abacus-level-dropdown {
+  max-width: 80%;
+  width: 200px; 
+  min-width: 100px; 
+  font-size: 12px;
+  margin: 5px 0;
+  margin-left: -10px;
+}
+
+/* Sidebar becomes a collapsible menu */
+.abacus-sidebar {
+  width: 200px!important;
+  height: 100vh;
+  position: fixed;
+  top: 82px;
+  z-index: 1000;
+  padding: 10px;
+  display: none;
+}
+
+.abacus-sidebar.active {
+  display: block; /* Show when active */
+}
+
+.abacus-level-heading h2 {
+  font-size: 15px;
+}
+
+/* Make the sidebar toggle-friendly */
+.abacus-stage {
+  font-size: 14px;
+}
+
+/* Adjust question item styles */
+.abacus-question-item {
+  font-size: 12px;
  
 }
-  .abacus-game-icon-container{
-    height: 30px;
-    width: 30px;
-  }
 
-  /* Make header more compact */
-  .abacus-header {
-    flex-direction: column;
-    padding: 5px;
-    text-align: center;
-  }
+.abacus-back-button {
+  font-size: 12px;
+  margin: 5px 0;
+  margin-top: 3px;
+  margin-right: 90%;
+}
 
-  /* Adjust level dropdown */
-  .abacus-level-dropdown {
-    max-width: 80%; /* Allow it to shrink */
-    width: 200px; /* Ensure it adjusts based on content */
-    min-width: 100px; /* Set a reasonable minimum width */
-    font-size: 12px;
-    margin: 5px 0;
-    margin-left: -10px;
-  }
+/* Expand main content to full width */
+.abacus-main-content {
+  margin-left: 0;
+  width: 100%;
+  padding: 15px;
+  height: 40% !important;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
 
-  /* Sidebar becomes a collapsible menu */
-  .abacus-sidebar {
-    width: 200px!important;
-    height: 100vh;
-    position: fixed;
-    top: 82px;
-    z-index: 1000;
-    padding: 10px;
-    display: none; /* Hide by default */
-  }
+/* Adjust game icon size and placement */
+.abacus-game-icon-container {
+  font-size: 15px;
+  bottom: 10px;
+  right: 30px;
+}
 
-  .abacus-sidebar.active {
-    display: block; /* Show when active */
-  }
+/* Dummy Questions Container for Mobile */
+.dummy-questions-container {
+  font-size: 10px;
+  font-weight: bold;
+  position: absolute;
+  top: 15%;
+  left: 50% !important;
+  transform: translateX(-50%);
+  transition: left 0.3s ease, transform 0.3s ease;
+  width: 80%;
+  max-width: 300px;
+  transform: none; /* Remove centering */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: 0px;
+  overflow-y: scroll; 
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+  height:400px ;
+  background:rgb(250, 250, 250);
+  border-radius: 10px;
+  text-align: center;
+  align-items: center;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+.dummy-questions-container.minimized {
+  left: 30%;
+  transform: translateX(-50%);
+}
+.dummy-questions-container.abacus-open {
+  left: 1% !important;
+  transform: none;
+  width: 80%;
+  /* top: % !important; */
+  height: 400px;
 
-  .abacus-level-heading h2 {
-    font-size: 15px;
-  }
+}
 
-  /* Make the sidebar toggle-friendly */
-  .abacus-stage {
-    font-size: 14px;
-  }
+.dummy-questions-container h3 {
+  font-size: 11px !important;
+  margin-bottom: 10px;
+  background-color: white;
+  width:  400px!important;
+  margin-left: 0px !important;
+  padding: 5px;
+}
 
-  /* Adjust question item styles */
-  .abacus-question-item {
-    font-size: 12px;
-   
-  }
+.dummy-questions-container input {
+  width: 50% !important;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
 
-  .abacus-back-button {
-    font-size: 12px;
-    margin: 5px 0;
-    margin-top: 3px;
-    margin-right: 90%;
-  }
-
-  /* Expand main content to full width */
-  .abacus-main-content {
-    margin-left: 0;
-    width: 100%;
-    padding: 15px;
-    height: 40% !important;
-    text-align: center;
-    z-index: 1;
-    position: relative;
-  }
-
-  /* Adjust game icon size and placement */
-  .abacus-game-icon-container {
-    font-size: 15px;
-    bottom: 10px;
-    right: 30px;
-  }
-
-  /* Dummy Questions Container for Mobile */
-  .dummy-questions-container {
-    font-size: 10px;
-    font-weight: bold;
-    position: absolute;
-    top: 15%;
-    left: 50% !important;
-    transform: translateX(-50%);
-    transition: left 0.3s ease, transform 0.3s ease;
-    width: 80%;
-    max-width: 300px;
-    transform: none; /* Remove centering */
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    padding: 0px;
-    overflow-y: scroll; /* Allow vertical scrolling */
-    scrollbar-width: none; /* Hide scrollbar in Firefox */
-    -ms-overflow-style: none; 
-    height:400px ;
-    background:rgb(250, 250, 250);
-    border-radius: 10px;
-    text-align: center;
-    align-items: center;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-  }
-  .dummy-questions-container.minimized {
-    left: 30%;
-    transform: translateX(-50%);
-  }
-  .dummy-questions-container.abacus-open {
-    left: 1% !important;
-    transform: none;
-    width: 80%;
-    /* top: % !important; */
-    height: 400px;
-
-  }
-
-  .dummy-questions-container h3 {
-    font-size: 11px !important;
-    margin-bottom: 10px;
-    background-color: white;
-    width:  400px!important;
-    margin-left: 0px !important;
-    padding: 5px;
-  }
-
-  .dummy-questions-container input {
-    width: 50% !important;
-    padding: 5px;
-    font-size: 14px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-
-  .dummy-questions-container button {
-    width: 30%;
-    padding: 5px;
-    font-size: 14px;
-    border: none;
-    background: #28a745;
-    color: white;
-    border-radius: 15px;
-    cursor: pointer;
-    
-    margin-left: 8%;
-    
-  }
-
-  .dummy-questions-container button:hover {
-    background: #218838;
-  }
-
-  .dummy-questions-container li {
-    font-size: 12px;
-    margin: 5px 0;
-  }
-
-  /* Navigation Items for Mobile */
-  .abacus-nav-text {
-    font-size: 12px; /* Reduce text size for mobile */
-  }
- .navbar-collapse {
-    position: fixed;
-    top: 60px; /* Adjust based on header height */
-    right: -100%; /* Start fully hidden */
-    width: 100%; /* Full width for mobile */
-    transition: right 0.3s ease-in-out;
-    padding-top: 20px;
-    color: black;
-    padding-left: 0px;
-  }
-
-  .navbar-collapse.show {
-    right: 0; /* Slide in from right */
-  }
-
-  .abacus-nav-items {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding-left: 20px;
-    background-color: white;
-  }
-
-  .navbar-toggler {
-    position: absolute; /* Or fixed if you want it to stay even when scrolling */
-    bottom: -10px;
-    left: 0px !important; /* Moves the hamburger to the right */
-    z-index: 1050; /* Ensure it stays above */
-    padding: 5px;
-  }
-
+.dummy-questions-container button {
+  width: 30%;
+  padding: 5px;
+  font-size: 14px;
+  border: none;
+  background: #28a745;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+   margin-left: 8%;
   
+}
 
-  .submit-button {
-    width: 80%; /* Full width for mobile */
-    font-size: 11px;
-  }
-  
-  .abacus-sidebar {
-    width: 60%; /* Full width for mobile */
-    left: -100%; /* Hide sidebar by default */
-  }
+.dummy-questions-container button:hover {
+  background: #218838;
+}
 
-  .abacus-sidebar.active {
-    left: 0; /* Show sidebar when active */
-  }
+.dummy-questions-container li {
+  font-size: 12px;
+  margin: 5px 0;
+}
 
-  .sidebar-close-icon {
-    display: block; /* Show only in mobile view */
-  }
+/* Navigation Items for Mobile */
+.abacus-nav-text {
+  font-size: 12px; 
+}
+.navbar-collapse {
+  position: fixed;
+  top: 60px; 
+  right: -100%; 
+  width: 100%; 
+  transition: right 0.3s ease-in-out;
+  padding-top: 20px;
+  color: black;
+  padding-left: 0px;
+}
+
+.navbar-collapse.show {
+  right: 0; 
+}
+
+.abacus-nav-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 20px;
+  background-color: white;
+}
+
+.navbar-toggler {
+  position: absolute;
+  bottom: -10px;
+  left: 0px !important; 
+  z-index: 1050; 
+  padding: 5px;
+}
+
+
+.submit-button {
+  width: 80%; 
+  font-size: 11px;
+}
+
+.sidebar-close-icon {
+  display: block; /* Show only in mobile view */
+}
 
 }

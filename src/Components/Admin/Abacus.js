@@ -307,7 +307,9 @@ const AbacusMath = () => {
                     {currentPage * beadsPerPage + index + 1}
                   </div>
                   <div className="abacus">
-                    <div className="stick"></div>
+                  {!(questions[selectedQuestion] === "Addition" || questions[selectedQuestion] === "Subtraction") && (
+    <div className="stick"></div>
+  )}
                     {/* Render numbers for Addition, otherwise render beads */}
                     {questions[selectedQuestion] === "Addition" ||
                     questions[selectedQuestion] === "Subtraction" ? (

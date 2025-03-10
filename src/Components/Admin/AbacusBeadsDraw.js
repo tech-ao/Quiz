@@ -4,16 +4,16 @@ const BeadDrawer = ({ givenNumber, onBeadDraw }) => {
   const [beads, setBeads] = useState(0);
 
   const handleAddBead = () => {
-    if (beads < 15) {
+    if (beads < 8) {
       setBeads(beads + 1);
-      onBeadDraw(beads + 1); // Update the parent component with the new bead count
+      onBeadDraw(beads + 1); 
     }
   };
 
   const handleRemoveBead = () => {
     if (beads > 0) {
       setBeads(beads - 1);
-      onBeadDraw(beads - 1); // Update the parent component with the new bead count
+      onBeadDraw(beads - 1); 
     }
   };
 

@@ -192,9 +192,9 @@ const TeacherSidePanel = () => {
         </div>
 
         {/* Logout */}
-        <div className="logout-section">
-          <ul className="nav flex-column">
-            <li className="nav-item">
+        <div className="logout-section" >
+          <ul className="nav flex-column" >
+            <li className="nav-item" >
               <div className="nav-link" onClick={() => setShowLogoutConfirm(true)} style={{ cursor: 'pointer' }}>
                 <div className="icon-with-text log">
                   <i className="bi bi-box-arrow-right" style={{ color: 'white' }}></i>

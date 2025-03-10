@@ -37,7 +37,7 @@ const Header = ({ toggleSidebar }) => {
   const [selectedNotification, setSelectedNotification] = useState(null);
 
   // State to detect mobile view (based on width)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 1024);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -60,7 +60,7 @@ const Header = ({ toggleSidebar }) => {
 
   useEffect(() => {
     // Update isMobile on window resize
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobileOrTablet(window.innerWidth < 1024);
     window.addEventListener("resize", handleResize);
 
     const storedStudentId = localStorage.getItem("studentId");
@@ -127,7 +127,7 @@ const Header = ({ toggleSidebar }) => {
       <Row className="align-items-center w-100">
         {/* Left Section: Logo and (for mobile) menu button */}
         <Col xs={4} md={3} className="d-flex align-items-center header-left">
-          {isMobile ? (
+        {isMobileOrTablet ? (
             isMobileExpanded ? (
               <>
                 <Link to="/studentDashboard">
@@ -170,7 +170,7 @@ const Header = ({ toggleSidebar }) => {
         </Col>
 
         {/* Center Section: Welcome Message (desktop only) */}
-        {!isMobile && (
+        {!isMobileOrTablet && (
           <Col md={5} className="text-center">
             <span className="fw-bold welcome-message">
               Welcome, {studentFullName} <span role="img" aria-label="wave">👋</span>

@@ -81,7 +81,7 @@ function NotificationPage() {
       <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container">
+        <Container className="main-container" style={{overflowY:"auto"}}>
           {/* Sticky Header */}
           <div className="sticky-header">
             <Row className="align-items-center">

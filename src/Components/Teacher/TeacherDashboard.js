@@ -25,9 +25,7 @@ import { fetchDashboardContent } from "../../redux/Services/Enum";
 const TeacherDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 768
-  );
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 992);
   const [sortBy, setSortBy] = useState("Recently");
   const [transactions, setTransactions] = useState([
     {
@@ -68,7 +66,7 @@ const TeacherDashboard = () => {
       amount: 120,
       paymentType: "QR Code",
       status: "Done",
-      timestamp: new Date().getTime() - 8* 60 * 1000,
+      timestamp: new Date().getTime() - 8 * 60 * 1000,
     },
     {
       purpose: "NKM Furniture",
@@ -118,7 +116,7 @@ const TeacherDashboard = () => {
     };
     fetchDashboardData();
   }, []);
-  
+
   // Stats data with routing paths
   const statsData = [
     { title: "Total Students", count: dashboardData?.studentsCount || 22, icon: FaBook, path: "/studentdata" },
@@ -127,7 +125,7 @@ const TeacherDashboard = () => {
     { title: "Assignments", count: dashboardData?.assignmentsCount || 10, icon: FaBookOpen, path: "/assignment" },
   ];
 
-  // Handle card click for routing - similar to the AdminDashboard
+  // Handle card click for routing
   const handleCardClick = (path) => {
     navigate(path);
   };
@@ -136,9 +134,15 @@ const TeacherDashboard = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  // New state: true if viewport width is between 768px and 992px
+  const [isMdLayout, setIsMdLayout] = useState(window.innerWidth >= 768 && window.innerWidth < 992);
+
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      setIsSidebarVisible(window.innerWidth >= 992);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsMdLayout(window.innerWidth >= 768 && window.innerWidth < 992);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -173,147 +177,267 @@ const TeacherDashboard = () => {
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 mx-auto">
-          <div className="sub-container dashboard-container">
-            <Row className="sticky-title align-items-center mb-4">
-              <h2 className="fw-bold text-left">Teacher Dashboard</h2>
-            </Row>
-            <Row
-              className="mt5 g-4 dashboard-row"
-              style={{ paddingRight: "86px" }}
-            >
-              {/* Stats Cards with onClick handlers for routing */}
-              <Col xs={12} lg={5} xl={4} className="box-details">
-                {statsData.map((stat, index) => (
-                  <div key={index} className="mb-4 my-1">
-                    <Card 
-                      className="stats-card border-0"
-                      onClick={() => handleCardClick(stat.path)}
-                      style={{cursor: "pointer"}}
-                    >
-                      <Card.Body className="d-flex align-items-center bg-mint-green rounded p-3">
-                        <stat.icon
-                          size={24}
-                          className="stats-icon me-3 mt-n2"
-                        />
-                        <div style={{ padding: "5px" }}>
-                          <div className="stats-title">{stat.title}</div>
-                          <div className="stats-count">{stat.count}</div>
+        <Container className="teacher-main-container p-4 mx-auto">
+          <div className="sticky-title align-items-center mb-4">
+            <h2 className="fw-bold text-left">Teacher Dashboard</h2>
+          </div>
+          <div className="teacher-sub-container dashboard-container">
+            {isMdLayout ? (
+              <>
+                {/* For screens between 768px and 992px: display stats cards in a grid (2 per row) */}
+                <Row className="g-4 dashboard-row">
+                  {statsData.map((stat, index) => (
+                    <Col xs={12} md={6} key={index}>
+                      <Card 
+                        className="stats-card border-0"
+                        onClick={() => handleCardClick(stat.path)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Card.Body className="d-flex align-items-center bg-mint-green rounded p-3">
+                          <stat.icon size={24} className="stats-icon me-3 mt-n2" />
+                          <div style={{ padding: "5px" }}>
+                            <div className="stats-title">{stat.title}</div>
+                            <div className="stats-count">{stat.count}</div>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+                {/* Payment History below the stats cards */}
+                <Row className="mt-4">
+                  <Col xs={12}>
+                    <Card className="payment-card border-0 h-100">
+                      <Card.Body>
+                        <div className="payment-history-header">
+                          <div className="payment-title-section">
+                            <h5>Payment History</h5>
+                            <div className="sort-section">
+                              <span className="sort-label">Sort by</span>
+                              <Dropdown className="sort-dropdown">
+                                <Dropdown.Toggle>{sortBy} ▾</Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                  {[
+                                    "Recently",
+                                    "Oldest",
+                                    "Amount (High-Low)",
+                                    "Amount (Low-High)",
+                                  ].map((option) => (
+                                    <Dropdown.Item
+                                      key={option}
+                                      onClick={() => handleSort(option)}
+                                      active={sortBy === option}
+                                    >
+                                      {option}
+                                    </Dropdown.Item>
+                                  ))}
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </div>
+                          </div>
+                          <div className="icon-container">
+                            <Button className="icon-only-button me1">
+                              <FaPrint className="icon-only" />
+                              <span className="button-text">Print</span>
+                            </Button>
+                            <Button className="icon-only-button">
+                              <FaShareAlt className="icon-only" />
+                              <span className="button-text">Share</span>
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="table_container">
+                          <Table responsive className="payment-table">
+                            <thead>
+                              <tr className="bg-dark-green text-white">
+                                <th className="py-3">Purpose</th>
+                                <th className="py-3">Date</th>
+                                <th className="py-3">Amount</th>
+                                <th className="py-3">Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {transactions.map((transaction, index) => (
+                                <tr key={index}>
+                                  <td>
+                                    <div>{transaction.purpose}</div>
+                                    <small className="text-muted">
+                                      {transaction.type}
+                                    </small>
+                                  </td>
+                                  <td>
+                                    <div>{transaction.date}</div>
+                                    <small className="text-muted">
+                                      {transaction.timeAgo}
+                                    </small>
+                                  </td>
+                                  <td>
+                                    <div>$ {transaction.amount}</div>
+                                    <small className="text-muted">
+                                      {transaction.paymentType}
+                                    </small>
+                                  </td>
+                                  <td>
+                                    <span
+                                      className={`badge ${
+                                        transaction.status === "Done"
+                                          ? "bg-success"
+                                          : "bg-warning"
+                                      } rounded-pill`}
+                                    >
+                                      {transaction.status}
+                                    </span>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </div>
+                        <div className="text-center mt-4">
+                          <a 
+                            href="#"
+                            className="text-primary text-decoration-none"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigate("/paymentHistory");
+                            }}
+                          >
+                            Show All My Transactions
+                          </a>
                         </div>
                       </Card.Body>
                     </Card>
-                  </div>
-                ))}
-              </Col>
-
-              {/* Payment History */}
-              <Col xs={12} lg={7} xl={8}>
-                <Card className="payment-card border-0 h-100">
-                  <Card.Body>
-                    {/* Payment History Header */}
-                    <div className="payment-history-header">
-                      <div className="payment-title-section">
-                        <h5>Payment History</h5>
-                        <div className="sort-section">
-                          <span className="sort-label">Sort by</span>
-                          <Dropdown className="sort-dropdown">
-                            <Dropdown.Toggle>{sortBy} ▾</Dropdown.Toggle>
-                            <Dropdown.Menu>
-                              {[
-                                "Recently",
-                                "Oldest",
-                                "Amount (High-Low)",
-                                "Amount (Low-High)",
-                              ].map((option) => (
-                                <Dropdown.Item
-                                  key={option}
-                                  onClick={() => handleSort(option)}
-                                  active={sortBy === option}
-                                >
-                                  {option}
-                                </Dropdown.Item>
-                              ))}
-                            </Dropdown.Menu>
-                          </Dropdown>
+                  </Col>
+                </Row>
+              </>
+            ) : (
+              // For other screen sizes, use the original two-column layout
+              <Row className="g-4 dashboard-row">
+                {/* Stats Cards Column */}
+                <Col xs={12} lg={5} md={6} xl={4} className="box-details ">
+                  {statsData.map((stat, index) => (
+                    <div key={index} className="mb-4 my-1">
+                      <Card 
+                        className="stats-card border-0"
+                        onClick={() => handleCardClick(stat.path)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        <Card.Body className="d-flex align-items-center bg-mint-green rounded p-3">
+                          <stat.icon size={24} className="stats-icon me-3 mt-n2" />
+                          <div style={{ padding: "5px" }}>
+                            <div className="stats-title">{stat.title}</div>
+                            <div className="stats-count">{stat.count}</div>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  ))}
+                </Col>
+                {/* Payment History Column */}
+                <Col xs={12} lg={7} xl={8} >
+                  <Card className="payment-card  h-100" >
+                    <Card.Body >
+                      <div className="payment-history-header">
+                        <div className="payment-title-section">
+                          <h5>Payment History</h5>
+                          <div className="sort-section">
+                            <span className="sort-label">Sort by</span>
+                            <Dropdown className="sort-dropdown">
+                              <Dropdown.Toggle>{sortBy} ▾</Dropdown.Toggle>
+                              <Dropdown.Menu>
+                                {[
+                                  "Recently",
+                                  "Oldest",
+                                  "Amount (High-Low)",
+                                  "Amount (Low-High)",
+                                ].map((option) => (
+                                  <Dropdown.Item
+                                    key={option}
+                                    onClick={() => handleSort(option)}
+                                    active={sortBy === option}
+                                  >
+                                    {option}
+                                  </Dropdown.Item>
+                                ))}
+                              </Dropdown.Menu>
+                            </Dropdown>
+                          </div>
+                        </div>
+                        <div className="icon-container">
+                          <Button className="icon-only-button me1">
+                            <FaPrint className="icon-only" />
+                            <span className="button-text">Print</span>
+                          </Button>
+                          <Button className="icon-only-button">
+                            <FaShareAlt className="icon-only" />
+                            <span className="button-text">Share</span>
+                          </Button>
                         </div>
                       </div>
-                      <div className="icon-container">
-                        <Button className="icon-only-button me1">
-                          <FaPrint className="icon-only" />
-                          <span className="button-text">Print</span>
-                        </Button>
-                        <Button className="icon-only-button">
-                          <FaShareAlt className="icon-only" />
-                          <span className="button-text">Share</span>
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* Transaction Table */}
-                    <div className="table_container">
-                      <Table responsive className="payment-table" style={{width:'100px'}}>
-                        <thead>
-                          <tr className="bg-dark-green text-white">
-                            <th className="py-3">Purpose</th>
-                            <th className="py-3">Date</th>
-                            <th className="py-3">Amount</th>
-                            <th className="py-3">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {transactions.map((transaction, index) => (
-                            <tr key={index}>
-                              <td>
-                                <div>{transaction.purpose}</div>
-                                <small className="text-muted">
-                                  {transaction.type}
-                                </small>
-                              </td>
-                              <td>
-                                <div>{transaction.date}</div>
-                                <small className="text-muted">
-                                  {transaction.timeAgo}
-                                </small>
-                              </td>
-                              <td>
-                                <div>$ {transaction.amount}</div>
-                                <small className="text-muted">
-                                  {transaction.paymentType}
-                                </small>
-                              </td>
-                              <td>
-                                <span
-                                  className={`badge ${
-                                    transaction.status === "Done"
-                                      ? "bg-success"
-                                      : "bg-warning"
-                                  } rounded-pill`}
-                                >
-                                  {transaction.status}
-                                </span>
-                              </td>
+                      <div className="table_container">
+                        <Table responsive className="payment-table">
+                          <thead>
+                            <tr className="bg-dark-green text-white">
+                              <th className="py-3">Purpose</th>
+                              <th className="py-3">Date</th>
+                              <th className="py-3">Amount</th>
+                              <th className="py-3">Status</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </Table>
-                    </div>
-
-                    <div className="text-center mt-4">
-                      <a 
-                        href="#" 
-                        className="text-primary text-decoration-none"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigate("/paymentHistory");
-                        }}
-                      >
-                        Show All My Transactions
-                      </a>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            </Row>
+                          </thead>
+                          <tbody>
+                            {transactions.map((transaction, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <div>{transaction.purpose}</div>
+                                  <small className="text-muted">
+                                    {transaction.type}
+                                  </small>
+                                </td>
+                                <td>
+                                  <div>{transaction.date}</div>
+                                  <small className="text-muted">
+                                    {transaction.timeAgo}
+                                  </small>
+                                </td>
+                                <td>
+                                  <div>$ {transaction.amount}</div>
+                                  <small className="text-muted">
+                                    {transaction.paymentType}
+                                  </small>
+                                </td>
+                                <td>
+                                  <span
+                                    className={`badge ${
+                                      transaction.status === "Done"
+                                        ? "bg-success"
+                                        : "bg-warning"
+                                    } rounded-pill`}
+                                  >
+                                    {transaction.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </Table>
+                      </div>
+                      <div className="text-center mt-4">
+                        <a 
+                          href="#"
+                          className="text-primary text-decoration-none"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigate("/paymentHistory");
+                          }}
+                        >
+                          Show All My Transactions
+                        </a>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              </Row>
+            )}
           </div>
         </Container>
       </div>

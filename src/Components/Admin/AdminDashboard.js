@@ -98,7 +98,7 @@ function AdminDashboard() {
                     { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg },
                     { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg }
                   ].map((item, index) => (
-                    <div className="col-lg-6 col-md-6 col-sm-12" key={index} style={{padding:"0px"}}>
+                    <div className="col-lg-6 col-md-6 col-sm-6" key={index} style={{padding:"0px"}}>
                       <Card
                         className="dashboard-card shadow-sm mb-4"
                         onClick={() => handleCardClick(item.label)}
@@ -108,7 +108,7 @@ function AdminDashboard() {
                           <img
                             src={item.img}
                             alt={item.label}
-                            className="card-icon me-3"
+                            className="card-icon "
                             width="50"
                             height="50"
                           />

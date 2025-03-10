@@ -72,8 +72,9 @@ const TeacherHeader = ({ toggleSidebar }) => {
   ]);
   const [selectedNotification, setSelectedNotification] = useState(null);
 
-  // State to detect mobile view (based on width)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+   // Responsive state: "isMobileOrTablet" is true if width < 992px
+   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+   const [isMobileOrTablet, setIsMobileOrTablet] = useState(window.innerWidth < 992);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -94,31 +95,31 @@ const TeacherHeader = ({ toggleSidebar }) => {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   useEffect(() => {
-    // Update isMobile on window resize
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-
-    const storedStudentId = localStorage.getItem("studentId");
-    if (storedStudentId) {
-      dispatch(fetchStudent(storedStudentId));
-    }
-    const handleClickOutside = (event) => {
-      if (popupRef.current && !popupRef.current.contains(event.target)) {
-        setShowPopup(false);
-      }
-      if (
-        notifPopupRef.current &&
-        !notifPopupRef.current.contains(event.target)
-      ) {
-        setShowNotificationPopup(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dispatch]);
+     // Update isMobile and isMobileOrTablet on window resize
+     const handleResize = () => {
+       setIsMobile(window.innerWidth < 768);
+       setIsMobileOrTablet(window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+ 
+     const storedStudentId = localStorage.getItem("studentId");
+     if (storedStudentId) {
+       dispatch(fetchStudent(storedStudentId));
+     }
+     const handleClickOutside = (event) => {
+       if (popupRef.current && !popupRef.current.contains(event.target)) {
+         setShowPopup(false);
+       }
+       if (notifPopupRef.current && !notifPopupRef.current.contains(event.target)) {
+         setShowNotificationPopup(false);
+       }
+     };
+     document.addEventListener("mousedown", handleClickOutside);
+     return () => {
+       window.removeEventListener("resize", handleResize);
+       document.removeEventListener("mousedown", handleClickOutside);
+     };
+   }, [dispatch]);
 
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true);
@@ -165,7 +166,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
       <Row className="align-items-center w-100 head-container">
         {/* Left Section: Logo and (for mobile) menu button */}
         <Col xs={3} md={3} className="d-flex align-items-center header-left">
-          {isMobile ? (
+          {isMobileOrTablet? (
             isMobileExpanded ? (
               <>
                 <Link to="/" style={{ marginLeft: "-10px" }}>
@@ -209,7 +210,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
         </Col>
 
         {/* Center Section: Welcome Message (desktop only) */}
-        {!isMobile && (
+        {!isMobileOrTablet && (
           <Col md={5} className="text-center">
             <span className="fw-bold welcome-message">
               Welcome, Teacher{" "}

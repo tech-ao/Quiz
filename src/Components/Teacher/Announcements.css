@@ -92,7 +92,7 @@
   /* Media Queries */
   @media (max-width: 768px) {
     .filter-section {
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
     }
   

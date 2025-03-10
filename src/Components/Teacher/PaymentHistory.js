@@ -16,7 +16,7 @@ const paymentHistory = [
 ];
 
 const PaymentHistory = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [filter, setFilter] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -27,14 +27,20 @@ const PaymentHistory = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+ 
+   useEffect(() => {
+     const handleResize = () => {
+       // Sidebar visible only for screens 1024px and above
+       setIsSidebarVisible(window.innerWidth >= 1024);
+       setIsSmallScreen(window.innerWidth < 768);
+       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+     };
+     window.addEventListener("resize", handleResize);
+     return () => window.removeEventListener("resize", handleResize);
+   }, []);
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
