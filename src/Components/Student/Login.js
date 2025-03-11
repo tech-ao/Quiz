@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
 import "./Login.css";
 import logo from "../../Components/images/Logo.png";
+
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
@@ -173,9 +174,15 @@ const LoginPage = () => {
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </Form>
-            <div className="text-center mt-3">
+              <div className="text-center mt-3">
                 <small>
-                  Don’t have an account? <a href="/registerStudent" className="text-decoration-none">Sign Up</a>
+                  Don’t have an account?{" "}
+                  <Link
+                    to={role === "Teacher" ? "/registerTeacher" : "/registerStudent"}
+                    className="text-decoration-none"
+                  >
+                    Sign Up
+                  </Link>
                 </small>
               </div>
               <div className="text-center mt-3">
