@@ -28,7 +28,7 @@ body {
 /* Side Panel */
 .side-panel {
   background-color: #e7ffec;
-  width: 250px;
+  width: 200px;
   min-height: 100vh;
   overflow: hidden;
   transition: transform 0.3s ease-in-out;
@@ -170,13 +170,13 @@ body {
 {
   .main-container{
     left: 0;
-    margin-left: 20% !important;
-    width: 80% !important;
+    margin-left: 15% !important;
+    width: 85% !important;
     background-color: white;
   
   }
   .side-panel{
-    width: 20% !important;
+    width: 15% !important;
   }
 }
 

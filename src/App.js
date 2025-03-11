@@ -20,6 +20,7 @@ import Abacus from "./Components/Abacus/Abacus";
 import NotificationPage from "./Components/Admin/Notification";
 import RegisterStudent from "./Components/Student/RegisterStudent";
 import RegisterTeacher from "./Components/Teacher/RegisterTeacher";
+import TeacherFirstLogin from "./Components/Teacher/TeacherFirstLogin";
 import EnrollmentRequestList from "./Components/Admin/EnrollmentRequest";
 import AdminSettings from "./Components/Admin/AdminSetting";
 import Students from "./Components/Teacher/Student";
@@ -80,6 +81,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/adminLogin" element={<AdminLoginPage />} />
           <Route path="/registerTeacher" element={<RegisterTeacher />} />
+          <Route path="/teacherFirstLogin" element={<TeacherFirstLogin />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/updatepassword" element={<UpdatePassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
@@ -90,6 +92,7 @@ function App() {
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+
 
           {/* Protected Routes */}
           <Route
