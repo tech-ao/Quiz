@@ -194,7 +194,16 @@ const ListTeacher = () => {
                         <td>{index + 1}</td>
                         <td>{teacher.fullName}</td>
                         <td>{teacher.email}</td>
-                        <td>{teacher.dob || 'N/A'}</td>
+                        <td>
+                          {teacher.dob 
+                            ? new Date(teacher.dob).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit' 
+                              }) 
+                            : 'N/A'}
+                        </td>
+
                         <td>{teacher.phoneNumber}</td>
                         <td>
                           <div className="d-flex">

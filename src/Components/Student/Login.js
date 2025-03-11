@@ -6,7 +6,6 @@ import BASE_URL from "../../redux/Services/Config";
 import "./Login.css";
 import logo from "../../Components/images/Logo.png";
 
-
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [studentId, setStudentId] = useState("");
@@ -43,15 +42,21 @@ const LoginPage = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("Full Response Data:", data); // Debugging
+        console.log("Full Response Data:", data);
 
         if (data && data.isSuccess && data.data) {
-          console.log("isFirstLogin Value:", data.data.isFirstLogin); // Debugging
+          console.log("isFirstLogin Value:", data.data.isFirstLogin);
 
           if (data.data.isFirstLogin) {
-            setStudentId(data.data.studentId);
-            setShowPopup(true);
-            setUserData(data.data);
+            if (role === "Teacher") {
+              // For teachers, redirect to the TeacherFirstLogin page on first login
+              navigate("/TeacherFirstLogin", { state: { userData: data.data } });
+            } else {
+              // For students, show the password update modal on first login
+              setStudentId(data.data.studentId);
+              setShowPopup(true);
+              setUserData(data.data);
+            }
           } else {
             console.log("Login Successful:", data);
             sessionStorage.setItem("isLoggedIn", "true");
@@ -83,17 +88,16 @@ const LoginPage = () => {
       const updateApiUrl = `${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${studentId}&OldPassword=${encodeURIComponent(oldPassword)}&Password=${encodeURIComponent(newPassword)}`;
 
       console.log("Sending request to:", updateApiUrl);
-  
+
       const response = await fetch(updateApiUrl, {
-        method: "POST", 
+        method: "POST",
         headers: {
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           "AccessToken": "123",
         },
       });
-  
-      console.log("Response status:", response.status);
 
+      console.log("Response status:", response.status);
 
       const result = await response.json();
       console.log("Password Update Response:", result);
@@ -101,7 +105,7 @@ const LoginPage = () => {
       if (result.isSuccess) {
         alert("Password updated successfully. Please log in with your new password.");
         setShowPopup(false);
-        setPassword(""); // Reset old password field
+        setPassword(""); // Reset password field
         setUserId(userData.email); // Keep email prefilled
       } else {
         setError("Failed to update password. Please check your old password.");
@@ -163,7 +167,6 @@ const LoginPage = () => {
                 >
                   {showPassword ? <FiEyeOff /> : <FiEye />}
                 </Button>
-                
               </Form.Group>
               <Button
                 type="submit"
@@ -174,27 +177,30 @@ const LoginPage = () => {
                 {loading ? "Logging in..." : "Login"}
               </Button>
             </Form>
-              <div className="text-center mt-3">
-                <small>
-                  Don’t have an account?{" "}
-                  <Link
-                    to={role === "Teacher" ? "/registerTeacher" : "/registerStudent"}
-                    className="text-decoration-none"
-                  >
-                    Sign Up
-                  </Link>
-                </small>
-              </div>
-              <div className="text-center mt-3">
-                <small>
-                  Forgot your password? <a href="/forgotPassword" className="text-decoration-none">Forgot Password</a>
-                </small>
-              </div>
+            <div className="text-center mt-3">
+              <small>
+                Don’t have an account?{" "}
+                <Link
+                  to={role === "Teacher" ? "/registerTeacher" : "/registerStudent"}
+                  className="text-decoration-none"
+                >
+                  Sign Up
+                </Link>
+              </small>
+            </div>
+            <div className="text-center mt-3">
+              <small>
+                Forgot your password?{" "}
+                <a href="/forgotPassword" className="text-decoration-none">
+                  Forgot Password
+                </a>
+              </small>
+            </div>
           </div>
         </Col>
       </Row>
 
-      {/* Password Update Modal */}
+      {/* Password Update Modal for Students */}
       <Modal show={showPopup} onHide={() => setShowPopup(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Update Password</Modal.Title>
@@ -202,15 +208,27 @@ const LoginPage = () => {
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Old Password</Form.Label>
-            <Form.Control type="password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} required />
+            <Form.Control
+              type="password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              required
+            />
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label>New Password</Form.Label>
-            <Form.Control type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
+            <Form.Control
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handlePasswordUpdate}>Update Password</Button>
+          <Button variant="primary" onClick={handlePasswordUpdate}>
+            Update Password
+          </Button>
         </Modal.Footer>
       </Modal>
     </Container>

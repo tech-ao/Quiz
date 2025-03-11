@@ -22,6 +22,7 @@ import RegisterStudent from "./Components/Student/RegisterStudent";
 import RegisterTeacher from "./Components/Teacher/RegisterTeacher";
 import TeacherFirstLogin from "./Components/Teacher/TeacherFirstLogin";
 import EnrollmentRequestList from "./Components/Admin/EnrollmentRequest";
+import TeacherEnrollment from "./Components/Admin/TeacherEnrollment";
 import AdminSettings from "./Components/Admin/AdminSetting";
 import Students from "./Components/Teacher/Student";
 import QuestionListPage from "./Components/Admin/Question";
@@ -170,6 +171,10 @@ function App() {
           <Route
             path="/enrollmentRequest"
             element={<ProtectedRoute element={<EnrollmentRequestList />} />}
+          />
+          <Route
+            path="/teacherEnrollment"
+            element={<ProtectedRoute element={<TeacherEnrollment />} />}
           />
           <Route
             path="/adminSettings"

@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
-import './RegisterTeacher.css';
-import { fetchGenders } from "../../redux/Services/Enum"; // Added import for fetchGenders
+import "./RegisterTeacher.css";
+import { fetchGenders } from "../../redux/Services/Enum"; // Import for fetching genders
 
 const RegisterTeacher = () => {
   const [formData, setFormData] = useState({
@@ -36,22 +36,34 @@ const RegisterTeacher = () => {
 
   const dispatch = useDispatch();
 
-  // Handle input changes, including checkbox if needed
+  // Handle input changes (for text, select, etc.)
   const handleInputChange = (e) => {
     const { name, type, value, checked } = e.target;
     const fieldValue = type === "checkbox" ? checked : value;
     setFormData({ ...formData, [name]: fieldValue });
   };
 
+  // Updated handleFileChange to convert file inputs to base64 strings
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+    const file = files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Remove the data prefix and store only the base64 content
+        const base64Content = reader.result.split(",")[1];
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: base64Content,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
     const fetchAllData = async () => {
       try {
-        // Assuming a fetchGenders function exists.
         const gendersData = await fetchGenders();
         setGenders(gendersData);
       } catch (error) {
@@ -78,16 +90,10 @@ const RegisterTeacher = () => {
       newErrors.permanentAddress = "Permanent Address is required.";
     if (!formData.currentAddress.trim())
       newErrors.currentAddress = "Current Residential Address is required.";
-  
-
-
 
     // Professional Experience validations
-
     if (!formData.experienceCertificate)
       newErrors.experienceCertificate = "Experience Certificate is required.";
-
-    // Resume upload validation
     if (!formData.teacherResume)
       newErrors.teacherResume = "Resume is required.";
 
@@ -264,10 +270,8 @@ const RegisterTeacher = () => {
           </Col>
         </Row>
 
-
         {/* Professional Experience */}
         <h5 className="mb-3">Professional Experience</h5>
-     
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="experienceCertificate">
@@ -285,9 +289,7 @@ const RegisterTeacher = () => {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-        
           <Col md={6}>
-         
             <Form.Group controlId="teacherResume">
               <Form.Label>Upload Resume</Form.Label>
               <Form.Control
@@ -304,10 +306,6 @@ const RegisterTeacher = () => {
             </Form.Group>
           </Col>
         </Row>
-
-        {/* Resume Upload */}
-       
-      
 
         <Button variant="success" onClick={handleRegister} disabled={isSubmitting}>
           Register

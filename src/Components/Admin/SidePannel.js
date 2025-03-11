@@ -134,8 +134,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               </li>
               <li className="nav-item">
                 <Link
-                  to="/enrollmentRequest"
-                  className={`nav-link ${location.pathname === "/enrollmentRequest" ? "active" : ""}`}
+                  to="/teacherEnrollment"
+                  className={`nav-link ${location.pathname === "/teacherEnrollment" ? "active" : ""}`}
                   onClick={closeSidePanel}
                   style={{ marginLeft: "15px" }}
                 >
@@ -325,8 +325,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
-        <li className="nav-item">
-          <button onClick={handleLogoutClick} className="nav-link btn-link">
+        <li className="nav-item" onClick={handleLogoutClick}>
+          <button  className="nav-link btn-link">
             <div className="icon-with-text">
               <i className="bi bi-box-arrow-right"></i>
               <span className="nav-text">Logout</span>
