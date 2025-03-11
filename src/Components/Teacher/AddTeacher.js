@@ -563,7 +563,7 @@ const AddTeacher = ({ show, onClose }) => {
           </Row>
 
           {/* Conditionally render Sections 5 and 6 if Preferred Country is "Other than India" */}
-          {formData.preferedCountryId === 2 && (
+          {formData.preferedCountryId == 2 && (
             <>
               <h4>Legal and Compliance Information</h4>
               <Row className="mb-3">
