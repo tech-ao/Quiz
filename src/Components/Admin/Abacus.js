@@ -14,6 +14,7 @@ const AbacusMath = () => {
     dummyQuestions,
     userAnswers,
     score,
+    incorrectAnswers,
     setScore,
     handleQuestionClick,
     handleAnswerChange,
@@ -244,59 +245,61 @@ const AbacusMath = () => {
   >
     <h3>{questions[selectedQuestion]}</h3>
     <div className="questio-wrapp">
-      {questions[selectedQuestion] === "Addition Beads" || questions[selectedQuestion] === "Subtraction Beads" ? (
-        // Specific layout for "Addition Beads" and "Subtraction Beads"
-        <div className="beads-column-content">
-        {dummyQuestions.map((question, index) => (
-          <div key={index} className="beads-column-wrapper">
-            {/* Serial Number Outside the Beads Column */}
-            <div className="Serial-number-Addition">
-              {currentPage * beadsPerPage + index + 1}
+    {questions[selectedQuestion] === "Addition Beads" ||questions[selectedQuestion] === "Subtraction Beads" ? (
+    <div className="beads-column-content">
+    {dummyQuestions.map((question, index) => (
+      <div key={index} className="beads-column-wrapper">
+        {/* Serial Number Outside the Beads Column */}
+        <div className="Serial-number-Addition">
+          {currentPage * beadsPerPage + index + 1}
+        </div>
+        <div className="beads-column-item">
+          <div className="beads-column-row">
+            <div className="beads-column">
+              <div className="koodu"></div>
+              {Array.from({ length: question.upper }, (_, i) => (
+                <div key={i} className="bead"></div>
+              ))}
             </div>
-            <div className="beads-column-item">
-              <div className="beads-column-row">
-                <div className="beads-column">
-                  <div className="koodu"></div>
-                  {Array.from({ length: question.upper }, (_, i) => (
-                    <div key={i} className="bead"></div>
-                  ))}
-                </div>
-                <span>
-                  {questions[selectedQuestion] === "Addition Beads" ? "+" : "-"}
-                </span>
-                <div className="beads-column">
-                  <div className="koodu"></div>
-                  {Array.from({ length: question.lower }, (_, i) => (
-                    <div key={i} className="bead"></div>
-                  ))}
-                </div>
-              </div>
-              <div className="beads-column-input">
-                <input
-                  type="text"
-                  value={userAnswers[index] || ""}
-                  onChange={(e) => handleAnswerChange(index, e.target.value)}
-                  placeholder=""
-                />
-              </div>
+            <span>
+              {questions[selectedQuestion] === "Addition Beads" ? "+" : "-"}
+            </span>
+            <div className="beads-column">
+              <div className="koodu"></div>
+              {Array.from({ length: question.lower }, (_, i) => (
+                <div key={i} className="bead"></div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
-    )  :questions[selectedQuestion] === "Draw a Beads For the Given Number" ? (
-        // Render BeadDrawer for Level B
-        questionsData[selectedQuestion].givenNumber.map((number, index) => (
-          <div key={index} className="bead-draw-question">
-            <div className="serial-number">
-               {currentPage * beadsPerPage + index + 1}
-              </div>
-            <BeadDrawer
-              givenNumber={number}
-              onBeadDraw={(drawnNumber) => handleAnswerChange(index, drawnNumber.toString())}
+          <div className="beads-column-input">
+            <input
+              type="text"
+              value={userAnswers[index] || ""}
+              onChange={(e) => handleAnswerChange(index, e.target.value)}
+              placeholder=""
+              className={`answer-input ${
+                incorrectAnswers.includes(index) ? "incorrect" : ""
+              }`}
             />
           </div>
-        ))
-      ) : (
+        </div>
+      </div>
+    ))}
+  </div>
+) :questions[selectedQuestion] === "Draw a Beads For the Given Number" ? (
+  questionsData[selectedQuestion].givenNumber.map((number, index) => (
+    <div key={index} className="bead-draw-question">
+      <div className="serial-number">
+        {currentPage * beadsPerPage + index + 1}
+      </div>
+      <BeadDrawer
+        givenNumber={number}
+        onBeadDraw={(drawnNumber) => handleAnswerChange(index, drawnNumber.toString())}
+        isIncorrect={incorrectAnswers.includes(index)} // Pass isIncorrect prop
+      />
+    </div>
+  ))
+):(
         // Default layout for other questions
         dummyQuestions && dummyQuestions.length > 0
           ? dummyQuestions
@@ -330,14 +333,11 @@ const AbacusMath = () => {
                       )
                     )}
                   </div>
-                  <input
-                    type="text"
-                    value={userAnswers[currentPage * beadsPerPage + index] || ""}
-                    onChange={(e) =>
-                      handleAnswerChange(currentPage * beadsPerPage + index, e.target.value)
-                    }
-                    placeholder=""
-                    className="answer-input"
+                  <input type="text" value={userAnswers[currentPage * beadsPerPage + index] || ""}
+                         onChange={(e) => handleAnswerChange(currentPage * beadsPerPage + index, e.target.value)}
+                          className={`answer-input ${
+                          incorrectAnswers.includes(currentPage * beadsPerPage + index) ? "incorrect" : ""
+                                }`}
                   />
                 </div>
               ))

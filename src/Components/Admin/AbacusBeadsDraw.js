@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
-const BeadDrawer = ({ givenNumber, onBeadDraw }) => {
+const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect }) => {
   const [beads, setBeads] = useState(0);
 
   const handleAddBead = () => {
     if (beads < 8) {
       setBeads(beads + 1);
-      onBeadDraw(beads + 1); 
+      onBeadDraw(beads + 1);
     }
   };
 
   const handleRemoveBead = () => {
     if (beads > 0) {
       setBeads(beads - 1);
-      onBeadDraw(beads - 1); 
+      onBeadDraw(beads - 1);
     }
   };
 
@@ -33,7 +33,9 @@ const BeadDrawer = ({ givenNumber, onBeadDraw }) => {
           - {/* Minus button */}
         </button>
       </div>
-      <h4 className="h4-beads">{givenNumber}</h4>
+      <h4 className={`h4-beads ${isIncorrect ? "incorrect" : ""}`}>
+        {givenNumber}
+      </h4>
     </div>
   );
 };

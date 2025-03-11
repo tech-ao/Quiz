@@ -62,80 +62,85 @@ export const questions = [
   "Subtraction Beads", // Level E
 ];
 
-
 export const useAbacusQuestion = () => {
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [dummyQuestions, setDummyQuestions] = useState([]);
-  const [userAnswers, setUserAnswers] = useState(Array(20).fill(""));
-  const [score, setScore] = useState(null);
-
-
-  const handleQuestionClick = (index) => {
-    setSelectedQuestion(index);
-    setUserAnswers(Array(20).fill("")); 
-    setScore({ correct: 0, incorrect: 0 });
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [dummyQuestions, setDummyQuestions] = useState([]);
+    const [userAnswers, setUserAnswers] = useState(Array(20).fill(""));
+    const [score, setScore] = useState(null);
+    const [incorrectAnswers, setIncorrectAnswers] = useState([]); // State to track incorrect answers
   
-    const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } = questionsData[index] || {};
+    // Function to handle changes in the input fields
+    const handleAnswerChange = (index, value) => {
+      const newAnswers = [...userAnswers];
+      newAnswers[index] = value;
+      setUserAnswers(newAnswers);
+    };
   
-    if (
-      questions[index] === "Addition" ||
-      questions[index] === "Subtraction"
-    ) {
-     
-      setDummyQuestions(
-        beadUpper && beadLower
-          ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
-          : []
-      );
-    } else if (
-      questions[index] === "Addition Beads" ||
-      questions[index] === "Subtraction Beads"
-    ) {
-
-      setDummyQuestions(
-        beadCounts1 && beadCounts2
-          ? beadCounts1.map((upper, i) => ({ upper, lower: beadCounts2[i] }))
-          : []
-      );
-    } else {
-      // For other questions, use beadCounts
-      setDummyQuestions(beadCounts ? beadCounts.map((count) => `🟤`.repeat(count)) : []);
-    }
-  };  const handleAnswerChange = (index, value) => {
-    const newAnswers = [...userAnswers];
-    newAnswers[index] = value;
-    setUserAnswers(newAnswers);
-  };
-  const handleSubmitAnswer = () => {
-    const correctAnswers = questionsData[selectedQuestion].correctAnswers;
+    const handleQuestionClick = (index) => {
+      setSelectedQuestion(index);
+      setUserAnswers(Array(20).fill("")); // Reset user answers
+      setScore({ correct: 0, incorrect: 0 });
+      setIncorrectAnswers([]); // Reset incorrect answers
   
-    let correctCount = 0;
-    let incorrectCount = 0;
+      const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } = questionsData[index] || {};
   
-    userAnswers.forEach((answer, index) => {
-      if (answer.trim() === correctAnswers[index]) {
-        correctCount++;
+      if (
+        questions[index] === "Addition" ||
+        questions[index] === "Subtraction"
+      ) {
+        setDummyQuestions(
+          beadUpper && beadLower
+            ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
+            : []
+        );
+      } else if (
+        questions[index] === "Addition Beads" ||
+        questions[index] === "Subtraction Beads"
+      ) {
+        setDummyQuestions(
+          beadCounts1 && beadCounts2
+            ? beadCounts1.map((upper, i) => ({ upper, lower: beadCounts2[i] }))
+            : []
+        );
       } else {
-        incorrectCount++;
+        setDummyQuestions(beadCounts ? beadCounts.map((count) => `🟤`.repeat(count)) : []);
       }
-    });
+    };
   
-    const scoreResult = { correct: correctCount, incorrect: incorrectCount };
-    setScore(scoreResult);
-    return scoreResult; 
+    const handleSubmitAnswer = () => {
+      const correctAnswers = questionsData[selectedQuestion].correctAnswers;
+      let correctCount = 0;
+      let incorrectCount = 0;
+      const incorrectIndices = [];
+    
+      userAnswers.forEach((answer, index) => {
+        if (answer.trim() === correctAnswers[index]) {
+          correctCount++;
+        } else {
+          incorrectCount++;
+          incorrectIndices.push(index); // Add incorrect answer indices
+        }
+      });
+    
+      console.log("Incorrect Indices:", incorrectIndices); // Debugging log
+      setIncorrectAnswers(incorrectIndices); // Update incorrect answers state
+      const scoreResult = { correct: correctCount, incorrect: incorrectCount };
+      setScore(scoreResult);
+      return scoreResult;
+    };
+    
+    return {
+      questionsData,
+      Alphabhets,
+      questions,
+      selectedQuestion,
+      dummyQuestions,
+      userAnswers,
+      score,
+      setScore,
+      handleQuestionClick,
+      handleAnswerChange, // Ensure this is returned
+      handleSubmitAnswer,
+      incorrectAnswers, // Return incorrect answers state
+    };
   };
-
-  return {
-    questionsData,
-    Alphabhets,
-    questions,
-    selectedQuestion,
-    dummyQuestions,
-    userAnswers,
-    score,
-    setScore,
-    handleQuestionClick,
-    handleAnswerChange,
-    handleSubmitAnswer,
-  };
-};
