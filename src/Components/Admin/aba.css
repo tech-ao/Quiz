@@ -591,6 +591,11 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   background-color: rgb(249, 235, 235);
 }
 
+
+.unfilled {
+  border: 2px solid blue !important;
+  background-color: rgb(190, 207, 245);
+}
 .answer-input {
   width: 60px;
   padding: 8px;
@@ -644,6 +649,15 @@ transform: translateX(0);
 
 .sidebar-close-icon {
   display: none; 
+}
+.locked {
+  opacity: 0.5; /* Make the level appear faded */
+  pointer-events: none; /* Disable clicks */
+  cursor: not-allowed; /* Show a "not allowed" cursor */
+}
+
+.bi-lock {
+  margin-left: 10px; /* Add spacing for the lock icon */
 }
 
 

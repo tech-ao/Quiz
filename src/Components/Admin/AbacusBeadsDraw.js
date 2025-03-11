@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect }) => {
+const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect ,unfilledInputs}) => {
   const [beads, setBeads] = useState(0);
 
   const handleAddBead = () => {
@@ -33,8 +33,9 @@ const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect }) => {
           - {/* Minus button */}
         </button>
       </div>
-      <h4 className={`h4-beads ${isIncorrect ? "incorrect" : ""}`}>
-        {givenNumber}
+      <h4 className={`h4-beads ${isIncorrect ? "incorrect"  :
+                             unfilledInputs ? "unfilled":""}`}>
+                          {givenNumber}
       </h4>
     </div>
   );

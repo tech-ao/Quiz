@@ -62,85 +62,143 @@ export const questions = [
   "Subtraction Beads", // Level E
 ];
 
+const questionLevelMapping = {
+  0: "A", // Write The Beads Value
+  1: "B", // Draw a Beads For the Given Number
+  2: "C", // Draw and write the beads value
+  3: "D", // Addition
+  4: "D", // Addition Beads
+  5: "E", // Subtraction
+  6: "E", // Subtraction Beads
+};
+
 export const useAbacusQuestion = () => {
-    const [selectedQuestion, setSelectedQuestion] = useState(null);
-    const [dummyQuestions, setDummyQuestions] = useState([]);
-    const [userAnswers, setUserAnswers] = useState(Array(20).fill(""));
-    const [score, setScore] = useState(null);
-    const [incorrectAnswers, setIncorrectAnswers] = useState([]); // State to track incorrect answers
-  
-    // Function to handle changes in the input fields
-    const handleAnswerChange = (index, value) => {
-      const newAnswers = [...userAnswers];
-      newAnswers[index] = value;
-      setUserAnswers(newAnswers);
-    };
-  
-    const handleQuestionClick = (index) => {
-      setSelectedQuestion(index);
-      setUserAnswers(Array(20).fill("")); // Reset user answers
-      setScore({ correct: 0, incorrect: 0 });
-      setIncorrectAnswers([]); // Reset incorrect answers
-  
-      const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } = questionsData[index] || {};
-  
-      if (
-        questions[index] === "Addition" ||
-        questions[index] === "Subtraction"
-      ) {
-        setDummyQuestions(
-          beadUpper && beadLower
-            ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
-            : []
-        );
-      } else if (
-        questions[index] === "Addition Beads" ||
-        questions[index] === "Subtraction Beads"
-      ) {
-        setDummyQuestions(
-          beadCounts1 && beadCounts2
-            ? beadCounts1.map((upper, i) => ({ upper, lower: beadCounts2[i] }))
-            : []
-        );
-      } else {
-        setDummyQuestions(beadCounts ? beadCounts.map((count) => `🟤`.repeat(count)) : []);
-      }
-    };
-  
-    const handleSubmitAnswer = () => {
-      const correctAnswers = questionsData[selectedQuestion].correctAnswers;
-      let correctCount = 0;
-      let incorrectCount = 0;
-      const incorrectIndices = [];
-    
-      userAnswers.forEach((answer, index) => {
-        if (answer.trim() === correctAnswers[index]) {
-          correctCount++;
-        } else {
-          incorrectCount++;
-          incorrectIndices.push(index); // Add incorrect answer indices
-        }
-      });
-    
-      console.log("Incorrect Indices:", incorrectIndices); // Debugging log
-      setIncorrectAnswers(incorrectIndices); // Update incorrect answers state
-      const scoreResult = { correct: correctCount, incorrect: incorrectCount };
-      setScore(scoreResult);
-      return scoreResult;
-    };
-    
-    return {
-      questionsData,
-      Alphabhets,
-      questions,
-      selectedQuestion,
-      dummyQuestions,
-      userAnswers,
-      score,
-      setScore,
-      handleQuestionClick,
-      handleAnswerChange, // Ensure this is returned
-      handleSubmitAnswer,
-      incorrectAnswers, // Return incorrect answers state
-    };
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [dummyQuestions, setDummyQuestions] = useState([]);
+  const [userAnswers, setUserAnswers] = useState(Array(20).fill(""));
+  const [score, setScore] = useState(null);
+  const [incorrectAnswers, setIncorrectAnswers] = useState([]);
+  const [unfilledInputs, setUnfilledInputs] = useState([]);
+  const [completedLevels, setCompletedLevels] = useState({
+    A: false,
+    B: false,
+    C: false,
+    D: false,
+    E: false,
+  });
+
+  const handleAnswerChange = (index, value) => {
+    const newAnswers = [...userAnswers];
+    newAnswers[index] = value;
+    setUserAnswers(newAnswers);
   };
+
+  const handleQuestionClick = (index) => {
+    setSelectedQuestion(index);
+    setUserAnswers(Array(20).fill(""));
+    setScore({ correct: 0, incorrect: 0 });
+    setIncorrectAnswers([]);
+    setUnfilledInputs([]); // Reset unfilled inputs state
+  
+    const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } =
+      questionsData[index] || {};
+  
+    if (questions[index] === "Addition" || questions[index] === "Subtraction") {
+      setDummyQuestions(
+        beadUpper && beadLower
+          ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
+          : []
+      );
+    } else if (
+      questions[index] === "Addition Beads" ||
+      questions[index] === "Subtraction Beads"
+    ) {
+      setDummyQuestions(
+        beadCounts1 && beadCounts2
+          ? beadCounts1.map((upper, i) => ({ upper, lower: beadCounts2[i] }))
+          : []
+      );
+    } else {
+      setDummyQuestions(
+        beadCounts ? beadCounts.map((count) => '🟤'.repeat(count)) : []
+      );
+    }
+  };
+
+  const handleSubmitAnswer = () => {
+    // Check if any field is empty
+    const notAttendedIndices = userAnswers
+      .map((answer, index) => (answer.trim() === "" ? index : null))
+      .filter((index) => index !== null);
+  
+    const notAttendedCount = notAttendedIndices.length;
+  
+    if (notAttendedCount > 10) {
+      alert("Please fill at least 10 fields before submitting.");
+      return; // Exit the function early if more than 10 fields are empty
+    }
+  
+    const correctAnswers = questionsData[selectedQuestion].correctAnswers;
+    let correctCount = 0;
+    let incorrectCount = 0;
+    const incorrectIndices = [];
+  
+    userAnswers.forEach((answer, index) => {
+      if (answer.trim() === "") {
+        // Skip not attended fields
+        return;
+      }
+      if (answer.trim() === correctAnswers[index]) {
+        correctCount++;
+      } else {
+        incorrectCount++;
+        incorrectIndices.push(index);
+      }
+    });
+  
+    setIncorrectAnswers(incorrectIndices);
+    setUnfilledInputs(notAttendedIndices); // Set unfilled inputs state
+  
+    const scoreResult = {
+      correct: correctCount,
+      incorrect: incorrectCount,
+      notAttend: notAttendedCount, // Add not attended count to the result
+    };
+    setScore(scoreResult);
+  
+    // Check if the user completed the *entire* stage
+    if (incorrectCount < 8) {
+      // Use the mapping to find the level key for the current question
+      const levelKey = questionLevelMapping[selectedQuestion];
+  
+      if (levelKey) {
+        setCompletedLevels((prev) => ({
+          ...prev,
+          [levelKey]: true, // Mark the level as completed
+        }));
+      }
+    }
+  
+    return scoreResult;
+  };
+
+  return {
+    questionsData,
+    Alphabhets,
+    questions,
+    questionLevelMapping,
+    selectedQuestion,
+    dummyQuestions,
+    userAnswers,
+    score,
+    setScore,
+    completedLevels,
+    setCompletedLevels,
+    handleQuestionClick,
+    handleAnswerChange,
+    handleSubmitAnswer,
+    incorrectAnswers,
+    unfilledInputs, 
+    setUnfilledInputs,
+  };
+};
