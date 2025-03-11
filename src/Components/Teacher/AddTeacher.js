@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import { fetchCountries, fetchGenders } from "../../redux/Services/Enum";
+import {addTeacher} from "../../redux/Services/Teacher.js"
 
 const AddTeacher = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
@@ -117,12 +118,15 @@ const AddTeacher = ({ show, onClose }) => {
 
   const fetchDocumentTypes = async () => {
     try {
-      const response = await fetch("http://santhwanamhhcs.in:8081/api/Enum/DocumentType", {
-        headers: {
-          accept: "text/plain",
-          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-        },
-      });
+      const response = await fetch(
+        "http://santhwanamhhcs.in:8081/api/Enum/DocumentType",
+        {
+          headers: {
+            accept: "text/plain",
+            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          },
+        }
+      );
       const data = await response.json();
       return data.reduce((acc, item) => {
         acc[item.item2] = item.item1;
@@ -140,12 +144,19 @@ const AddTeacher = ({ show, onClose }) => {
     if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
     if (!formData.dob) newErrors.dob = "Date of Birth is required";
     if (!formData.gender) newErrors.gender = "Gender is required";
-    if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = "Enter a valid 10-digit phone number";
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "Enter a valid email address";
-    if (!formData.permanentAddress.trim()) newErrors.permanentAddress = "Permanent Address is required";
-    if (!formData.currentResidentialAddress.trim()) newErrors.currentResidentialAddress = "Current Residential Address is required";
-    if (formData.nationalityId === null) newErrors.nationalityId = "Nationality is required";
-    if (formData.teacherDocumentFileModels.length === 0) newErrors.teacherDocumentFileModels = "At least one document is required";
+    if (!formData.phoneNumber.match(/^\d{10}$/))
+      newErrors.phoneNumber = "Enter a valid 10-digit phone number";
+    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
+      newErrors.email = "Enter a valid email address";
+    if (!formData.permanentAddress.trim())
+      newErrors.permanentAddress = "Permanent Address is required";
+    if (!formData.currentResidentialAddress.trim())
+      newErrors.currentResidentialAddress =
+        "Current Residential Address is required";
+    if (formData.nationalityId === null)
+      newErrors.nationalityId = "Nationality is required";
+    if (formData.teacherDocumentFileModels.length === 0)
+      newErrors.teacherDocumentFileModels = "At least one document is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -157,23 +168,27 @@ const AddTeacher = ({ show, onClose }) => {
       toast.error("Please fix the errors before submitting.");
       return;
     }
-
+  
     setIsSubmitting(true);
     try {
       const payload = {
         ...formData,
-        teacherDocumentFileModels: formData.teacherDocumentFileModels.map(doc => ({
+        teacherDocumentFileModels: formData.teacherDocumentFileModels.map((doc) => ({
           ...doc,
           base64Content: doc.base64Content,
         })),
       };
-
-      console.log("Submitting Data:", payload);
-      await dispatch(addTeacherAction(payload));
-      toast.success("Teacher added successfully!");
-      onClose();
+  
+      const response = await (addTeacher(payload));   
+      if (response?.isSuccess) {
+        toast.success("Teacher added successfully!");
+        onClose();
+      } else {
+        toast.error(response?.message || "Failed to add teacher!");
+      }
     } catch (error) {
-      toast.error("Failed to add teacher!");
+      console.error("Error in handleSubmit:", error);
+      toast.error(error.message || "Failed to add teacher!");
     } finally {
       setIsSubmitting(false);
     }
@@ -369,14 +384,18 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Control
                   type="text"
                   name="higherLevelEducation"
-                  value={formData.educationQualificationModel.higherLevelEducation}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    educationQualificationModel: {
-                      ...formData.educationQualificationModel,
-                      higherLevelEducation: e.target.value,
-                    },
-                  })}
+                  value={
+                    formData.educationQualificationModel.higherLevelEducation
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      educationQualificationModel: {
+                        ...formData.educationQualificationModel,
+                        higherLevelEducation: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -387,13 +406,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="institute"
                   value={formData.educationQualificationModel.institute}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    educationQualificationModel: {
-                      ...formData.educationQualificationModel,
-                      institute: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      educationQualificationModel: {
+                        ...formData.educationQualificationModel,
+                        institute: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -406,13 +427,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="subjectSpecialist"
                   value={formData.educationQualificationModel.subjectSpecialist}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    educationQualificationModel: {
-                      ...formData.educationQualificationModel,
-                      subjectSpecialist: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      educationQualificationModel: {
+                        ...formData.educationQualificationModel,
+                        subjectSpecialist: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -423,13 +446,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="yearOfGraduation"
                   value={formData.educationQualificationModel.yearOfGraduation}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    educationQualificationModel: {
-                      ...formData.educationQualificationModel,
-                      yearOfGraduation: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      educationQualificationModel: {
+                        ...formData.educationQualificationModel,
+                        yearOfGraduation: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -445,13 +470,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="employerName"
                   value={formData.professionalExperianceModel.employerName}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    professionalExperianceModel: {
-                      ...formData.professionalExperianceModel,
-                      employerName: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      professionalExperianceModel: {
+                        ...formData.professionalExperianceModel,
+                        employerName: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -462,13 +489,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="jobTitle"
                   value={formData.professionalExperianceModel.jobTitle}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    professionalExperianceModel: {
-                      ...formData.professionalExperianceModel,
-                      jobTitle: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      professionalExperianceModel: {
+                        ...formData.professionalExperianceModel,
+                        jobTitle: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -481,13 +510,15 @@ const AddTeacher = ({ show, onClose }) => {
                   type="text"
                   name="yoe"
                   value={formData.professionalExperianceModel.yoe}
-                  onChange={(e) => setFormData({
-                    ...formData,
-                    professionalExperianceModel: {
-                      ...formData.professionalExperianceModel,
-                      yoe: e.target.value,
-                    },
-                  })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      professionalExperianceModel: {
+                        ...formData.professionalExperianceModel,
+                        yoe: e.target.value,
+                      },
+                    })
+                  }
                 />
               </Form.Group>
             </Col>
@@ -572,14 +603,22 @@ const AddTeacher = ({ show, onClose }) => {
                     <Form.Label>Criminal Background Check</Form.Label>
                     <Form.Select
                       name="isCriminalBackgroundCheck"
-                      value={formData.complianceInformationModel.isCriminalBackgroundCheck ? "true" : "false"}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        complianceInformationModel: {
-                          ...formData.complianceInformationModel,
-                          isCriminalBackgroundCheck: e.target.value === "true",
-                        },
-                      })}
+                      value={
+                        formData.complianceInformationModel
+                          .isCriminalBackgroundCheck
+                          ? "true"
+                          : "false"
+                      }
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          complianceInformationModel: {
+                            ...formData.complianceInformationModel,
+                            isCriminalBackgroundCheck:
+                              e.target.value === "true",
+                          },
+                        })
+                      }
                     >
                       <option value="false">Not Done</option>
                       <option value="true">Done</option>

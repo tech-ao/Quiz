@@ -26,9 +26,6 @@ export const fetchTeachers = async (paginationDetail) => {
 };
 
 export const addTeacher = async (TeacherData) => {
-  console.log("📤 Sending request to API:", `${BASE_URL}/Teacher/Create`);
-  console.log("📄 Request Body:", JSON.stringify(TeacherData));
-
   try {
     const response = await fetch(`${BASE_URL}/Teacher/Create`, {
       method: "POST",
@@ -36,21 +33,17 @@ export const addTeacher = async (TeacherData) => {
       body: JSON.stringify(TeacherData),
     });
 
-    console.log("📥 Response Status:", response.status);
-
-    const responseText = await response.text(); // Read raw response text
-    console.log("📝 Raw Response:", responseText);
-
+    const responseText = await response.text();
+  
     if (!response.ok) {
-      throw new Error(`❌ API Error: ${response.status} - ${response.statusText}`);
+      throw new Error(`API Error: ${response.status} - ${response.statusText}`);
     }
 
-    const jsonResponse = responseText ? JSON.parse(responseText) : {}; // Handle empty responses
-    console.log("✅ Parsed Response:", jsonResponse);
+    const jsonResponse = responseText ? JSON.parse(responseText) : {}; 
+    console.log("Parsed Response:", jsonResponse);
 
     return jsonResponse;
   } catch (error) {
-    console.error("🚨 Error in addTeacher:", error);
     throw error;
   }
 };
