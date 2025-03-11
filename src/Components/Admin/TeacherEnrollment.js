@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { fetchTeacher } from "../../redux/Action/TeacherAction";
 import axios from "axios";
 import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
@@ -23,7 +24,7 @@ const TeacherEnrollment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showViewTeacher, setShowViewTeacher] = useState(false);
-  const [selectedTeacherId, setSelectedTeacherId] = useState(null);
+  const [teacherData, setTeacherData] = useState(null); 
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
@@ -90,12 +91,16 @@ const TeacherEnrollment = () => {
   const handleApprove = async () => {
     if (selectedRequestIds.length > 0) {
       await updateStatus(1);
+    } else {
+      toast.error("No teachers selected.");
     }
   };
 
   const handleDeny = async () => {
     if (selectedRequestIds.length > 0) {
       await updateStatus(2);
+    } else {
+      toast.error("No teachers selected.");
     }
   };
 
@@ -122,21 +127,29 @@ const TeacherEnrollment = () => {
       toast.success("Status updated successfully!");
 
       // Remove updated teachers from the pending enrollment list.
-      // Approved teachers should now appear on your teacher list page.
       setRequests((prev) =>
         prev.filter((teacher) => !selectedRequestIds.includes(teacher.teacherId))
       );
       setSelectedRequestIds([]);
     } catch (error) {
-      // Log more details to the console to help diagnose the issue
       console.error("Error updating status:", error.response ? error.response.data : error.message);
       toast.error("Failed to update status. Please try again.");
     }
   };
 
-  const handleOpenViewTeacher = (teacherId) => {
-    setSelectedTeacherId(teacherId);
-    setShowViewTeacher(true);
+  const handleOpenViewTeacher = async (teacherId) => {
+    try {
+      const response = await dispatch(fetchTeacher(teacherId));
+      if (response && response.data) {
+        setTeacherData(response.data);
+        setShowViewTeacher(true);
+      } else {
+        toast.error("Invalid API response format.");
+      }
+    } catch (error) {
+      console.error("Error fetching teacher details:", error);
+      toast.error("Failed to fetch teacher details.");
+    }
   };
 
   const handleEmailAction = (email) => {
@@ -145,7 +158,7 @@ const TeacherEnrollment = () => {
 
   const handleCloseViewTeacher = () => {
     setShowViewTeacher(false);
-    setSelectedTeacherId(null);
+    setTeacherData(null); // Reset teacher data when closing the view
   };
 
   return (
@@ -220,8 +233,8 @@ const TeacherEnrollment = () => {
                                 day: '2-digit' 
                             }) 
                             : 'N/A'}
-                        </td>
-                         <td>{request.email}</td>
+                      </td>
+                      <td>{request.email}</td>
                       <td>{request.phoneNumber}</td>
                       <td>{request.genderName}</td>
                       <td>
@@ -256,7 +269,7 @@ const TeacherEnrollment = () => {
           </div>
         </Container>
       </div>
-      <ViewTeacherPanel show={showViewTeacher} onClose={handleCloseViewTeacher} />
+      <ViewTeacherPanel show={showViewTeacher} onClose={handleCloseViewTeacher} teacherData={teacherData} />
     </div>
   );
 };

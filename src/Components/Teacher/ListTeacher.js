@@ -109,7 +109,7 @@ const ListTeacher = () => {
 
   const handleCloseViewTeacher = () => {
     setShowViewTeacher(false);
-    setTeacherData(null); // Clear the teacher data when closing
+    setTeacherData(null); 
   };
 
   const handleOpenAddTeacher = () => setShowAddTeacher(true);

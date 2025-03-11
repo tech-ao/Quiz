@@ -5,65 +5,91 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import "./RegisterTeacher.css";
-import { fetchGenders } from "../../redux/Services/Enum"; // Import for fetching genders
+import { fetchCountries, fetchGenders } from "../../redux/Services/Enum"; 
 
 const RegisterTeacher = () => {
   const [formData, setFormData] = useState({
+    teacherId: 0,
     fullName: "",
     dob: "",
     gender: "",
     phoneNumber: "",
     email: "",
+    statusId: 1,
     permanentAddress: "",
-    currentAddress: "",
-    nationality: "",
-    candidatePhoto: null,
-    photoId: null,
-    highestQualification: "",
-    institutionsAttended: "",
-    degreesCertifications: "",
-    subjectSpecialization: "",
-    graduationCertificate: null,
-    employer: "",
-    jobTitle: "",
-    experienceCertificate: null,
-    teacherResume: null,
+    currentResidentialAddress: "",
+    nationalityId: null,
+    availabilityId: 1,
+    registerNo: "",
+    preferedCountryId: 1,
+    complianceInformationModel: {
+      isCriminalBackgroundCheck: false,
+    },
+    teacherDocumentFileModels: [],
+    createdBy: 0,
+    preferredWorkDays: "",
+    preferredWorkTimes: "",
+    applicationDate: "",
+    declaration: false,
   });
 
   const [genders, setGenders] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const dispatch = useDispatch();
 
-  // Handle input changes (for text, select, etc.)
   const handleInputChange = (e) => {
     const { name, type, value, checked } = e.target;
     const fieldValue = type === "checkbox" ? checked : value;
     setFormData({ ...formData, [name]: fieldValue });
   };
 
-  // Updated handleFileChange to convert file inputs to base64 strings
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        // Remove the data prefix and store only the base64 content
         const base64Content = reader.result.split(",")[1];
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: base64Content,
-        }));
+        const documentTypeId = getDocumentTypeId(name); // Function to get document type ID based on name
+
+        if (documentTypeId !== null) {
+          setFormData((prevData) => ({
+            ...prevData,
+            teacherDocumentFileModels: [
+              ...prevData.teacherDocumentFileModels.filter(doc => doc.documentTypeId !== documentTypeId),
+              {
+                documentTypeId,
+                name: file.name,
+                extension: file.name.split(".").pop(),
+                base64Content,
+              },
+            ],
+          }));
+        } else {
+          toast.error(`Invalid document type for ${name}`);
+        }
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const getDocumentTypeId = (name) => {
+    // Map the input name to the corresponding document type ID
+    const documentTypeMap = {
+      experienceCertificate: 5,
+      teacherResume: 4,
+    };
+    return documentTypeMap[name] || null;
+  };
+
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        const countriesData = await fetchCountries();
+        setCountries(countriesData);
         const gendersData = await fetchGenders();
         setGenders(gendersData);
       } catch (error) {
@@ -78,7 +104,6 @@ const RegisterTeacher = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Personal Information validations
     if (!formData.fullName.trim()) newErrors.fullName = "Name is required.";
     if (!formData.dob) newErrors.dob = "Date of Birth is required.";
     if (!formData.gender) newErrors.gender = "Gender is required.";
@@ -88,40 +113,42 @@ const RegisterTeacher = () => {
       newErrors.email = "Invalid Email Address.";
     if (!formData.permanentAddress.trim())
       newErrors.permanentAddress = "Permanent Address is required.";
-    if (!formData.currentAddress.trim())
-      newErrors.currentAddress = "Current Residential Address is required.";
-
-    // Professional Experience validations
-    if (!formData.experienceCertificate)
-      newErrors.experienceCertificate = "Experience Certificate is required.";
-    if (!formData.teacherResume)
-      newErrors.teacherResume = "Resume is required.";
+    if (!formData.currentResidentialAddress.trim())
+      newErrors.currentResidentialAddress = "Current Residential Address is required.";
+    if (!formData.teacherDocumentFileModels.length)
+      newErrors.teacherDocumentFileModels = "At least one document is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (e) => {
+    e.preventDefault();
     if (validateForm()) {
       try {
-        console.log("Submitting Data:", formData);
         setIsSubmitting(true);
-        await dispatch(addTeacherAction(formData));
-        toast.success("Teacher information registered successfully!");
+        const response = await dispatch(addTeacherAction(formData)); 
+        if (response?.isSuccess) {
+          toast.success("Teacher added successfully!");
+        } else {
+          toast.error(response?.message || "Failed to add teacher!");
+        }
       } catch (error) {
-        toast.error("Failed to register teacher!");
+        console.error("Error in handleRegister:", error);
+        toast.error(error.message || "Failed to add teacher!");
       } finally {
         setIsSubmitting(false);
       }
     } else {
-      alert("Please fix the errors before proceeding.");
+      const errorMessages = Object.values(errors).join(", ");
+      toast.error(`Please fix the following errors: ${errorMessages}`);
     }
   };
 
   return (
     <Container className="register-teacher-container">
       <h3 className="mb-4">Register Teacher</h3>
-      <Form noValidate>
+      <Form noValidate onSubmit={handleRegister}>
         {/* Personal Information */}
         <h5 className="mb-3">Personal Information</h5>
         <Row className="mb-3">
@@ -218,18 +245,24 @@ const RegisterTeacher = () => {
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group controlId="nationality">
+            <Form.Group controlId="nationalityId">
               <Form.Label>Nationality</Form.Label>
-              <Form.Control
-                type="text"
-                name="nationality"
-                value={formData.nationality}
+              <Form.Select
+                name="nationalityId"
+                value={formData.nationalityId}
                 onChange={handleInputChange}
-                isInvalid={!!errors.nationality}
+                isInvalid={!!errors.nationalityId}
                 required
-              />
+              >
+                <option value="">Select Nationality</option>
+                {countries.map((country, index) => (
+                  <option key={index} value={country.item1}>
+                    {country.item2}
+                  </option>
+                ))}
+              </Form.Select>
               <Form.Control.Feedback type="invalid">
-                {errors.nationality}
+                {errors.nationalityId}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
@@ -253,40 +286,36 @@ const RegisterTeacher = () => {
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group controlId="currentAddress">
+            <Form.Group controlId="currentResidentialAddress">
               <Form.Label>Current Residential Address</Form.Label>
               <Form.Control
                 type="text"
-                name="currentAddress"
-                value={formData.currentAddress}
+                name="currentResidentialAddress"
+                value={formData.currentResidentialAddress}
                 onChange={handleInputChange}
-                isInvalid={!!errors.currentAddress}
+                isInvalid={!!errors.currentResidentialAddress}
                 required
               />
               <Form.Control.Feedback type="invalid">
-                {errors.currentAddress}
+                {errors.currentResidentialAddress}
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
 
-        {/* Professional Experience */}
-        <h5 className="mb-3">Professional Experience</h5>
+        {/* Document Uploads */}
+        <h5 className="mb-3">Document Uploads</h5>
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="experienceCertificate">
-              <Form.Label>Year of Experience</Form.Label>
+              <Form.Label>Experience Certificate (Upload)</Form.Label>
               <Form.Control
                 type="file"
                 name="experienceCertificate"
                 onChange={handleFileChange}
-                isInvalid={!!errors.experienceCertificate}
                 accept="image/*"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.experienceCertificate}
-              </Form.Control.Feedback>
             </Form.Group>
           </Col>
           <Col md={6}>
@@ -296,18 +325,14 @@ const RegisterTeacher = () => {
                 type="file"
                 name="teacherResume"
                 onChange={handleFileChange}
-                isInvalid={!!errors.teacherResume}
                 accept="application/pdf, image/*"
                 required
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.teacherResume}
-              </Form.Control.Feedback>
             </Form.Group>
           </Col>
         </Row>
 
-        <Button variant="success" onClick={handleRegister} disabled={isSubmitting}>
+        <Button variant="success" type="submit" disabled={isSubmitting}>
           Register
         </Button>
       </Form>
