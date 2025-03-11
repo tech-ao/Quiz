@@ -6,35 +6,32 @@ import axios from "axios";
 import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
-import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
-import ViewStudentPanel from "../Student/ViewStudent";
-import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
+import { fetchTeacherEnrollmentRequest } from "../../redux/Services/api";
+import ViewTeacherPanel from "../ViewTeacher"; // Optional: teacher view panel
+import { FiEye, FiMail } from "react-icons/fi";
 
 const BASE_URL = "http://santhwanamhhcs.in:8081/api";
 
-const EnrollmentRequestList = () => {
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+const TeacherEnrollment = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRequestIds, setSelectedRequestIds] = useState([]);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [showViewStudent, setShowViewStudent] = useState(false);
-  const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [showViewTeacher, setShowViewTeacher] = useState(false);
+  const [selectedTeacherId, setSelectedTeacherId] = useState(null);
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  
-
   useEffect(() => {
     const handleResize = () => {
-      // Sidebar visible only for screens 1024px and above
       setIsSidebarVisible(window.innerWidth >= 1024);
       setIsSmallScreen(window.innerWidth < 768);
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -43,33 +40,33 @@ const EnrollmentRequestList = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const studentsPerPage = 10;
+  const teachersPerPage = 10; // For pagination
 
-  // Filter requests by search term (matching first name or email)
+  // Filter requests by search term (matching teacher name or email)
   const filteredRequests = requests.filter((request) => {
     const searchLower = searchTerm.toLowerCase();
     return (
-      request.firstName.toLowerCase().includes(searchLower) ||
-      request.email.toLowerCase().includes(searchLower)
+      (request.firstName || "").toLowerCase().includes(searchLower) ||
+      (request.email || "").toLowerCase().includes(searchLower)
     );
   });
 
-  const indexOfLastRequest = currentPage * studentsPerPage;
-  const indexOfFirstRequest = indexOfLastRequest - studentsPerPage;
+  const indexOfLastRequest = currentPage * teachersPerPage;
+  const indexOfFirstRequest = indexOfLastRequest - teachersPerPage;
   const currentRequests = filteredRequests.slice(indexOfFirstRequest, indexOfLastRequest);
-  const totalPages = Math.ceil(filteredRequests.length / studentsPerPage);
+  const totalPages = Math.ceil(filteredRequests.length / teachersPerPage);
 
   useEffect(() => {
     const paginationDetail = {
-      pageSize: studentsPerPage,
+      pageSize: teachersPerPage,
       pageNumber: currentPage,
     };
     const fetchRequests = async () => {
       try {
         setLoading(true);
-        const response = await fetchStudentEnrollmentRequest({ paginationDetail });
+        const response = await fetchTeacherEnrollmentRequest({ paginationDetail });
         if (response && response.data) {
-          setRequests(response.data.searchAndListStudentResult || []);
+          setRequests(response.data.searchAndListTeacherResult || []);
         } else {
           setError("Failed to fetch enrollment requests.");
         }
@@ -82,11 +79,11 @@ const EnrollmentRequestList = () => {
     fetchRequests();
   }, [currentPage]);
 
-  const handleSelectRequest = (studentId) => {
+  const handleSelectRequest = (teacherId) => {
     setSelectedRequestIds((prevSelected) =>
-      prevSelected.includes(studentId)
-        ? prevSelected.filter((id) => id !== studentId)
-        : [...prevSelected, studentId]
+      prevSelected.includes(teacherId)
+        ? prevSelected.filter((id) => id !== teacherId)
+        : [...prevSelected, teacherId]
     );
   };
 
@@ -105,50 +102,50 @@ const EnrollmentRequestList = () => {
   const updateStatus = async (statusEnum) => {
     try {
       if (selectedRequestIds.length === 0) {
-        toast.error("No students selected.");
+        toast.error("No teachers selected.");
         return;
       }
 
       const requestBody = {
         statusEnum,
-        studentIdList: selectedRequestIds,
+        teacherIdList: selectedRequestIds,
       };
 
-      await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
+      await axios.post(`${BASE_URL}/Teacher/UpdateTeacherStatus`, requestBody, {
         headers: {
           Accept: "application/json",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
+          "Content-Type": "application/json",
         },
       });
       toast.success("Status updated successfully!");
 
+      // Remove updated teachers from the pending enrollment list.
+      // Approved teachers should now appear on your teacher list page.
       setRequests((prev) =>
-        prev.map((student) =>
-          selectedRequestIds.includes(student.studentId)
-            ? { ...student, statusName: statusEnum === 1 ? "Approved" : "Rejected" }
-            : student
-        )
+        prev.filter((teacher) => !selectedRequestIds.includes(teacher.teacherId))
       );
       setSelectedRequestIds([]);
     } catch (error) {
+      // Log more details to the console to help diagnose the issue
+      console.error("Error updating status:", error.response ? error.response.data : error.message);
       toast.error("Failed to update status. Please try again.");
     }
   };
 
-  const handleOpenViewStudent = (studentId) => {
-    setSelectedStudentId(studentId);
-    setShowViewStudent(true);
+  const handleOpenViewTeacher = (teacherId) => {
+    setSelectedTeacherId(teacherId);
+    setShowViewTeacher(true);
   };
 
-  // New function: Opens the default email client with the student's email address
   const handleEmailAction = (email) => {
     window.location.href = `mailto:${email}`;
   };
 
-  const handleCloseViewStudent = () => {
-    setShowViewStudent(false);
-    setSelectedStudentId(null);
+  const handleCloseViewTeacher = () => {
+    setShowViewTeacher(false);
+    setSelectedTeacherId(null);
   };
 
   return (
@@ -156,11 +153,11 @@ const EnrollmentRequestList = () => {
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container ">
+        <Container className="main-container">
           <div className="sticky-header">
             <Row className="align-items-center" style={{ marginTop: "20px" }}>
               <Col md={6}>
-                <h2 className="fw-bold">Student Enrollment Request</h2>
+                <h2 className="fw-bold">Teacher Enrollment Request</h2>
               </Col>
               <Col md={6} className="d-flex justify-content-end align-items-center">
                 <Form.Control
@@ -176,7 +173,7 @@ const EnrollmentRequestList = () => {
                 <Button variant="success" onClick={handleApprove}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny} >
+                <Button variant="danger" onClick={handleDeny}>
                   Reject
                 </Button>
               </Col>
@@ -195,8 +192,8 @@ const EnrollmentRequestList = () => {
                   <tr>
                     <th>Select</th>
                     <th>S.Number</th>
-                    <th>Reg Number</th>
                     <th>Name</th>
+                    <th>Date Of Birth</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Gender</th>
@@ -208,12 +205,23 @@ const EnrollmentRequestList = () => {
                   {currentRequests.map((request, index) => (
                     <tr key={request.id || index}>
                       <td>
-                        <Form.Check type="checkbox" onChange={() => handleSelectRequest(request.studentId)} />
+                        <Form.Check
+                          type="checkbox"
+                          onChange={() => handleSelectRequest(request.teacherId)}
+                        />
                       </td>
                       <td>{indexOfFirstRequest + index + 1}</td>
-                      <td>{request.studentId}</td>
-                      <td>{request.firstName}</td>
-                      <td>{request.email}</td>
+                      <td>{request.fullName}</td>
+                      <td>
+                        {request.dob 
+                            ? new Date(request.dob).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: '2-digit', 
+                                day: '2-digit' 
+                            }) 
+                            : 'N/A'}
+                        </td>
+                         <td>{request.email}</td>
                       <td>{request.phoneNumber}</td>
                       <td>{request.genderName}</td>
                       <td>
@@ -223,7 +231,7 @@ const EnrollmentRequestList = () => {
                       </td>
                       <td>
                         <div className="d-flex align-items-center gap-2">
-                          <Button variant="transparent" size="sm" onClick={() => handleOpenViewStudent(request.studentId)}>
+                          <Button variant="transparent" size="sm" onClick={() => handleOpenViewTeacher(request.teacherId)}>
                             <FiEye />
                           </Button>
                           <Button variant="transparent" size="sm" onClick={() => handleEmailAction(request.email)}>
@@ -248,9 +256,9 @@ const EnrollmentRequestList = () => {
           </div>
         </Container>
       </div>
-      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
+      <ViewTeacherPanel show={showViewTeacher} onClose={handleCloseViewTeacher} />
     </div>
   );
 };
 
-export default EnrollmentRequestList;
+export default TeacherEnrollment;
