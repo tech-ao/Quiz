@@ -1,79 +1,82 @@
 /* General container styling */
 .register-teacher-container {
-    margin-top: 30px;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f8f9fa;
-  }
-  
-  /* Form styling */
+  margin-top: 30px;
+  padding: 20px;
+  width: 60%;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+/* Form styling */
+.register-teacher-container .form-group {
+  margin-bottom: 15px;
+}
+
+.register-teacher-container .form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Form control styling */
+.register-teacher-container .form-control {
+  border-radius: 4px;
+  border: 1px solid #ced4da;
+  font-size: 1rem;
+  padding: 10px;
+}
+
+/* Invalid input styling */
+.register-teacher-container .form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+/* Feedback styling for invalid inputs */
+.register-teacher-container .form-control-feedback {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 5px;
+}
+
+/* Button styling */
+.register-teacher-container .btn {
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.register-teacher-container .btn:hover {
+  background-color: #0056b3;
+}
+
+.register-teacher-container .btn:disabled {
+  background-color: #6c757d;
+}
+
+/* Responsive styling */
+@media (max-width: 767px) {
   .register-teacher-container .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
-  
+
   .register-teacher-container .form-label {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #333;
+    font-size: 0.9rem;
   }
-  
-  /* Form control styling */
+
   .register-teacher-container .form-control {
-    border-radius: 4px;
-    border: 1px solid #ced4da;
-    font-size: 1rem;
-    padding: 10px;
+    font-size: 0.9rem;
   }
-  
-  /* Invalid input styling */
-  .register-teacher-container .form-control.is-invalid {
-    border-color: #dc3545;
-  }
-  
-  /* Feedback styling for invalid inputs */
-  .register-teacher-container .form-control-feedback {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 5px;
-  }
-  
-  /* Button styling */
+
   .register-teacher-container .btn {
-    background-color: #007bff;
-    color: white;
-    font-size: 1rem;
-    padding: 10px 20px;
-    border-radius: 4px;
-    border: none;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
+    font-size: 0.9rem;
+    padding: 8px 15px;
   }
-  
-  .register-teacher-container .btn:hover {
-    background-color: #0056b3;
+  .register-teacher-container {
+    width: 75%;
   }
-  
-  .register-teacher-container .btn:disabled {
-    background-color: #6c757d;
-  }
-  
-  /* Responsive styling */
-  @media (max-width: 767px) {
-    .register-teacher-container .form-group {
-      margin-bottom: 10px;
-    }
-  
-    .register-teacher-container .form-label {
-      font-size: 0.9rem;
-    }
-  
-    .register-teacher-container .form-control {
-      font-size: 0.9rem;
-    }
-  
-    .register-teacher-container .btn {
-      font-size: 0.9rem;
-      padding: 8px 15px;
-    }
-  }
-  
+}

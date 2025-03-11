@@ -7,7 +7,7 @@ import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import './RegisterTeacher.css';
 import { fetchGenders } from "../../redux/Services/Enum"; // Added import for fetchGenders
 
-const RegisterTeacher = () => {
+const TeacherFirstLogin = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     dob: "",
@@ -78,12 +78,30 @@ const RegisterTeacher = () => {
       newErrors.permanentAddress = "Permanent Address is required.";
     if (!formData.currentAddress.trim())
       newErrors.currentAddress = "Current Residential Address is required.";
-  
+    if (!formData.nationality.trim())
+      newErrors.nationality = "Nationality is required.";
+    if (!formData.candidatePhoto)
+      newErrors.candidatePhoto = "Candidate Photo is required.";
+    if (!formData.photoId)
+      newErrors.photoId = "Photo ID is required.";
 
-
+    // Educational Qualifications validations
+    if (!formData.highestQualification.trim())
+      newErrors.highestQualification = "Highest Qualification is required.";
+    if (!formData.institutionsAttended.trim())
+      newErrors.institutionsAttended = "Institution(s) Attended is required.";
+    if (!formData.degreesCertifications.trim())
+      newErrors.degreesCertifications = "Degrees/Certifications are required.";
+    if (!formData.subjectSpecialization.trim())
+      newErrors.subjectSpecialization = "Subject Specialization is required.";
+    if (!formData.graduationCertificate)
+      newErrors.graduationCertificate = "Graduation Certificate is required.";
 
     // Professional Experience validations
-
+    if (!formData.employer.trim())
+      newErrors.employer = "Current/Previous Employer is required.";
+    if (!formData.jobTitle.trim())
+      newErrors.jobTitle = "Job Title is required.";
     if (!formData.experienceCertificate)
       newErrors.experienceCertificate = "Experience Certificate is required.";
 
@@ -264,10 +282,166 @@ const RegisterTeacher = () => {
           </Col>
         </Row>
 
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="candidatePhoto">
+              <Form.Label>Candidate Photo</Form.Label>
+              <Form.Control
+                type="file"
+                name="candidatePhoto"
+                onChange={handleFileChange}
+                isInvalid={!!errors.candidatePhoto}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.candidatePhoto}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="photoId">
+              <Form.Label>Photo ID</Form.Label>
+              <Form.Control
+                type="file"
+                name="photoId"
+                onChange={handleFileChange}
+                isInvalid={!!errors.photoId}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.photoId}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+
+        {/* Educational Qualifications */}
+        <h5 className="mb-3">Educational Qualifications</h5>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="highestQualification">
+              <Form.Label>Highest Level of Qualification</Form.Label>
+              <Form.Control
+                type="text"
+                name="highestQualification"
+                value={formData.highestQualification}
+                onChange={handleInputChange}
+                isInvalid={!!errors.highestQualification}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.highestQualification}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="institutionsAttended">
+              <Form.Label>Institution(s) Attended</Form.Label>
+              <Form.Control
+                type="text"
+                name="institutionsAttended"
+                value={formData.institutionsAttended}
+                onChange={handleInputChange}
+                isInvalid={!!errors.institutionsAttended}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.institutionsAttended}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="degreesCertifications">
+              <Form.Label>Degrees/Certifications</Form.Label>
+              <Form.Control
+                type="text"
+                name="degreesCertifications"
+                value={formData.degreesCertifications}
+                onChange={handleInputChange}
+                isInvalid={!!errors.degreesCertifications}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.degreesCertifications}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="subjectSpecialization">
+              <Form.Label>Subject Specialization</Form.Label>
+              <Form.Control
+                type="text"
+                name="subjectSpecialization"
+                value={formData.subjectSpecialization}
+                onChange={handleInputChange}
+                isInvalid={!!errors.subjectSpecialization}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.subjectSpecialization}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="graduationCertificate">
+              <Form.Label>Year of Graduation</Form.Label>
+              <Form.Control
+                type="file"
+                name="graduationCertificate"
+                onChange={handleFileChange}
+                isInvalid={!!errors.graduationCertificate}
+                accept="image/*"
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.graduationCertificate}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
 
         {/* Professional Experience */}
         <h5 className="mb-3">Professional Experience</h5>
-     
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="employer">
+              <Form.Label>Current/Previous Employer</Form.Label>
+              <Form.Control
+                type="text"
+                name="employer"
+                value={formData.employer}
+                onChange={handleInputChange}
+                isInvalid={!!errors.employer}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.employer}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="jobTitle">
+              <Form.Label>Job Title</Form.Label>
+              <Form.Control
+                type="text"
+                name="jobTitle"
+                value={formData.jobTitle}
+                onChange={handleInputChange}
+                isInvalid={!!errors.jobTitle}
+                required
+              />
+              <Form.Control.Feedback type="invalid">
+                {errors.jobTitle}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+        </Row>
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="experienceCertificate">
@@ -285,9 +459,8 @@ const RegisterTeacher = () => {
               </Form.Control.Feedback>
             </Form.Group>
           </Col>
-        
+
           <Col md={6}>
-         
             <Form.Group controlId="teacherResume">
               <Form.Label>Upload Resume</Form.Label>
               <Form.Control
@@ -305,11 +478,8 @@ const RegisterTeacher = () => {
           </Col>
         </Row>
 
-        {/* Resume Upload */}
-       
-      
 
-        <Button variant="success" onClick={handleRegister} disabled={isSubmitting}>
+        <Button variant="primary" onClick={handleRegister} disabled={isSubmitting}>
           Register
         </Button>
       </Form>
@@ -317,4 +487,4 @@ const RegisterTeacher = () => {
   );
 };
 
-export default RegisterTeacher;
+export default TeacherFirstLogin;
