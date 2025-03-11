@@ -8,45 +8,37 @@ import { fetchCountries, fetchGenders } from "../../redux/Services/Enum";
 
 const AddTeacher = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
-    // Section 1: Personal Information
+    teacherId: 0,
     fullName: "",
     dob: "",
     gender: "",
     phoneNumber: "",
     email: "",
+    statusId: 1,
     permanentAddress: "",
-    currentAddress: "",
-    nationality: "",
-    candidatePhoto: null,
-    photoId: null,
-    // Section 2: Educational Qualifications
-    highestQualification: "",
-    institutionsAttended: "",
-    degreesCertifications: "",
-    subjectSpecialization: "",
-    graduationCertificate: null,
-    // Section 3: Professional Experience
-    employer: "",
-    jobTitle: "",
-    yearsOfExperience: "",
-    experienceCertificate: null,
-    // Section 4: Franchise-specific Requirements
-    availability: "",
+    currentResidentialAddress: "",
+    nationalityId: null,
+    availabilityId: 1,
+    registerNo: "",
+    preferedCountryId: 1,
+    professionalExperianceModel: {
+      employerName: "",
+      jobTitle: "",
+      yoe: "",
+    },
+    educationQualificationModel: {
+      higherLevelEducation: "",
+      institute: "",
+      subjectSpecialist: "",
+      yearOfGraduation: "",
+    },
+    complianceInformationModel: {
+      isCriminalBackgroundCheck: false,
+    },
+    teacherDocumentFileModels: [],
+    createdBy: 0,
     preferredWorkDays: "",
     preferredWorkTimes: "",
-    preferredCountry: "", // Options: "Only India" or "Other than India"
-    // Section 5: Legal and Compliance Information (conditional)
-    criminalBackgroundCheck: "",
-    workAuthorization: null,
-    healthMedicalFitness: null,
-    nonDisclosureAgreement: null,
-    proofOfAddress: null,
-    // Section 6: References (conditional)
-    professionalReferences: null,
-    // Section 7: Resume
-    resume: null,
-    // Section 8 (Subtitle 9): Signature and Declaration
-    applicantSignature: null,
     applicationDate: "",
     declaration: false,
   });
@@ -54,6 +46,7 @@ const AddTeacher = ({ show, onClose }) => {
   const [errors, setErrors] = useState({});
   const [countries, setCountries] = useState([]);
   const [genders, setGenders] = useState([]);
+  const [documentTypes, setDocumentTypes] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -61,13 +54,43 @@ const AddTeacher = ({ show, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const fieldValue = type === "checkbox" ? checked : value;
-    setFormData({ ...formData, [name]: fieldValue });
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
-    setFormData({ ...formData, [name]: files[0] });
+    const file = files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Content = reader.result.split(",")[1];
+        const documentTypeId = documentTypes[name] || null;
+
+        if (documentTypeId !== null) {
+          setFormData((prevData) => {
+            const updatedDocuments = prevData.teacherDocumentFileModels.filter(
+              (doc) => doc.documentTypeId !== documentTypeId
+            );
+            return {
+              ...prevData,
+              teacherDocumentFileModels: [
+                ...updatedDocuments,
+                {
+                  documentTypeId,
+                  name: file.name,
+                  extension: file.name.split(".").pop(),
+                  base64Content,
+                },
+              ],
+            };
+          });
+        } else {
+          toast.error(`Invalid document type for ${name}`);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   useEffect(() => {
@@ -79,6 +102,9 @@ const AddTeacher = ({ show, onClose }) => {
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
+
+        const documentTypesData = await fetchDocumentTypes();
+        setDocumentTypes(documentTypesData);
       } catch (error) {
         console.error("Error fetching data:", error.message);
       } finally {
@@ -89,83 +115,37 @@ const AddTeacher = ({ show, onClose }) => {
     fetchAllData();
   }, []);
 
+  const fetchDocumentTypes = async () => {
+    try {
+      const response = await fetch("http://santhwanamhhcs.in:8081/api/Enum/DocumentType", {
+        headers: {
+          accept: "text/plain",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+        },
+      });
+      const data = await response.json();
+      return data.reduce((acc, item) => {
+        acc[item.item2] = item.item1;
+        return acc;
+      }, {});
+    } catch (error) {
+      console.error("Error fetching document types:", error);
+      return {};
+    }
+  };
+
   const validateForm = () => {
     let newErrors = {};
 
-    // Section 1: Personal Information validations
     if (!formData.fullName.trim()) newErrors.fullName = "Full Name is required";
     if (!formData.dob) newErrors.dob = "Date of Birth is required";
     if (!formData.gender) newErrors.gender = "Gender is required";
-    if (!formData.phoneNumber.match(/^\d{10}$/))
-      newErrors.phoneNumber = "Enter a valid 10-digit phone number";
-    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
-      newErrors.email = "Enter a valid email address";
-    if (!formData.permanentAddress.trim())
-      newErrors.permanentAddress = "Permanent Address is required";
-    if (!formData.currentAddress.trim())
-      newErrors.currentAddress = "Current Residential Address is required";
-    if (!formData.nationality.trim())
-      newErrors.nationality = "Nationality is required";
-    if (!formData.candidatePhoto)
-      newErrors.candidatePhoto = "Candidate Photo is required";
-    if (!formData.photoId) newErrors.photoId = "Photo ID is required";
-
-    // Section 2: Educational Qualifications validations
-    if (!formData.highestQualification.trim())
-      newErrors.highestQualification = "Highest Qualification is required";
-    if (!formData.institutionsAttended.trim())
-      newErrors.institutionsAttended = "Institution(s) Attended is required";
-    if (!formData.degreesCertifications.trim())
-      newErrors.degreesCertifications = "Degrees/Certifications are required";
-    if (!formData.subjectSpecialization.trim())
-      newErrors.subjectSpecialization = "Subject Specialization is required";
-    if (!formData.graduationCertificate)
-      newErrors.graduationCertificate = "Graduation Certificate is required";
-
-    // Section 3: Professional Experience validations
-    if (!formData.employer.trim())
-      newErrors.employer = "Current/Previous Employer is required";
-    if (!formData.jobTitle.trim())
-      newErrors.jobTitle = "Job Title is required";
-    if (!formData.yearsOfExperience.match(/^\d+$/))
-      newErrors.yearsOfExperience = "Years of Experience must be a number";
-    if (!formData.experienceCertificate)
-      newErrors.experienceCertificate = "Experience Certificate is required";
-
-    // Section 4: Franchise-specific Requirements validations
-    if (!formData.availability)
-      newErrors.availability = "Availability is required";
-    if (!formData.preferredWorkDays.trim())
-      newErrors.preferredWorkDays = "Preferred Work Days is required";
-    if (!formData.preferredWorkTimes.trim())
-      newErrors.preferredWorkTimes = "Preferred Work Times is required";
-    if (!formData.preferredCountry)
-      newErrors.preferredCountry = "Preferred Country selection is required";
-
-    // If "Other than India" is selected, validate additional fields.
-    if (formData.preferredCountry === "Other than India") {
-      if (!formData.criminalBackgroundCheck)
-        newErrors.criminalBackgroundCheck = "Criminal Background Check status is required";
-      if (!formData.workAuthorization)
-        newErrors.workAuthorization = "Work Authorization is required";
-      if (!formData.healthMedicalFitness)
-        newErrors.healthMedicalFitness = "Health and Medical Fitness is required";
-      if (!formData.proofOfAddress)
-        newErrors.proofOfAddress = "Proof of Address is required";
-      if (!formData.professionalReferences)
-        newErrors.professionalReferences = "Professional References are required";
-    }
-
-    // Section 7: Resume validation
-    if (!formData.resume) newErrors.resume = "Resume is required";
-
-    // Section 8 (Subtitle 9): Signature and Declaration validations
-    if (!formData.applicantSignature)
-      newErrors.applicantSignature = "Signature is required";
-    if (!formData.applicationDate)
-      newErrors.applicationDate = "Application Date is required";
-    if (!formData.declaration)
-      newErrors.declaration = "You must acknowledge that all provided information is truthful and correct";
+    if (!formData.phoneNumber.match(/^\d{10}$/)) newErrors.phoneNumber = "Enter a valid 10-digit phone number";
+    if (!formData.email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) newErrors.email = "Enter a valid email address";
+    if (!formData.permanentAddress.trim()) newErrors.permanentAddress = "Permanent Address is required";
+    if (!formData.currentResidentialAddress.trim()) newErrors.currentResidentialAddress = "Current Residential Address is required";
+    if (formData.nationalityId === null) newErrors.nationalityId = "Nationality is required";
+    if (formData.teacherDocumentFileModels.length === 0) newErrors.teacherDocumentFileModels = "At least one document is required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -177,10 +157,19 @@ const AddTeacher = ({ show, onClose }) => {
       toast.error("Please fix the errors before submitting.");
       return;
     }
+
     setIsSubmitting(true);
     try {
-      console.log("Submitting Data:", formData);
-      await dispatch(addTeacherAction(formData));
+      const payload = {
+        ...formData,
+        teacherDocumentFileModels: formData.teacherDocumentFileModels.map(doc => ({
+          ...doc,
+          base64Content: doc.base64Content,
+        })),
+      };
+
+      console.log("Submitting Data:", payload);
+      await dispatch(addTeacherAction(payload));
       toast.success("Teacher added successfully!");
       onClose();
     } catch (error) {
@@ -197,7 +186,6 @@ const AddTeacher = ({ show, onClose }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          {/* Section 1: Personal Information */}
           <h4>Personal Information</h4>
           <Row className="mb-3">
             <Col md={6}>
@@ -303,32 +291,38 @@ const AddTeacher = ({ show, onClose }) => {
           </Row>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="currentAddress">
+              <Form.Group controlId="currentResidentialAddress">
                 <Form.Label>Current Residential Address</Form.Label>
                 <Form.Control
                   type="text"
-                  name="currentAddress"
-                  value={formData.currentAddress}
+                  name="currentResidentialAddress"
+                  value={formData.currentResidentialAddress}
                   onChange={handleChange}
-                  isInvalid={!!errors.currentAddress}
+                  isInvalid={!!errors.currentResidentialAddress}
                 />
                 <Form.Control.Feedback type="invalid">
-                  {errors.currentAddress}
+                  {errors.currentResidentialAddress}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={6}>
-              <Form.Group controlId="nationality">
+              <Form.Group controlId="nationalityId">
                 <Form.Label>Nationality</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="nationality"
-                  value={formData.nationality}
+                <Form.Select
+                  name="nationalityId"
+                  value={formData.nationalityId}
                   onChange={handleChange}
-                  isInvalid={!!errors.nationality}
-                />
+                  isInvalid={!!errors.nationalityId}
+                >
+                  <option value="">Select Nationality</option>
+                  {countries.map((country, index) => (
+                    <option key={index} value={country.item1}>
+                      {country.item2}
+                    </option>
+                  ))}
+                </Form.Select>
                 <Form.Control.Feedback type="invalid">
-                  {errors.nationality}
+                  {errors.nationalityId}
                 </Form.Control.Feedback>
               </Form.Group>
             </Col>
@@ -339,7 +333,7 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Label>Candidate Photo</Form.Label>
                 <Form.Control
                   type="file"
-                  name="candidatePhoto"
+                  name="Profile Photo"
                   onChange={handleFileChange}
                   isInvalid={!!errors.candidatePhoto}
                   accept="image/*"
@@ -354,7 +348,7 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Label>Photo ID</Form.Label>
                 <Form.Control
                   type="file"
-                  name="photoId"
+                  name="Profile Photo"
                   onChange={handleFileChange}
                   isInvalid={!!errors.photoId}
                   accept="image/*"
@@ -370,82 +364,73 @@ const AddTeacher = ({ show, onClose }) => {
           <h4>Educational Qualifications</h4>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="highestQualification">
+              <Form.Group controlId="higherLevelEducation">
                 <Form.Label>Highest Level of Qualification</Form.Label>
                 <Form.Control
                   type="text"
-                  name="highestQualification"
-                  value={formData.highestQualification}
-                  onChange={handleChange}
-                  isInvalid={!!errors.highestQualification}
+                  name="higherLevelEducation"
+                  value={formData.educationQualificationModel.higherLevelEducation}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    educationQualificationModel: {
+                      ...formData.educationQualificationModel,
+                      higherLevelEducation: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.highestQualification}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={6}>
-              <Form.Group controlId="institutionsAttended">
+              <Form.Group controlId="institute">
                 <Form.Label>Institution(s) Attended</Form.Label>
                 <Form.Control
                   type="text"
-                  name="institutionsAttended"
-                  value={formData.institutionsAttended}
-                  onChange={handleChange}
-                  isInvalid={!!errors.institutionsAttended}
+                  name="institute"
+                  value={formData.educationQualificationModel.institute}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    educationQualificationModel: {
+                      ...formData.educationQualificationModel,
+                      institute: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.institutionsAttended}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="degreesCertifications">
-                <Form.Label>Degrees/Certifications</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="degreesCertifications"
-                  value={formData.degreesCertifications}
-                  onChange={handleChange}
-                  isInvalid={!!errors.degreesCertifications}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.degreesCertifications}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group controlId="subjectSpecialization">
+              <Form.Group controlId="subjectSpecialist">
                 <Form.Label>Subject Specialization</Form.Label>
                 <Form.Control
                   type="text"
-                  name="subjectSpecialization"
-                  value={formData.subjectSpecialization}
-                  onChange={handleChange}
-                  isInvalid={!!errors.subjectSpecialization}
+                  name="subjectSpecialist"
+                  value={formData.educationQualificationModel.subjectSpecialist}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    educationQualificationModel: {
+                      ...formData.educationQualificationModel,
+                      subjectSpecialist: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.subjectSpecialization}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
-          </Row>
-          <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="graduationCertificate">
-                <Form.Label>Graduation Certificate (Upload)</Form.Label>
+              <Form.Group controlId="yearOfGraduation">
+                <Form.Label>Year of Graduation</Form.Label>
                 <Form.Control
-                  type="file"
-                  name="graduationCertificate"
-                  onChange={handleFileChange}
-                  isInvalid={!!errors.graduationCertificate}
-                  accept="image/*"
+                  type="text"
+                  name="yearOfGraduation"
+                  value={formData.educationQualificationModel.yearOfGraduation}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    educationQualificationModel: {
+                      ...formData.educationQualificationModel,
+                      yearOfGraduation: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.graduationCertificate}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -454,18 +439,20 @@ const AddTeacher = ({ show, onClose }) => {
           <h4>Professional Experience</h4>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="employer">
+              <Form.Group controlId="employerName">
                 <Form.Label>Current/Previous Employer</Form.Label>
                 <Form.Control
                   type="text"
-                  name="employer"
-                  value={formData.employer}
-                  onChange={handleChange}
-                  isInvalid={!!errors.employer}
+                  name="employerName"
+                  value={formData.professionalExperianceModel.employerName}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    professionalExperianceModel: {
+                      ...formData.professionalExperianceModel,
+                      employerName: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.employer}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -474,30 +461,34 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Control
                   type="text"
                   name="jobTitle"
-                  value={formData.jobTitle}
-                  onChange={handleChange}
-                  isInvalid={!!errors.jobTitle}
+                  value={formData.professionalExperianceModel.jobTitle}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    professionalExperianceModel: {
+                      ...formData.professionalExperianceModel,
+                      jobTitle: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.jobTitle}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="yearsOfExperience">
+              <Form.Group controlId="yoe">
                 <Form.Label>Years of Experience</Form.Label>
                 <Form.Control
                   type="text"
-                  name="yearsOfExperience"
-                  value={formData.yearsOfExperience}
-                  onChange={handleChange}
-                  isInvalid={!!errors.yearsOfExperience}
+                  name="yoe"
+                  value={formData.professionalExperianceModel.yoe}
+                  onChange={(e) => setFormData({
+                    ...formData,
+                    professionalExperianceModel: {
+                      ...formData.professionalExperianceModel,
+                      yoe: e.target.value,
+                    },
+                  })}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.yearsOfExperience}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -505,14 +496,10 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Label>Experience Certificate (Upload)</Form.Label>
                 <Form.Control
                   type="file"
-                  name="experienceCertificate"
+                  name="Professional Year Of Experiance"
                   onChange={handleFileChange}
-                  isInvalid={!!errors.experienceCertificate}
                   accept="image/*"
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.experienceCertificate}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -521,22 +508,18 @@ const AddTeacher = ({ show, onClose }) => {
           <h4>Franchise-specific Requirements</h4>
           <Row className="mb-3">
             <Col md={4}>
-              <Form.Group controlId="availability">
+              <Form.Group controlId="availabilityId">
                 <Form.Label>Availability</Form.Label>
                 <Form.Select
-                  name="availability"
-                  value={formData.availability}
+                  name="availabilityId"
+                  value={formData.availabilityId}
                   onChange={handleChange}
-                  isInvalid={!!errors.availability}
                 >
                   <option value="">Select Availability</option>
-                  <option value="Full Time">Full Time</option>
-                  <option value="Part Time">Part Time</option>
-                  <option value="Temporary">Temporary</option>
+                  <option value="1">Full Time</option>
+                  <option value="2">Part Time</option>
+                  <option value="3">Temporary</option>
                 </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.availability}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={4}>
@@ -547,11 +530,7 @@ const AddTeacher = ({ show, onClose }) => {
                   name="preferredWorkDays"
                   value={formData.preferredWorkDays}
                   onChange={handleChange}
-                  isInvalid={!!errors.preferredWorkDays}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.preferredWorkDays}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={4}>
@@ -562,57 +541,49 @@ const AddTeacher = ({ show, onClose }) => {
                   name="preferredWorkTimes"
                   value={formData.preferredWorkTimes}
                   onChange={handleChange}
-                  isInvalid={!!errors.preferredWorkTimes}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.preferredWorkTimes}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
           <Row className="mb-3">
             <Col md={6}>
-              <Form.Group controlId="preferredCountry">
+              <Form.Group controlId="preferedCountryId">
                 <Form.Label>Preferred Country</Form.Label>
                 <Form.Select
-                  name="preferredCountry"
-                  value={formData.preferredCountry}
+                  name="preferedCountryId"
+                  value={formData.preferedCountryId}
                   onChange={handleChange}
-                  isInvalid={!!errors.preferredCountry}
                 >
                   <option value="">Select Preferred Country</option>
-                  <option value="Only India">Only India</option>
-                  <option value="Other than India">Other than India</option>
+                  <option value="1">Only India</option>
+                  <option value="2">Other than India</option>
                 </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.preferredCountry}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
 
           {/* Conditionally render Sections 5 and 6 if Preferred Country is "Other than India" */}
-          {formData.preferredCountry === "Other than India" && (
+          {formData.preferedCountryId === 2 && (
             <>
-              {/* Section 5: Legal and Compliance Information */}
               <h4>Legal and Compliance Information</h4>
               <Row className="mb-3">
                 <Col md={6}>
-                  <Form.Group controlId="criminalBackgroundCheck">
+                  <Form.Group controlId="isCriminalBackgroundCheck">
                     <Form.Label>Criminal Background Check</Form.Label>
                     <Form.Select
-                      name="criminalBackgroundCheck"
-                      value={formData.criminalBackgroundCheck}
-                      onChange={handleChange}
-                      isInvalid={!!errors.criminalBackgroundCheck}
+                      name="isCriminalBackgroundCheck"
+                      value={formData.complianceInformationModel.isCriminalBackgroundCheck ? "true" : "false"}
+                      onChange={(e) => setFormData({
+                        ...formData,
+                        complianceInformationModel: {
+                          ...formData.complianceInformationModel,
+                          isCriminalBackgroundCheck: e.target.value === "true",
+                        },
+                      })}
                     >
-                      <option value="">Select Status</option>
-                      <option value="Done">Done</option>
-                      <option value="Not Done">Not Done</option>
+                      <option value="false">Not Done</option>
+                      <option value="true">Done</option>
                     </Form.Select>
-                    <Form.Control.Feedback type="invalid">
-                      {errors.criminalBackgroundCheck}
-                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
                 <Col md={6}>
@@ -622,12 +593,8 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="workAuthorization"
                       onChange={handleFileChange}
-                      isInvalid={!!errors.workAuthorization}
                       accept="image/*"
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.workAuthorization}
-                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
               </Row>
@@ -639,27 +606,10 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="healthMedicalFitness"
                       onChange={handleFileChange}
-                      isInvalid={!!errors.healthMedicalFitness}
-                      accept="image/*"
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.healthMedicalFitness}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group controlId="nonDisclosureAgreement">
-                    <Form.Label>Non-disclosure Agreement (Upload, if applicable)</Form.Label>
-                    <Form.Control
-                      type="file"
-                      name="nonDisclosureAgreement"
-                      onChange={handleFileChange}
                       accept="image/*"
                     />
                   </Form.Group>
                 </Col>
-              </Row>
-              <Row className="mb-3">
                 <Col md={6}>
                   <Form.Group controlId="proofOfAddress">
                     <Form.Label>Proof of Address (Upload)</Form.Label>
@@ -667,39 +617,14 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="proofOfAddress"
                       onChange={handleFileChange}
-                      isInvalid={!!errors.proofOfAddress}
                       accept="image/*"
                     />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.proofOfAddress}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                </Col>
-              </Row>
-
-              {/* Section 6: References */}
-              <h4>References</h4>
-              <Row className="mb-3">
-                <Col md={6}>
-                  <Form.Group controlId="professionalReferences">
-                    <Form.Label>Professional References (Upload)</Form.Label>
-                    <Form.Control
-                      type="file"
-                      name="professionalReferences"
-                      onChange={handleFileChange}
-                      isInvalid={!!errors.professionalReferences}
-                      accept="image/*"
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {errors.professionalReferences}
-                    </Form.Control.Feedback>
                   </Form.Group>
                 </Col>
               </Row>
             </>
           )}
 
-          {/* Section 7: Resume */}
           <h4>Resume</h4>
           <Row className="mb-3">
             <Col md={6}>
@@ -707,19 +632,14 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Label>Upload Resume</Form.Label>
                 <Form.Control
                   type="file"
-                  name="resume"
+                  name="Resume"
                   onChange={handleFileChange}
-                  isInvalid={!!errors.resume}
                   accept="application/pdf, image/*"
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.resume}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
 
-          {/* Section 8 (Subtitle 9): Signature and Declaration */}
           <h4>Signature and Declaration</h4>
           <Row className="mb-3">
             <Col md={6}>
@@ -727,14 +647,10 @@ const AddTeacher = ({ show, onClose }) => {
                 <Form.Label>Signature of Applicant (Upload)</Form.Label>
                 <Form.Control
                   type="file"
-                  name="applicantSignature"
+                  name="Signature"
                   onChange={handleFileChange}
-                  isInvalid={!!errors.applicantSignature}
                   accept="image/*"
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.applicantSignature}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -745,11 +661,7 @@ const AddTeacher = ({ show, onClose }) => {
                   name="applicationDate"
                   value={formData.applicationDate}
                   onChange={handleChange}
-                  isInvalid={!!errors.applicationDate}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.applicationDate}
-                </Form.Control.Feedback>
               </Form.Group>
             </Col>
           </Row>
@@ -762,8 +674,6 @@ const AddTeacher = ({ show, onClose }) => {
                   label="I acknowledge that all provided information is truthful and correct."
                   checked={formData.declaration}
                   onChange={handleChange}
-                  isInvalid={!!errors.declaration}
-                  feedback={errors.declaration}
                   required
                 />
               </Form.Group>
