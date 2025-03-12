@@ -156,24 +156,25 @@ const ListTeacher = () => {
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container">
-          <div className="sub-container">
-            <Row className="align-items-center mt-2">
+        <Row className="sticky-top bg-white  d-flex align-items-center justify-content-between">
               <Col  xs={12} sm={12} md={isTablet ? 4 : 6}>
                 <h2 className="fw-bold">Teacher List</h2>
               </Col>
               <Col  xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex" style={{ marginTop: isSmallScreen ? "10px" : "30px" }}>
-                <InputGroup style={{ maxWidth: isSmallScreen ? "55%" : "400px", marginRight: '35px' }}>
+                <InputGroup style={{ maxWidth: isSmallScreen ? "55%" : "380px", marginRight: '35px' }}>
                   <Form.Control
                     placeholder="Search Teachers by name or email"
                     value={searchTerm}
                     onChange={handleSearch}
                   />
                 </InputGroup>
-                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
+                <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"220px" }}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
               </Col>
             </Row>
+          <div className="sub-container">
+           
 
             <div className="table-responsive" style={{ maxWidth: "1250px" }}>
               <Table hover className="mb-0">

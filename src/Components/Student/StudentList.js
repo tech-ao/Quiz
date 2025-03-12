@@ -207,14 +207,14 @@ const StudentList = () => {
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
                 <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
-                  <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
+                  <InputGroup style={{ maxWidth: "400px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}
                       onChange={handleSearch}
                     />
                     <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px", backgroundColor: "transparent" }}>
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ backgroundColor: "transparent" }}>
                         <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
@@ -229,7 +229,7 @@ const StudentList = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
+                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"200px"}}>
                     <i className="bi bi-person-plus me-2"></i> Add Student
                   </Button>
                 </Col>
