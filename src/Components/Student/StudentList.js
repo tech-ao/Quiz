@@ -207,7 +207,7 @@ const StudentList = () => {
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
                 <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
-                  <InputGroup style={{ maxWidth: "400px", marginRight: '15px' }}>
+                  <InputGroup style={{ maxWidth: "380px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}
