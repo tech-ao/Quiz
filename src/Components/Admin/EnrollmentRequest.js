@@ -10,7 +10,7 @@ import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
 import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
 
-const BASE_URL = "http://santhwanamhhcs.in:8081/api";
+const BASE_URL = "http://srimathicare.in:8081/api";
 
 const EnrollmentRequestList = () => {
    const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
