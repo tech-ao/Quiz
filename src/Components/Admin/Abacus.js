@@ -163,73 +163,102 @@ const AbacusMath = () => {
                     )}
                   </div>
                   {openStage === stage && !isLocked && (
-                    <div className="abacus-questions">
-                      {/* Render questions for the stage */}
-                      {stage === 1 && (
-                        <div
-                          className={`abacus-question-item ${selectedQuestion === 0 ? 'active' : ''}`}
-                          onClick={() => handleQuestionClick(0)}
-                        >
-                          <i className="bi-check-circle" aria-hidden="true"></i>
-                          Write The Beads Value
-                        </div>
-                      )}
-                      {stage === 2 && (
-                        <div
-                          className={`abacus-question-item ${selectedQuestion === 1 ? 'active' : ''}`}
-                          onClick={() => handleQuestionClick(1)}
-                        >
-                          <i className="bi-check-circle" aria-hidden="true"></i>
-                          Draw a Beads For the Given Number
-                        </div>
-                      )}
-                      {stage === 3 && (
-                        <div
-                          className={`abacus-question-item ${selectedQuestion === 2 ? 'active' : ''}`}
-                          onClick={() => handleQuestionClick(2)}
-                        >
-                          <i className="bi-check-circle" aria-hidden="true"></i>
-                          Draw and write the beads value
-                        </div>
-                      )}
-                      {stage === 4 && (
-                        <>
-                          <div
-                            className={`abacus-question-item ${selectedQuestion === 3 ? 'active' : ''}`}
-                            onClick={() => handleQuestionClick(3)}
-                          >
-                            <i className="bi-check-circle" aria-hidden="true"></i>
-                            Addition
-                          </div>
-                          <div
-                            className={`abacus-question-item nested ${selectedQuestion === 4 ? 'active' : ''}`}
-                            onClick={() => handleQuestionClick(4)}
-                          >
-                            <i className="bi-check-circle" aria-hidden="true"></i>
-                            Addition Beads
-                          </div>
-                        </>
-                      )}
-                      {stage === 5 && (
-                        <>
-                          <div
-                            className={`abacus-question-item ${selectedQuestion === 5 ? 'active' : ''}`}
-                            onClick={() => handleQuestionClick(5)}
-                          >
-                            <i className="bi-check-circle" aria-hidden="true"></i>
-                            Subtraction
-                          </div>
-                          <div
-                            className={`abacus-question-item nested ${selectedQuestion === 6 ? 'active' : ''}`}
-                            onClick={() => handleQuestionClick(6)}
-                          >
-                            <i className="bi-check-circle" aria-hidden="true"></i>
-                            Subtraction Beads
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
+  <div className="abacus-questions">
+    {/* Render questions for the stage */}
+    {stage === 1 && (
+      <>
+        <div
+          className={`abacus-question-item ${selectedQuestion === 0 ? 'active' : ''}`}
+          onClick={() => handleQuestionClick(0)}
+        >
+          <i className="bi-check-circle" aria-hidden="true"></i>
+          Write The Beads Value
+        </div>
+        <div
+          className={`abacus-question-item ${selectedQuestion === 1 ? 'active' : ''}`}
+          onClick={() => handleQuestionClick(1)}
+        >
+          <i className="bi-check-circle" aria-hidden="true"></i>
+          Draw a Beads For the Given Number
+        </div>
+        {/* Add the new questions here */}
+        <div
+          className={`abacus-question-item ${selectedQuestion === 2 ? 'active' : ''}`}
+          onClick={() => handleQuestionClick(2)}
+        >
+          <i className="bi-check-circle" aria-hidden="true"></i>
+          Write The Value For Given Beads
+        </div>
+        <div
+          className={`abacus-question-item ${selectedQuestion === 3 ? 'active' : ''}`}
+          onClick={() => handleQuestionClick(3)}
+        >
+          <i className="bi-check-circle" aria-hidden="true"></i>
+          Draw The Beads
+        </div>
+      </>
+    )}
+    {stage === 2 && (
+      <>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 4 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(4)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Addition
+      </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 5 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(5)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Add The  Given Number
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 6 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(6)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Add The  Given Number
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 7 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(7)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Subtraction
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 8 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(8)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Subtract The Number
+     </div>
+
+     </>
+    )}
+    {stage === 3 && (
+  <>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 9 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(9)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Addition & Subtraction Beads 
+    </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 10 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(10)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Addition & Subtraction Values
+    </div>
+  </>
+)}
+
+  </div>
+)}
                 </div>
               );
             })}
@@ -268,6 +297,7 @@ const AbacusMath = () => {
           >
             <h3>{questions[selectedQuestion]}</h3>
             <div className="questio-wrapp">
+              
               {questions[selectedQuestion] === "Addition Beads" ||
               questions[selectedQuestion] === "Subtraction Beads" ? (
                 <div className="beads-column-content">
@@ -319,6 +349,46 @@ const AbacusMath = () => {
                     </div>
                   ))}
                 </div>
+                ): questions[selectedQuestion] === "Addition & Subtraction Beads" ? (
+                  <div className="beads-column-content">
+                    {questionsData[selectedQuestion].beadCounts1.map((upper, index) => (
+                      <div key={index} className="beads-column-wrapper">
+                        <div className="Serial-number-Addition">
+                          {index + 1}
+                        </div>
+                        <div className="beads-column-item">
+                          <div className="beads-column-row">
+                            <div className="beads-column">
+                              <div className="koodu"></div>
+                              {Array.from({ length: upper }, (_, i) => (
+                                <div key={i} className="bead"></div>
+                              ))}
+                            </div>
+                            <span>{index % 2 === 0 ? "+" : "-"}</span>
+                            <div className="beads-column">
+                              <div className="koodu"></div>
+                              {Array.from(
+                                { length: questionsData[selectedQuestion].beadCounts2[index] },
+                                (_, i) => <div key={i} className="bead"></div>
+                              )}
+                            </div>
+                          </div>
+                          <div className="beads-column-input">
+                            <input
+                              type="text"
+                              value={userAnswers[index] || ""}
+                              onChange={(e) => handleAnswerChange(index, e.target.value)}
+                              className={`answer-input ${
+                                incorrectAnswers.includes(index) ? "incorrect" :
+                                unfilledInputs.includes(index) ? "unfilled" : ""
+                              }`}
+                              required
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
               ) : questions[selectedQuestion] ===
                 "Draw a Beads For the Given Number" ? (
                 questionsData[selectedQuestion].givenNumber.map(
@@ -353,11 +423,13 @@ const AbacusMath = () => {
                       <div className="abacus">
                         {!(
                           questions[selectedQuestion] === "Addition" ||
-                          questions[selectedQuestion] === "Subtraction"
+                          questions[selectedQuestion] === "Subtraction"||
+                          questions[selectedQuestion] === "Addition & Subtraction Values"
                         ) && <div className="stick"></div>}
                         {/* Render numbers for Addition, otherwise render beads */}
                         {questions[selectedQuestion] === "Addition" ||
-                        questions[selectedQuestion] === "Subtraction" ? (
+                        questions[selectedQuestion] === "Subtraction" ||
+                        questions[selectedQuestion] === "Addition & Subtraction Values"? (
                           <div className="addition-grid">
                             <div className="addition-row">
                               <span>{question.upper}</span>
