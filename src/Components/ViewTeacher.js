@@ -83,7 +83,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         <Row className="mb-3">
           <Col>
             <strong>Gender:</strong>
-            <p>{teacherData?.gender || teacherData?.genderName || "N/A"}</p>
+            <p>{teacherData?.genderName || teacherData?.genderName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Register Number:</strong>
@@ -247,7 +247,8 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
            
           <div>
             <h5>Resume PDF:</h5>
-            <PDFViewer base64Data={sampleBase64PDF} />
+           
+            <PDFViewer base64String={sampleBase64PDF} />
 
 
           </div>

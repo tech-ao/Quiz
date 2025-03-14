@@ -3,9 +3,10 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addTeacherAction } from "../../redux/Action/TeacherAction";
+import { addTeacherAction,getTeachers } from "../../redux/Action/TeacherAction";
 import { fetchCountries, fetchGenders } from "../../redux/Services/Enum";
-import {addTeacher} from "../../redux/Services/Teacher.js"
+import { addTeacher } from "../../redux/Services/Teacher.js"
+import InputMask from "react-input-mask";
 
 const AddTeacher = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
@@ -51,7 +52,16 @@ const AddTeacher = ({ show, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+    const [paginationDetail, setPaginationDetail] = useState({
+      pageNumber: 1,
+      pageSize: 15,
+    });
+
   const dispatch = useDispatch();
+
+  const currentYear = new Date().getFullYear();
+  const startYear = 1970; // Adjust as needed
+  const years = Array.from({ length: currentYear - startYear + 1 }, (_, i) => startYear + i);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -86,9 +96,7 @@ const AddTeacher = ({ show, onClose }) => {
               ],
             };
           });
-        } else {
-          toast.error(`Invalid document type for ${name}`);
-        }
+        } 
       };
       reader.readAsDataURL(file);
     }
@@ -164,11 +172,8 @@ const AddTeacher = ({ show, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateForm()) {
-      toast.error("Please fix the errors before submitting.");
-      return;
-    }
-  
+   validateForm()
+
     setIsSubmitting(true);
     try {
       const payload = {
@@ -178,9 +183,10 @@ const AddTeacher = ({ show, onClose }) => {
           base64Content: doc.base64Content,
         })),
       };
-  
-      const response = await (addTeacher(payload));   
+
+      const response = await (addTeacher(payload));
       if (response?.isSuccess) {
+         dispatch(getTeachers({ paginationDetail }));
         toast.success("Teacher added successfully!");
         onClose();
       } else {
@@ -259,13 +265,20 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="phoneNumber">
                 <Form.Label>Phone Number</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="phoneNumber"
+                <InputMask
+                 mask="9999999999" // Change this format as needed
                   value={formData.phoneNumber}
                   onChange={handleChange}
-                  isInvalid={!!errors.phoneNumber}
-                />
+                >
+                  {(inputProps) => (
+                    <Form.Control
+                      {...inputProps}
+                      type="text"
+                      name="phoneNumber"
+                      isInvalid={!!errors.phoneNumber}
+                    />
+                  )}
+                </InputMask>
                 <Form.Control.Feedback type="invalid">
                   {errors.phoneNumber}
                 </Form.Control.Feedback>
@@ -443,7 +456,7 @@ const AddTeacher = ({ show, onClose }) => {
               <Form.Group controlId="yearOfGraduation">
                 <Form.Label>Year of Graduation</Form.Label>
                 <Form.Control
-                  type="text"
+                  as="select"
                   name="yearOfGraduation"
                   value={formData.educationQualificationModel.yearOfGraduation}
                   onChange={(e) =>
@@ -455,7 +468,14 @@ const AddTeacher = ({ show, onClose }) => {
                       },
                     })
                   }
-                />
+                >
+                  <option value="">Select Year</option>
+                  {years.map((year) => (
+                    <option key={year} value={year}>
+                      {year}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
             </Col>
           </Row>
@@ -507,7 +527,7 @@ const AddTeacher = ({ show, onClose }) => {
               <Form.Group controlId="yoe">
                 <Form.Label>Years of Experience</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="number"
                   name="yoe"
                   value={formData.professionalExperianceModel.yoe}
                   onChange={(e) =>
@@ -529,7 +549,7 @@ const AddTeacher = ({ show, onClose }) => {
                   type="file"
                   name="Professional Year Of Experiance"
                   onChange={handleFileChange}
-                  accept="image/*"
+                  accept="application/pdf"
                 />
               </Form.Group>
             </Col>
@@ -632,7 +652,7 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="workAuthorization"
                       onChange={handleFileChange}
-                      accept="image/*"
+                      accept="application/pdf"
                     />
                   </Form.Group>
                 </Col>
@@ -645,7 +665,7 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="healthMedicalFitness"
                       onChange={handleFileChange}
-                      accept="image/*"
+                      accept="application/pdf"
                     />
                   </Form.Group>
                 </Col>
@@ -656,7 +676,7 @@ const AddTeacher = ({ show, onClose }) => {
                       type="file"
                       name="proofOfAddress"
                       onChange={handleFileChange}
-                      accept="image/*"
+                      accept="application/pdf, image/*"
                     />
                   </Form.Group>
                 </Col>
@@ -673,7 +693,7 @@ const AddTeacher = ({ show, onClose }) => {
                   type="file"
                   name="Resume"
                   onChange={handleFileChange}
-                  accept="application/pdf, image/*"
+                  accept="application/pdf"
                 />
               </Form.Group>
             </Col>
@@ -688,7 +708,7 @@ const AddTeacher = ({ show, onClose }) => {
                   type="file"
                   name="Signature"
                   onChange={handleFileChange}
-                  accept="image/*"
+                  accept="application/pdf , image/*"
                 />
               </Form.Group>
             </Col>
