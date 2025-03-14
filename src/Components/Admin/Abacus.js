@@ -143,10 +143,11 @@ const AbacusMath = () => {
         {selectedLevel && (
           <div className="abacus-level-section">
             {selectedLevel && <h2 className="abacus-level-heading">Level {selectedLevel}</h2>}
-            {[1, 2, 3, 4, 5].map((stage) => {
+            {[1, 2, 3, 4, 5,6].map((stage) => {
               const levelKey = Alphabhets[stage]; // Get the level key (A, B, C, etc.)
               const isLocked = (stage === 4 && !completedLevels.A) || 
-            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D));
+            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D
+             ));
             return (
                 <div key={stage}>
                   <div
@@ -311,6 +312,79 @@ const AbacusMath = () => {
 
      </>
     )}
+     {stage === 5 && (
+  <>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 18 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(18)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Practice with Abacus
+    </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 19 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(19)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Practice with Abacus???
+      </div>
+      <div
+      className={`abacus-question-item ${selectedQuestion === 20 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(20)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Addition & Subtraction Beads 
+    </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 21 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(21)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+       Draw & Practice with Abacus
+    </div>
+    
+  </>
+)}
+{stage === 6 && (
+      <>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 22 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(22)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Difficult Add & Sub
+      </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 23 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(23)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Difficult Four Row Add&Sub
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 24 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(24)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Difficult Three Row Add&Sub
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 25 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(25)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Draw the Difficult Beads
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 26 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(26)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Hard Digit Number
+     </div>
+
+     </>
+    )}
 
   </div>
 )}
@@ -384,13 +458,24 @@ const AbacusMath = () => {
                       ))}
                     </div>
                   </div>
-                  {/* Render beadMiddle if it exists */}
-                  {question.middle !== undefined && (
+                  {/* Render beadMiddle1 and beadMiddle2 if they exist */}
+                  {question.middle1 !== undefined && (
                     <div className="beads-column-row">
                       <span>+</span>
                       <div className="beads-column">
                         <div className="koodu"></div>
-                        {Array.from({ length: question.middle }, (_, i) => (
+                        {Array.from({ length: question.middle1 }, (_, i) => (
+                          <div key={i} className="bead"></div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {question.middle2 !== undefined && (
+                    <div className="beads-column-row">
+                      <span>+</span>
+                      <div className="beads-column">
+                        <div className="koodu"></div>
+                        {Array.from({ length: question.middle2 }, (_, i) => (
                           <div key={i} className="bead"></div>
                         ))}
                       </div>
@@ -514,10 +599,15 @@ const AbacusMath = () => {
                     <div className="addition-row">
                       <span>{question.upper}</span>
                     </div>
-                    {/* Render beadMiddle if it exists */}
+                    {/* Render beadMiddle1 and beadMiddle2 if they exist */}
                     {question.middle1 !== undefined && (
                       <div className="addition-row">
                         <span>{question.middle1}</span>
+                      </div>
+                    )}
+                    {question.middle2 !== undefined && (
+                      <div className="addition-row">
+                        <span>{question.middle2}</span>
                       </div>
                     )}
                     <div className="addition-row">
