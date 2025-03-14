@@ -5,11 +5,17 @@ import "./AddQuestion.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
+const BASE_URL = "http://srimathicare.in:8081";
+const ACCESS_TOKEN = "123";
+const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
- const AddQuestion = () => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+const API_URL_GET = `${BASE_URL}/api/ImportExcel/GetQuestionSet`;
+const API_URL_CREATE = `${BASE_URL}/api/ImportExcel/CreateNewQuestion`;
+const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion/${id}`;
+const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion/${id}`;
+
+const AddQuestion = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [questions, setQuestions] = useState([]);
   const [filterLevel, setFilterLevel] = useState("All");
   const [currentNumber, setCurrentNumber] = useState("");
@@ -21,17 +27,15 @@ import AdminHeader from "./AdminHeader";
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  // const [questionSetId, setQuestionSetId] = useState("");
-  // const [no, setNo] = useState("");
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/GetQuestionSet", {
+        const response = await fetch(API_URL_GET, {
           method: "GET",
           headers: {
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
+            "X-Api-Key": API_KEY,
+            AccessToken: ACCESS_TOKEN,
           },
         });
 
@@ -67,7 +71,7 @@ import AdminHeader from "./AdminHeader";
     if (event.key === "Enter") {
       handleStoreNumber();
     }
-  }
+  };
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -103,11 +107,11 @@ import AdminHeader from "./AdminHeader";
       };
   
       try {
-        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/CreateNewQuestion", {
+        const response = await fetch(API_URL_CREATE, {
           method: "POST",
           headers: {
             Accept: "text/plain",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "X-Api-Key": API_KEY,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newQuestion),
@@ -135,6 +139,7 @@ import AdminHeader from "./AdminHeader";
       alert("Please fill all fields.");
     }
   };
+
   const handleReset = () => {
     setStoredNumbers([]);
     setAnswer("");
@@ -145,11 +150,11 @@ import AdminHeader from "./AdminHeader";
 
   const handleDeleteQuestion = async (id) => {
     try {
-      const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/DeleteQuestion/${id}`, {
+      const response = await fetch(API_URL_DELETE(id), {
         method: "DELETE",
         headers: {
-          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-          AccessToken: "123",
+          "X-Api-Key": API_KEY,
+          AccessToken: ACCESS_TOKEN,
         },
       });
 
@@ -185,12 +190,12 @@ import AdminHeader from "./AdminHeader";
   const handleSaveEdit = async () => {
     if (selectedQuestion) {
       try {
-        const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/UpdateQuestion/${selectedQuestion.id}`, {
+        const response = await fetch(API_URL_UPDATE(selectedQuestion.id), {
           method: "PUT",
           headers: {
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "X-Api-Key": API_KEY,
             "Content-Type": "application/json",
-            AccessToken: "123",
+            AccessToken: ACCESS_TOKEN,
           },
           body: JSON.stringify(selectedQuestion),
         });
@@ -238,14 +243,12 @@ import AdminHeader from "./AdminHeader";
                 {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
               </Form.Select>
 
-             
-
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
-                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)}  onKeyDown={handleKeyPress} />
-                    <Button variant="success" className="plusicon"   onKeyPress={handleKeyPress}  onClick={handleStoreNumber}><FaPlus /></Button>
+                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)} onKeyDown={handleKeyPress} />
+                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
                   </InputGroup>
                   {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
                 </Col>
@@ -291,11 +294,10 @@ import AdminHeader from "./AdminHeader";
                 <Table striped bordered hover responsive>
                   <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
                     <tr className="fw-bold">
-                     {/* Changed from # to Question ID */}
-                      <th>S.no</th> {/* Added Question Set ID */}
+                      <th>S.no</th>
                       <th>Level</th>
-                      <th>Question</th> {/* Changed from Title to Question */}
-                      <th>Answer</th> {/* Changed from Description to Answer */}
+                      <th>Question</th>
+                      <th>Answer</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -303,11 +305,10 @@ import AdminHeader from "./AdminHeader";
                     {filteredQuestions.length > 0 ? (
                       filteredQuestions.map((q, index) => (
                         <tr key={q.id}>
-                          {/* Display Question ID */}
-                          <td>{index+1}</td> {/* Display Question Set ID */}
+                          <td>{index + 1}</td>
                           <td>{q.level}</td>
-                          <td>{q.questions}</td> {/* Display Question */}
-                          <td>{q.answer}</td> {/* Display Answer */}
+                          <td>{q.questions}</td>
+                          <td>{q.answer}</td>
                           <td className="py-3">
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}><FaEdit /></Button>
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}><FaTrash /></Button>
@@ -316,7 +317,7 @@ import AdminHeader from "./AdminHeader";
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="6" className="text-center">No Data found for the selected level.</td>
+                        <td colSpan="5" className="text-center">No Data found for the selected level.</td>
                       </tr>
                     )}
                   </tbody>
