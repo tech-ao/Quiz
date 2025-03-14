@@ -2,13 +2,11 @@
 
 import React, { useState } from "react";
 export const questionsData = {
-  0: { 
-    beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
-    beadUpper: [], 
-    beadLower: [], 
+  0: { //level A
+    beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5], 
     correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5", "1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
-  1: {//Drawbeads
+  1: {//level A
     givenNumber: [5, 3, 7, 2, 4, 6, 1, 8, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1], 
     beadCounts: [], 
     beadUpper: [], 
@@ -16,34 +14,55 @@ export const questionsData = {
     correctAnswers: ["5", "3", "7", "2", "4", "6", "1", "8", "5", "1","3", "2", "4", "2", "1", "3", "2", "4", "5", "1",], 
   
   },
-  2: {
-    beadCounts: [0, 6, 2, 3, 5, 0, 1, 4, 2, 3, 0, 6, 4, 6, 5, 0, 1, 4, 0, 3],
+  2: { //level A
+    beadCounts: [1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
     beadUpper: [], 
     beadLower: [], 
-    correctAnswers: ["0", "6", "2", "3", "5", "0", "1", "4", "2", "3", "0", "6", "4", "6", "5", "0", "1", "4", "0", "3"],
+    correctAnswers: ["1", "3", "2", "4", "2", "1", "3", "2", "4", "5", "1", "3", "2", "4", "2", "1", "3", "2", "4", "5"],
   },
-  3: { // Level D - Addition
-    beadUpper: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-    beadLower: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 5, 1, 5, 2, 5, 0, 5, 0, 5, 5],
-    correctAnswers: ["6", "3", "8", "6", "10", "6", "12", "8", "14", "15", "6", "3", "8", "6", "10", "6", "12", "8", "14", "15"],
+  3: {//level A
+    givenNumber: [5, 3, 7, 2, 4, 6, 1, 8, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5, 1], 
+    beadCounts: [], 
+    beadUpper: [], 
+    beadLower: [], 
+    correctAnswers: ["5", "3", "7", "2", "4", "6", "1", "8", "5", "1","3", "2", "4", "2", "1", "3", "2", "4", "5", "1",], 
+  
   },
-  4: { // Level D - Addition Beads
+  4: { // Level B - Addition Beads
     beadCounts1: [1, 3, 2,  1, 2, 1, 3, 2, 4, 5, 1, 3, 2, 4, 2, 1, 3, 2, 4, 5],
     beadCounts2: [5, 1, 5, 2, 5, 0, 5, 0, 5, 5, 1, 2, 3, 4, 5, 6, 5, 3, 1, 6],
     correctAnswers: ["6", "4", "7", "3", "7", "1", "8", "2", "9", "10", "2", "5", "5", "8", "7", "7", "8", "5", "5", "11"],
   },
-  5: { // Level E - Subtraction
-    beadUpper: [6, 5, 10, 8, 5, 3, 9, 4, 8, 10, 6, 5, 10, 8, 5, 3, 9, 4, 8, 10],
-    beadLower: [-1, -2, -3, -4, -5, -3, -2, -4, 9, -9, -1, -2, -3, -4, -5, -3, -2, -4, 9, -9],
+  5: { // Level B - Addition
+    beadUpper: [4, 1, 2, 2, 4, 0, 1, 0, 2, 3, 1, 2, 3, 4, 4, 2, 1, 4, 0, 1],
+    beadLower: [1, 2, 3, 4, 0, 4, 3, 4, 2, 1, 4, 1, 2, 2, 0, 0, 1, 0, 4, 0],
+    correctAnswers: ["5", "3", "5", "6", "4", "4", "4", "4", "4", "4", "5", "3", "5", "6", "4", "2", "2", "4", "4", "1"],
+  },
+  6: { // Level B - Addition
+    beadUpper: [1, 1, 1, 2, 2, 3, 2, 1, 1, 1, 1, 2, 3, 1, 2, 3, 1, 1, 1, 3],
+    beadLower: [1, 2, 3, 2, 1, 1, 2, 3, 1, 2, 1, 2, 1, 2, 1, 1, 2, 3, 1, 1],
+    correctAnswers: ["2", "3", "4", "4", "3", "4", "4", "4", "2", "3", "2", "4", "4", "3", "3", "4", "3", "4", "2", "4"],
+  },
+  7: { // Level B- Subtraction Beads
+    beadCounts1: [1, 2, 3, 4, 3, 4, 3, 2, 4, 1, 1, 4, 6, 4, 3, 2, 3, 2, 4, 5],
+    beadCounts2: [1, 1, 1, 1, 2, 2, 1, 1, 3, 1, 1, 3, 2, 4, 2, 1, 2, 1, 4, 3],
+    correctAnswers: ["0","1", "2", "3", "1", "2", "1", "1", "1", "0", "0", "1", "4", "0","1", "1", "1", "1", "0", "2"],
+  },
+  8: { // Level B - Subtraction
+    beadUpper: [1, 2, 3, 4, 2, 3, 4, 4, 3, 2, 3, 4, 2, 1, 2, 3, 4, 4, 4, 3],
+    beadLower: [-1, -1, -1, -1, -2, -2,-2, -1, -1, -1, -3, -3, -1, -1, -2, -3, -1, -2, -3, -1],
     correctAnswers: ["5", "3", "7", "4", "0", "0", "6", "2", "4", "0", "5", "3", "7", "4", "0", "0", "6", "2", "4", "0"],
   },
-  6: { // Level E - Subtraction Beads
-    beadCounts1: [5, 5, 2, 6, 4, 5, 6, 2, 3, 3, 1, 4, 6, 4, 3, 2, 3, 2, 4, 5],
-    beadCounts2: [1, 3, 2, 4, 2, 1, 3, 2, 1, 1, 1, 3, 2, 4, 2, 1, 2, 1, 4, 3],
-    correctAnswers: ["4", "2", "0", "2", "2", "4", "3", "0", "2", "2", "2", "0", "1", "4", "0", "1", "1", "1", "0", "2"],
+  9: { // Level C - Addition & Subtraction Beads and Values
+    beadCounts1: [1, 2, 3, 4, 3, 4, 3, 2, 3, 2, 1, 4, 6, 4, 3, 2, 3, 2, 4, 5],
+    beadCounts2: [1, 1, 1, 1, 2, 2, 1, 2, 2, 2, 1, 3, 2, 4, 2, 1, 2, 1, 4, 3],
+    correctAnswers: ["0", "1", "2", "3", "0", "1", "2", "3", "2","1", "0", "1", "1", "0", "0", "0", "2", "2", "1",  "2"],
   },
- 
-  
+  10: { // Level C
+    beadUpper: [1, 2, 1, 3, 3, 3, 4, 3, 4, 4, 2, 2, 3, 4, 2, 4, 1, 4, 3, 4],
+    beadLower: [-1, -1, 2, -2, -1, 1, -2, -3, -3, -1, 1, 2, -2, -1, -2, -3, -1, -3, -1, -4],
+    correctAnswers: ["0", "1", "3", "1", "2", "4", "2", "0", "1", "3", "3", "4", "1", "3", "0", "1", "0", "1", "2", "0"],
+  },
 };
 export const Alphabhets = {
   1: "A",
@@ -56,21 +75,31 @@ export const Alphabhets = {
 export const questions = [
   "Write The Beads Value", 
   "Draw a Beads For the Given Number", 
-  "Draw and write the beads value", 
-  "Addition", // Level D
-  "Addition Beads", // Level D
-  "Subtraction", // Level E
-  "Subtraction Beads", // Level E
+  "Write The Beads Value", 
+  "Draw a Beads For the Given Number",
+  "Addition Beads", 
+  "Addition", // Level B
+  "Addition",
+  "Subtraction Beads",  
+  "Subtraction",
+  "Addition & Subtraction Beads", // Level C
+  "Addition & Subtraction Values",
+ 
 ];
 
 const questionLevelMapping = {
   0: "A", // Write The Beads Value
-  1: "B", // Draw a Beads For the Given Number
-  2: "C", // Draw and write the beads value
-  3: "D", // Addition
-  4: "D", // Addition Beads
-  5: "E", // Subtraction
-  6: "E", // Subtraction Beads
+  1: "A", // Draw a Beads For the Given Number
+  2: "A", // Draw and write the beads value
+  3: "A", //Draw and write the beads value
+  4: "B", // Addition Beads
+  5: "B",
+  6: "B", 
+  7:"B", // Subtraction
+  8:"B",// Subtraction Beads
+  9:"C",
+  10:"C"
+  
 };
 
 export const useAbacusQuestion = () => {
@@ -104,7 +133,7 @@ export const useAbacusQuestion = () => {
     const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } =
       questionsData[index] || {};
   
-    if (questions[index] === "Addition" || questions[index] === "Subtraction") {
+    if (questions[index] === "Addition" || questions[index] === "Subtraction" ||questions[index]==="Addition & Subtraction Values") {
       setDummyQuestions(
         beadUpper && beadLower
           ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
