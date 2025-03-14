@@ -12,6 +12,19 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const sampleBase64PDF = `
+JVBERi0xLjQKJeLjz9MNCjEgMCBvYmo8PC9UeXBlL1BhZ2UvUGFyZW50
+IDUgMCBSL1Jlc291cmNlczw8L1Byb2NTZXRbL1BERi9UZXh0XS9YT2Jq
+ZWN0PDwvRjE8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMQovQmFzZUZv
+bnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZz4+Pj4+
+Pj4KZW5kb2JqCjUgMCBvYmo8PC9UeXBlL1BhZ2VzL0tpZHMgWzEgMCBS
+Xj4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAw
+MDAwMDAwMTAgMDAwMDAgbiAKMDAwMDAwMDAwMiAwMDAwMCBuIAowMDAw
+MDAwMDAzIDAwMDAwIG4gCjAwMDAwMDAwMDQgMDAwMDAgbiAKMDAwMDAw
+MDAwNSA2NTUzNSBmIAp0cmFpbGVyCjw8L1NpemUgNi9Sb290IDUgMCBS
+L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
+`;
+
   // Format date of birth if available
   const formatDate = (dob) => {
     return dob ? new Date(dob).toLocaleDateString() : "N/A";
@@ -231,13 +244,14 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           </Col>
           <Col>
             <strong>Experience Proof:</strong>
-            {teacherData?.resumePdf && (
+           
           <div>
             <h5>Resume PDF:</h5>
-            {teacherData?.resume && <PDFViewer base64Data={teacherData.resume} />}
+            <PDFViewer base64Data={sampleBase64PDF} />
+
 
           </div>
-        )}  
+     
 
           </Col>
         </Row>

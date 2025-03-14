@@ -1,6 +1,7 @@
 import { Document, Page, pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+// Load from the official Mozilla CDN
+pdfjs.GlobalWorkerOptions.workerSrc = "https://unpkg.com/pdfjs-dist@4.8.69/build/pdf.worker.min.js";
 
 const PDFViewer = ({ base64Data }) => {
   const pdfDataUri = `data:application/pdf;base64,${base64Data}`;
