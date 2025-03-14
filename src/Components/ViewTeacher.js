@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Offcanvas, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
+import BASE_URL from "../redux/Services/Config";
 import { toast } from "react-toastify";
+import PDFViewer from "../pdfViewer";
 
-const BASE_URL = "http://santhwanamhhcs.in:8081/api";
+
 
 const ViewTeacher = ({ show, onClose, teacherData }) => {
   console.log("this is from view teachers", teacherData);
@@ -54,7 +56,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
         <Offcanvas.Title>View Teacher Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        {/* Personal Information */}
+       <h5>Personal Information</h5>
         <Row className="mb-3">
           <Col>
             <strong>Full Name:</strong>
@@ -89,27 +91,8 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           </Col>
         </Row>
 
-        {/* Account Information */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Is First Login:</strong>
-            <p>{teacherData?.isFirstLogin ? "Yes" : "No"}</p>
-          </Col>
-          <Col>
-            <strong>Is Agree:</strong>
-            <p>{teacherData?.isAgree ? "Yes" : "No"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Status ID:</strong>
-            <p>{teacherData?.statusId || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Status Name:</strong>
-            <p>{teacherData?.statusName || "N/A"}</p>
-          </Col>
-        </Row>
+      
+      
 
         {/* Address Information */}
         <Row className="mb-3">
@@ -129,35 +112,75 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           </Col>
         </Row>
 
-        {/* Availability & Work Details */}
+        <h5>Education Qualification</h5>
+          <Row className="mb-3">
+          <Col>
+            <strong>Highest Level Education:</strong>
+            <p>{teacherData?.educationQualificationModel?.higherLevelEducation || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Institute Attended:</strong>
+            <p>{teacherData?.educationQualificationModel?.institute || "N/A"}</p>
+          </Col>
+        </Row>
         <Row className="mb-3">
           <Col>
-            <strong>Availability ID:</strong>
-            <p>{teacherData?.availabilityId || "N/A"}</p>
+            <strong>Degrees/Certifications:</strong>
+            <p>{teacherData?.degrees || "N/A"}</p>
           </Col>
+          <Col>
+            <strong>Subject Specialist:</strong>
+            <p>{teacherData?.educationQualificationModel?.subjectSpecialist || "N/A"}</p>
+          </Col>
+        </Row>
+
+        <h5>Professional Experience</h5>
+        <Row className="mb-3">
+          <Col>
+            <strong>Year of Graduation:</strong>
+            <p>{teacherData?.educationQualificationModel?.yearOfGraduation || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Employer Name:</strong>
+            <p>{teacherData?.professionalExperianceModel?.employerName || "N/A"}</p>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <strong>Job Title:</strong>
+            <p>{teacherData?.professionalExperianceModel?.jobTitle || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Years of Experience:</strong>
+            <p>{teacherData?.professionalExperianceModel?.yoe || "N/A"}</p>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+          <Col>
+            <strong>Preferred Countries:</strong>
+            <p>{teacherData?.preferedCountryName || "N/A"}</p>
+          </Col>
+        </Row>
+
+
+        {/* Availability & Work Details */}
+        <Row className="mb-3">
+          
           <Col>
             <strong>Availability:</strong>
             <p>{teacherData?.availability || "N/A"}</p>
           </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Teacher Mode ID:</strong>
-            <p>{teacherData?.teacherModeId || "N/A"}</p>
-          </Col>
           <Col>
             <strong>Teaching Mode:</strong>
-            <p>{teacherData?.teachingModeName || "N/A"}</p>
+            <p>{teacherData?.teacherModeName || "N/A"}</p>
           </Col>
         </Row>
+      
         <Row className="mb-3">
-          <Col>
-            <strong>Preferred Work Schedule ID:</strong>
-            <p>{teacherData?.preferedWorkScheduledId || "N/A"}</p>
-          </Col>
+         
           <Col>
             <strong>Work Schedule:</strong>
-            <p>{teacherData?.workSchedule || "N/A"}</p>
+            <p>{teacherData?.preferedWorkScheduledName || "N/A"}</p>
           </Col>
         </Row>
 
@@ -173,14 +196,8 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           </Col>
         </Row>
         <Row className="mb-3">
-          <Col>
-            <strong>Nationality ID:</strong>
-            <p>{teacherData?.nationalityId || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Preferred Country ID:</strong>
-            <p>{teacherData?.preferedCountryId || "N/A"}</p>
-          </Col>
+         
+         
         </Row>
 
         {/* Document & Media */}
@@ -197,18 +214,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
               <p>N/A</p>
             )}
           </Col>
-          <Col>
-            <strong>Photo ID:</strong>
-            {teacherData?.photoID ? (
-              <img
-                src={teacherData.photoID}
-                alt="Photo ID"
-                style={{ width: "100px", height: "auto" }}
-              />
-            ) : (
-              <p>N/A</p>
-            )}
-          </Col>
+         
         </Row>
         <Row className="mb-3">
           <Col>
@@ -225,66 +231,18 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           </Col>
           <Col>
             <strong>Experience Proof:</strong>
-            {teacherData?.experienceProof ? (
-              <img
-                src={teacherData.experienceProof}
-                alt="Experience Proof"
-                style={{ width: "100px", height: "auto" }}
-              />
-            ) : (
-              <p>N/A</p>
-            )}
+            {teacherData?.resumePdf && (
+          <div>
+            <h5>Resume PDF:</h5>
+            {teacherData?.resume && <PDFViewer base64Data={teacherData.resume} />}
+
+          </div>
+        )}  
+
           </Col>
         </Row>
 
-        {/* Education & Professional Details */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Highest Level Education:</strong>
-            <p>{teacherData?.higherLevelEducation || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Institute Attended:</strong>
-            <p>{teacherData?.institute || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Degrees/Certifications:</strong>
-            <p>{teacherData?.degrees || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Subject Specialist:</strong>
-            <p>{teacherData?.subjectSpecialist || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Year of Graduation:</strong>
-            <p>{teacherData?.yearOfGraduation || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Employer Name:</strong>
-            <p>{teacherData?.employerName || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Job Title:</strong>
-            <p>{teacherData?.jobTitle || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Years of Experience:</strong>
-            <p>{teacherData?.yoe || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-          <Col>
-            <strong>Preferred Countries:</strong>
-            <p>{teacherData?.preferredCountries || "N/A"}</p>
-          </Col>
-        </Row>
-
+      
         <div className="d-flex justify-content-center mt-3">
           <Button variant="success" onClick={handleApprove} className="me-2">
             Approve
