@@ -247,8 +247,8 @@ const AddQuestion = () => {
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
-                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)} onKeyDown={handleKeyPress} />
-                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
+                    <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)}  onKeyDown={handleKeyPress} />
+                    <Button variant="success" className="plusicon"   onKeyPress={handleKeyPress}  onClick={handleStoreNumber}><FaPlus /></Button>
                   </InputGroup>
                   {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
                 </Col>
@@ -294,10 +294,11 @@ const AddQuestion = () => {
                 <Table striped bordered hover responsive>
                   <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
                     <tr className="fw-bold">
-                      <th>S.no</th>
+                     {/* Changed from # to Question ID */}
+                      <th>S.no</th> {/* Added Question Set ID */}
                       <th>Level</th>
-                      <th>Question</th>
-                      <th>Answer</th>
+                      <th>Question</th> {/* Changed from Title to Question */}
+                      <th>Answer</th> {/* Changed from Description to Answer */}
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -305,10 +306,11 @@ const AddQuestion = () => {
                     {filteredQuestions.length > 0 ? (
                       filteredQuestions.map((q, index) => (
                         <tr key={q.id}>
-                          <td>{index + 1}</td>
+                          {/* Display Question ID */}
+                          <td>{index+1}</td> {/* Display Question Set ID */}
                           <td>{q.level}</td>
-                          <td>{q.questions}</td>
-                          <td>{q.answer}</td>
+                          <td>{q.questions}</td> {/* Display Question */}
+                          <td>{q.answer}</td> {/* Display Answer */}
                           <td className="py-3">
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}><FaEdit /></Button>
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}><FaTrash /></Button>
@@ -317,7 +319,7 @@ const AddQuestion = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="5" className="text-center">No Data found for the selected level.</td>
+                        <td colSpan="6" className="text-center">No Data found for the selected level.</td>
                       </tr>
                     )}
                   </tbody>

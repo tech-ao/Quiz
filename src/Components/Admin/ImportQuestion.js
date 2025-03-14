@@ -29,11 +29,10 @@ const ImportQuestion = () => {
     setExcelFile(event.target.files[0]);
   };
 
-  // ✅ Convert Excel File to Base64 (Browser-Safe Method)
   const convertExcelToBase64 = (file) => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(file); // Read as Base64 directly
+      reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result.split(",")[1]);
       reader.onerror = (error) => reject(error);
     });
@@ -73,17 +72,16 @@ const ImportQuestion = () => {
       }
 
       const result = await response.json();
-      setUploadStatus("✅ Questions uploaded successfully!");
+      setUploadStatus("Questions uploaded successfully!");
       console.log("Upload result:", result);
       setExcelFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Error uploading questions:", error);
-      setUploadStatus("❌ Failed to upload questions. Please try again.");
+      setUploadStatus("Failed to upload questions. Please try again.");
     }
   };
 
-  // Download Sample Excel Template
   const downloadSampleFile = () => {
     const sampleData = [
       ["Sno", "Question", "Answer"],
@@ -125,7 +123,7 @@ const ImportQuestion = () => {
 
                   <div className="button-group">
                     <button className="upload-btn" onClick={handleUpload}>
-                      📤 Upload Excel file
+                       Upload Excel file
                     </button>
                     <button className="download-btn" onClick={downloadSampleFile}>
                       📥 Download Sample File
@@ -136,16 +134,22 @@ const ImportQuestion = () => {
                 {uploadStatus && <p>{uploadStatus}</p>}
 
                 <div className="instructions">
-                  <h3>Instructions for Excel Upload</h3>
+                  <h3>How to convert CSV into Unicode (For Non-English)</h3>
                   <ol>
-                    <li>Ensure the first row contains column headers.</li>
-                    <li>Save the file in .xlsx format.</li>
-                    <li>Download the sample file for the correct format.</li>
-                    <li>Ensure there are no empty rows in between.</li>
+                    <li>Fill the data in an Excel sheet with the given format.</li>
+                    <li>
+                      Save the file as <strong>Unicode Text (*.txt)</strong>.
+                    </li>
+                    <li>Open the .txt file in Notepad.</li>
+                    <li>Replace Tab space with a comma ( , ).</li>
+                    <li>
+                      Save the file again with a .txt extension and change encoding to{" "}
+                      <strong>UTF-8</strong>.
+                    </li>
+                    <li>Change the file extension from .txt to .csv.</li>
+                    <li>Now, use this file to import questions.</li>
                   </ol>
-                  <a href="#" className="more-info">
-                    For more info
-                  </a>
+                  <a href="#" className="more-info ">For more info</a>
                 </div>
               </div>
             </main>
