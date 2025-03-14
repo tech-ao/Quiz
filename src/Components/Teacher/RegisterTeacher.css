@@ -1,6 +1,6 @@
 /* General container styling */
 .register-teacher-container {
-  margin-top: 30px;
+  margin-top: 100px;
   padding: 20px;
   width: 60%;
   border-radius: 8px;
@@ -59,7 +59,7 @@
 }
 
 /* Responsive styling */
-@media (max-width: 767px) {
+@media (max-width: 769px) {
   .register-teacher-container .form-group {
     margin-bottom: 10px;
   }
@@ -77,6 +77,10 @@
     padding: 8px 15px;
   }
   .register-teacher-container {
-    width: 75%;
+    width: 80%;
+  }
+  .reg-form{
+    justify-content: center;
+    align-items: center;
   }
 }
