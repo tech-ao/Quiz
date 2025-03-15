@@ -107,6 +107,44 @@ export const fetchTeacherMode = async () => {
   }
 };
 
+export const fetchPreferedWorkScheduled = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/Enum/PreferedWorkScheduled`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};
+
+export const fetchAvailability = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/Enum/Availability`, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch genders");
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error("Error fetching genders:", error.message);
+    return [];
+  }
+};
+
 
 export const fetchDashboardContent = async () => {
   try {
