@@ -105,6 +105,10 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
         <Row className="mb-3">
+        <Col>
+            <strong>Nationality:</strong>
+            <p>{teacherData?.nationalityName || "N/A"}</p>
+          </Col>
           <Col>
             <strong>Candidate Photo:</strong>
             {teacherData?.teacherDocumentFileModels?.length > 0 ? (

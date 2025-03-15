@@ -3,8 +3,8 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addTeacherAction,getTeachers } from "../../redux/Action/TeacherAction";
-import { fetchCountries, fetchGenders } from "../../redux/Services/Enum";
+import { addTeacherAction, getTeachers } from "../../redux/Action/TeacherAction";
+import { fetchCountries, fetchGenders, fetchTeacherMode ,fetchAvailability } from "../../redux/Services/Enum";
 import { addTeacher } from "../../redux/Services/Teacher.js"
 import InputMask from "react-input-mask";
 import BASE_URL from "../../redux/Services/Config.js";
@@ -19,11 +19,12 @@ const AddTeacher = ({ show, onClose }) => {
     email: "",
     statusId: 1,
     permanentAddress: "",
+    teacherModeId: "",
     currentResidentialAddress: "",
     nationalityId: null,
-    availabilityId: 1,
+    availabilityId: null,
     registerNo: "",
-    preferedCountryId: 1,
+    preferedCountryId: null,
     professionalExperianceModel: {
       employerName: "",
       jobTitle: "",
@@ -40,7 +41,7 @@ const AddTeacher = ({ show, onClose }) => {
     },
     teacherDocumentFileModels: [],
     createdBy: 0,
-    preferredWorkDays: "",
+    preferedWorkScheduledName: "",
     preferredWorkTimes: "",
     applicationDate: "",
     declaration: false,
@@ -48,15 +49,17 @@ const AddTeacher = ({ show, onClose }) => {
 
   const [errors, setErrors] = useState({});
   const [countries, setCountries] = useState([]);
+  const [teachingModes, setTeachingMode] = useState([]);
   const [genders, setGenders] = useState([]);
+  const [availabilitys , setAvailability] =useState([]);
   const [documentTypes, setDocumentTypes] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
-    const [paginationDetail, setPaginationDetail] = useState({
-      pageNumber: 1,
-      pageSize: 15,
-    });
+  const [paginationDetail, setPaginationDetail] = useState({
+    pageNumber: 1,
+    pageSize: 15,
+  });
 
   const dispatch = useDispatch();
 
@@ -66,8 +69,18 @@ const AddTeacher = ({ show, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
+  
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox"
+        ? checked
+        : ["country", "grade", "gender", "studyModeId", "teacherModeId"].includes(name)
+        ? parseInt(value, 10)
+        : value,
+    }));
   };
+  
+  
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -75,7 +88,7 @@ const AddTeacher = ({ show, onClose }) => {
 
     if (file) {
       console.log(file);
-      
+
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Content = reader.result.split(",")[1];
@@ -99,7 +112,7 @@ const AddTeacher = ({ show, onClose }) => {
               ],
             };
           });
-        } 
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -114,6 +127,13 @@ const AddTeacher = ({ show, onClose }) => {
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
+
+        const teachingModesData = await fetchTeacherMode()
+        setTeachingMode(teachingModesData)
+
+        const availabilityData = await fetchAvailability()
+        setAvailability(availabilityData)
+
 
         const documentTypesData = await fetchDocumentTypes();
         setDocumentTypes(documentTypesData);
@@ -175,7 +195,7 @@ const AddTeacher = ({ show, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   validateForm()
+    validateForm()
 
     setIsSubmitting(true);
     try {
@@ -188,10 +208,11 @@ const AddTeacher = ({ show, onClose }) => {
       };
 
       const response = await (addTeacher(payload));
-      if (response?.isSuccess) {
-         dispatch(getTeachers({ paginationDetail }));
+      if (response?.isSuccess) {       
+        dispatch(getTeachers({ paginationDetail }));
         toast.success("Teacher added successfully!");
         onClose();
+       
       } else {
         toast.error(response?.message || "Failed to add teacher!");
       }
@@ -244,32 +265,30 @@ const AddTeacher = ({ show, onClose }) => {
             </Col>
           </Row>
           <Row className="mb-3">
-            <Col md={6}>
-              <Form.Group controlId="gender">
-                <Form.Label>Gender</Form.Label>
-                <Form.Select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  isInvalid={!!errors.gender}
-                >
-                  <option value="">Select Gender</option>
-                  {genders.map((gender, index) => (
-                    <option key={index} value={gender.item1}>
-                      {gender.item2}
-                    </option>
-                  ))}
-                </Form.Select>
-                <Form.Control.Feedback type="invalid">
-                  {errors.gender}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Col>
+            <Form.Group as={Col} className="mb-3" controlId="formGender">
+                       <Form.Label>Gender</Form.Label>
+                       <Row>
+                         {genders.map((gender, index) => (
+                           <Col key={index} md={4}>
+                             <Form.Check
+                               type="radio"
+                               label={gender.item2}
+                               name="gender"
+                               value={gender.item1}
+                               checked={formData.gender === gender.item1}
+                               onChange={handleChange}
+                               inline
+                               required
+                             />
+                           </Col>
+                         ))}
+                       </Row>
+                     </Form.Group>
             <Col md={6}>
               <Form.Group controlId="phoneNumber">
                 <Form.Label>Phone Number</Form.Label>
                 <InputMask
-                 mask="9999999999" // Change this format as needed
+                  mask="9999999999" // Change this format as needed
                   value={formData.phoneNumber}
                   onChange={handleChange}
                 >
@@ -561,28 +580,34 @@ const AddTeacher = ({ show, onClose }) => {
           {/* Section 4: Franchise-specific Requirements */}
           <h4>Franchise-specific Requirements</h4>
           <Row className="mb-3">
-            <Col md={4}>
+          <Col md={4}>
               <Form.Group controlId="availabilityId">
                 <Form.Label>Availability</Form.Label>
                 <Form.Select
                   name="availabilityId"
                   value={formData.availabilityId}
                   onChange={handleChange}
+                  isInvalid={!!errors.availability}
                 >
                   <option value="">Select Availability</option>
-                  <option value="1">Full Time</option>
-                  <option value="2">Part Time</option>
-                  <option value="3">Temporary</option>
+                  {availabilitys.map((availability, index) => (
+                    <option key={index} value={availability.item1}>
+                      {availability.item2}
+                    </option>
+                  ))}
                 </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.availabilityId}
+                </Form.Control.Feedback>
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group controlId="preferredWorkDays">
+              <Form.Group controlId="preferedWorkScheduledName">
                 <Form.Label>Preferred Work Days</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferredWorkDays"
-                  value={formData.preferredWorkDays}
+                  name="preferedWorkScheduledName"
+                  value={formData.preferedWorkScheduledName}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -614,9 +639,29 @@ const AddTeacher = ({ show, onClose }) => {
                 </Form.Select>
               </Form.Group>
             </Col>
+            <Form.Group as={Col} className="mb-3" controlId="formClassMode">
+              <Form.Label>Teaching Mode</Form.Label>
+              <Row>
+                {teachingModes.map((mode, index) => (
+                  <Col key={index} md={4}>
+                    <Form.Check
+                      type="radio"
+                      label={mode.item2}
+                      name="teacherModeId"
+                      value={mode.item1}
+                      checked={formData.teacherModeId === mode.item1}
+                      onChange={handleChange} // Calls handleChange on selection
+                      inline
+                      required
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Form.Group>
+
+
           </Row>
 
-          {/* Conditionally render Sections 5 and 6 if Preferred Country is "Other than India" */}
           {formData.preferedCountryId == 2 && (
             <>
               <h4>Legal and Compliance Information</h4>
