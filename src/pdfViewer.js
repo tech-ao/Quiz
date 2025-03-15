@@ -1,4 +1,5 @@
-import { Document, Page, pdfjs } from "react-pdf";
+/*import { Document, Page, pdfjs } from "react-pdf";
+
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
 
@@ -17,3 +18,4 @@ const PdfViewer = ({ base64String }) => {
 };
 
 export default PdfViewer;
+*/
