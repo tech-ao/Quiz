@@ -145,9 +145,9 @@ const AbacusMath = () => {
             {selectedLevel && <h2 className="abacus-level-heading">Level {selectedLevel}</h2>}
             {[1, 2, 3, 4, 5,6].map((stage) => {
               const levelKey = Alphabhets[stage]; // Get the level key (A, B, C, etc.)
-              const isLocked = (stage === 2 && !completedLevels.A) || 
-            (stage === 1 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D
-             ));
+              const isLocked = (stage === 4 && !completedLevels.A) || 
+            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D))||
+            (stage === 6 && !completedLevels.E);
             return (
                 <div key={stage}>
                   <div
