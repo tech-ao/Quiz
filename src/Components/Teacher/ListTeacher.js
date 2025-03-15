@@ -192,7 +192,7 @@ const ListTeacher = () => {
                   {currentTeachers.length > 0 ? (
                     currentTeachers.map((teacher, index) => (
                       <tr key={teacher.teacherId}>
-                        <td>{index + 1}</td>
+                        <td>{currentPage * TeachersPerPage + index + 1}</td>
                         <td>{teacher.fullName}</td>
                         <td>{teacher.email}</td>
                         <td>

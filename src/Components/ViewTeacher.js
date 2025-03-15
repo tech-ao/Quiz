@@ -12,6 +12,19 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const sampleBase64PDF = `
+JVBERi0xLjQKJeLjz9MNCjEgMCBvYmo8PC9UeXBlL1BhZ2UvUGFyZW50
+IDUgMCBSL1Jlc291cmNlczw8L1Byb2NTZXRbL1BERi9UZXh0XS9YT2Jq
+ZWN0PDwvRjE8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMQovQmFzZUZv
+bnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZz4+Pj4+
+Pj4KZW5kb2JqCjUgMCBvYmo8PC9UeXBlL1BhZ2VzL0tpZHMgWzEgMCBS
+Xj4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAw
+MDAwMDAwMTAgMDAwMDAgbiAKMDAwMDAwMDAwMiAwMDAwMCBuIAowMDAw
+MDAwMDAzIDAwMDAwIG4gCjAwMDAwMDAwMDQgMDAwMDAgbiAKMDAwMDAw
+MDAwNSA2NTUzNSBmIAp0cmFpbGVyCjw8L1NpemUgNi9Sb290IDUgMCBS
+L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
+`;
+
   // Format date of birth if available
   const formatDate = (dob) => {
     return dob ? new Date(dob).toLocaleDateString() : "N/A";
@@ -56,7 +69,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
         <Offcanvas.Title>View Teacher Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-       <h5>Personal Information</h5>
+        <h5>Personal Information</h5>
         <Row className="mb-3">
           <Col>
             <strong>Full Name:</strong>
@@ -70,7 +83,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
         <Row className="mb-3">
           <Col>
             <strong>Gender:</strong>
-            <p>{teacherData?.gender || teacherData?.genderName || "N/A"}</p>
+            <p>{teacherData?.genderName || teacherData?.genderName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Register Number:</strong>
@@ -90,9 +103,25 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             <p>{teacherData?.email || "N/A"}</p>
           </Col>
         </Row>
+        <Row className="mb-3">
+          <Col>
+            <strong>Candidate Photo:</strong>
+            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
+              teacherData.teacherDocumentFileModels.map((file) =>
+                file.documentTypeId === 8 ? ( // Ensure the correct document type if needed
+                  <div key={file.teacherDocumentFileId}>
+                    <p>{file.name}</p>
+                  
+                  </div>
+                ) : null
+              )
+            ) : (
+              <p>N/A</p>
+            )}
+          </Col>
+        </Row>
 
-      
-      
+
 
         {/* Address Information */}
         <Row className="mb-3">
@@ -113,7 +142,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
         </Row>
 
         <h5>Education Qualification</h5>
-          <Row className="mb-3">
+        <Row className="mb-3">
           <Col>
             <strong>Highest Level Education:</strong>
             <p>{teacherData?.educationQualificationModel?.higherLevelEducation || "N/A"}</p>
@@ -165,7 +194,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
 
         {/* Availability & Work Details */}
         <Row className="mb-3">
-          
+
           <Col>
             <strong>Availability:</strong>
             <p>{teacherData?.availability || "N/A"}</p>
@@ -175,47 +204,19 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             <p>{teacherData?.teacherModeName || "N/A"}</p>
           </Col>
         </Row>
-      
+
         <Row className="mb-3">
-         
+
           <Col>
             <strong>Work Schedule:</strong>
             <p>{teacherData?.preferedWorkScheduledName || "N/A"}</p>
           </Col>
         </Row>
 
-        {/* Additional Information */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Disclaimer Content:</strong>
-            <p>{teacherData?.disclaimerContent || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Created By:</strong>
-            <p>{teacherData?.createdBy || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-         
-         
-        </Row>
+        
 
         {/* Document & Media */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Candidate Photo:</strong>
-            {teacherData?.candidatePhoto ? (
-              <img
-                src={teacherData.candidatePhoto}
-                alt="Candidate"
-                style={{ width: "100px", height: "auto" }}
-              />
-            ) : (
-              <p>N/A</p>
-            )}
-          </Col>
-         
-        </Row>
+
         <Row className="mb-3">
           <Col>
             <strong>Graduation Photo:</strong>
@@ -230,19 +231,23 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             )}
           </Col>
           <Col>
-            <strong>Experience Proof:</strong>
-            {teacherData?.resumePdf && (
-          <div>
-            <h5>Resume PDF:</h5>
-            {teacherData?.resume && <PDFViewer base64Data={teacherData.resume} />}
-
-          </div>
-        )}  
-
+            <strong>Resume:</strong>
+            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
+              teacherData.teacherDocumentFileModels.map((file) =>
+                file.documentTypeId === 4 ? ( // Ensure the correct document type if needed
+                  <div key={file.teacherDocumentFileId}>
+                    <p>{file.name}</p>
+                  
+                  </div>
+                ) : null
+              )
+            ) : (
+              <p>N/A</p>
+            )}
           </Col>
         </Row>
 
-      
+
         <div className="d-flex justify-content-center mt-3">
           <Button variant="success" onClick={handleApprove} className="me-2">
             Approve
