@@ -7,6 +7,7 @@ import { addTeacherAction,getTeachers } from "../../redux/Action/TeacherAction";
 import { fetchCountries, fetchGenders } from "../../redux/Services/Enum";
 import { addTeacher } from "../../redux/Services/Teacher.js"
 import InputMask from "react-input-mask";
+import BASE_URL from "../../redux/Services/Config.js";
 
 const AddTeacher = ({ show, onClose }) => {
   const [formData, setFormData] = useState({
@@ -73,6 +74,8 @@ const AddTeacher = ({ show, onClose }) => {
     const file = files[0];
 
     if (file) {
+      console.log(file);
+      
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Content = reader.result.split(",")[1];
@@ -127,7 +130,7 @@ const AddTeacher = ({ show, onClose }) => {
   const fetchDocumentTypes = async () => {
     try {
       const response = await fetch(
-        "http://santhwanamhhcs.in:8081/api/Enum/DocumentType",
+        `${BASE_URL}/Enum/DocumentType`,
         {
           headers: {
             accept: "text/plain",
