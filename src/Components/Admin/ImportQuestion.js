@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container } from "react-bootstrap";
 import * as XLSX from "xlsx";
 import "./ImportQuestion.css";
@@ -9,6 +9,7 @@ const ImportQuestion = () => {
   const [excelFile, setExcelFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const fileInputRef = useRef(null);
 
   const BASE_URL = "http://srimathicare.in:8081";
   const API_URL_IMPORT = `${BASE_URL}/api/ImportExcel/ImportQuestion`;
@@ -75,7 +76,10 @@ const ImportQuestion = () => {
       setUploadStatus("Questions uploaded successfully!");
       console.log("Upload result:", result);
       setExcelFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     } catch (error) {
       console.error("Error uploading questions:", error);
       setUploadStatus("Failed to upload questions. Please try again.");
@@ -119,11 +123,12 @@ const ImportQuestion = () => {
                     id="excelFile"
                     accept=".xlsx"
                     onChange={handleFileChange}
+                    ref={fileInputRef} 
                   />
 
                   <div className="button-group">
                     <button className="upload-btn" onClick={handleUpload}>
-                       Upload Excel file
+                      Upload Excel file
                     </button>
                     <button className="download-btn" onClick={downloadSampleFile}>
                       📥 Download Sample File
@@ -149,7 +154,9 @@ const ImportQuestion = () => {
                     <li>Change the file extension from .txt to .csv.</li>
                     <li>Now, use this file to import questions.</li>
                   </ol>
-                  <a href="#" className="more-info ">For more info</a>
+                  <a href="#" className="more-info ">
+                    For more info
+                  </a>
                 </div>
               </div>
             </main>
