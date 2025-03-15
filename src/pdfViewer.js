@@ -1,17 +1,19 @@
 import { Document, Page, pdfjs } from "react-pdf";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
 
-const PDFViewer = ({ base64Data }) => {
-  const pdfDataUri = `data:application/pdf;base64,${base64Data}`;
+const PdfViewer = ({ base64String }) => {
+  console.log(base64String);
+  
+  const pdfData = `data:application/pdf;base64,${base64String}`;
+  console.log(pdfData);
+  
 
   return (
-    <div>
-      <Document file={pdfDataUri}>
-        <Page pageNumber={1} />
-      </Document>
-    </div>
+    <Document file={pdfData}>
+      <Page pageNumber={1} />
+    </Document>
   );
 };
 
-export default PDFViewer;
+export default PdfViewer;

@@ -145,8 +145,8 @@ const AbacusMath = () => {
             {selectedLevel && <h2 className="abacus-level-heading">Level {selectedLevel}</h2>}
             {[1, 2, 3, 4, 5,6].map((stage) => {
               const levelKey = Alphabhets[stage]; // Get the level key (A, B, C, etc.)
-              const isLocked = (stage === 4 && !completedLevels.A) || 
-            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D
+              const isLocked = (stage === 2 && !completedLevels.A) || 
+            (stage === 1 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D
              ));
             return (
                 <div key={stage}>
@@ -253,21 +253,21 @@ const AbacusMath = () => {
       onClick={() => handleQuestionClick(10)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
-      Addition & Subtraction Values
+      Add & Sub the givenNumber
       </div>
       <div
       className={`abacus-question-item ${selectedQuestion === 11 ? 'active' : ''}`}
       onClick={() => handleQuestionClick(11)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
-      Addition & Subtraction Beads 
+      Add & Sub the Given Values 
     </div>
     <div
       className={`abacus-question-item ${selectedQuestion === 12 ? 'active' : ''}`}
       onClick={() => handleQuestionClick(12)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
-      Addition & Subtraction Values
+      Add & Sub the  Value
     </div>
     
   </>
@@ -279,32 +279,60 @@ const AbacusMath = () => {
         onClick={() => handleQuestionClick(13)}
       >
         <i className="bi-check-circle" aria-hidden="true"></i>
-       Abacus ???
+       Write the number of beads ???
       </div>
        <div
        className={`abacus-question-item ${selectedQuestion === 14 ? 'active' : ''}`}
        onClick={() => handleQuestionClick(14)}
      >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Draw the Abacus Beads???
+     </div>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 15 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(15)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Abacus Add Beads ???
+      </div>
+      <div
+       className={`abacus-question-item ${selectedQuestion === 16 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(16)}
+     >
        <i className="bi-check-circle" aria-hidden="true"></i>
-      Abacus Doubt??
+      Addition Operation
+     </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 17 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(17)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Abacus  Sub Beads ???
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 15 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(15)}
+       className={`abacus-question-item ${selectedQuestion === 18 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(18)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Subtraction Operation
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 19 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(19)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
        Add & Sub two Values
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 16 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(16)}
+       className={`abacus-question-item ${selectedQuestion === 20 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(20)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
        Add & Sub Three Values
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 17? 'active' : ''}`}
-       onClick={() => handleQuestionClick(17)}
+       className={`abacus-question-item ${selectedQuestion === 21? 'active' : ''}`}
+       onClick={() => handleQuestionClick(21)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
      Add & Sub Four Values
@@ -315,29 +343,29 @@ const AbacusMath = () => {
      {stage === 5 && (
   <>
     <div
-      className={`abacus-question-item ${selectedQuestion === 18 ? 'active' : ''}`}
-      onClick={() => handleQuestionClick(18)}
+      className={`abacus-question-item ${selectedQuestion === 22 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(22)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
       Practice with Abacus
     </div>
     <div
-      className={`abacus-question-item ${selectedQuestion === 19 ? 'active' : ''}`}
-      onClick={() => handleQuestionClick(19)}
+      className={`abacus-question-item ${selectedQuestion === 23 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(23)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
       Practice with Abacus???
       </div>
       <div
-      className={`abacus-question-item ${selectedQuestion === 20 ? 'active' : ''}`}
-      onClick={() => handleQuestionClick(20)}
+      className={`abacus-question-item ${selectedQuestion === 24 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(24)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
-      Addition & Subtraction Beads 
+      Addition & Subtraction Values 
     </div>
     <div
-      className={`abacus-question-item ${selectedQuestion === 21 ? 'active' : ''}`}
-      onClick={() => handleQuestionClick(21)}
+      className={`abacus-question-item ${selectedQuestion === 25 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(25)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
        Draw & Practice with Abacus
@@ -348,41 +376,48 @@ const AbacusMath = () => {
 {stage === 6 && (
       <>
       <div
-        className={`abacus-question-item ${selectedQuestion === 22 ? 'active' : ''}`}
-        onClick={() => handleQuestionClick(22)}
+        className={`abacus-question-item ${selectedQuestion === 26 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(26)}
       >
         <i className="bi-check-circle" aria-hidden="true"></i>
        Difficult Add & Sub
       </div>
        <div
-       className={`abacus-question-item ${selectedQuestion === 23 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(23)}
+       className={`abacus-question-item ${selectedQuestion === 27 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(27)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
       Difficult Four Row Add&Sub
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 24 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(24)}
+       className={`abacus-question-item ${selectedQuestion === 28 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(28)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
        Difficult Three Row Add&Sub
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 25 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(25)}
+       className={`abacus-question-item ${selectedQuestion === 29 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(29)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
        Draw the Difficult Beads
      </div>
      <div
-       className={`abacus-question-item ${selectedQuestion === 26 ? 'active' : ''}`}
-       onClick={() => handleQuestionClick(26)}
+       className={`abacus-question-item ${selectedQuestion === 30 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(30)}
      >
        <i className="bi-check-circle" aria-hidden="true"></i>
        Hard Digit Number
      </div>
-
+     <div
+       className={`abacus-question-item ${selectedQuestion === 31 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(31)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+        Add & Sub (Hard Digit) 
+     </div>
+      
      </>
     )}
 
