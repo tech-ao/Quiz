@@ -15,7 +15,7 @@ const RegisterTeacher = () => {
     gender: "",
     phoneNumber: "",
     email: "",
-    statusId: 1,
+    statusId: 0,
     permanentAddress: "",
     currentResidentialAddress: "",
     nationalityId: null,

@@ -5,11 +5,17 @@ import "./AddQuestion.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
+const BASE_URL = "http://srimathicare.in:8081";
+const ACCESS_TOKEN = "123";
+const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
- const AddQuestion = () => {
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+const API_URL_GET = `${BASE_URL}/api/ImportExcel/GetQuestionSet`;
+const API_URL_CREATE = `${BASE_URL}/api/ImportExcel/CreateNewQuestion`;
+const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion/${id}`;
+const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion/${id}`;
+
+const AddQuestion = () => {
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [questions, setQuestions] = useState([]);
   const [filterLevel, setFilterLevel] = useState("All");
   const [currentNumber, setCurrentNumber] = useState("");
@@ -21,17 +27,15 @@ import AdminHeader from "./AdminHeader";
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  // const [questionSetId, setQuestionSetId] = useState("");
-  // const [no, setNo] = useState("");
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/GetQuestionSet", {
+        const response = await fetch(API_URL_GET, {
           method: "GET",
           headers: {
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            AccessToken: "123",
+            "X-Api-Key": API_KEY,
+            AccessToken: ACCESS_TOKEN,
           },
         });
 
@@ -67,7 +71,7 @@ import AdminHeader from "./AdminHeader";
     if (event.key === "Enter") {
       handleStoreNumber();
     }
-  }
+  };
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -103,11 +107,11 @@ import AdminHeader from "./AdminHeader";
       };
   
       try {
-        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/CreateNewQuestion", {
+        const response = await fetch(API_URL_CREATE, {
           method: "POST",
           headers: {
             Accept: "text/plain",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "X-Api-Key": API_KEY,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(newQuestion),
@@ -135,6 +139,7 @@ import AdminHeader from "./AdminHeader";
       alert("Please fill all fields.");
     }
   };
+
   const handleReset = () => {
     setStoredNumbers([]);
     setAnswer("");
@@ -145,11 +150,11 @@ import AdminHeader from "./AdminHeader";
 
   const handleDeleteQuestion = async (id) => {
     try {
-      const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/DeleteQuestion/${id}`, {
+      const response = await fetch(API_URL_DELETE(id), {
         method: "DELETE",
         headers: {
-          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-          AccessToken: "123",
+          "X-Api-Key": API_KEY,
+          AccessToken: ACCESS_TOKEN,
         },
       });
 
@@ -185,12 +190,12 @@ import AdminHeader from "./AdminHeader";
   const handleSaveEdit = async () => {
     if (selectedQuestion) {
       try {
-        const response = await fetch(`http://santhwanamhhcs.in:8081/api/ImportExcel/UpdateQuestion/${selectedQuestion.id}`, {
+        const response = await fetch(API_URL_UPDATE(selectedQuestion.id), {
           method: "PUT",
           headers: {
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+            "X-Api-Key": API_KEY,
             "Content-Type": "application/json",
-            AccessToken: "123",
+            AccessToken: ACCESS_TOKEN,
           },
           body: JSON.stringify(selectedQuestion),
         });
@@ -237,8 +242,6 @@ import AdminHeader from "./AdminHeader";
               <Form.Select value={level} onChange={(e) => setLevel(e.target.value)}>
                 {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
               </Form.Select>
-
-             
 
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
