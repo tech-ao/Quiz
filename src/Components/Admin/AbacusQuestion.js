@@ -65,10 +65,72 @@ export const questionsData = {
   },
   11:{
     beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
-    beadMiddle:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+    beadMiddle1:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
     beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+    correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+  },
+  12:{
+    beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+    beadMiddle1:[0, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+    beadMiddle2:[0, 0, 2, 3, 2,2, 5, 1, 1, 1, 0, 2, 0, 1, 1, -2, 3, 0, -2, 0],
+    beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+    correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+  },
+  13:{},
+  14:{},
+  15:{
+    beadUpper: [1, 2, 1, 3, 3, 3, 4, 3, 4, 4, 2, 2, 3, 4, 2, 4, 1, 4, 3, 4],
+    beadLower: [-1, -1, 2, -2, -1, 1, -2, -3, -3, -1, 1, 2, -2, -1, -2, -3, -1, -3, -1, -4],
     correctAnswers: ["0", "1", "3", "1", "2", "4", "2", "0", "1", "3", "3", "4", "1", "3", "0", "1", "0", "1", "2", "0"],
   },
+  16:{
+    beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+    beadMiddle1:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+    beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+    correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+  },
+  17:{
+    beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+    beadMiddle1:[0, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+    beadMiddle2:[0, 0, 2, 3, 2,2, 5, 1, 1, 1, 0, 2, 0, 1, 1, -2, 3, 0, -2, 0],
+    beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+    correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+  },
+  18:{},
+  19:{},
+  20:{
+    beadUpper: [1, 2, 1, 3, 3, 3, 4, 3, 4, 4, 2, 2, 3, 4, 2, 4, 1, 4, 3, 4],
+    beadLower: [-1, -1, 2, -2, -1, 1, -2, -3, -3, -1, 1, 2, -2, -1, -2, -3, -1, -3, -1, -4],
+    correctAnswers: ["0", "1", "3", "1", "2", "4", "2", "0", "1", "3", "3", "4", "1", "3", "0", "1", "0", "1", "2", "0"],
+  },
+21:{},
+22:{
+  beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+  beadMiddle1:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+  beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+  correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+},
+23:{
+  beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+  beadMiddle1:[0, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+  beadMiddle2:[0, 0, 2, 3, 2,2, 5, 1, 1, 1, 0, 2, 0, 1, 1, -2, 3, 0, -2, 0],
+  beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+  correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+},
+24:{
+  beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+  beadMiddle1:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+  beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+  correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+},
+25:{},
+26:{
+  beadUpper: [1, 3, 5, 4, 4, 6, 8, 4, 2, 3, 3, 7, 8, 3, 8, 9, 6, 4, 7, 8],
+  beadMiddle1:[2, 1, 2, 5, -2, 2, -5, 5, 5, 1, 5, 2, -3, 1, -1, -4, 3, -2, -2, -4],
+  beadLower: [5, 5, 1, -1, 5, -1, 1, -3, -1, 5, 1, -4, 4, 5, -2, 2,-1, 5, 4,  3],
+  correctAnswers: ["8", "9", "8", "8", "7", "7", "4", "6", "6", "9", "9", "5", "9", "9", "5", "7", "8", "7", "9", "7"],
+},
+ 
 };
 export const Alphabhets = {
   1: "A",
@@ -76,6 +138,7 @@ export const Alphabhets = {
   3: "C",
   4: "D",
   5: "E",
+  6:"F",
 };
 
 export const questions = [
@@ -90,6 +153,23 @@ export const questions = [
   "Subtraction",
   "Addition & Subtraction Beads", // Level C
   "Addition & Subtraction Values",
+  "Addition & Subtraction Values",
+ "Addition & Subtraction Values",
+ "Abacus Querry",
+ "Abacus Querry",
+ "Addition & Subtraction Values",
+ "Addition & Subtraction Values",
+ "Addition & Subtraction Values",
+ "Practice with Abacus",
+ "Practice with Abacus",
+ "Addition & Subtraction Values",
+ "Draw Beads Difficult",
+ "Addition & Subtraction Values",
+ "Addition & Subtraction Values",
+ "Addition & Subtraction Values",
+ "Draw Beads Difficult",
+ "Addition & Subtraction Values",
+
  
 ];
 
@@ -104,7 +184,23 @@ const questionLevelMapping = {
   7:"B", // Subtraction
   8:"B",// Subtraction Beads
   9:"C",
-  10:"C"
+  10:"C",
+  11:"C",
+  12:"C",
+  13:"D",
+  14:"D",
+  15:"D",
+  16:"D",
+  17:"D",
+  18:"E",
+  19:"E",
+  20:"E",
+  21:"E",
+  22:"F",
+  23:"F",
+  24:"F",
+  25:"F",
+  26:"F",
   
 };
 
@@ -121,6 +217,7 @@ export const useAbacusQuestion = () => {
     C: false,
     D: false,
     E: false,
+    F:false,
   });
 
   const handleAnswerChange = (index, value) => {
@@ -136,15 +233,45 @@ export const useAbacusQuestion = () => {
     setIncorrectAnswers([]);
     setUnfilledInputs([]); // Reset unfilled inputs state
   
-    const { beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } =
+    const { beadMiddle1, beadMiddle2, beadCounts, beadUpper, beadLower, beadCounts1, beadCounts2 } =
       questionsData[index] || {};
   
-    if (questions[index] === "Addition" || questions[index] === "Subtraction" ||questions[index]==="Addition & Subtraction Values") {
-      setDummyQuestions(
-        beadUpper && beadLower
-          ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
-          : []
-      );
+    if (
+      questions[index] === "Addition" ||
+      questions[index] === "Subtraction" ||
+      questions[index] === "Addition & Subtraction Values"
+    ) {
+      if (beadMiddle1 && beadMiddle2) {
+        // If beadMiddle1 and beadMiddle2 exist, create dummyQuestions with beadUpper, beadMiddle1, beadMiddle2, and beadLower
+        setDummyQuestions(
+          beadUpper && beadMiddle1 && beadMiddle2 && beadLower
+            ? beadUpper.map((upper, i) => ({
+                upper,
+                middle1: beadMiddle1[i],
+                middle2: beadMiddle2[i],
+                lower: beadLower[i],
+              }))
+            : [] // Fallback to an empty array
+        );
+      } else if (beadMiddle1) {
+        // If only beadMiddle1 exists, create dummyQuestions with beadUpper, beadMiddle1, and beadLower
+        setDummyQuestions(
+          beadUpper && beadMiddle1 && beadLower
+            ? beadUpper.map((upper, i) => ({
+                upper,
+                middle1: beadMiddle1[i],
+                lower: beadLower[i],
+              }))
+            : [] // Fallback to an empty array
+        );
+      } else {
+        // If no middle values exist, create dummyQuestions with only beadUpper and beadLower
+        setDummyQuestions(
+          beadUpper && beadLower
+            ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
+            : [] // Fallback to an empty array
+        );
+      }
     } else if (
       questions[index] === "Addition Beads" ||
       questions[index] === "Subtraction Beads"
@@ -152,11 +279,11 @@ export const useAbacusQuestion = () => {
       setDummyQuestions(
         beadCounts1 && beadCounts2
           ? beadCounts1.map((upper, i) => ({ upper, lower: beadCounts2[i] }))
-          : []
+          : [] // Fallback to an empty array
       );
     } else {
       setDummyQuestions(
-        beadCounts ? beadCounts.map((count) => '🟤'.repeat(count)) : []
+        beadCounts ? beadCounts.map((count) => '🟤'.repeat(count)) : [] // Fallback to an empty array
       );
     }
   };
