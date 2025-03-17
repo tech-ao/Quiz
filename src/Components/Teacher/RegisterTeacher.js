@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import "./RegisterTeacher.css";
-import { fetchCountries, fetchGenders } from "../../redux/Services/Enum"; 
+import { fetchCountries, fetchGenders, fetchTeacherMode ,fetchAvailability } from "../../redux/Services/Enum";
 
 const RegisterTeacher = () => {
   const [formData, setFormData] = useState({
