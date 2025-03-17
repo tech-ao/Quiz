@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 export const questionsData = {
   0: { //level A
@@ -281,7 +279,6 @@ export const useAbacusQuestion = () => {
             : [] // Fallback to an empty array
         );
       } else if (beadMiddle1) {
-        // If only beadMiddle1 exists, create dummyQuestions with beadUpper, beadMiddle1, and beadLower
         setDummyQuestions(
           beadUpper && beadMiddle1 && beadLower
             ? beadUpper.map((upper, i) => ({
@@ -292,7 +289,6 @@ export const useAbacusQuestion = () => {
             : [] // Fallback to an empty array
         );
       } else {
-        // If no middle values exist, create dummyQuestions with only beadUpper and beadLower
         setDummyQuestions(
           beadUpper && beadLower
             ? beadUpper.map((upper, i) => ({ upper, lower: beadLower[i] }))
@@ -316,7 +312,7 @@ export const useAbacusQuestion = () => {
   };
 
   const handleSubmitAnswer = () => {
-    // Check if any field is empty
+ 
     const notAttendedIndices = userAnswers
       .map((answer, index) => (answer.trim() === "" ? index : null))
       .filter((index) => index !== null);
@@ -355,10 +351,8 @@ export const useAbacusQuestion = () => {
       notAttend: notAttendedCount, // Add not attended count to the result
     };
     setScore(scoreResult);
-  
-    // Check if the user completed the *entire* stage
+
     if (incorrectCount < 8) {
-      // Use the mapping to find the level key for the current question
       const levelKey = questionLevelMapping[selectedQuestion];
   
       if (levelKey) {
