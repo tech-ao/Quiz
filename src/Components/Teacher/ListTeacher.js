@@ -76,6 +76,8 @@ const ListTeacher = () => {
 
   const handleOpenEditTeacher = (teacherId) => {
     setSelectedTeacherId(teacherId);
+    console.log(teacherId);    
+    dispatch(fetchTeacher(teacherId));
     setShowEditTeacher(true);
   };
 
