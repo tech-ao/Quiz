@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import './RegisterTeacher.css';
 import { fetchGenders } from "../../redux/Services/Enum"; // Added import for fetchGenders
+import RegisterHeader from "../Student/RegisterHeader";
 
 const TeacherFirstLogin = () => {
   const [formData, setFormData] = useState({
@@ -131,6 +132,9 @@ const TeacherFirstLogin = () => {
   };
 
   return (
+    <div><RegisterHeader />
+     <div className="register-student-page registerbg-image">
+
     <Container className="register-teacher-container">
       <h3 className="mb-4">Register Teacher</h3>
       <Form noValidate>
@@ -484,6 +488,8 @@ const TeacherFirstLogin = () => {
         </Button>
       </Form>
     </Container>
+    </div>
+    </div>
   );
 };
 
