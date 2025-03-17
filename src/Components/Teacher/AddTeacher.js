@@ -14,7 +14,7 @@ const AddTeacher = ({ show, onClose }) => {
     teacherId: 0,
     fullName: "",
     dob: "",
-    gender: "",
+    gender: null,
     phoneNumber: "",
     email: "",
     statusId: 1,
