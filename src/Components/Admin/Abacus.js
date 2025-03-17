@@ -143,10 +143,11 @@ const AbacusMath = () => {
         {selectedLevel && (
           <div className="abacus-level-section">
             {selectedLevel && <h2 className="abacus-level-heading">Level {selectedLevel}</h2>}
-            {[1, 2, 3, 4, 5].map((stage) => {
+            {[1, 2, 3, 4, 5,6].map((stage) => {
               const levelKey = Alphabhets[stage]; // Get the level key (A, B, C, etc.)
               const isLocked = (stage === 4 && !completedLevels.A) || 
-            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D));
+            (stage === 5 && (!completedLevels.A || !completedLevels.B || !completedLevels.C || !completedLevels.D))||
+            (stage === 6 && !completedLevels.E);
             return (
                 <div key={stage}>
                   <div
@@ -252,10 +253,173 @@ const AbacusMath = () => {
       onClick={() => handleQuestionClick(10)}
     >
       <i className="bi-check-circle" aria-hidden="true"></i>
-      Addition & Subtraction Values
+      Add & Sub the givenNumber
+      </div>
+      <div
+      className={`abacus-question-item ${selectedQuestion === 11 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(11)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Add & Sub the Given Values 
     </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 12 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(12)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Add & Sub the  Value
+    </div>
+    
   </>
 )}
+ {stage === 4 && (
+      <>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 13 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(13)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Write the number of beads ???
+      </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 14 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(14)}
+     >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Draw the Abacus Beads???
+     </div>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 15 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(15)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Abacus Add Beads ???
+      </div>
+      <div
+       className={`abacus-question-item ${selectedQuestion === 16 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(16)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Addition Operation
+     </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 17 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(17)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Abacus  Sub Beads ???
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 18 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(18)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Subtraction Operation
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 19 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(19)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Add & Sub two Values
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 20 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(20)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Add & Sub Three Values
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 21? 'active' : ''}`}
+       onClick={() => handleQuestionClick(21)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+     Add & Sub Four Values
+     </div>
+
+     </>
+    )}
+     {stage === 5 && (
+  <>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 22 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(22)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Practice with Abacus
+    </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 23 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(23)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Practice with Abacus???
+      </div>
+      <div
+      className={`abacus-question-item ${selectedQuestion === 24 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(24)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+      Addition & Subtraction Values 
+    </div>
+    <div
+      className={`abacus-question-item ${selectedQuestion === 25 ? 'active' : ''}`}
+      onClick={() => handleQuestionClick(25)}
+    >
+      <i className="bi-check-circle" aria-hidden="true"></i>
+       Draw & Practice with Abacus
+    </div>
+    
+  </>
+)}
+{stage === 6 && (
+      <>
+      <div
+        className={`abacus-question-item ${selectedQuestion === 26 ? 'active' : ''}`}
+        onClick={() => handleQuestionClick(26)}
+      >
+        <i className="bi-check-circle" aria-hidden="true"></i>
+       Difficult Add & Sub
+      </div>
+       <div
+       className={`abacus-question-item ${selectedQuestion === 27 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(27)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+      Difficult Four Row Add&Sub
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 28 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(28)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Difficult Three Row Add&Sub
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 29 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(29)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Draw the Difficult Beads
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 30 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(30)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+       Hard Digit Number
+     </div>
+     <div
+       className={`abacus-question-item ${selectedQuestion === 31 ? 'active' : ''}`}
+       onClick={() => handleQuestionClick(31)}
+     >
+       <i className="bi-check-circle" aria-hidden="true"></i>
+        Add & Sub (Hard Digit) 
+     </div>
+      
+     </>
+    )}
 
   </div>
 )}
@@ -289,203 +453,246 @@ const AbacusMath = () => {
             />
           </>
         )}
-        {selectedQuestion !== null && questionsData[selectedQuestion] && (
-          <div
-            className={`dummy-questions-container 
+       {selectedQuestion !== null && questionsData[selectedQuestion] && (
+  <div
+    className={`dummy-questions-container 
       ${isMinimized || !showAbacusKit ? "minimized" : ""} 
       ${showAbacusKit && !isMinimized ? "abacus-open" : ""}`}
-          >
-            <h3>{questions[selectedQuestion]}</h3>
-            <div className="questio-wrapp">
-              
-              {questions[selectedQuestion] === "Addition Beads" ||
-              questions[selectedQuestion] === "Subtraction Beads" ? (
-                <div className="beads-column-content">
-                  {dummyQuestions.map((question, index) => (
-                    <div key={index} className="beads-column-wrapper">
-                      {/* Serial Number Outside the Beads Column */}
-                      <div className="Serial-number-Addition">
-                        {currentPage * beadsPerPage + index + 1}
-                      </div>
-                      <div className="beads-column-item">
-                        <div className="beads-column-row">
-                          <div className="beads-column">
-                            <div className="koodu"></div>
-                            {Array.from({ length: question.upper }, (_, i) => (
-                              <div key={i} className="bead"></div>
-                            ))}
-                          </div>
-                          <span>
-                            {questions[selectedQuestion] === "Addition Beads"
-                              ? "+"
-                              : "-"}
-                          </span>
-                          <div className="beads-column">
-                            <div className="koodu"></div>
-                            {Array.from({ length: question.lower }, (_, i) => (
-                              <div key={i} className="bead"></div>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="beads-column-input">
-                          <input
-                            type="text"
-                            value={userAnswers[index] || ""}
-                            onChange={(e) =>
-                              handleAnswerChange(index, e.target.value)
-                            }
-                            placeholder=""
-                            className={`answer-input ${
-                              incorrectAnswers.includes(index)
-                                ? "incorrect"
-                                : unfilledInputs.includes(index)
-                                ? "unfilled"
-                                : ""
-                            }`}
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+  >
+    <h3>{questions[selectedQuestion]}</h3>
+    <div className="questio-wrapp">
+      {questions[selectedQuestion] === "Addition Beads" ||
+      questions[selectedQuestion] === "Subtraction Beads" ? (
+        <div className="beads-column-content">
+          {dummyQuestions && dummyQuestions.length > 0 ? (
+            dummyQuestions.map((question, index) => (
+              <div key={index} className="beads-column-wrapper">
+                {/* Serial Number Outside the Beads Column */}
+                <div className="Serial-number-Addition">
+                  {currentPage * beadsPerPage + index + 1}
                 </div>
-                ): questions[selectedQuestion] === "Addition & Subtraction Beads" ? (
-                  <div className="beads-column-content">
-                    {questionsData[selectedQuestion].beadCounts1.map((upper, index) => (
-                      <div key={index} className="beads-column-wrapper">
-                        <div className="Serial-number-Addition">
-                          {index + 1}
-                        </div>
-                        <div className="beads-column-item">
-                          <div className="beads-column-row">
-                            <div className="beads-column">
-                              <div className="koodu"></div>
-                              {Array.from({ length: upper }, (_, i) => (
-                                <div key={i} className="bead"></div>
-                              ))}
-                            </div>
-                            <span>{index % 2 === 0 ? "+" : "-"}</span>
-                            <div className="beads-column">
-                              <div className="koodu"></div>
-                              {Array.from(
-                                { length: questionsData[selectedQuestion].beadCounts2[index] },
-                                (_, i) => <div key={i} className="bead"></div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="beads-column-input">
-                            <input
-                              type="text"
-                              value={userAnswers[index] || ""}
-                              onChange={(e) => handleAnswerChange(index, e.target.value)}
-                              className={`answer-input ${
-                                incorrectAnswers.includes(index) ? "incorrect" :
-                                unfilledInputs.includes(index) ? "unfilled" : ""
-                              }`}
-                              required
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                <div className="beads-column-item">
+                  <div className="beads-column-row">
+                    {/* Render beadUpper */}
+                    <div className="beads-column">
+                      <div className="koodu"></div>
+                      {Array.from({ length: question.upper }, (_, i) => (
+                        <div key={i} className="bead"></div>
+                      ))}
+                    </div>
+                    <span>
+                      {questions[selectedQuestion] === "Addition Beads"
+                        ? "+"
+                        : "-"}
+                    </span>
+                    {/* Render beadLower */}
+                    <div className="beads-column">
+                      <div className="koodu"></div>
+                      {Array.from({ length: question.lower }, (_, i) => (
+                        <div key={i} className="bead"></div>
+                      ))}
+                    </div>
                   </div>
-              ) : questions[selectedQuestion] ===
-                "Draw a Beads For the Given Number" ? (
-                questionsData[selectedQuestion].givenNumber.map(
-                  (number, index) => (
-                    <div key={index} className="bead-draw-question">
-                      <div className="serial-number">
-                        {currentPage * beadsPerPage + index + 1}
+                  {/* Render beadMiddle1 and beadMiddle2 if they exist */}
+                  {question.middle1 !== undefined && (
+                    <div className="beads-column-row">
+                      <span>+</span>
+                      <div className="beads-column">
+                        <div className="koodu"></div>
+                        {Array.from({ length: question.middle1 }, (_, i) => (
+                          <div key={i} className="bead"></div>
+                        ))}
                       </div>
-                      <BeadDrawer
-                        givenNumber={number}
-                        onBeadDraw={(drawnNumber) =>
-                          handleAnswerChange(index, drawnNumber.toString())
-                        }
-                        isIncorrect={incorrectAnswers.includes(index)} // Pass isIncorrect prop
-                        isnotattend={unfilledInputs.includes(index)}
-                      />
                     </div>
-                  )
-                )
-              ) : // Default layout for other questions
-              dummyQuestions && dummyQuestions.length > 0 ? (
-                dummyQuestions
-                  .slice(
-                    currentPage * beadsPerPage,
-                    (currentPage + 1) * beadsPerPage
-                  )
-                  .map((question, index) => (
-                    <div key={index} className="question-item">
-                      <div className="question-number">
-                        {currentPage * beadsPerPage + index + 1}
+                  )}
+                  {question.middle2 !== undefined && (
+                    <div className="beads-column-row">
+                      <span>+</span>
+                      <div className="beads-column">
+                        <div className="koodu"></div>
+                        {Array.from({ length: question.middle2 }, (_, i) => (
+                          <div key={i} className="bead"></div>
+                        ))}
                       </div>
-                      <div className="abacus">
-                        {!(
-                          questions[selectedQuestion] === "Addition" ||
-                          questions[selectedQuestion] === "Subtraction"||
-                          questions[selectedQuestion] === "Addition & Subtraction Values"
-                        ) && <div className="stick"></div>}
-                        {/* Render numbers for Addition, otherwise render beads */}
-                        {questions[selectedQuestion] === "Addition" ||
-                        questions[selectedQuestion] === "Subtraction" ||
-                        questions[selectedQuestion] === "Addition & Subtraction Values"? (
-                          <div className="addition-grid">
-                            <div className="addition-row">
-                              <span>{question.upper}</span>
-                            </div>
-                            <div className="addition-row">
-                              <span>{question.lower}</span>
-                            </div>
-                          </div>
-                        ) : (
-                          Array.from(
-                            {
-                              length:
-                                questionsData[selectedQuestion].beadCounts[
-                                  index
-                                ] || 0,
-                            },
-                            (_, i) => <div key={i} className="bead"></div>
-                          )
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        value={
-                          userAnswers[currentPage * beadsPerPage + index] || ""
-                        }
-                        onChange={(e) =>
-                          handleAnswerChange(
-                            currentPage * beadsPerPage + index,
-                            e.target.value
-                          )
-                        }
-                        className={`answer-input ${
-                          incorrectAnswers.includes(
-                            currentPage * beadsPerPage + index
-                          )
-                            ? "incorrect"
-                            : unfilledInputs.includes(currentPage * beadsPerPage + index)
-                            ? "unfilled"
-                            : ""
-                        }`}
-                        required
-                      />
                     </div>
-                  ))
-              ) : (
-                "No questions available."
-              )}
+                  )}
+                  {/* Input for user answer */}
+                  <div className="beads-column-input">
+                    <input
+                      type="text"
+                      value={userAnswers[index] || ""}
+                      onChange={(e) =>
+                        handleAnswerChange(index, e.target.value)
+                      }
+                      placeholder=""
+                      className={`answer-input ${
+                        incorrectAnswers.includes(index)
+                          ? "incorrect"
+                          : unfilledInputs.includes(index)
+                          ? "unfilled"
+                          : ""
+                      }`}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>No questions available.</div>
+          )}
+        </div>
+      ) : questions[selectedQuestion] === "Addition & Subtraction Beads" ? (
+        <div className="beads-column-content">
+          {questionsData[selectedQuestion].beadCounts1 &&
+          questionsData[selectedQuestion].beadCounts1.length > 0 ? (
+            questionsData[selectedQuestion].beadCounts1.map((upper, index) => (
+              <div key={index} className="beads-column-wrapper">
+                <div className="Serial-number-Addition">
+                  {index + 1}
+                </div>
+                <div className="beads-column-item">
+                  <div className="beads-column-row">
+                    <div className="beads-column">
+                      <div className="koodu"></div>
+                      {Array.from({ length: upper }, (_, i) => (
+                        <div key={i} className="bead"></div>
+                      ))}
+                    </div>
+                    <span>{index % 2 === 0 ? "+" : "-"}</span>
+                    <div className="beads-column">
+                      <div className="koodu"></div>
+                      {Array.from(
+                        { length: questionsData[selectedQuestion].beadCounts2[index] },
+                        (_, i) => <div key={i} className="bead"></div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="beads-column-input">
+                    <input
+                      type="text"
+                      value={userAnswers[index] || ""}
+                      onChange={(e) => handleAnswerChange(index, e.target.value)}
+                      className={`answer-input ${
+                        incorrectAnswers.includes(index) ? "incorrect" :
+                        unfilledInputs.includes(index) ? "unfilled" : ""
+                      }`}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div>No questions available.</div>
+          )}
+        </div>
+      ) : questions[selectedQuestion] === "Draw a Beads For the Given Number" ? (
+        questionsData[selectedQuestion].givenNumber &&
+        questionsData[selectedQuestion].givenNumber.length > 0 ? (
+          questionsData[selectedQuestion].givenNumber.map((number, index) => (
+            <div key={index} className="bead-draw-question">
+              <div className="serial-number">
+                {currentPage * beadsPerPage + index + 1}
+              </div>
+              <BeadDrawer
+                givenNumber={number}
+                onBeadDraw={(drawnNumber) =>
+                  handleAnswerChange(index, drawnNumber.toString())
+                }
+                isIncorrect={incorrectAnswers.includes(index)} // Pass isIncorrect prop
+                isnotattend={unfilledInputs.includes(index)}
+              />
             </div>
-            <button
-              onClick={handleSubmit}
-              className="submit-button"
-            >
-              Submit
-            </button>
-          </div>
-        )}{" "}
+          ))
+        ) : (
+          <div>No questions available.</div>
+        )
+      ) : // Default layout for other questions
+      dummyQuestions && dummyQuestions.length > 0 ? (
+        dummyQuestions
+          .slice(
+            currentPage * beadsPerPage,
+            (currentPage + 1) * beadsPerPage
+          )
+          .map((question, index) => (
+            <div key={index} className="question-item">
+              <div className="question-number">
+                {currentPage * beadsPerPage + index + 1}
+              </div>
+              <div className="abacus">
+                {!(
+                  questions[selectedQuestion] === "Addition" ||
+                  questions[selectedQuestion] === "Subtraction" ||
+                  questions[selectedQuestion] === "Addition & Subtraction Values"
+                ) && <div className="stick"></div>}
+                {/* Render numbers for Addition, otherwise render beads */}
+                {questions[selectedQuestion] === "Addition" ||
+                questions[selectedQuestion] === "Subtraction" ||
+                questions[selectedQuestion] === "Addition & Subtraction Values" ? (
+                  <div className="addition-grid">
+                    <div className="addition-row">
+                      <span>{question.upper}</span>
+                    </div>
+                    {/* Render beadMiddle1 and beadMiddle2 if they exist */}
+                    {question.middle1 !== undefined && (
+                      <div className="addition-row">
+                        <span>{question.middle1}</span>
+                      </div>
+                    )}
+                    {question.middle2 !== undefined && (
+                      <div className="addition-row">
+                        <span>{question.middle2}</span>
+                      </div>
+                    )}
+                    <div className="addition-row">
+                      <span>{question.lower}</span>
+                    </div>
+                  </div>
+                ) : (
+                  Array.from(
+                    {
+                      length:
+                        questionsData[selectedQuestion].beadCounts[index] || 0,
+                    },
+                    (_, i) => <div key={i} className="bead"></div>
+                  )
+                )}
+              </div>
+              <input
+                type="text"
+                value={
+                  userAnswers[currentPage * beadsPerPage + index] || ""
+                }
+                onChange={(e) =>
+                  handleAnswerChange(
+                    currentPage * beadsPerPage + index,
+                    e.target.value
+                  )
+                }
+                className={`answer-input ${
+                  incorrectAnswers.includes(currentPage * beadsPerPage + index)
+                    ? "incorrect"
+                    : unfilledInputs.includes(currentPage * beadsPerPage + index)
+                    ? "unfilled"
+                    : ""
+                }`}
+                required
+              />
+            </div>
+          ))
+      ) : (
+        <div>No questions available.</div>
+      )}
+    </div>
+    <button
+      onClick={handleSubmit}
+      className="submit-button"
+    >
+      Submit
+    </button>
+  </div>
+)}{" "}
         <Modal
           show={showResultModal}
           onHide={() => setShowResultModal(false)}
