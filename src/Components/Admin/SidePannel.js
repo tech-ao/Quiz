@@ -8,6 +8,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   const [isEnrollmentOpen, setEnrollmentOpen] = useState(false);
   const [isQuestionOpen, setQuestionOpen] = useState(false); // New state for Questions dropdown
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
+  const [isQuizOpen ,setQuizOpen]=useState(false)
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,6 +34,11 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   const toggleQuestionMenu = () => {
     setQuestionOpen(!isQuestionOpen);
   };
+  
+  const toggleQuizMenu = () => {
+    setQuizOpen(!isQuizOpen);
+  };
+
 
   // Show Logout Confirmation Popup
   const handleLogoutClick = () => {
@@ -149,17 +155,38 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           )}
         </li>
 
-        <li className="nav-item">
-          <Link
-            to="/quiz"
-            className={`nav-link ${location.pathname === "/quiz" ? "active" : ""}`}
-            onClick={closeSidePanel}
+
+        {/*Quiz Dropdown*/}
+           {/* Questions Dropdown */}
+           <li className="nav-item">
+          <div
+            className={`nav-link ${isQuizOpen ? "active" : ""}`}
+            onClick={toggleQuizMenu}
+            style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
-              <i className="bi bi-patch-question"></i>
+              <i className="bi bi-question-circle"></i>
               <span className="nav-text">Quiz</span>
+              <i className={`bi ${isQuizOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
-          </Link>
+          </div>
+          {isQuizOpen && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <Link
+                  to="/ScheduleForm"
+                  className={`nav-link ${location.pathname ==="/ScheduleForm" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                    <i className="bi bi-clock"></i>
+                    <span className="nav-text">Schedule Time</span>
+                  </div>
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
 
         {/* Questions Dropdown */}
