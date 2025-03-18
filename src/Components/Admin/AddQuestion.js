@@ -22,7 +22,7 @@ const AddQuestion = () => {
   const [storedNumbers, setStoredNumbers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-  const [level, setLevel] = useState("Level 1");
+  const [level, setLevel] = useState(1); 
   const [answer, setAnswer] = useState("");
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
@@ -101,7 +101,7 @@ const AddQuestion = () => {
       const newQuestion = {
         questions: storedNumbers.join(", "),
         answer: parseInt(answer),
-        level: level,
+        level: level, 
         note: note,
         image: imagePreview,
       };
@@ -239,8 +239,8 @@ const AddQuestion = () => {
             <Card.Body className="p-3 mb-5 card-spacing shadow">
               <Card.Title className="text-primary fw-bold mb-4">Create Questions</Card.Title>
               <Form.Label className="fw-bold mt-3">Select Level:</Form.Label>
-              <Form.Select value={level} onChange={(e) => setLevel(e.target.value)}>
-                {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
+              <Form.Select value={level} onChange={(e) => setLevel(parseInt(e.target.value))}>
+                {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
               </Form.Select>
 
               <Row className="g-4 mt-0">
@@ -248,7 +248,7 @@ const AddQuestion = () => {
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
                     <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)}  onKeyDown={handleKeyPress} />
-                    <Button variant="success" className="plusicon"   onKeyPress={handleKeyPress}  onClick={handleStoreNumber}><FaPlus /></Button>
+                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
                   </InputGroup>
                   {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
                 </Col>
@@ -286,7 +286,7 @@ const AddQuestion = () => {
               <Col md={6} className="text-md-end">
                 <Form.Select value={filterLevel} onChange={(e) => setFilterLevel(e.target.value)} style={{ width: "230px" }}>
                   <option value="All">All Levels</option>
-                  {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
+                  {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
                 </Form.Select>
               </Col>
 
@@ -294,11 +294,10 @@ const AddQuestion = () => {
                 <Table striped bordered hover responsive>
                   <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
                     <tr className="fw-bold">
-                     {/* Changed from # to Question ID */}
-                      <th>S.no</th> {/* Added Question Set ID */}
+                      <th>S.no</th>
                       <th>Level</th>
-                      <th>Question</th> {/* Changed from Title to Question */}
-                      <th>Answer</th> {/* Changed from Description to Answer */}
+                      <th>Question</th>
+                      <th>Answer</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -306,11 +305,10 @@ const AddQuestion = () => {
                     {filteredQuestions.length > 0 ? (
                       filteredQuestions.map((q, index) => (
                         <tr key={q.id}>
-                          {/* Display Question ID */}
-                          <td>{index+1}</td> {/* Display Question Set ID */}
+                          <td>{index + 1}</td>
                           <td>{q.level}</td>
-                          <td>{q.questions}</td> {/* Display Question */}
-                          <td>{q.answer}</td> {/* Display Answer */}
+                          <td>{q.questions}</td>
+                          <td>{q.answer}</td>
                           <td className="py-3">
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}><FaEdit /></Button>
                             <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}><FaTrash /></Button>
@@ -319,7 +317,7 @@ const AddQuestion = () => {
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="6" className="text-center">No Data found for the selected level.</td>
+                        <td colSpan="5" className="text-center">No Data found for the selected level.</td>
                       </tr>
                     )}
                   </tbody>
@@ -336,8 +334,8 @@ const AddQuestion = () => {
                 <Form>
                   <Form.Group>
                     <Form.Label className="fw-bold">Level:</Form.Label>
-                    <Form.Select value={selectedQuestion?.level} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, level: e.target.value })}>
-                      {[...Array(6).keys()].map(i => <option key={i} value={`Level ${i + 1}`}>Level {i + 1}</option>)}
+                    <Form.Select value={selectedQuestion?.level} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, level: parseInt(e.target.value) })}>
+                      {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
                     </Form.Select>
                   </Form.Group>
                   <Form.Group>
