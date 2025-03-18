@@ -9,14 +9,14 @@ const BASE_URL = "http://srimathicare.in:8081";
 const ACCESS_TOKEN = "123";
 const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
-const API_URL_GET = `${BASE_URL}/api/ImportExcel/GetQuestionSet`;
 const API_URL_CREATE = `${BASE_URL}/api/ImportExcel/CreateNewQuestion`;
 const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion/${id}`;
-const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion/${id}`;
+const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion`;
+const API_URL_SEARCH = `${BASE_URL}/api/SearchAndList/SearchAndListQuestions`;
 
 const AddQuestion = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState([]); // Ensure this is initialized as an array
   const [filterLevel, setFilterLevel] = useState("All");
   const [currentNumber, setCurrentNumber] = useState("");
   const [storedNumbers, setStoredNumbers] = useState([]);
@@ -27,16 +27,25 @@ const AddQuestion = () => {
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch(API_URL_GET, {
-          method: "GET",
+        const response = await fetch(API_URL_SEARCH, {
+          method: "POST",
           headers: {
             "X-Api-Key": API_KEY,
-            AccessToken: ACCESS_TOKEN,
+            "Content-Type": "application/json",
           },
+          body: JSON.stringify({
+            level: level, 
+            pagination: {
+              pageSize: 15,
+              pageNumber: currentPage,
+            },
+          }),
         });
 
         if (!response.ok) {
@@ -45,7 +54,8 @@ const AddQuestion = () => {
 
         const result = await response.json();
         if (result.isSuccess) {
-          setQuestions(result.data);
+          setQuestions(result.data.questions || []); 
+          setTotalPages(Math.ceil(result.data.totalCount / 15)); 
         } else {
           console.error(result.message);
         }
@@ -55,15 +65,15 @@ const AddQuestion = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, [level, currentPage]);
 
   const handleStoreNumber = () => {
     if (currentNumber.trim() !== "") {
-      console.log("Adding number:", currentNumber); // Debugging log
+      console.log("Adding number:", currentNumber);
       setStoredNumbers([...storedNumbers, currentNumber]);
       setCurrentNumber("");
     } else {
-      console.log("Current number is empty, not adding."); // Debugging log
+      console.log("Current number is empty, not adding."); 
     }
   };
 
@@ -284,10 +294,9 @@ const AddQuestion = () => {
                 <Card.Title className="text-primary fw-bold mb-4">Stored Questions</Card.Title>
               </Col>
               <Col md={6} className="text-md-end">
-                <Form.Select value={filterLevel} onChange={(e) => setFilterLevel(e.target.value)} style={{ width: "230px" }}>
-                  <option value="All">All Levels</option>
-                  {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
-                </Form.Select>
+              <Form.Select value={level} onChange={(e) => setLevel(parseInt(e.target.value))}>
+                {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
+              </Form.Select>
               </Col>
 
               <div style={{ maxHeight: "400px", overflowY: "auto" }}>
