@@ -56,6 +56,8 @@ export const editTeacherAction =
   };
 
 export const deleteTeacherAction = (TeacherId) => async (dispatch) => {
+  console.log(TeacherId);
+  
   dispatch({ type: "DELETE_Teacher_REQUEST" });
   try {
     const deletedTeacher = await deleteTeacher(TeacherId);

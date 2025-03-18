@@ -4,9 +4,8 @@ import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { fetchCountries, fetchGenders, fetchTeacherMode, fetchAvailability, fetchDocumentType } from "../../redux/Services/Enum";
 import { editTeacherAction } from "../../redux/Action/TeacherAction";
 
-const EditTeacher = ({ show, handleClose  }) => {
+const EditTeacher = ({ show, onclose  }) => {
   const state = useSelector((state) => state);
-console.log("Redux State:", state);
 
 
    const { selectedTeacher } = useSelector((state) => state.teachers);
@@ -21,6 +20,7 @@ console.log("Redux State:", state);
       firstName: "",
       email: "",
       mobileNumber: "",
+      dateOfBirth:"",
       gender: "",
       nationalityId: "",
       highestQualification: "",
@@ -57,10 +57,10 @@ console.log("Redux State:", state);
             email: selectedTeacher.data.email || "",
             mobileNumber: selectedTeacher.data.phoneNumber || "",
             gender: selectedTeacher.data.gender || "",
-            dateOfBirth:selectedTeacher.data.dob || "",
+            dateOfBirth:selectedTeacher.data.dob.split("T")[0] || "" ,
             permanentAddress:selectedTeacher.data.permanentAddress || "",
             nationalityId: selectedTeacher.data.nationalityId || "",
-            documentType: "", // No documentType in response, adjust accordingly
+            documentType: "",
             documentNumber: "", // No documentNumber in response
             photo: null, // No direct photo field, might be in teacherDocumentFileModels
           
@@ -104,11 +104,11 @@ console.log("Redux State:", state);
             updatedData.append(key, formData[key]);
         });
         dispatch(editTeacherAction(updatedData));
-        handleClose();
+        onclose();
     };
 
     return (
-        <Modal show={show} onHide={handleClose} centered>
+        <Modal show={show} onHide={onclose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Edit Teacher</Modal.Title>
             </Modal.Header>
@@ -121,7 +121,7 @@ console.log("Redux State:", state);
                     
                     <Form.Group className="mb-3">
                         <Form.Label>Date Of Birth</Form.Label>
-                        <Form.Control type="date" name="lastName" value={formData.dateOfBirth} onChange={handleChange} required />
+                        <Form.Control type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
@@ -167,19 +167,6 @@ console.log("Redux State:", state);
                             {countries.map(c => <option key={c.item1} value={c.item1}>{c.item2}</option>)}
                         </Form.Select>
                     </Form.Group>
-{/*                     
-                    <Form.Group className="mb-3">
-                        <Form.Label>Document Type</Form.Label>
-                        <Form.Select name="documentType" value={formData.documentType} onChange={handleChange} required>
-                            <option value="">Select Document Type</option>
-                            {documentTypes.map(d => <option key={d.item1} value={d.item1}>{d.item2}</option>)}
-                        </Form.Select>
-                    </Form.Group> */}
-                    
-                    {/* <Form.Group className="mb-3">
-                        <Form.Label>Document Number</Form.Label>
-                        <Form.Control type="text" name="documentNumber" value={formData.documentNumber} onChange={handleChange} required />
-                    </Form.Group> */}
                     
                     <Form.Group className="mb-3">
                         <Form.Label>Candidate Photo</Form.Label>
