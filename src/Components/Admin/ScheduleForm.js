@@ -101,7 +101,6 @@ const ScheduleForm = () => {
                         />
                       </Form.Group>
                       </Col>
-  
                       {/* Start Date and End Date */}
                       <Row className=" Schedule-start-end mb-4">
                         <Col md={6}>
@@ -122,7 +121,7 @@ const ScheduleForm = () => {
                           </Form.Group>
                         </Col>
                       </Row>
-  
+
                       {/* Total Time */}
                       <Col md={11}>
                       <Form.Group className="mb-4">
@@ -173,8 +172,7 @@ const ScheduleForm = () => {
     Save
   </Button>
 </Col>
-
-   </Row>
+</Row>
 
                  </Form>
                   </Col>
