@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch ,useSelector } from "react-redux";
 import { Modal, Form, Button, Row, Col } from "react-bootstrap";
 import { fetchCountries, fetchGenders, fetchTeacherMode, fetchAvailability, fetchDocumentType } from "../../redux/Services/Enum";
-import { editTeacherAction } from "../../redux/Action/TeacherAction";
+import { editTeacherAction, getTeachers } from "../../redux/Action/TeacherAction";
+import { toast } from "react-toastify";
 
-const EditTeacher = ({ show, onclose  }) => {
+
+const EditTeacher = ({ show, onClose  }) => {
   const state = useSelector((state) => state);
 
 
@@ -16,27 +18,43 @@ const EditTeacher = ({ show, onclose  }) => {
     const [availability, setAvailability] = useState([]);
     const [documentTypes, setDocumentTypes] = useState([]);
     
+      const [isSubmitting, setIsSubmitting] = useState(false);
     const [formData, setFormData] = useState({
-      firstName: "",
-      email: "",
-      mobileNumber: "",
-      dateOfBirth:"",
-      gender: "",
-      nationalityId: "",
-      highestQualification: "",
-      institution: "",
-      specialization: "",
-      graduationYear: "",
-      employer: "",
-      jobTitle: "",
-      experienceYears: "",
-      experienceCertificate: null,
-      availability: "",
-      workDays: "",
-      workTimes: "",
-      preferredCountry: "Only India",
-      resume: null,
+        fullName: "",
+        dob: "",
+        gender: null,
+        phoneNumber: "",
+        email: "",
+        permanentAddress: "",
+        teacherModeId: "",
+        currentResidentialAddress: "",
+        nationalityId: null,
+        availabilityId: null,
+        registerNo: "",
+        preferedCountryId: null,
+        professionalExperianceModel: {
+          employerName: "",
+          jobTitle: "",
+          yoe: "",
+        },
+        educationQualificationModel: {
+          higherLevelEducation: "",
+          institute: "",
+          subjectSpecialist: "",
+          yearOfGraduation: "",
+        },
+        complianceInformationModel: {
+          isCriminalBackgroundCheck: false,
+        },
+        teacherDocumentFileModels: [],
+        preferedWorkScheduledName: "",
+        preferredWorkTimes: "",
+        applicationDate: "",
+        declaration: false,
     });
+
+    console.log(formData);
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -55,9 +73,9 @@ const EditTeacher = ({ show, onclose  }) => {
             fullName: selectedTeacher.data.fullName || "",
             lastName: "", // No last name field in the response, adjust accordingly
             email: selectedTeacher.data.email || "",
-            mobileNumber: selectedTeacher.data.phoneNumber || "",
+            phoneNumber: selectedTeacher.data.phoneNumber || "",
             gender: selectedTeacher.data.gender || "",
-            dateOfBirth:selectedTeacher.data.dob.split("T")[0] || "" ,
+            dob:selectedTeacher.data.dob.split("T")[0] || "" ,
             permanentAddress:selectedTeacher.data.permanentAddress || "",
             nationalityId: selectedTeacher.data.nationalityId || "",
             documentType: "",
@@ -65,21 +83,21 @@ const EditTeacher = ({ show, onclose  }) => {
             photo: null, // No direct photo field, might be in teacherDocumentFileModels
           
             // Educational Qualifications
-            highestQualification: selectedTeacher.data.educationQualificationModel?.higherLevelEducation || "",
-            institution: selectedTeacher.data.educationQualificationModel?.institute || "",
-            specialization: selectedTeacher.data.educationQualificationModel?.subjectSpecialist || "",
-            graduationYear: selectedTeacher.data.educationQualificationModel?.yearOfGraduation || "",
+            higherLevelEducation: selectedTeacher.data.educationQualificationModel?.higherLevelEducation || "",
+            institute: selectedTeacher.data.educationQualificationModel?.institute || "",
+            subjectSpecialist: selectedTeacher.data.educationQualificationModel?.subjectSpecialist || "",
+            yearOfGraduation: selectedTeacher.data.educationQualificationModel?.yearOfGraduation || "",
           
             // Professional Experience
-            employer: selectedTeacher.data.professionalExperianceModel?.employerName || "",
+            employerName: selectedTeacher.data.professionalExperianceModel?.employerName || "",
             jobTitle: selectedTeacher.data.professionalExperianceModel?.jobTitle || "",
-            experienceYears: selectedTeacher.data.professionalExperianceModel?.yoe || "",
+            yoe: selectedTeacher.data.professionalExperianceModel?.yoe || "",
             experienceCertificate: null, // No experienceCertificate in response
           
             // Franchise-specific Requirements
             availability: selectedTeacher.data.availabilityName || "",
-            preferredWorkDays: "", // No preferredWorkDays field in response
-            preferredWorkTimes: "", // No preferredWorkTimes field in response
+            preferredWorkDays: selectedTeacher.data.availabilityName || "", // No preferredWorkDays field in response
+            preferredWorkTimes: selectedTeacher.data.preferredWorkTimes|| "", // No preferredWorkTimes field in response
             preferredCountry: selectedTeacher.data.preferedCountryName || "",
           
             // Resume Upload
@@ -94,21 +112,74 @@ const EditTeacher = ({ show, onclose  }) => {
     };
 
     const handleFileChange = (e) => {
-        setFormData({ ...formData, photo: e.target.files[0] });
-    };
+        const { name, files } = e.target;
+        const file = files[0];
+    
+        if (file) {
+          console.log(file);
+    
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64Content = reader.result.split(",")[1];
+            const documentTypeId = documentTypes[name] || null;
+    
+            if (documentTypeId !== null) {
+              setFormData((prevData) => {
+                const updatedDocuments = prevData.teacherDocumentFileModels.filter(
+                  (doc) => doc.documentTypeId !== documentTypeId
+                );
+                return {
+                  ...prevData,
+                  teacherDocumentFileModels: [
+                    ...updatedDocuments,
+                    {
+                      documentTypeId,
+                      name: file.name,
+                      extension: file.name.split(".").pop(),
+                      base64Content,
+                    },
+                  ],
+                };
+              });
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      };
 
-    const handleSubmit = (e) => {
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     const updatedData = new FormData();
+    //     Object.keys(formData).forEach(key => {
+    //         updatedData.append(key, formData[key]);
+    //     });
+    //     dispatch(editTeacherAction(updatedData));
+    //     onClose();
+    // };
+
+      const [paginationDetail, setPaginationDetail] = useState({
+        pageNumber: 1,
+        pageSize: 15,
+      });
+
+      const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatedData = new FormData();
-        Object.keys(formData).forEach(key => {
-            updatedData.append(key, formData[key]);
-        });
-        dispatch(editTeacherAction(updatedData));
-        onclose();
-    };
+        setIsSubmitting(true);
+        try {
+          await dispatch(editTeacherAction(formData, selectedTeacher.teacherId));
+          dispatch(getTeachers({ paginationDetail }));
+          toast.success("Teacher modified successfully!");
+          onClose();
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          toast.error("Failed to modify student.");
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
 
     return (
-        <Modal show={show} onHide={onclose} centered>
+        <Modal show={show} onHide={onClose} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Edit Teacher</Modal.Title>
             </Modal.Header>
@@ -116,12 +187,12 @@ const EditTeacher = ({ show, onclose  }) => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label>Full Name</Form.Label>
-                        <Form.Control type="text" name="firstName" value={formData.fullName} onChange={handleChange} required />
+                        <Form.Control type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
                         <Form.Label>Date Of Birth</Form.Label>
-                        <Form.Control type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
+                        <Form.Control type="date" name="dob" value={formData.dob} onChange={handleChange} required />
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
@@ -149,8 +220,8 @@ const EditTeacher = ({ show, onclose  }) => {
                     </Form.Group>
                     
                     <Form.Group className="mb-3">
-                        <Form.Label>Mobile Number</Form.Label>
-                        <Form.Control type="text" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} required />
+                        <Form.Label>Phone Number</Form.Label>
+                        <Form.Control type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>permanentAddress</Form.Label>
@@ -179,25 +250,25 @@ const EditTeacher = ({ show, onclose  }) => {
 
                     <Form.Group>
                         <Form.Label>Highest Level of Qualification</Form.Label>
-                        <Form.Control type="text" name="highestQualification" value={formData.highestQualification} onChange={handleChange} required />
+                        <Form.Control type="text" name="higherLevelEducation" value={formData.higherLevelEducation} onChange={handleChange} required />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Institution(s) Attended</Form.Label>
-                        <Form.Control type="text" name="institution" value={formData.institution} onChange={handleChange} required />
+                        <Form.Label>institute(s) Attended</Form.Label>
+                        <Form.Control type="text" name="institute" value={formData.institute} onChange={handleChange} required />
                     </Form.Group>
                     <Form.Group>
-                        <Form.Label>Subject Specialization</Form.Label>
-                        <Form.Control type="text" name="specialization" value={formData.specialization} onChange={handleChange} required />
+                        <Form.Label>Subject subjectSpecialist</Form.Label>
+                        <Form.Control type="text" name="subjectSpecialist" value={formData.subjectSpecialist} onChange={handleChange} required />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Year of Graduation</Form.Label>
-                        <Form.Control type="text" name="graduationYear" value={formData.graduationYear} onChange={handleChange} required />
+                        <Form.Control type="text" name="yearOfGraduation" value={formData.yearOfGraduation} onChange={handleChange} required />
                     </Form.Group>
                     
                     {/* Professional Experience */}
                     <Form.Group>
                         <Form.Label>Current/Previous Employer</Form.Label>
-                        <Form.Control type="text" name="employer" value={formData.employer} onChange={handleChange} />
+                        <Form.Control type="text" name="employerName" value={formData.employerName} onChange={handleChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Job Title</Form.Label>
@@ -205,7 +276,7 @@ const EditTeacher = ({ show, onclose  }) => {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Years of Experience</Form.Label>
-                        <Form.Control type="text" name="experienceYears" value={formData.experienceYears} onChange={handleChange} />
+                        <Form.Control type="text" name="yoe" value={formData.yoe} onChange={handleChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Experience Certificate (Upload)</Form.Label>
@@ -221,11 +292,11 @@ const EditTeacher = ({ show, onclose  }) => {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Preferred Work Days</Form.Label>
-                        <Form.Control type="text" name="workDays" value={formData.workDays} onChange={handleChange} />
+                        <Form.Control type="text" name="preferredWorkDays" value={formData.preferredWorkDays} onChange={handleChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Preferred Work Times</Form.Label>
-                        <Form.Control type="text" name="workTimes" value={formData.workTimes} onChange={handleChange} />
+                        <Form.Control type="text" name="preferredWorkTimes" value={formData.preferredWorkTimes} onChange={handleChange} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Preferred Country</Form.Label>
@@ -235,12 +306,12 @@ const EditTeacher = ({ show, onclose  }) => {
                     </Form.Group>
                     
                     {/* Resume Upload */}
-                    <Form.Group>
+                    <Form.Group className="mb-3" >
                         <Form.Label>Upload Resume</Form.Label>
                         <Form.Control type="file" name="resume" onChange={handleFileChange} />
                     </Form.Group>
                     
-                    <Button variant="primary" type="submit">Update Teacher</Button>
+                    <Button variant="primary" type="submit">Save Teacher </Button>
                 </Form>
             </Modal.Body>
         </Modal>

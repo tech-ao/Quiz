@@ -1,0 +1,10 @@
+@media (max-width: 425px) {
+    .Schedule-man-men {
+      gap: 10px !important;
+     
+    }
+    .Schedule-start-end{
+        gap: 10px !important;   
+    }
+  }
+  

@@ -182,7 +182,6 @@ const AbacusMath = () => {
           <i className="bi-check-circle" aria-hidden="true"></i>
           Draw a Beads For the Given Number
         </div>
-        {/* Add the new questions here */}
         <div
           className={`abacus-question-item ${selectedQuestion === 2 ? 'active' : ''}`}
           onClick={() => handleQuestionClick(2)}

@@ -46,6 +46,8 @@ const AddTeacher = ({ show, onClose }) => {
     applicationDate: "",
     declaration: false,
   });
+  console.log(formData);
+  
 
   const [errors, setErrors] = useState({});
   const [countries, setCountries] = useState([]);
