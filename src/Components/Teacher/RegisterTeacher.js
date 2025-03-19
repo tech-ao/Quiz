@@ -130,7 +130,22 @@ const RegisterTeacher = () => {
         setIsSubmitting(true);
         const response = await dispatch(addTeacherAction(formData)); 
         if (response?.isSuccess) {
-          toast.success("Teacher added successfully!");
+          toast.success("Teacher added successfully!");    
+                
+                  setFormData({
+                    fullName: "",
+                    dob: "",
+                    gender: "",
+                    phoneNumber: "",
+                    email: "",
+                    statusId: 0,
+                    permanentAddress: "",
+                    currentResidentialAddress: "",
+                    nationalityId:"",
+                    teacherDocumentFileModels: [],
+                    experienceCertificate:null,
+                    teacherResume: null
+                  });
         } else {
           toast.error(response?.message || "Failed to add teacher!");
         }
@@ -316,7 +331,7 @@ const RegisterTeacher = () => {
                 type="file"
                 name="experienceCertificate"
                 onChange={handleFileChange}
-                accept="image/*"
+                accept="image/*, application/pdf"
                 required
               />
             </Form.Group>
