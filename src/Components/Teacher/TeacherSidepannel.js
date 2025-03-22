@@ -98,6 +98,11 @@ const TeacherSidePanel = () => {
               {openMenus.onlineClass && (
                 <ul className="nav flex-column sub-nav">
                   <li className="nav-item">
+                    <Link to="/meeting" className={`nav-link ${isPathActive('/meeting') ? 'active-sub' : ''}`}>
+                      ➤ Create Meeting
+                    </Link>
+                  </li>
+                  <li className="nav-item">
                     <Link to="/assignclass" className={`nav-link ${isPathActive('/assignclass') ? 'active-sub' : ''}`}>
                       ➤ Assigned Classes
                     </Link>
