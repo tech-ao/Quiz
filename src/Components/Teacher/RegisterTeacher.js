@@ -5,7 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { useDispatch } from "react-redux";
 import { addTeacherAction } from "../../redux/Action/TeacherAction";
 import "./RegisterTeacher.css";
-import { fetchCountries, fetchGenders } from "../../redux/Services/Enum"; 
+import RegisterHeader from "../Student/RegisterHeader";
+import { fetchCountries, fetchGenders, fetchTeacherMode ,fetchAvailability } from "../../redux/Services/Enum";
 
 const RegisterTeacher = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ const RegisterTeacher = () => {
     gender: "",
     phoneNumber: "",
     email: "",
-    statusId: 1,
+    statusId: 0,
     permanentAddress: "",
     currentResidentialAddress: "",
     nationalityId: null,
@@ -146,9 +147,11 @@ const RegisterTeacher = () => {
   };
 
   return (
-    <Container className="register-teacher-container">
+    <div><RegisterHeader />
+     <div className="register-student-page registerbg-image">
+    <Container className="register-teacher-container ">
       <h3 className="mb-4">Register Teacher</h3>
-      <Form noValidate onSubmit={handleRegister}>
+      <Form className="reg-form" noValidate onSubmit={handleRegister}>
         {/* Personal Information */}
         <h5 className="mb-3">Personal Information</h5>
         <Row className="mb-3">
@@ -308,7 +311,7 @@ const RegisterTeacher = () => {
         <Row className="mb-3">
           <Col md={6}>
             <Form.Group controlId="experienceCertificate">
-              <Form.Label>Experience Certificate (Upload)</Form.Label>
+              <Form.Label>Experience Certificate</Form.Label>
               <Form.Control
                 type="file"
                 name="experienceCertificate"
@@ -337,6 +340,8 @@ const RegisterTeacher = () => {
         </Button>
       </Form>
     </Container>
+    </div>
+    </div>
   );
 };
 

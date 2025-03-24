@@ -3,15 +3,18 @@ import { Offcanvas, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../redux/Services/Config";
 import { toast } from "react-toastify";
-import PDFViewer from "../pdfViewer";
-
-
 
 const ViewTeacher = ({ show, onClose, teacherData }) => {
   console.log("this is from view teachers", teacherData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isUpdating, setIsUpdating] = useState(false); 
 
+  const formatDate = (dob) => {
+    return dob ? new Date(dob).toLocaleDateString() : "N/A";
+  };
+
+  
   const sampleBase64PDF = `
 JVBERi0xLjQKJeLjz9MNCjEgMCBvYmo8PC9UeXBlL1BhZ2UvUGFyZW50
 IDUgMCBSL1Jlc291cmNlczw8L1Byb2NTZXRbL1BERi9UZXh0XS9YT2Jq
@@ -25,14 +28,9 @@ MDAwNSA2NTUzNSBmIAp0cmFpbGVyCjw8L1NpemUgNi9Sb290IDUgMCBS
 L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
 `;
 
-  // Format date of birth if available
-  const formatDate = (dob) => {
-    return dob ? new Date(dob).toLocaleDateString() : "N/A";
-  };
-
-  // Update status for the teacher (1: Approved, 2: Rejected)
   const updateStatus = async (statusEnum) => {
     try {
+      setIsUpdating(true);
       if (!teacherData || !teacherData.teacherId) {
         toast.error("No teacher data available.");
         return;
@@ -51,7 +49,10 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
       });
       toast.success("Status updated successfully!");
     } catch (error) {
+      console.error("Error updating status:", error);
       toast.error("Failed to update status. Please try again.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -69,7 +70,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         <Offcanvas.Title>View Teacher Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-       <h5>Personal Information</h5>
+        <h5>Personal Information</h5>
         <Row className="mb-3">
           <Col>
             <strong>Full Name:</strong>
@@ -83,7 +84,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         <Row className="mb-3">
           <Col>
             <strong>Gender:</strong>
-            <p>{teacherData?.genderName || teacherData?.genderName || "N/A"}</p>
+            <p>{teacherData?.genderName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Register Number:</strong>
@@ -103,9 +104,26 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
             <p>{teacherData?.email || "N/A"}</p>
           </Col>
         </Row>
-
-      
-      
+        <Row className="mb-3">
+        <Col>
+            <strong>Nationality:</strong>
+            <p>{teacherData?.nationalityName || "N/A"}</p>
+          </Col>
+          <Col>
+            <strong>Candidate Photo:</strong>
+            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
+              teacherData.teacherDocumentFileModels.map((file) =>
+                file.documentTypeId === 8 ? (
+                  <div key={file.teacherDocumentFileId}>
+                    <p>{file.name}</p>
+                  </div>
+                ) : null
+              )
+            ) : (
+              <p>N/A</p>
+            )}
+          </Col>
+        </Row>
 
         {/* Address Information */}
         <Row className="mb-3">
@@ -126,7 +144,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         </Row>
 
         <h5>Education Qualification</h5>
-          <Row className="mb-3">
+        <Row className="mb-3">
           <Col>
             <strong>Highest Level Education:</strong>
             <p>{teacherData?.educationQualificationModel?.higherLevelEducation || "N/A"}</p>
@@ -175,10 +193,8 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
 
-
         {/* Availability & Work Details */}
         <Row className="mb-3">
-          
           <Col>
             <strong>Availability:</strong>
             <p>{teacherData?.availability || "N/A"}</p>
@@ -188,47 +204,15 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
             <p>{teacherData?.teacherModeName || "N/A"}</p>
           </Col>
         </Row>
-      
+
         <Row className="mb-3">
-         
           <Col>
             <strong>Work Schedule:</strong>
             <p>{teacherData?.preferedWorkScheduledName || "N/A"}</p>
           </Col>
         </Row>
 
-        {/* Additional Information */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Disclaimer Content:</strong>
-            <p>{teacherData?.disclaimerContent || "N/A"}</p>
-          </Col>
-          <Col>
-            <strong>Created By:</strong>
-            <p>{teacherData?.createdBy || "N/A"}</p>
-          </Col>
-        </Row>
-        <Row className="mb-3">
-         
-         
-        </Row>
-
         {/* Document & Media */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Candidate Photo:</strong>
-            {teacherData?.candidatePhoto ? (
-              <img
-                src={teacherData.candidatePhoto}
-                alt="Candidate"
-                style={{ width: "100px", height: "auto" }}
-              />
-            ) : (
-              <p>N/A</p>
-            )}
-          </Col>
-         
-        </Row>
         <Row className="mb-3">
           <Col>
             <strong>Graduation Photo:</strong>
@@ -243,26 +227,26 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
             )}
           </Col>
           <Col>
-            <strong>Experience Proof:</strong>
-           
-          <div>
-            <h5>Resume PDF:</h5>
-           
-            <PDFViewer base64String={sampleBase64PDF} />
-
-
-          </div>
-     
-
+            <strong>Resume:</strong>
+            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
+              teacherData.teacherDocumentFileModels.map((file) =>
+                file.documentTypeId === 4 ? (
+                  <div key={file.teacherDocumentFileId}>
+                    <p>{file.name}</p>
+                  </div>
+                ) : null
+              )
+            ) : (
+              <p>N/A</p>
+            )}
           </Col>
         </Row>
 
-      
         <div className="d-flex justify-content-center mt-3">
-          <Button variant="success" onClick={handleApprove} className="me-2">
+          <Button variant="success" onClick={handleApprove} className="me-2" disabled={isUpdating}>
             Approve
           </Button>
-          <Button variant="danger" onClick={handleDeny}>
+          <Button variant="danger" onClick={handleDeny} disabled={isUpdating}>
             Reject
           </Button>
         </div>

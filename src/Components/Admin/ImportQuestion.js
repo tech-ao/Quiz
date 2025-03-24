@@ -1,81 +1,123 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import { FaFileUpload, FaDownload } from "react-icons/fa";
-import { Container, Row, Col, Button, Form, Table, Modal } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  Table,
+  Modal,
+} from "react-bootstrap";
 import "./ImportQuestion.css"; // Import the CSS for styling
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import * as XLSX from "xlsx";
+
 
 const ImportQuestion = () => {
-  const [csvFile, setCsvFile] = useState(null);
+  const API_URL_IMPORT = "http://your-api-url.com/upload"; // Replace with your actual API endpoint
+
+  const fileInputRef = useRef(null);
+  const [level, setLevel] = useState(1); // Default value can be 1 or empty
+const [title, setTitle] = useState("");
+const [description, setDescription] = useState("");
+
+  const [excelFile, setExcelFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
-  const [title, setTitle] = useState("");
-  const [level, setLevel] = useState(1);
-  const [description, setDescription] = useState("");
-
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 1024);
-      setIsSmallScreen(window.innerWidth < 768);
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+   const toggleSidebar = () => {
+        setIsSidebarVisible((prev) => !prev);
+      };
+    
+      useEffect(() => {
+        const handleResize = () => {
+          // Sidebar visible only for screens 1024px and above
+          setIsSidebarVisible(window.innerWidth >= 1024);
+          setIsSmallScreen(window.innerWidth < 768);
+          setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
 
   const handleFileChange = (event) => {
-    setCsvFile(event.target.files[0]);
+    setExcelFile(event.target.files[0]);
+  };
+
+  const convertExcelToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]);
+      reader.onerror = (error) => reject(error);
+    });
   };
 
   const handleUpload = async () => {
-    if (!csvFile) {
-      alert("Please select a CSV file to upload.");
+    if (!excelFile) {
+      alert("Please select an Excel (.xlsx) file to upload.");
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const fileContent = e.target.result;
-      const questionBase64 = btoa(fileContent);
+    try {
+      const questionBase64 = await convertExcelToBase64(excelFile);
+      console.log("Base64 Content:", questionBase64.slice(0, 100) + "...");
 
       const requestBody = {
         questionBase64: questionBase64,
-        title: title,
-        level: level,
-        description: description,
+        title: "Your Title Here", 
+        level: 1, 
+        description: "Your Description Here", 
       };
 
-      try {
-        const response = await fetch("http://santhwanamhhcs.in:8081/api/ImportExcel/ImportQuestion", {
-          method: "POST",
-          headers: {
-            accept: "text/plain",
-            "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
+      console.log("Request Body:", requestBody);
 
-        if (!response.ok) {
-          throw new Error("Failed to upload questions");
-        }
+      console.log("Request Body:", requestBody);
 
-        const result = await response.json();
-        setUploadStatus("Questions uploaded successfully!");
-        console.log("Upload result:", result);
-      } catch (error) {
-        console.error("Error uploading questions:", error);
-        setUploadStatus("Failed to upload questions. Please try again.");
+      const response = await fetch(API_URL_IMPORT, {
+        method: "POST",
+        headers: {
+          accept: "text/plain",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Upload failed with status: ${response.status}`);
       }
-    };
 
-    reader.readAsText(csvFile);
+      const result = await response.json();
+      setUploadStatus("Questions uploaded successfully!");
+      console.log("Upload result:", result);
+      setExcelFile(null);
+
+      // ✅ Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    } catch (error) {
+      console.error("Error uploading questions:", error);
+      setUploadStatus("Failed to upload questions. Please try again.");
+    }
+  };
+
+  const downloadSampleFile = () => {
+    const sampleData = [
+      ["Sno", "Question", "Answer"],
+      ["1", "1,-2,2,3,2,5,6,-1", "2"],
+      ["2", "1,2,3,4,5,6,7,8,9", "9"],
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(sampleData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sample");
+
+    XLSX.writeFile(wb, "Sample_Questions.xlsx");
   };
 
   return (
@@ -88,17 +130,30 @@ const ImportQuestion = () => {
             <main className="import-questions-container">
               <div className="sticky-head">
                 <h2 className="title">
-                  Import Questions <span className="subtitle">upload using CSV file</span>
+                  Import Questions{" "}
+                  <span className="subtitle">Upload using Excel file</span>
                 </h2>
               </div>
+
               <div className="Content-box">
             
                 <div className="upload-box">
-                  <label htmlFor="csvFile">CSV Questions file</label>
-                  <input type="file" id="csvFile" accept=".csv" onChange={handleFileChange} />
+                  <label htmlFor="excelFile">Excel Questions file (.xlsx)</label>
+                  <input
+                    type="file"
+                    id="excelFile"
+                    accept=".xlsx"
+                    onChange={handleFileChange}
+                    ref={fileInputRef} 
+                  />
+
                   <div className="button-group">
-                    <button className="upload-btn" onClick={handleUpload}>Upload CSV file</button>
-                    <button className="download-btn">📥 Download Sample File</button>
+                    <button className="upload-btn" onClick={handleUpload}>
+                      Upload Excel file
+                    </button>
+                    <button className="download-btn" onClick={downloadSampleFile}>
+                      📥 Download Sample File
+                    </button>
                   </div>
                 </div>
 
@@ -112,8 +167,11 @@ const ImportQuestion = () => {
       onChange={(e) => setLevel(e.target.value)}
     >
       <option value={1}>Level 1</option>
-      <option value={2}>Level 2</option>
-      <option value={3}>Level 3</option>
+      <option value={1}>Level 2</option>
+      <option value={1}>Level 3</option>
+      <option value={1}>Level 4</option>
+      <option value={2}>Level 5</option>
+      <option value={3}>Level 6</option>
     </select>
   </div>
 
@@ -151,7 +209,7 @@ const ImportQuestion = () => {
                     <li>Change the file extension from .txt to .csv.</li>
                     <li>Now, use this file to import questions.</li>
                   </ol>
-                  <a href="#" className="more-info">For more info</a>
+                  <a href="#" className="more-info ">For more info</a>
                 </div>
               </div>
             </main>

@@ -19,7 +19,9 @@ const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect ,unfilledInputs}) => 
 
   return (
     <div className="bead-drawer">
-      <div className="beads-container">
+      <div
+        className={`beads-container bead-bg-${(beads % 4) + 1}`}
+      >
         <div className="D-stick"></div>
         {Array.from({ length: beads }, (_, index) => (
           <div key={index} className="D-bead"></div>
@@ -33,12 +35,14 @@ const BeadDrawer = ({ givenNumber, onBeadDraw, isIncorrect ,unfilledInputs}) => 
           - {/* Minus button */}
         </button>
       </div>
-      <h4 className={`h4-beads ${isIncorrect ? "incorrect"  :
-                             unfilledInputs ? "unfilled":""}`}>
-                          {givenNumber}
+      <h4
+        className={`h4-beads ${
+          isIncorrect ? "incorrect" : unfilledInputs ? "unfilled" : ""
+        }`}
+      >
+        {givenNumber}
       </h4>
     </div>
-  );
-};
-
+  );  
+};  
 export default BeadDrawer;
