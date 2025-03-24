@@ -41,6 +41,8 @@ import StudentAttendance from "./Components/Admin/StudentAttendance";
 import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
 import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
+import GoogleMeetPage from "./Components/google/MeetForm.js";
+
 import "react-toastify/dist/ReactToastify.css";
 
 // Import Redux Provider and Store
@@ -93,6 +95,7 @@ function App() {
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+          <Route path="/meet" element={<GoogleMeetPage/>}/>
 
 
           {/* Protected Routes */}
