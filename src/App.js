@@ -68,6 +68,7 @@ import AbacusSidePanel from "./Components/Admin/AbacusSidePannel";
 import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
+import CreateMeeting from "./Components/Teacher/Meeting";
 
 
 // ProtectedRoute component to check login status
@@ -250,6 +251,10 @@ function App() {
            <Route
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
+          />
+           <Route
+            path="/meeting"
+            element={<ProtectedRoute element={<CreateMeeting />} />}
           />
         </Routes>
       </Router>
