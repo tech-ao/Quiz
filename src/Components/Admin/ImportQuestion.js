@@ -1,30 +1,47 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Container } from "react-bootstrap";
-import * as XLSX from "xlsx";
-import "./ImportQuestion.css";
+import React, { useState, useEffect,useRef } from "react";
+import { FaFileUpload, FaDownload } from "react-icons/fa";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  Form,
+  Table,
+  Modal,
+} from "react-bootstrap";
+import "./ImportQuestion.css"; // Import the CSS for styling
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import * as XLSX from "xlsx";
+
 
 const ImportQuestion = () => {
+  const API_URL_IMPORT = "http://your-api-url.com/upload"; // Replace with your actual API endpoint
+
+  const fileInputRef = useRef(null);
+  const [level, setLevel] = useState(1); // Default value can be 1 or empty
+const [title, setTitle] = useState("");
+const [description, setDescription] = useState("");
+
   const [excelFile, setExcelFile] = useState(null);
   const [uploadStatus, setUploadStatus] = useState("");
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const fileInputRef = useRef(null); // ✅ Define the fileInputRef
-
-  const BASE_URL = "http://srimathicare.in:8081";
-  const API_URL_IMPORT = `${BASE_URL}/api/ImportExcel/ImportQuestion`;
-
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 1024);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+   const toggleSidebar = () => {
+        setIsSidebarVisible((prev) => !prev);
+      };
+    
+      useEffect(() => {
+        const handleResize = () => {
+          // Sidebar visible only for screens 1024px and above
+          setIsSidebarVisible(window.innerWidth >= 1024);
+          setIsSmallScreen(window.innerWidth < 768);
+          setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
 
   const handleFileChange = (event) => {
     setExcelFile(event.target.files[0]);
@@ -50,11 +67,13 @@ const ImportQuestion = () => {
       console.log("Base64 Content:", questionBase64.slice(0, 100) + "...");
 
       const requestBody = {
-        questionBase64,
-        title: "questions",
-        level: 1,
-        description: "Excel file for questions",
+        questionBase64: questionBase64,
+        title: "Your Title Here", 
+        level: 1, 
+        description: "Your Description Here", 
       };
+
+      console.log("Request Body:", requestBody);
 
       console.log("Request Body:", requestBody);
 
@@ -117,6 +136,7 @@ const ImportQuestion = () => {
               </div>
 
               <div className="Content-box">
+            
                 <div className="upload-box">
                   <label htmlFor="excelFile">Excel Questions file (.xlsx)</label>
                   <input
@@ -138,26 +158,58 @@ const ImportQuestion = () => {
                 </div>
 
                 {uploadStatus && <p>{uploadStatus}</p>}
+                <div className="new-field d-flex align-items-center">
+  <div className="form-group">
+    <label htmlFor="level">Select Level:</label>
+    <select
+      id="level"
+      value={level}
+      onChange={(e) => setLevel(e.target.value)}
+    >
+      <option value={1}>Level 1</option>
+      <option value={1}>Level 2</option>
+      <option value={1}>Level 3</option>
+      <option value={1}>Level 4</option>
+      <option value={2}>Level 5</option>
+      <option value={3}>Level 6</option>
+    </select>
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="title">Title:</label>
+    <input
+      type="text"
+      id="title"
+      value={title}
+      placeholder="Enter the answer"
+      onChange={(e) => setTitle(e.target.value)}
+    />
+  </div>
+
+  <div className="form-group">
+    <label htmlFor="description">Description:</label>
+    <input
+      type="text"
+      id="description"
+      value={description}
+      placeholder="Add a note"
+      onChange={(e) => setDescription(e.target.value)}
+    />
+  </div>
+</div>
 
                 <div className="instructions">
                   <h3>How to convert CSV into Unicode (For Non-English)</h3>
                   <ol>
                     <li>Fill the data in an Excel sheet with the given format.</li>
-                    <li>
-                      Save the file as <strong>Unicode Text (*.txt)</strong>.
-                    </li>
+                    <li>Save the file as <strong>Unicode Text (*.txt)</strong>.</li>
                     <li>Open the .txt file in Notepad.</li>
                     <li>Replace Tab space with a comma ( , ).</li>
-                    <li>
-                      Save the file again with a .txt extension and change encoding to{" "}
-                      <strong>UTF-8</strong>.
-                    </li>
+                    <li>Save the file again with a .txt extension and change encoding to <strong>UTF-8</strong>.</li>
                     <li>Change the file extension from .txt to .csv.</li>
                     <li>Now, use this file to import questions.</li>
                   </ol>
-                  <a href="#" className="more-info ">
-                    For more info
-                  </a>
+                  <a href="#" className="more-info ">For more info</a>
                 </div>
               </div>
             </main>

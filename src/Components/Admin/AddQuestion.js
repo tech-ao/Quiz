@@ -16,13 +16,22 @@ const API_URL_SEARCH = `${BASE_URL}/api/SearchAndList/SearchAndListQuestions`;
 
 const AddQuestion = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+<<<<<<< HEAD
   const [questions, setQuestions] = useState([]); // Ensure this is initialized as an array
   const [filterLevel, setFilterLevel] = useState("All");
+=======
+  const [questions, setQuestions] = useState([]);
+  const [filterLevel, setFilterLevel] = useState("All"); // State for filtering
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
   const [currentNumber, setCurrentNumber] = useState("");
   const [storedNumbers, setStoredNumbers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
+<<<<<<< HEAD
   const [level, setLevel] = useState(1); 
+=======
+  const [level, setLevel] = useState(1); // State for creating questions
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
   const [answer, setAnswer] = useState("");
   const [note, setNote] = useState("");
   const [image, setImage] = useState(null);
@@ -30,6 +39,7 @@ const AddQuestion = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
+  // Fetch questions based on filterLevel
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -40,7 +50,11 @@ const AddQuestion = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+<<<<<<< HEAD
             level: level, 
+=======
+            level: filterLevel === "All" ? null : filterLevel, // Send null for "All" levels
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
             pagination: {
               pageSize: 15,
               pageNumber: currentPage,
@@ -54,8 +68,13 @@ const AddQuestion = () => {
 
         const result = await response.json();
         if (result.isSuccess) {
+<<<<<<< HEAD
           setQuestions(result.data.questions || []); 
           setTotalPages(Math.ceil(result.data.totalCount / 15)); 
+=======
+          setQuestions(result.data.questions || []);
+          setTotalPages(Math.ceil(result.data.totalCount / 15));
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
         } else {
           console.error(result.message);
         }
@@ -65,6 +84,7 @@ const AddQuestion = () => {
     };
 
     fetchQuestions();
+<<<<<<< HEAD
   }, [level, currentPage]);
 
   const handleStoreNumber = () => {
@@ -74,6 +94,14 @@ const AddQuestion = () => {
       setCurrentNumber("");
     } else {
       console.log("Current number is empty, not adding."); 
+=======
+  }, [filterLevel, currentPage]); // Re-fetch when filterLevel or currentPage changes
+
+  const handleStoreNumber = () => {
+    if (currentNumber.trim() !== "") {
+      setStoredNumbers([...storedNumbers, currentNumber]);
+      setCurrentNumber("");
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
     }
   };
 
@@ -104,9 +132,6 @@ const AddQuestion = () => {
   };
 
   const handleSubmitQuestion = async () => {
-    console.log("Stored Numbers:", storedNumbers);
-    console.log("Answer:", answer);
-  
     if (storedNumbers.length > 0 && answer.trim() !== "") {
       const newQuestion = {
         questions: storedNumbers.join(", "),
@@ -115,7 +140,7 @@ const AddQuestion = () => {
         note: note,
         image: imagePreview,
       };
-  
+
       try {
         const response = await fetch(API_URL_CREATE, {
           method: "POST",
@@ -126,14 +151,14 @@ const AddQuestion = () => {
           },
           body: JSON.stringify(newQuestion),
         });
-  
+
         if (!response.ok) {
           throw new Error("Failed to add question");
         }
-  
+
         const result = await response.json();
         console.log("Question added successfully:", result);
-  
+
         // Update local state
         setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
         setStoredNumbers([]);
@@ -174,7 +199,7 @@ const AddQuestion = () => {
 
       const result = await response.json();
       console.log("Question deleted successfully:", result);
-      
+
       // Update local state
       const updatedQuestions = questions.filter((q) => q.id !== id);
       setQuestions(updatedQuestions);
@@ -230,7 +255,11 @@ const AddQuestion = () => {
     }
   };
 
-  const filteredQuestions = filterLevel === "All" ? questions : questions.filter(q => q.level === filterLevel);
+  // Filter questions based on filterLevel
+ const filteredQuestions =
+  filterLevel === "All"
+    ? questions
+    : questions.filter((q) => parseInt(q.level) === parseInt(filterLevel));
 
   return (
     <div>
@@ -250,46 +279,89 @@ const AddQuestion = () => {
               <Card.Title className="text-primary fw-bold mb-4">Create Questions</Card.Title>
               <Form.Label className="fw-bold mt-3">Select Level:</Form.Label>
               <Form.Select value={level} onChange={(e) => setLevel(parseInt(e.target.value))}>
+<<<<<<< HEAD
                 {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
+=======
+                {[...Array(6).keys()].map((i) => (
+                  <option key={i} value={i + 1}>Level {i + 1}</option>
+                ))}
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
               </Form.Select>
 
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Type Question:</Form.Label>
                   <InputGroup>
+<<<<<<< HEAD
                     <Form.Control type="number" placeholder="Enter a number" value={currentNumber} onChange={(e) => setCurrentNumber(e.target.value)}  onKeyDown={handleKeyPress} />
                     <Button variant="success" className="plusicon" onClick={handleStoreNumber}><FaPlus /></Button>
+=======
+                    <Form.Control
+                      type="number"
+                      placeholder="Enter a number"
+                      value={currentNumber}
+                      onChange={(e) => setCurrentNumber(e.target.value)}
+                      onKeyDown={handleKeyPress}
+                    />
+                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}>
+                      <FaPlus />
+                    </Button>
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
                   </InputGroup>
-                  {storedNumbers.length > 0 && <p><strong>Question:</strong> {storedNumbers.join(", ")}</p>}
+                  {storedNumbers.length > 0 && (
+                    <p>
+                      <strong>Question:</strong> {storedNumbers.join(", ")}
+                    </p>
+                  )}
                 </Col>
 
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Upload Image:</Form.Label>
                   <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-                  {imagePreview && <Image src={imagePreview} alt="Uploaded" fluid className="mt-2" width="100" height="100" />}
+                  {imagePreview && (
+                    <Image src={imagePreview} alt="Uploaded" fluid className="mt-2" width="100" height="100" />
+                  )}
                 </Col>
               </Row>
 
               <Row className="g-4 mt-0">
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Set Answer:</Form.Label>
-                  <Form.Control type="number" placeholder="Enter the answer" value={answer} onChange={(e) => setAnswer(e.target.value)} />
+                  <Form.Control
+                    type="number"
+                    placeholder="Enter the answer"
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                  />
                 </Col>
                 <Col xs={12} md={6}>
                   <Form.Label className="fw-bold">Note:</Form.Label>
-                  <Form.Control as="textarea" rows={2} placeholder="Add a note" value={note} onChange={(e) => setNote(e.target.value)} />
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    placeholder="Add a note"
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                  />
                 </Col>
               </Row>
 
               <div className="d-flex justify-content-end mt-5 gap-3 flex-wrap fw-bold">
-                <Button variant="success" onClick={handleSubmitQuestion}>Submit</Button>
-                <Button variant="outline-secondary" onClick={handleReset}>Reset</Button>
-                <Button variant="danger" onClick={() => setStoredNumbers([])}>Cancel</Button>
+                <Button variant="success" onClick={handleSubmitQuestion}>
+                  Submit
+                </Button>
+                <Button variant="outline-secondary" onClick={handleReset}>
+                  Reset
+                </Button>
+                <Button variant="danger" onClick={() => setStoredNumbers([])}>
+                  Cancel
+                </Button>
               </div>
             </Card.Body>
 
             {/* Stored Questions Table */}
             <Card.Body className="p-3 card-spacing shadow">
+<<<<<<< HEAD
               <Col md={6}>
                 <Card.Title className="text-primary fw-bold mb-4">Stored Questions</Card.Title>
               </Col>
@@ -298,6 +370,26 @@ const AddQuestion = () => {
                 {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
               </Form.Select>
               </Col>
+=======
+            <Row className="align-items-center mb-4">
+  <Col md={6}>
+    <Card.Title className="text-primary fw-bold">Stored Questions</Card.Title>
+  </Col>
+  <Col md={2} className="text-md-end ms-auto"> {/* Reduced width and added ms-auto for right alignment */}
+    <Form.Select
+      style={{ width: "150px" }} // Reduce width to 150px or any desired value
+      value={filterLevel}
+      onChange={(e) => setFilterLevel(e.target.value === "All" ? "All" : parseInt(e.target.value))}
+    >
+      <option value="All">All Levels</option>
+      {[...Array(6).keys()].map((i) => (
+        <option key={i} value={i + 1}>Level {i + 1}</option>
+      ))}
+    </Form.Select>
+  </Col>
+</Row>
+
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
 
               <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                 <Table striped bordered hover responsive>
@@ -319,14 +411,24 @@ const AddQuestion = () => {
                           <td>{q.questions}</td>
                           <td>{q.answer}</td>
                           <td className="py-3">
-                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}><FaEdit /></Button>
-                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}><FaTrash /></Button>
+                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}>
+                              <FaEdit />
+                            </Button>
+                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}>
+                              <FaTrash />
+                            </Button>
                           </td>
                         </tr>
                       ))
                     ) : (
                       <tr>
+<<<<<<< HEAD
                         <td colSpan="5" className="text-center">No Data found for the selected level.</td>
+=======
+                        <td colSpan="5" className="text-center">
+                          No Data found for the selected level.
+                        </td>
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
                       </tr>
                     )}
                   </tbody>
@@ -343,21 +445,50 @@ const AddQuestion = () => {
                 <Form>
                   <Form.Group>
                     <Form.Label className="fw-bold">Level:</Form.Label>
+<<<<<<< HEAD
                     <Form.Select value={selectedQuestion?.level} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, level: parseInt(e.target.value) })}>
                       {[...Array(6).keys()].map(i => <option key={i} value={i + 1}>Level {i + 1}</option>)}
+=======
+                    <Form.Select
+                      value={selectedQuestion?.level}
+                      onChange={(e) =>
+                        setSelectedQuestion({ ...selectedQuestion, level: parseInt(e.target.value) })
+                      }
+                    >
+                      {[...Array(6).keys()].map((i) => (
+                        <option key={i} value={i + 1}>Level {i + 1}</option>
+                      ))}
+>>>>>>> 69705a6f8fd06f6cec93f5fa5807b0177a1c613d
                     </Form.Select>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label className="fw-bold">Question:</Form.Label>
-                    <Form.Control type="text" value={selectedQuestion?.questions || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, questions: e.target.value })} />
+                    <Form.Control
+                      type="text"
+                      value={selectedQuestion?.questions || ""}
+                      onChange={(e) =>
+                        setSelectedQuestion({ ...selectedQuestion, questions: e.target.value })
+                      }
+                    />
                   </Form.Group>
                   <Form.Group>
                     <Form.Label className="fw-bold">Answer:</Form.Label>
-                    <Form.Control as="textarea" rows={2} value={selectedQuestion?.answer || ""} onChange={(e) => setSelectedQuestion({ ...selectedQuestion, answer: e.target.value })} />
+                    <Form.Control
+                      type="number"
+                      rows={2}
+                      value={selectedQuestion?.answer || ""}
+                      onChange={(e) =>
+                        setSelectedQuestion({ ...selectedQuestion, answer: e.target.value })
+                      }
+                    />
                   </Form.Group>
                   <div className="d-flex justify-content-end mt-3">
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>Cancel</Button>
-                    <Button variant="primary" className="ms-2" onClick={handleSaveEdit}>Save</Button>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                      Cancel
+                    </Button>
+                    <Button variant="primary" className="ms-2" onClick={handleSaveEdit}>
+                      Save
+                    </Button>
                   </div>
                 </Form>
               </Modal.Body>
