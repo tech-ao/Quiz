@@ -197,7 +197,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         <Row className="mb-3">
           <Col>
             <strong>Availability:</strong>
-            <p>{teacherData?.availability || "N/A"}</p>
+            <p>{teacherData?.availabilityName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Teaching Mode:</strong>

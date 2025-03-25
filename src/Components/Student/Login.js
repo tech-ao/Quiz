@@ -3,12 +3,15 @@ import { Container, Row, Col, Button, Form, Modal } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import logo from "../../Components/images/Logo.png";
 
 const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [studentId, setStudentId] = useState("");
+  const [teacherId, setTeacherId] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Student");
   const [showPassword, setShowPassword] = useState(false);
@@ -46,11 +49,21 @@ const LoginPage = () => {
 
         if (data && data.isSuccess && data.data) {
           console.log("isFirstLogin Value:", data.data.isFirstLogin);
+          console.log(role)
+          
 
-          if (data.data.isFirstLogin) {
+          if (data.data.isFirsLogin){
             if (role === "Teacher") {
-              // For teachers, redirect to the TeacherFirstLogin page on first login
-              navigate("/TeacherFirstLogin", { state: { userData: data.data } });
+              if(data.data.statusId != 1){
+                 toast.error("Your not allowed to login Your Register Status is pending");
+              }else{
+                setTeacherId(data.data.teacherId);
+                setShowPopup(true);
+                setUserData(data.data);
+                console.log(data.data)
+              }
+             
+              
             } else {
               // For students, show the password update modal on first login
               setStudentId(data.data.studentId);
@@ -85,7 +98,11 @@ const LoginPage = () => {
     }
 
     try {
-      const updateApiUrl = `${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${studentId}&OldPassword=${encodeURIComponent(oldPassword)}&Password=${encodeURIComponent(newPassword)}`;
+   
+      const updateApiUrl = 
+      role === 'Teacher'
+      ? `${BASE_URL}/PasswordManager/TeacherChangePassword?TeacherId=${teacherId}&OldPassword=${encodeURIComponent(oldPassword)}&Password=${encodeURIComponent(newPassword)}`
+      :`${BASE_URL}/PasswordManager/StudentChangePassword?StudentId=${studentId}&OldPassword=${encodeURIComponent(oldPassword)}&Password=${encodeURIComponent(newPassword)}`;
 
       console.log("Sending request to:", updateApiUrl);
 

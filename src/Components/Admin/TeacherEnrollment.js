@@ -113,12 +113,13 @@ const TeacherEnrollment = () => {
 
       const requestBody = {
         statusEnum,
-        teacherIdList: selectedRequestIds,
+        teacherIdsList: selectedRequestIds,
       };
 
-      await axios.post(`${BASE_URL}/Teacher/UpdateTeacherStatus`, requestBody, {
+      await axios.post(`${BASE_URL}/Teacher/GetTeacherDocument`, requestBody, {
         headers: {
           Accept: "application/json",
+          method: "POST",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
           "Content-Type": "application/json",
