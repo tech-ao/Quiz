@@ -179,25 +179,31 @@ const EditTeacher = ({ show, onClose  }) => {
       };
 
     return (
-        <Modal show={show} onHide={onClose} centered>
+        <Modal show={show} onHide={onClose} centered size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>Edit Teacher</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
+                <Row className="mb-3">
+                  <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Full Name</Form.Label>
                         <Form.Control type="text" name="fullName" value={formData.fullName} onChange={handleChange} required />
                     </Form.Group>
-                    
+                    </Col>
+                    <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Date Of Birth</Form.Label>
                         <Form.Control type="date" name="dob" value={formData.dob} onChange={handleChange} required />
                     </Form.Group>
+                    </Col>
+                    </Row>
                     
-                    <Form.Group className="mb-3">
+                    <Row className="mb-3">
+                    <Form.Group as={Col} className="mb-3">
                         <Form.Label>Gender</Form.Label>
-                        <Row>
+                        <Row className="mt-2">
                             {genders.map((gender, index) => (
                                 <Col key={index} md={4}>
                                     <Form.Check
@@ -214,23 +220,31 @@ const EditTeacher = ({ show, onClose  }) => {
                             ))}
                         </Row>
                     </Form.Group>
+                    <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Email</Form.Label>
                         <Form.Control type="email" name="email" value={formData.email} onChange={handleChange} required />
                     </Form.Group>
-                    
+                    </Col>
+                    </Row>
+                    <Row className="mb-3">
+                      <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Phone Number</Form.Label>
                         <Form.Control type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} required />
                     </Form.Group>
+                    </Col>
+                    <Col md={6}>
                     <Form.Group className="mb-3">
-                        <Form.Label>permanentAddress</Form.Label>
-                        <Form.Control type="text" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required />
+                        <Form.Label>Permanent Address</Form.Label>
+                        <Form.Control as="textarea" name="permanentAddress" value={formData.permanentAddress} onChange={handleChange} required />
                     </Form.Group>
-
+                    </Col>
+                    </Row>
                     
                    
-                    
+                    <Row className="md-3">
+                    <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Nationality</Form.Label>
                         <Form.Select name="nationalityId" value={formData.nationalityId} onChange={handleChange} required>
@@ -238,78 +252,131 @@ const EditTeacher = ({ show, onClose  }) => {
                             {countries.map(c => <option key={c.item1} value={c.item1}>{c.item2}</option>)}
                         </Form.Select>
                     </Form.Group>
+                    </Col>
                     
+                    <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Candidate Photo</Form.Label>
                         <Form.Control type="file" name="photo" onChange={handleFileChange} />
                     </Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                      <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Photo Id</Form.Label>
                         <Form.Control type="file" name="photoId" onChange={handleFileChange} />
                     </Form.Group>
-
+                            </Col>
+                            <Col md={6}>
                     <Form.Group>
                         <Form.Label>Highest Level of Qualification</Form.Label>
                         <Form.Control type="text" name="higherLevelEducation" value={formData.higherLevelEducation} onChange={handleChange} required />
                     </Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
                     <Form.Group>
                         <Form.Label>institute(s) Attended</Form.Label>
                         <Form.Control type="text" name="institute" value={formData.institute} onChange={handleChange} required />
                     </Form.Group>
+                    </Col>
+                    <Col md={6}>
                     <Form.Group>
                         <Form.Label>Subject subjectSpecialist</Form.Label>
                         <Form.Control type="text" name="subjectSpecialist" value={formData.subjectSpecialist} onChange={handleChange} required />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Year of Graduation</Form.Label>
                         <Form.Control type="text" name="yearOfGraduation" value={formData.yearOfGraduation} onChange={handleChange} required />
                     </Form.Group>
+                    </Col>
                     
                     {/* Professional Experience */}
-                    <Form.Group>
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Current/Previous Employer</Form.Label>
                         <Form.Control type="text" name="employerName" value={formData.employerName} onChange={handleChange} />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Job Title</Form.Label>
                         <Form.Control type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Years of Experience</Form.Label>
                         <Form.Control type="text" name="yoe" value={formData.yoe} onChange={handleChange} />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Experience Certificate (Upload)</Form.Label>
                         <Form.Control type="file" name="experienceCertificate" onChange={handleFileChange} />
                     </Form.Group>
+                    </Col>
                     
                     {/* Franchise-specific Requirements */}
-                    <Form.Group>
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Availability</Form.Label>
                         <Form.Select name="availability" value={formData.availability} onChange={handleChange}>
                             {availability.map(a => <option key={a.item1} value={a.item1}>{a.item2}</option>)}
                         </Form.Select>
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Preferred Work Days</Form.Label>
                         <Form.Control type="text" name="preferredWorkDays" value={formData.preferredWorkDays} onChange={handleChange} />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Preferred Work Times</Form.Label>
                         <Form.Control type="text" name="preferredWorkTimes" value={formData.preferredWorkTimes} onChange={handleChange} />
                     </Form.Group>
-                    <Form.Group>
+                    </Col>
+                    </Row>
+
+                    <Row className="md-3">
+                    <Col md={6}>
+                    <Form.Group className="mt-3">
                         <Form.Label>Preferred Country</Form.Label>
                         <Form.Select name="preferredCountry" value={formData.preferredCountry} onChange={handleChange}>
                             <option>Only India</option>
                         </Form.Select>
                     </Form.Group>
+                    </Col>
                     
                     {/* Resume Upload */}
-                    <Form.Group className="mb-3" >
+                    <Col md={6}>
+                    <Form.Group className="mt-3 mb-3" >
                         <Form.Label>Upload Resume</Form.Label>
                         <Form.Control type="file" name="resume" onChange={handleFileChange} />
                     </Form.Group>
+                    </Col>
+                    </Row>
                     
                     <Button variant="primary" type="submit">Save Teacher </Button>
                 </Form>
