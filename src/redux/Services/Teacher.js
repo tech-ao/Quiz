@@ -105,10 +105,19 @@ export const getTeacher = async (TeacherId) => {
 export const deleteTeacher = async (TeacherId) => {
   console.log(`${BASE_URL}/Teacher/Delete/${TeacherId}`);
 
-  const response = await fetch(`${BASE_URL}/Teacher/Delete/${TeacherId}`, {
+  const response = await fetch(`${BASE_URL}/Teacher/Delete/?TeacherId=${TeacherId}`, {
     method: "DELETE",
     headers: getHeaders(),
   });
   if (!response.ok) throw new Error("Failed to delete Teacher");
   return await response.json();
 };
+
+// export const deleteStudent = async (studentId) => {
+//   const response = await fetch(`${BASE_URL}/Student/Delete/${studentId}`, {
+//     method: "DELETE",
+//     headers: getHeaders(),
+//   });
+//   if (!response.ok) throw new Error("Failed to delete student");
+//   return await response.json();
+// };

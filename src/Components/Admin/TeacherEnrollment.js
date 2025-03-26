@@ -106,27 +106,27 @@ const TeacherEnrollment = () => {
 
   const updateStatus = async (statusEnum) => {
     try {
-      if (selectedRequestIds.length === 0) {
+      if (!selectedRequestIds || selectedRequestIds.length === 0) {
         toast.error("No teachers selected.");
         return;
       }
-
+  
       const requestBody = {
         statusEnum,
         teacherIdsList: selectedRequestIds,
       };
-
+  
       await axios.post(`${BASE_URL}/Teacher/GetTeacherDocument`, requestBody, {
         headers: {
           Accept: "application/json",
-          method: "POST",
           "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
           AccessToken: "123",
           "Content-Type": "application/json",
         },
       });
+  
       toast.success("Status updated successfully!");
-
+  
       // Remove updated teachers from the pending enrollment list.
       setRequests((prev) =>
         prev.filter((teacher) => !selectedRequestIds.includes(teacher.teacherId))
@@ -137,7 +137,7 @@ const TeacherEnrollment = () => {
       toast.error("Failed to update status. Please try again.");
     }
   };
-
+  
   const handleOpenViewTeacher = async (teacherId) => {
     try {
       const response = await dispatch(fetchTeacher(teacherId));
