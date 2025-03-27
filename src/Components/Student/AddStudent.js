@@ -29,8 +29,8 @@ const AddStudentPanel = ({ show, onClose }) => {
     centreName: "",       // New field: Centre Name
     centrePlace: "",      // New field: Place
     joiningDate: "",      // New field: Joining Date
-    currentLevel: "",     // New field: Current Level
-    completedLevel: "",   // New field: Completed Level
+    currentLevel: null,     // New field: Current Level
+    completedLevel: null,   // New field: Completed Level
     statusId: 1,
     createdBy: 1,
     profile: {
@@ -82,7 +82,7 @@ const AddStudentPanel = ({ show, onClose }) => {
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: ["country", "grade", "gender", "studyModeId"].includes(name)
+        [name]: ["country", "grade", "completedLevel" , "currentLevel","gender", "studyModeId"].includes(name)
           ? parseInt(value, 10)
           : value,
       }));
@@ -353,26 +353,36 @@ const AddStudentPanel = ({ show, onClose }) => {
 
           <Form.Group className="mb-3" controlId="formCurrentLevel">
             <Form.Label>Current Level</Form.Label>
-            <Form.Control
-              type="text"
+            <Form.Select
               name="currentLevel"
-              placeholder="Enter current level"
               value={formData.currentLevel}
               onChange={handleInputChange}
               required
-            />
+            >
+              <option value="">Select Level</option>
+              {grades.map((grade, index) => (
+                <option key={index} value={grade.item1}>
+                  {grade.item2}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formCompletedLevel">
             <Form.Label>Completed Level</Form.Label>
-            <Form.Control
-              type="text"
+            <Form.Select
               name="completedLevel"
-              placeholder="Enter completed level"
               value={formData.completedLevel}
               onChange={handleInputChange}
               required
-            />
+            >
+              <option value="">Select Level</option>
+              {grades.map((grade, index) => (
+                <option key={index} value={grade.item1}>
+                  {grade.item2}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
           <Form.Group controlId="formFile" className="mb-3">
