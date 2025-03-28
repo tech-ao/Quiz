@@ -98,6 +98,7 @@ function App() {
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
+          <Route path="/meeting" element={<CreateMeeting/>}/>
 
 
           {/* Protected Routes */}
@@ -252,10 +253,10 @@ function App() {
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
           />
-           <Route
+           {/* <Route
             path="/meeting"
             element={<ProtectedRoute element={<CreateMeeting />} />}
-          />
+          /> */}
         </Routes>
       </Router>
     </Provider>
