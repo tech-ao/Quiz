@@ -9,6 +9,7 @@ import { getTeachers, deleteTeacherAction, fetchTeacher } from "../../redux/Acti
 import EditTeacher from './EditTeacher';
 import AddTeacher from './AddTeacher';
 import ViewTeacher from '../ViewTeacher';
+import AssignStudent from '../Admin/AssignStudent';
 import { toast } from 'react-toastify';
 
 const ListTeacher = () => {
@@ -20,6 +21,7 @@ const ListTeacher = () => {
   const [showEditTeacher, setShowEditTeacher] = useState(false);
   const [showViewTeacher, setShowViewTeacher] = useState(false);
   const [showAddTeacher, setShowAddTeacher] = useState(false);
+  const [showAssignStudent, setShowAssignStudent] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedTeacherId, setSelectedTeacherId] = useState(null);
    const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -117,6 +119,9 @@ const ListTeacher = () => {
   const handleOpenAddTeacher = () => setShowAddTeacher(true);
   const handleCloseAddTeacher = () => setShowAddTeacher(false);
 
+  const handleOpenAssignStudent = () => setShowAssignStudent(true);
+  const handleCloseAssignStudent = () => setShowAssignStudent(false);
+
   const handleOpenDeleteModal = (teacherId) => {
     setSelectedTeacherId(teacherId);
     setShowDeleteModal(true);
@@ -171,9 +176,14 @@ const ListTeacher = () => {
                     onChange={handleSearch}
                   />
                 </InputGroup>
+                <Button variant="outline-success" onClick={handleOpenAssignStudent} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
+                  <i className="bi bi-person-plus me-2"></i> Assign Students
+                </Button>
+
                 <Button variant="outline-success" onClick={handleOpenAddTeacher} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
                   <i className="bi bi-person-plus me-2"></i> Add Teacher
                 </Button>
+
               </Col>
             </Row>
 
@@ -231,6 +241,8 @@ const ListTeacher = () => {
                   )}
                 </tbody>
               </Table>
+              <AssignStudent show={showAssignStudent} onClose={handleCloseAssignStudent} />
+
             </div>
 
             <div className="d-flex justify-content-center">
@@ -251,6 +263,7 @@ const ListTeacher = () => {
                 nextLinkClassName="page-link"
               />
             </div>
+
           </div>
         </Container>
 

@@ -69,6 +69,7 @@ import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
+import AssignStudent from "./Components/Admin/AssignStudent.js";
 
 
 // ProtectedRoute component to check login status
@@ -222,6 +223,10 @@ function App() {
           <Route
             path="/studentOnlineClass"
             element={<ProtectedRoute element={<StudentOnlineClass />} />}
+          />
+           <Route
+            path="/assignstudent"
+            element={<ProtectedRoute element={<AssignStudent />} />}
           />
           <Route
             path="/studentSettings"

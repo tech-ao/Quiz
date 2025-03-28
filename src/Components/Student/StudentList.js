@@ -79,7 +79,6 @@ const StudentList = () => {
     setCurrentPage(pageNumber - 1);
   };
 
-  // Helper function to extract the numeric grade (if gradeName is in "Level X" format)
   const extractGradeNumber = (gradeName) => {
     if (typeof gradeName === 'string' && gradeName.toLowerCase().includes('level')) {
       return gradeName.toLowerCase().replace('level', '').trim();
@@ -87,7 +86,6 @@ const StudentList = () => {
     return gradeName.toString().trim();
   };
 
-  // Filter students by search term and selected grade filter (if any)
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult.filter((student) => {
         const matchesSearch = [student.firstName, student.email]
