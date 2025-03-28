@@ -58,6 +58,9 @@ const AddTeacher = ({ show, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  console.log(countries);
+  
+
   const [paginationDetail, setPaginationDetail] = useState({
     pageNumber: 1,
     pageSize: 15,

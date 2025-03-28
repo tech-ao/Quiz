@@ -24,30 +24,28 @@ const AssignStudent = ({ show, onClose }) => {
     dispatch(getTeachers({ paginationDetail }));
   }, [dispatch]);
 
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setDropdownOpen(false);
       }
     };
-  
+
     if (dropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
     }
-  
+
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownOpen]);
-  
 
   const filteredStudents = Array.isArray(students.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult
     : [];
-  
+
   const filteredTeachers = Array.isArray(teachers?.data?.searchAndListTeacherResult)
     ? teachers.data.searchAndListTeacherResult
     : [];
@@ -57,21 +55,26 @@ const AssignStudent = ({ show, onClose }) => {
       alert("Please select at least one student and a teacher.");
       return;
     }
-    
-    try {
-      for (let student of selectedStudents) {
-        const apiUrl = `http://srimathicare.in:8081/api/Teacher/TeacherStudentAssociate?TeacherId=${selectedTeacher.teacherId}&StudentId=${student.studentId}`;
-        
-        const response = await fetch(apiUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
 
-        if (!response.ok) {
-          throw new Error("Failed to assign student");
-        }
+    try {
+      const requestBody = {
+        teacherId: selectedTeacher.teacherId,
+        studentIdList: selectedStudents.map((student) => student.studentId),
+      };
+
+      const response = await fetch("http://srimathicare.in:8081/api/Teacher/TeacherStudentAssociate", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+          AccessToken: "123",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to assign students");
       }
 
       alert("Students successfully assigned!");
@@ -92,7 +95,10 @@ const AssignStudent = ({ show, onClose }) => {
       <Offcanvas.Body>
         <div className="mb-3 position-relative" ref={dropdownRef}>
           <label className="form-label">Students:</label>
-          <button className="form-control text-start" onClick={() => setDropdownOpen(!dropdownOpen)}>
+          <button
+            className="form-control text-start"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
             {selectedStudents.length > 0
               ? selectedStudents.map((s) => s.firstName + " " + s.lastName).join(", ")
               : "Select Students"}
