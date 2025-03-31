@@ -28,78 +28,77 @@ const TeacherDashboard = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 992);
   const [sortBy, setSortBy] = useState("Recently");
   const [transactions, setTransactions] = useState([
-    {
-      purpose: "Fauget Cafe",
-      type: "Coffee Shop",
-      date: "Today",
-      timeAgo: "2m ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 2 * 60 * 1000,
-    },
-    {
-      purpose: "Claudia Store",
-      type: "Accessories",
-      date: "Today",
-      timeAgo: "5m ago",
-      amount: 1000,
-      paymentType: "Transfer",
-      status: "Done",
-      timestamp: new Date().getTime() - 5 * 60 * 1000,
-    },
-    {
-      purpose: "Chidi Barber",
-      type: "Barber Shop",
-      date: "Today",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 60 * 60 * 1000,
-    },
-    {
-      purpose: "King's",
-      type: "Coffe Shop",
-      date: "Today",
-      timeAgo: "8h ago",
-      amount: 120,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 8 * 60 * 1000,
-    },
-    {
-      purpose: "NKM Furniture",
-      type: "Furniture",
-      date: "Yesturday",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 30 * 80 * 1000,
-    },
-    {
-      purpose: "Black Suits",
-      type: "Clothes",
-      date: "Today",
-      timeAgo: "2days ago",
-      amount: 1500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 10 * 20 * 1000,
-    },
-    {
-      purpose: "Wilde Bears",
-      type: "Choclate Shop",
-      date: "Yesturday",
-      timeAgo: "8h ago",
-      amount: 300,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 50 * 60 * 1000,
-    },
-  ]);
-
+      {
+        purpose: "Fauget Cafe",
+        type: "Coffee Shop",
+        date: "Today",
+        timeAgo: "2m ago",
+        amount: 500,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 2 * 60 * 1000,
+      },
+      {
+        purpose: "Claudia Store",
+        type: "Accessories",
+        date: "Today",
+        timeAgo: "5m ago",
+        amount: 1000,
+        paymentType: "Transfer",
+        status: "Done",
+        timestamp: new Date().getTime() - 5 * 60 * 1000,
+      },
+      {
+        purpose: "Chidi Barber",
+        type: "Barber Shop",
+        date: "Today",
+        timeAgo: "1h ago",
+        amount: 500,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 60 * 60 * 1000,
+      },
+      {
+        purpose: "King's",
+        type: "Coffe Shop",
+        date: "Today",
+        timeAgo: "8h ago",
+        amount: 120,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 8 * 60 * 1000,
+      },
+      {
+        purpose: "NKM Furniture",
+        type: "Furniture",
+        date: "Yesturday",
+        timeAgo: "1h ago",
+        amount: 500,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 30 * 80 * 1000,
+      },
+      {
+        purpose: "Black Suits",
+        type: "Clothes",
+        date: "Today",
+        timeAgo: "2days ago",
+        amount: 1500,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 10 * 20 * 1000,
+      },
+      {
+        purpose: "Wilde Bears",
+        type: "Choclate Shop",
+        date: "Yesturday",
+        timeAgo: "8h ago",
+        amount: 300,
+        paymentType: "QR Code",
+        status: "Done",
+        timestamp: new Date().getTime() - 50 * 60 * 1000,
+      },
+    ]);
   const navigate = useNavigate();
   
   useEffect(() => {
@@ -125,7 +124,6 @@ const TeacherDashboard = () => {
     { title: "Assignments", count: dashboardData?.assignmentsCount || 10, icon: FaBookOpen, path: "/assignment" },
   ];
 
-  // Handle card click for routing
   const handleCardClick = (path) => {
     navigate(path);
   };
@@ -135,7 +133,6 @@ const TeacherDashboard = () => {
   };
 
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  // New state: true if viewport width is between 768px and 992px
   const [isMdLayout, setIsMdLayout] = useState(window.innerWidth >= 768 && window.innerWidth < 992);
 
   useEffect(() => {
@@ -184,10 +181,9 @@ const TeacherDashboard = () => {
           <div className="teacher-sub-container dashboard-container">
             {isMdLayout ? (
               <>
-                {/* For screens between 768px and 992px: display stats cards in a grid (2 per row) */}
-                <Row className="g-4 dashboard-row">
+                <Row className="g-3 dashboard-row mx-1">
                   {statsData.map((stat, index) => (
-                    <Col xs={12} md={6} key={index}>
+                    <Col xs={12} md={6} key={index} className="px-1">
                       <Card 
                         className="stats-card border-0"
                         onClick={() => handleCardClick(stat.path)}
@@ -204,9 +200,8 @@ const TeacherDashboard = () => {
                     </Col>
                   ))}
                 </Row>
-                {/* Payment History below the stats cards */}
-                <Row className="mt-4">
-                  <Col xs={12}>
+                <Row className="mt-4 mx-1"> 
+                <Col xs={12} className="px-1">
                     <Card className="payment-card border-0 h-100">
                       <Card.Body>
                         <div className="payment-history-header">
@@ -236,27 +231,28 @@ const TeacherDashboard = () => {
                             </div>
                           </div>
                           <div className="icon-container">
-                            <Button className="icon-only-button me1">
-                              <FaPrint className="icon-only" />
-                              <span className="button-text">Print</span>
-                            </Button>
-                            <Button className="icon-only-button">
-                              <FaShareAlt className="icon-only" />
-                              <span className="button-text">Share</span>
-                            </Button>
-                          </div>
+  <Button className="icon-only-button me-2">
+    <FaPrint className="icon-only" />
+    <span className="button-text">Print</span>
+  </Button>
+  <Button className="icon-only-button">
+    <FaShareAlt className="icon-only" />
+    <span className="button-text">Share</span>
+  </Button>
+</div>
                         </div>
+                        
                         <div className="table_container">
-                          <Table responsive className="payment-table">
-                            <thead>
+                          <Table responsive="md" className="payment-table">
+                            <thead className="payment-table-head">
                               <tr className="bg-dark-green text-white">
-                                <th className="py-3">Purpose</th>
-                                <th className="py-3">Date</th>
-                                <th className="py-3">Amount</th>
-                                <th className="py-3">Status</th>
+                                <th className="py-0">Purpose</th>
+                                <th className="py-0">Date</th>
+                                <th className="py-0">Amount</th>
+                                <th className="py-0">Status</th>
                               </tr>
                             </thead>
-                            <tbody>
+                            <tbody className="payment-table-data">
                               {transactions.map((transaction, index) => (
                                 <tr key={index}>
                                   <td>
@@ -278,21 +274,24 @@ const TeacherDashboard = () => {
                                     </small>
                                   </td>
                                   <td>
-                                    <span
-                                      className={`badge ${
-                                        transaction.status === "Done"
-                                          ? "bg-success"
-                                          : "bg-warning"
-                                      } rounded-pill`}
-                                    >
-                                      {transaction.status}
-                                    </span>
-                                  </td>
+  <div className=".status-cell-right "> {/* Right alignment */}
+    <span
+      className={`badge ${
+        transaction.status === "Done"
+          ? "bg-success"
+          : "bg-warning"
+      } rounded-pill`}
+    >
+      {transaction.status}
+    </span>
+  </div>
+</td>
                                 </tr>
                               ))}
                             </tbody>
                           </Table>
                         </div>
+                        
                         <div className="text-center mt-4">
                           <a 
                             href="#"
@@ -311,10 +310,8 @@ const TeacherDashboard = () => {
                 </Row>
               </>
             ) : (
-              // For other screen sizes, use the original two-column layout
-              <Row className="g-4 dashboard-row">
-                {/* Stats Cards Column */}
-                <Col xs={12} lg={5} md={6} xl={4} className="box-details ">
+              <Row className="g-4 dashboard-row mx-1"> 
+                <Col xs={12} lg={5} md={6} xl={4} className="box-details px-1">
                   {statsData.map((stat, index) => (
                     <div key={index} className="mb-4 my-1">
                       <Card 
@@ -333,10 +330,9 @@ const TeacherDashboard = () => {
                     </div>
                   ))}
                 </Col>
-                {/* Payment History Column */}
-                <Col xs={12} lg={7} xl={8} >
-                  <Card className="payment-card  h-100" >
-                    <Card.Body >
+                <Col xs={12} lg={7} xl={8} className="px-1">
+                  <Card className="payment-card h-100">
+                    <Card.Body>
                       <div className="payment-history-header">
                         <div className="payment-title-section">
                           <h5>Payment History</h5>
@@ -375,7 +371,7 @@ const TeacherDashboard = () => {
                         </div>
                       </div>
                       <div className="table_container">
-                        <Table responsive className="payment-table">
+                        <Table responsive="md" className="payment-table">
                           <thead>
                             <tr className="bg-dark-green text-white">
                               <th className="py-3">Purpose</th>

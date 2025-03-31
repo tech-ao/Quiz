@@ -1,85 +1,84 @@
 /* Ensuring the container is responsive */
 .question-container {
-    max-width: 100%;
+  max-width: 100%;
+
+}
+
+/* Responsive image preview */
+.img-preview {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  display: block;
+  margin-top: 10px;
+}
+
+
+/* Ensure buttons wrap properly on small screens */
+@media (max-width: 576px) {
   
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100% !important;
+
+  }
+ 
+  .plusicon{
+    
+    margin-top: -60px;
+    padding: 9px 8px  !important;
+    color: green;
+    font-weight: bolder;
+  
+    border: 0px solid aliceblue !important;
+  }
+
+  .row {
+    margin-bottom: 2px !important;  /* Only 5px spacing */
+  }
+
+  .form-label-sm {
+    font-size: 12px;  /* Reduce label size for compact view */
+  }
+
+  .form-control {
+    padding: 3px;  /* Reduce padding inside inputs */
+  }
+
+  .card-title {
+    font-size: 20px !important; /* Adjust as needed */
+  }
+  .form-label {
+    font-size: 13px;  /* Reduce font size */
+    font-weight: normal;  /* Adjust weight if needed */
+  }
+    .d-flex {
+      gap: 1px;
+    }
+    .d-flex button {
+      /* margin-right:35px; */
+      font-size: 10px;
+
+    }
+  
+    /* Table scrollable in small screens */
+    .table-responsive {
+      overflow-x: auto;
+    }
+  
+    /* Reduce table font size for better fit */
+    table {
+     
+      font-size: 15px;
+    }
+  
+    /* Adjust image size in the table */
+    td img {
+      width: 40px;
+      height: 40px;
+    
+    }
   }
   
-  
-  
-  /* Responsive image preview */
-  .img-preview {
-    width: 100%;
-    max-width: 200px;
-    height: auto;
-    display: block;
-    margin-top: 10px;
-  }
-  
-  /* Ensure buttons wrap properly on small screens */
-  @media (max-width: 576px) {
-    
-    input[type="text"],
-    input[type="number"],
-    textarea,
-    select {
-      width: 100% !important;
-  
-    }
-   
-    .plusicon{
-      
-      margin-top: -60px;
-      padding: 9px 8px  !important;
-      color: green;
-      font-weight: bolder;
-    
-      border: 0px solid aliceblue !important;
-    }
-  
-    .row {
-      margin-bottom: 2px !important;  /* Only 5px spacing */
-    }
-  
-    .form-label-sm {
-      font-size: 12px;  /* Reduce label size for compact view */
-    }
-  
-    .form-control {
-      padding: 3px;  /* Reduce padding inside inputs */
-    }
-  
-    .card-title {
-      font-size: 20px !important; /* Adjust as needed */
-    }
-    .form-label {
-      font-size: 13px;  /* Reduce font size */
-      font-weight: normal;  /* Adjust weight if needed */
-    }
-      .d-flex {
-        gap: 1px;
-      }
-      .d-flex button {
-        /* margin-right:35px; */
-        font-size: 10px;
-  
-      }
-    
-      /* Table scrollable in small screens */
-      .table-responsive {
-        overflow-x: auto;
-      }
-    
-      /* Reduce table font size for better fit */
-      table {
-       
-        font-size: 15px;
-      }
-    
-      /* Adjust image size in the table */
-      td img {
-        width: 40px;
-        height: 40px;
-      
-      }
-    }
-    
