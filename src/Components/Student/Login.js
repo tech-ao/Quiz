@@ -6,6 +6,7 @@ import BASE_URL from "../../redux/Services/Config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
+import Pending from "../Admin/Pending";
 import logo from "../../Components/images/Logo.png";
 
 const LoginPage = () => {
@@ -51,26 +52,25 @@ const LoginPage = () => {
           console.log("isFirstLogin Value:", data.data.isFirstLogin);
           console.log(role)
           
-
-          if (data.data.isFirsLogin){
+          if (data.data.statusId === 2 || data.data.statusId === 3) {
+            navigate("/Pending");
+            return; // Stop further execution if status is not approved
+          }
+          if (data.data.isFirstLogin === true){   
+            console.log("ABCD");
+                     
             if (role === "Teacher") {
-              if(data.data.statusId != 1){
-                 toast.error("Your not allowed to login Your Register Status is pending");
-              }else{
-                setTeacherId(data.data.teacherId);
-                setShowPopup(true);
-                setUserData(data.data);
-                console.log(data.data)
-              }
-             
-              
-            } else {
-              // For students, show the password update modal on first login
-              setStudentId(data.data.studentId);
-              setShowPopup(true);
+              setTeacherId(data.data.teacherId);             
               setUserData(data.data);
-            }
-          } else {
+              setShowPopup(true);
+              console.log(data.data);
+            } else {
+              setStudentId(data.data.studentId);
+              setUserData(data.data);
+              setShowPopup(true);
+             
+            }}
+           else {
             console.log("Login Successful:", data);
             sessionStorage.setItem("isLoggedIn", "true");
             sessionStorage.setItem("userRole", role);

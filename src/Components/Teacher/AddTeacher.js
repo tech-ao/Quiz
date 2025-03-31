@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addTeacherAction, getTeachers } from "../../redux/Action/TeacherAction";
-import { fetchCountries, fetchGenders, fetchTeacherMode ,fetchAvailability } from "../../redux/Services/Enum";
+import { fetchCountries, fetchGenders, fetchTeacherMode, fetchAvailability } from "../../redux/Services/Enum";
 import { addTeacher } from "../../redux/Services/Teacher.js"
 import InputMask from "react-input-mask";
 import BASE_URL from "../../redux/Services/Config.js";
@@ -47,19 +47,19 @@ const AddTeacher = ({ show, onClose }) => {
     declaration: false,
   });
   console.log(formData);
-  
+
 
   const [errors, setErrors] = useState({});
   const [countries, setCountries] = useState([]);
   const [teachingModes, setTeachingMode] = useState([]);
   const [genders, setGenders] = useState([]);
-  const [availabilitys , setAvailability] =useState([]);
+  const [availabilitys, setAvailability] = useState([]);
   const [documentTypes, setDocumentTypes] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(false);
 
   console.log(countries);
-  
+
 
   const [paginationDetail, setPaginationDetail] = useState({
     pageNumber: 1,
@@ -74,31 +74,45 @@ const AddTeacher = ({ show, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     setFormData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox"
         ? checked
         : ["country", "grade", "gender", "studyModeId", "teacherModeId"].includes(name)
-        ? parseInt(value, 10)
-        : value,
+          ? parseInt(value, 10)
+          : value,
     }));
   };
-  
-  
+
+
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     const file = files[0];
-
+  
     if (file) {
-      console.log(file);
-
+      const fileSize = file.size; // File size in bytes
+      const fileType = file.type; // MIME type (e.g., "image/png", "application/pdf")
+      const fileExtension = file.name.split(".").pop().toLowerCase(); // File extension
+  
+      // File validation
+      if (fileType.startsWith("image/") && fileSize > 100 * 1024) {
+        toast.error("Image file size must be less than 100KB!");
+        e.target.value = ""; // Reset file input
+        return;
+      } else if (fileType === "application/pdf" && fileSize > 2 * 1024 * 1024) {
+        toast.error("PDF file size must be less than 2MB!");
+        e.target.value = ""; // Reset file input
+        return;
+      }
+  
+      // Proceed with file processing
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Content = reader.result.split(",")[1];
         const documentTypeId = documentTypes[name] || null;
-
+  
         if (documentTypeId !== null) {
           setFormData((prevData) => {
             const updatedDocuments = prevData.teacherDocumentFileModels.filter(
@@ -111,7 +125,7 @@ const AddTeacher = ({ show, onClose }) => {
                 {
                   documentTypeId,
                   name: file.name,
-                  extension: file.name.split(".").pop(),
+                  extension: fileExtension,
                   base64Content,
                 },
               ],
@@ -122,7 +136,7 @@ const AddTeacher = ({ show, onClose }) => {
       reader.readAsDataURL(file);
     }
   };
-
+  
   useEffect(() => {
     const fetchAllData = async () => {
       setLoading(true);
@@ -213,11 +227,11 @@ const AddTeacher = ({ show, onClose }) => {
       };
 
       const response = await (addTeacher(payload));
-      if (response?.isSuccess) {       
+      if (response?.isSuccess) {
         dispatch(getTeachers({ paginationDetail }));
         toast.success("Teacher added successfully!");
         onClose();
-       
+
       } else {
         toast.error(response?.message || "Failed to add teacher!");
       }
@@ -256,12 +270,14 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="dob">
                 <Form.Label>Date of Birth</Form.Label>
+                <Form.Label>Date of Birth</Form.Label>
                 <Form.Control
                   type="date"
                   name="dob"
                   value={formData.dob}
                   onChange={handleChange}
-                  isInvalid={!!errors.dob}
+                  required
+                  max={new Date().toISOString().split("T")[0]} // Prevents future dates
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.dob}
@@ -271,24 +287,24 @@ const AddTeacher = ({ show, onClose }) => {
           </Row>
           <Row className="mb-3">
             <Form.Group as={Col} className="mb-3" controlId="formGender">
-                       <Form.Label>Gender</Form.Label>
-                       <Row>
-                         {genders.map((gender, index) => (
-                           <Col key={index} md={4}>
-                             <Form.Check
-                               type="radio"
-                               label={gender.item2}
-                               name="gender"
-                               value={gender.item1}
-                               checked={formData.gender === gender.item1}
-                               onChange={handleChange}
-                               inline
-                               required
-                             />
-                           </Col>
-                         ))}
-                       </Row>
-                     </Form.Group>
+              <Form.Label>Gender</Form.Label>
+              <Row>
+                {genders.map((gender, index) => (
+                  <Col key={index} md={4}>
+                    <Form.Check
+                      type="radio"
+                      label={gender.item2}
+                      name="gender"
+                      value={gender.item1}
+                      checked={formData.gender === gender.item1}
+                      onChange={handleChange}
+                      inline
+                      required
+                    />
+                  </Col>
+                ))}
+              </Row>
+            </Form.Group>
             <Col md={6}>
               <Form.Group controlId="phoneNumber">
                 <Form.Label>Phone Number</Form.Label>
@@ -386,6 +402,8 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="candidatePhoto">
                 <Form.Label>Candidate Photo</Form.Label>
+                <p style={{ color: "#f55050" }}>Image size less than 100 KB</p>
+
                 <Form.Control
                   type="file"
                   name="Profile Photo"
@@ -401,6 +419,8 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="photoId">
                 <Form.Label>Photo ID</Form.Label>
+                <p style={{ color: "#f55050" }}>Image size less than 100 KB</p>
+
                 <Form.Control
                   type="file"
                   name="Profile Photo"
@@ -553,6 +573,7 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="yoe">
                 <Form.Label>Years of Experience</Form.Label>
+                <p></p>
                 <Form.Control
                   type="number"
                   name="yoe"
@@ -572,6 +593,8 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="experienceCertificate">
                 <Form.Label>Experience Certificate (Upload)</Form.Label>
+                <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
+
                 <Form.Control
                   type="file"
                   name="Professional Year Of Experiance"
@@ -585,7 +608,7 @@ const AddTeacher = ({ show, onClose }) => {
           {/* Section 4: Franchise-specific Requirements */}
           <h4>Franchise-specific Requirements</h4>
           <Row className="mb-3">
-          <Col md={4}>
+            <Col md={4}>
               <Form.Group controlId="availabilityId">
                 <Form.Label>Availability</Form.Label>
                 <Form.Select
@@ -701,6 +724,8 @@ const AddTeacher = ({ show, onClose }) => {
                 <Col md={6}>
                   <Form.Group controlId="workAuthorization">
                     <Form.Label>Work Authorization (Upload)</Form.Label>
+                    <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
+
                     <Form.Control
                       type="file"
                       name="workAuthorization"
@@ -714,6 +739,8 @@ const AddTeacher = ({ show, onClose }) => {
                 <Col md={6}>
                   <Form.Group controlId="healthMedicalFitness">
                     <Form.Label>Health and Medical Fitness (Upload)</Form.Label>
+                    <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
+
                     <Form.Control
                       type="file"
                       name="healthMedicalFitness"
@@ -725,6 +752,7 @@ const AddTeacher = ({ show, onClose }) => {
                 <Col md={6}>
                   <Form.Group controlId="proofOfAddress">
                     <Form.Label>Proof of Address (Upload)</Form.Label>
+                    <p style={{ color: "#f55050" }}>Image size less than 100Kb & Pdf less than 2mb</p>
                     <Form.Control
                       type="file"
                       name="proofOfAddress"
@@ -742,6 +770,8 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="resume">
                 <Form.Label>Upload Resume</Form.Label>
+                <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
+
                 <Form.Control
                   type="file"
                   name="Resume"
@@ -757,6 +787,8 @@ const AddTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group controlId="applicantSignature">
                 <Form.Label>Signature of Applicant (Upload)</Form.Label>
+                <p style={{ color: "#f55050" }}>pdf size less than 2mb</p>
+
                 <Form.Control
                   type="file"
                   name="Signature"
@@ -773,6 +805,9 @@ const AddTeacher = ({ show, onClose }) => {
                   name="applicationDate"
                   value={formData.applicationDate}
                   onChange={handleChange}
+                  required
+                  min={new Date().toISOString().split("T")[0]} // Prevents past dates
+                  max={new Date().toISOString().split("T")[0]} // Prevents future dates
                 />
               </Form.Group>
             </Col>

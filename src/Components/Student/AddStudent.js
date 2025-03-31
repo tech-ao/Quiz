@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { fetchCountries, fetchGrades, fetchGenders, fetchStudentMode } from "../../redux/Services/Enum";
+import { colors } from "@mui/material";
 
 const AddStudentPanel = ({ show, onClose }) => {
   const [countries, setCountries] = useState([]);
@@ -50,17 +51,32 @@ const AddStudentPanel = ({ show, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
-
+  
     if (type === "file") {
       const file = files[0];
       if (file) {
+        const fileSize = file.size; // File size in bytes
+        const fileType = file.type; // MIME type (e.g., "image/png", "application/pdf")
+        const extension = file.name.split(".").pop().toLowerCase(); // File extension
+  
+        // Validation: Check file type and size
+        if (fileType.startsWith("image/") && fileSize > 100 * 1024) {
+          toast.error("Image file size must be less than 100KB!");
+          e.target.value = ""; // Reset input field
+          return;
+        } else if (fileType === "application/pdf" && fileSize > 2 * 1024 * 1024) {
+         toast.error("PDF file size must be less than 2MB!");
+          e.target.value = ""; // Reset input field
+          return;
+        }
+  
+        // Convert file to Base64
         const reader = new FileReader();
         reader.onloadend = () => {
           const base64Content = reader.result.split(",")[1];
-          const extension = file.name.split(".").pop();
-
+  
           const field = name === "profile" ? "profile" : "birthCertificate";
-
+  
           setFormData((prevData) => ({
             ...prevData,
             [field]: {
@@ -71,23 +87,27 @@ const AddStudentPanel = ({ show, onClose }) => {
           }));
         };
         reader.readAsDataURL(file);
+  
+        // Generate preview URL (only for images)
         const previewURL = URL.createObjectURL(file);
-
-        if (name === "profile") {
-          setPreview(previewURL);
-        } else if (name === "birthCertificate") {
-          setBirthCertificatePreview(previewURL);
+        if (fileType.startsWith("image/")) {
+          if (name === "profile") {
+            setPreview(previewURL);
+          } else if (name === "birthCertificate") {
+            setBirthCertificatePreview(previewURL);
+          }
         }
       }
     } else {
       setFormData((prevData) => ({
         ...prevData,
-        [name]: ["country", "grade", "completedLevel" , "currentLevel","gender", "studyModeId"].includes(name)
+        [name]: ["country", "grade", "completedLevel", "currentLevel", "gender", "studyModeId"].includes(name)
           ? parseInt(value, 10)
           : value,
       }));
     }
   };
+  
 
   const [paginationDetail, setPaginationDetail] = useState({
     pageNumber: 1,
@@ -224,6 +244,7 @@ const AddStudentPanel = ({ show, onClose }) => {
                 value={formData.dob}
                 onChange={handleInputChange}
                 required
+                max={new Date().toISOString().split("T")[0]} // Prevents future dates
               />
             </Form.Group>
           </Row>
@@ -341,13 +362,13 @@ const AddStudentPanel = ({ show, onClose }) => {
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formJoiningDate">
-            <Form.Label>Joining Date</Form.Label>
             <Form.Control
               type="date"
               name="joiningDate"
               value={formData.joiningDate}
               onChange={handleInputChange}
               required
+              min={new Date().toISOString().split("T")[0]} // Prevents past dates
             />
           </Form.Group>
 
@@ -387,6 +408,8 @@ const AddStudentPanel = ({ show, onClose }) => {
 
           <Form.Group controlId="formFile" className="mb-3">
             <Form.Label>Upload Student Image</Form.Label>
+            <p style={{ color: "#f55050" }}>Image size less than 100 KB</p>
+
             <Form.Control
               type="file"
               name="profile"
@@ -406,10 +429,12 @@ const AddStudentPanel = ({ show, onClose }) => {
 
           <Form.Group controlId="formBirthCertificate" className="mb-3">
             <Form.Label>Upload Birth Certificate</Form.Label>
+            <p style={{ color: "#f55050" }}>File size less than 2mb</p>
+
             <Form.Control
               type="file"
               name="birthCertificate"
-              accept="image/*"
+             accept="application/pdf"
               onChange={handleInputChange}
             />
           </Form.Group>

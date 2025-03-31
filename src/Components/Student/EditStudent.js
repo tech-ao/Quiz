@@ -84,8 +84,8 @@ const EditStudent = ({ show, onClose }) => {
         centreName: selectedStudent.data.centreName || "",
         centrePlace: selectedStudent.data.centrePlace || "",
         joiningDate: selectedStudent.data.joiningDate ? selectedStudent.data.joiningDate.split("T")[0] : "",
-        currentLevel: selectedStudent.data.currentLevel || "",
-        completedLevel: selectedStudent.data.completedLevel || ""
+        currentLevel: selectedStudent.data.currentLevelName || "",
+        completedLevel: selectedStudent.data.completedLevelName || ""
       });
     }
   }, [selectedStudent]);

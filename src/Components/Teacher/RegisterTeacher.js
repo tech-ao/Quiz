@@ -190,13 +190,13 @@ const RegisterTeacher = () => {
             <Form.Group controlId="dob">
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
-                type="date"
-                name="dob"
-                value={formData.dob}
-                onChange={handleInputChange}
-                isInvalid={!!errors.dob}
-                required
-              />
+                                         type="date"
+                                         name="dob"
+                                         value={formData.dob}
+                                         onChange={handleInputChange}
+                                         required
+                                         max={new Date().toISOString().split("T")[0]} // Prevents future dates
+                                       />
               <Form.Control.Feedback type="invalid">
                 {errors.dob}
               </Form.Control.Feedback>

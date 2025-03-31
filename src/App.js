@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import ImportQuestion from "./Components/Admin/ImportQuestion";
-import  ScheduleForm from "./Components/Admin/ScheduleForm";
+import ScheduleForm from "./Components/Admin/ScheduleForm";
 import AddQuestion from "./Components/Admin/AddQuestion";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
@@ -70,6 +70,7 @@ import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
 import AssignStudent from "./Components/Admin/AssignStudent.js";
+import Pending from "./Components/Admin/Pending.js";
 
 
 // ProtectedRoute component to check login status
@@ -95,10 +96,10 @@ function App() {
           <Route path="/adminAttendance" element={<AdminAttendance />} />
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
-          <Route path="/studentdata" element={<StudentData/>}/>
-          <Route path="/AddQuestion" element={<AddQuestion/>}/>
-          <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
-          <Route path="/meet" element={<GoogleMeetPage/>}/>
+          <Route path="/studentdata" element={<StudentData />} />
+          <Route path="/AddQuestion" element={<AddQuestion />} />
+          <Route path="/ImportQuestion" element={<ImportQuestion />} />
+          <Route path="/meet" element={<GoogleMeetPage />} />
 
 
           {/* Protected Routes */}
@@ -224,9 +225,14 @@ function App() {
             path="/studentOnlineClass"
             element={<ProtectedRoute element={<StudentOnlineClass />} />}
           />
-           <Route
+          <Route
             path="/assignstudent"
             element={<ProtectedRoute element={<AssignStudent />} />}
+          />
+
+          <Route
+            path="/pending"
+            element={<ProtectedRoute element={<Pending />} />}
           />
           <Route
             path="/studentSettings"
@@ -253,11 +259,11 @@ function App() {
             path="/AbacusKit"
             element={<ProtectedRoute element={<AbacusKit />} />}
           />
-           <Route
+          <Route
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
           />
-           <Route
+          <Route
             path="/meeting"
             element={<ProtectedRoute element={<CreateMeeting />} />}
           />
