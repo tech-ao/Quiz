@@ -103,9 +103,9 @@ export const getTeacher = async (TeacherId) => {
 
 // Delete Teacher
 export const deleteTeacher = async (TeacherId) => {
-  console.log(`${BASE_URL}/Teacher/Delete/${TeacherId}`);
+  console.log(`${BASE_URL}/Teacher/Delete/TeacherId${TeacherId}`);
 
-  const response = await fetch(`${BASE_URL}/Teacher/Delete/${TeacherId}`, {
+  const response = await fetch(`${BASE_URL}/Teacher/Delete?TeacherId=${TeacherId}`, {
     method: "DELETE",
     headers: getHeaders(),
   });
