@@ -204,19 +204,35 @@ const AddQuestion = () => {
           },
           body: JSON.stringify(selectedQuestion),
         });
-
+  
         if (!response.ok) {
           throw new Error("Failed to update question");
         }
-
+  
         const result = await response.json();
         console.log("Question updated successfully:", result);
-
-        // Update local state
-        const updatedQuestions = questions.map((q) =>
-          q.id === selectedQuestion.id ? selectedQuestion : q
-        );
-        setQuestions(updatedQuestions);
+  
+        // Fetch updated data from API instead of updating local state manually
+        const updatedResponse = await fetch(API_URL_SEARCH, {
+          method: "POST",
+          headers: {
+            "X-Api-Key": API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            level: filterLevel === "All" ? null : filterLevel,
+            pagination: {
+              pageSize: 15,
+              pageNumber: currentPage,
+            },
+          }),
+        });
+  
+        const updatedData = await updatedResponse.json();
+        if (updatedData.isSuccess) {
+          setQuestions(updatedData.data.questions || []);
+        }
+  
         setShowModal(false);
       } catch (error) {
         console.error("Error updating question:", error);

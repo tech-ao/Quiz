@@ -16,7 +16,7 @@ import * as XLSX from "xlsx";
 
 
 const ImportQuestion = () => {
-  const API_URL_IMPORT = "http://your-api-url.com/upload"; // Replace with your actual API endpoint
+  const API_URL_IMPORT = "http://srimathicare.in:8081/api/ImportExcel/ImportQuestion"; // Replace with your actual API endpoint
 
   const fileInputRef = useRef(null);
   const [level, setLevel] = useState(1); // Default value can be 1 or empty
@@ -68,12 +68,10 @@ const [description, setDescription] = useState("");
 
       const requestBody = {
         questionBase64: questionBase64,
-        title: "Your Title Here", 
-        level: 1, 
-        description: "Your Description Here", 
+        title: title,
+        level: level, 
+        description: description, 
       };
-
-      console.log("Request Body:", requestBody);
 
       console.log("Request Body:", requestBody);
 
@@ -95,8 +93,10 @@ const [description, setDescription] = useState("");
       setUploadStatus("Questions uploaded successfully!");
       console.log("Upload result:", result);
       setExcelFile(null);
+      setTitle("");  // ✅ Reset input fields after successful upload
+      setDescription("");
+      setLevel(1);
 
-      // ✅ Reset the file input
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -105,6 +105,7 @@ const [description, setDescription] = useState("");
       setUploadStatus("Failed to upload questions. Please try again.");
     }
   };
+
 
   const downloadSampleFile = () => {
     const sampleData = [
@@ -159,21 +160,22 @@ const [description, setDescription] = useState("");
 
                 {uploadStatus && <p>{uploadStatus}</p>}
                 <div className="new-field d-flex align-items-center">
-  <div className="form-group">
-    <label htmlFor="level">Select Level:</label>
-    <select
-      id="level"
-      value={level}
-      onChange={(e) => setLevel(e.target.value)}
-    >
-      <option value={1}>Level 1</option>
-      <option value={1}>Level 2</option>
-      <option value={1}>Level 3</option>
-      <option value={1}>Level 4</option>
-      <option value={2}>Level 5</option>
-      <option value={3}>Level 6</option>
-    </select>
-  </div>
+                <div className="form-group">
+  <label htmlFor="level">Select Level:</label>
+  <select
+    id="level"
+    value={level}
+    onChange={(e) => setLevel(Number(e.target.value))} 
+  >
+    <option value={1}>Level 1</option>
+    <option value={2}>Level 2</option>
+    <option value={3}>Level 3</option>
+    <option value={4}>Level 4</option>
+    <option value={5}>Level 5</option>
+    <option value={6}>Level 6</option>
+  </select>
+</div>
+
 
   <div className="form-group">
     <label htmlFor="title">Title:</label>
