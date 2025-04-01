@@ -10,14 +10,14 @@ const ACCESS_TOKEN = "123";
 const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
 const API_URL_CREATE = `${BASE_URL}/api/ImportExcel/CreateNewQuestion`;
-const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion/${id}`;
+const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion?questionId=${id}`;
 const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion`;
 const API_URL_SEARCH = `${BASE_URL}/api/SearchAndList/SearchAndListQuestions`;
 
 const AddQuestion = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [questions, setQuestions] = useState([]);
-  const [filterLevel, setFilterLevel] = useState("All"); // State for filtering
+  const [filterLevel, setFilterLevel] = useState("null"); // State for filtering
   const [currentNumber, setCurrentNumber] = useState("");
   const [storedNumbers, setStoredNumbers] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -154,30 +154,37 @@ const AddQuestion = () => {
   };
 
   const handleDeleteQuestion = async (id) => {
+    if (!id) {
+      console.error("Error: questionId is undefined.");
+      alert("Error: Unable to delete question. ID is missing.");
+      return;
+    }
+  
+    console.log("Deleting question with ID:", id);
+  
     try {
       const response = await fetch(API_URL_DELETE(id), {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "X-Api-Key": API_KEY,
-          AccessToken: ACCESS_TOKEN,
+          "AccessToken": ACCESS_TOKEN,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to delete question");
       }
-
+  
       const result = await response.json();
       console.log("Question deleted successfully:", result);
-
-      // Update local state
-      const updatedQuestions = questions.filter((q) => q.id !== id);
-      setQuestions(updatedQuestions);
+  
+      setQuestions((prevQuestions) => prevQuestions.filter((q) => q.questionId !== id));
     } catch (error) {
       console.error("Error deleting question:", error);
       alert("Failed to delete question. Please try again.");
     }
   };
+  
 
   const handleEditQuestion = (question) => {
     setSelectedQuestion({ ...question });
@@ -204,19 +211,35 @@ const AddQuestion = () => {
           },
           body: JSON.stringify(selectedQuestion),
         });
-
+  
         if (!response.ok) {
           throw new Error("Failed to update question");
         }
-
+  
         const result = await response.json();
         console.log("Question updated successfully:", result);
-
-        // Update local state
-        const updatedQuestions = questions.map((q) =>
-          q.id === selectedQuestion.id ? selectedQuestion : q
-        );
-        setQuestions(updatedQuestions);
+  
+        // Fetch updated data from API instead of updating local state manually
+        const updatedResponse = await fetch(API_URL_SEARCH, {
+          method: "POST",
+          headers: {
+            "X-Api-Key": API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            level: filterLevel === "All" ? null : filterLevel,
+            pagination: {
+              pageSize: 15,
+              pageNumber: currentPage,
+            },
+          }),
+        });
+  
+        const updatedData = await updatedResponse.json();
+        if (updatedData.isSuccess) {
+          setQuestions(updatedData.data.questions || []);
+        }
+  
         setShowModal(false);
       } catch (error) {
         console.error("Error updating question:", error);
@@ -238,149 +261,191 @@ const AddQuestion = () => {
         {isSidebarVisible && <Sidebar />}
         <Container className="main-container">
           <div className="sub-container">
-            <Row className="sticky-title align-items-center mb-4">
-              <Col>
-                <h2 className="fw-bold text-left"> Questions List</h2>
-              </Col>
-            </Row>
+            {/* Create Question Section */}
+            <div className="mb-5">
+              <Row className="sticky-title align-items-center mb-4">
+                <Col>
+                  <h2 className="fw-bold text-left">Create Questions</h2>
+                </Col>
+              </Row>
 
-            {/* Create Question Form */}
-            <Card.Body className="p-3 mb-5 card-spacing shadow">
-              <Card.Title className="text-primary fw-bold mb-4">Create Questions</Card.Title>
-              <Form.Label className="fw-bold mt-3">Select Level:</Form.Label>
-              <Form.Select value={level} onChange={(e) => setLevel(parseInt(e.target.value))}>
-                {[...Array(6).keys()].map((i) => (
-                  <option key={i} value={i + 1}>Level {i + 1}</option>
-                ))}
-              </Form.Select>
+              <Card.Body className="p-3 card-spacing shadow">
+                <Form.Label className="fw-bold mt-3">Select Level:</Form.Label>
+                <Form.Select value={level} onChange={(e) => setLevel(parseInt(e.target.value))}>
+                  {[...Array(6).keys()].map((i) => (
+                    <option key={i} value={i + 1}>Level {i + 1}</option>
+                  ))}
+                </Form.Select>
 
-              <Row className="g-4 mt-0">
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">Type Question:</Form.Label>
-                  <InputGroup>
+                <Row className="g-4 mt-0">
+                  <Col xs={12} md={6}>
+                    <Form.Label className="fw-bold">Type Question:</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type="number"
+                        placeholder="Enter a number"
+                        value={currentNumber}
+                        onChange={(e) => setCurrentNumber(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                      />
+                      <Button variant="success" className="plusicon" onClick={handleStoreNumber}>
+                        <FaPlus />
+                      </Button>
+                    </InputGroup>
+                    {storedNumbers.length > 0 && (
+                      <p>
+                        <strong>Question:</strong> {storedNumbers.join(", ")}
+                      </p>
+                    )}
+                  </Col>
+
+                  <Col xs={12} md={6}>
+                    <Form.Label className="fw-bold">Upload Image:</Form.Label>
+                    <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
+                    {imagePreview && (
+                      <Image src={imagePreview} alt="Uploaded" fluid className="mt-2" width="100" height="100" />
+                    )}
+                  </Col>
+                </Row>
+
+                <Row className="g-4 mt-0">
+                  <Col xs={12} md={6}>
+                    <Form.Label className="fw-bold">Set Answer:</Form.Label>
                     <Form.Control
                       type="number"
-                      placeholder="Enter a number"
-                      value={currentNumber}
-                      onChange={(e) => setCurrentNumber(e.target.value)}
-                      onKeyDown={handleKeyPress}
+                      placeholder="Enter the answer"
+                      value={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
                     />
-                    <Button variant="success" className="plusicon" onClick={handleStoreNumber}>
-                      <FaPlus />
-                    </Button>
-                  </InputGroup>
-                  {storedNumbers.length > 0 && (
-                    <p>
-                      <strong>Question:</strong> {storedNumbers.join(", ")}
-                    </p>
-                  )}
-                </Col>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <Form.Label className="fw-bold">Note:</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={2}
+                      placeholder="Add a note"
+                      value={note}
+                      onChange={(e) => setNote(e.target.value)}
+                    />
+                  </Col>
+                </Row>
 
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">Upload Image:</Form.Label>
-                  <Form.Control type="file" accept="image/*" onChange={handleImageChange} />
-                  {imagePreview && (
-                    <Image src={imagePreview} alt="Uploaded" fluid className="mt-2" width="100" height="100" />
-                  )}
-                </Col>
-              </Row>
-
-              <Row className="g-4 mt-0">
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">Set Answer:</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Enter the answer"
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                  />
-                </Col>
-                <Col xs={12} md={6}>
-                  <Form.Label className="fw-bold">Note:</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={2}
-                    placeholder="Add a note"
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                  />
+                <div className="d-flex justify-content-end mt-5 gap-3 flex-wrap fw-bold">
+                  <Button variant="success" onClick={handleSubmitQuestion}>
+                    Submit
+                  </Button>
+                  <Button variant="outline-secondary" onClick={handleReset}>
+                    Reset
+                  </Button>
+                  <Button variant="danger" onClick={() => setStoredNumbers([])}>
+                    Cancel
+                  </Button>
+                </div>
+              </Card.Body>
+            </div>
+            <div>
+            <Row className="sticky-title align-items-center ">
+                <Col>
+                  <h2 className="fw-bold text-left">Stored Questions</h2>
                 </Col>
               </Row>
 
-              <div className="d-flex justify-content-end mt-5 gap-3 flex-wrap fw-bold">
-                <Button variant="success" onClick={handleSubmitQuestion}>
-                  Submit
-                </Button>
-                <Button variant="outline-secondary" onClick={handleReset}>
-                  Reset
-                </Button>
-                <Button variant="danger" onClick={() => setStoredNumbers([])}>
-                  Cancel
-                </Button>
-              </div>
-            </Card.Body>
+  <Card.Body className="p-3 card-spacing shadow">
+    <Row className="align-items-center mb-2">
+      <Col md={6}>
+        <Card.Title className="text-primary fw-bold">Questions List</Card.Title>
+      </Col>
+      <Col md={2} className="text-md-end ms-auto">
+        <Form.Select
+          style={{ width: "150px" }}
+          value={filterLevel}
+          onChange={(e) =>
+            setFilterLevel(e.target.value === "All" ? "All" : parseInt(e.target.value))
+          }
+        >
+          <option value="All">All Levels</option>
+          {[...Array(6).keys()].map((i) => (
+            <option key={i} value={i + 1}>
+              Level {i + 1}
+            </option>
+          ))}
+        </Form.Select>
+      </Col>
+    </Row>
+  
+    <div style={{
+  height: "350px",
+  overflowY: "auto",
+  WebkitOverflowScrolling: "touch",
+  scrollbarWidth: "thin",
+  // border: "1px solid #ddd",
+  // position: "relative",
+  // borderRadius: "4px",
+  // top:"5px"
+}}>
+  <Table  responsive ="md" >
+    
+    {/* Sticky Header */}
+    <thead style={{
+      position: "sticky",
+      top: 0,
 
-            {/* Stored Questions Table */}
-            <Card.Body className="p-3 card-spacing shadow">
-            <Row className="align-items-center mb-4">
-  <Col md={6}>
-    <Card.Title className="text-primary fw-bold">Stored Questions</Card.Title>
-  </Col>
-  <Col md={2} className="text-md-end ms-auto"> {/* Reduced width and added ms-auto for right alignment */}
-    <Form.Select
-      style={{ width: "150px" }} // Reduce width to 150px or any desired value
-      value={filterLevel}
-      onChange={(e) => setFilterLevel(e.target.value === "All" ? "All" : parseInt(e.target.value))}
-    >
-      <option value="All">All Levels</option>
-      {[...Array(6).keys()].map((i) => (
-        <option key={i} value={i + 1}>Level {i + 1}</option>
-      ))}
-    </Form.Select>
-  </Col>
-</Row>
+      background: "white",
+      zIndex: 2,
+      boxShadow: "0 2px 3px rgba(0,0,0,0.1)"
+    }}>
+      <tr className="fw-bold">
+        <th className="align-middle">S.no</th>
+        <th className="align-middle">Level</th>
+        <th className="align-middle">Question</th>
+        <th className="align-middle">Answer</th>
+        <th className="align-middle text-center">Actions</th>
+      </tr>
+    </thead>
+
+    {/* Scrollable Body */}
+    <tbody>
+      {filteredQuestions.length > 0 ? (
+        filteredQuestions.map((q, index) => (
+          <tr key={q.id}>
+            <td className="align-middle">{index + 1}</td>
+            <td className="align-middle">{q.level}</td>
+            <td className="align-middle" style={{ whiteSpace: "pre-wrap" }}>{q.questions}</td>
+            <td className="align-middle">{q.answer}</td>
+            <td className="py-2 text-center">
+              <Button 
+                variant="outline-primary" 
+                size="sm" 
+                className="me-2"
+                onClick={() => handleEditQuestion(q)}
+              >
+                <FaEdit />
+              </Button>
+              <Button
+  variant="outline-danger"
+  size="sm"
+  onClick={() => handleDeleteQuestion(q.questionId)} // Make sure q.questionId is defined
+>
+  <FaTrash />
+</Button>
+
+            </td>
+          </tr>
+        ))
+      ) : (
+        <tr>
+          <td colSpan="5" className="text-center py-4">
+            No Data found for the selected level.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </Table>
+</div>
+  </Card.Body>
+</div>
 
 
-              <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-                <Table striped bordered hover responsive>
-                  <thead style={{ position: "sticky", top: 0, background: "white", zIndex: 2 }}>
-                    <tr className="fw-bold">
-                      <th>S.no</th>
-                      <th>Level</th>
-                      <th>Question</th>
-                      <th>Answer</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredQuestions.length > 0 ? (
-                      filteredQuestions.map((q, index) => (
-                        <tr key={q.id}>
-                          <td>{index + 1}</td>
-                          <td>{q.level}</td>
-                          <td>{q.questions}</td>
-                          <td>{q.answer}</td>
-                          <td className="py-3">
-                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleEditQuestion(q)}>
-                              <FaEdit />
-                            </Button>
-                            <Button variant="outlined" size="sm" className="ms-2" onClick={() => handleDeleteQuestion(q.id)}>
-                              <FaTrash />
-                            </Button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="5" className="text-center">
-                          No Data found for the selected level.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </Table>
-              </div>
-            </Card.Body>
 
             {/* Edit Question Modal */}
             <Modal show={showModal} onHide={() => setShowModal(false)}>

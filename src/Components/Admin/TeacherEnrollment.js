@@ -10,7 +10,12 @@ import AdminHeader from "../Admin/AdminHeader";
 import { fetchTeacherEnrollmentRequest } from "../../redux/Services/api";
 import ViewTeacherPanel from "../ViewTeacher"; // Optional: teacher view panel
 import { FiEye, FiMail } from "react-icons/fi";
+<<<<<<< HEAD
 import BASE_URL from "../../redux/Services/Config";
+=======
+
+const BASE_URL = "http://srimathicare.in:8081/api";
+>>>>>>> 8300635cf600a18fedca123d61e7a59a9f9a9ff7
 
 const TeacherEnrollment = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);

@@ -96,12 +96,11 @@ function App() {
           <Route path="/adminAttendance" element={<AdminAttendance />} />
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
-          <Route path="/studentdata" element={<StudentData />} />
-          <Route path="/pending" element={<Pending />} />
-
-          <Route path="/AddQuestion" element={<AddQuestion />} />
-          <Route path="/ImportQuestion" element={<ImportQuestion />} />
-          <Route path="/meet" element={<GoogleMeetPage />} />
+          <Route path="/studentdata" element={<StudentData/>}/>
+          <Route path="/AddQuestion" element={<AddQuestion/>}/>
+          <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+          <Route path="/meet" element={<GoogleMeetPage/>}/>
+          <Route path="/meeting" element={<CreateMeeting/>}/>
 
 
           {/* Protected Routes */}
@@ -262,10 +261,10 @@ function App() {
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
           />
-          <Route
+           {/* <Route
             path="/meeting"
             element={<ProtectedRoute element={<CreateMeeting />} />}
-          />
+          /> */}
         </Routes>
       </Router>
     </Provider>
