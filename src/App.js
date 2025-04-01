@@ -97,6 +97,8 @@ function App() {
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData />} />
+          <Route path="/pending" element={<Pending />} />
+
           <Route path="/AddQuestion" element={<AddQuestion />} />
           <Route path="/ImportQuestion" element={<ImportQuestion />} />
           <Route path="/meet" element={<GoogleMeetPage />} />
@@ -230,10 +232,7 @@ function App() {
             element={<ProtectedRoute element={<AssignStudent />} />}
           />
 
-          <Route
-            path="/pending"
-            element={<ProtectedRoute element={<Pending />} />}
-          />
+         
           <Route
             path="/studentSettings"
             element={<ProtectedRoute element={<StudentSettings />} />}

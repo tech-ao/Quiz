@@ -51,6 +51,8 @@ function AdminDashboard() {
   }, []);
 
   const dashboardDatas = dashboardData?.data || {};
+  console.log(dashboardDatas);
+  
 
   const handleCardClick = (label) => {
     switch (label) {
@@ -91,9 +93,9 @@ function AdminDashboard() {
               <div className="dashboard-cards-container" style={{ display: "inline-block", width: "75%" }}>
               <Row className="g-lg-4 g-0">
                   {[
-                    { label: "Total Students", count: dashboardDatas.activeCount || 0, img: studentImg },
+                    { label: "Total Students", count: dashboardDatas.studentCount || 0, img: studentImg },
                     { label: "Total Teacher", count: dashboardDatas.teacherCount || 0, img: teacherImg },
-                    { label: "Enrollment Request", count: 0, img: enrolImg },
+                    { label: "Enrollment Request", count: dashboardDatas.teacherEnrollmentCount || 0, img: enrolImg },
                     { label: "Total Question", count: dashboardDatas.questionsCount || 0, img: questionImg },
                     { label: "Total Levels", count: dashboardDatas.levelscount || 0, img: questionImg },
                     { label: "Total Quizzes", count: dashboardDatas.quizCount || 0, img: questionImg }
