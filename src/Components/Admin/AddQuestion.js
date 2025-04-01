@@ -421,6 +421,7 @@ const AddQuestion = () => {
               >
                 <FaEdit />
               </Button>
+<<<<<<< HEAD
               <Button
   variant="outline-danger"
   size="sm"
@@ -429,6 +430,15 @@ const AddQuestion = () => {
   <FaTrash />
 </Button>
 
+=======
+              <Button 
+                variant="outline-danger" 
+                size="sm"
+                onClick={() => handleDeleteQuestion(q.id)}
+              >
+                <FaTrash />
+              </Button>
+>>>>>>> b648c1962e863e0930d6c9214ceb2b2308d11d2f
             </td>
           </tr>
         ))
