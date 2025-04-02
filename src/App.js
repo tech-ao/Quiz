@@ -9,12 +9,17 @@ import {
 import ImportQuestion from "./Components/Admin/ImportQuestion";
 import ScheduleForm from "./Components/Admin/ScheduleForm";
 import AddQuestion from "./Components/Admin/AddQuestion";
+import AssignedClass from "./Components/Admin/AssignedClass";
+import CompleteClass from "./Components/Admin/completeClass.js";
+import Createmeeting from "./Components/Admin/CreateMeeting.js";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
 import ListTeacher from "./Components/Teacher/ListTeacher";
 import QuizPage from "./Components/QuizTest";
 import StudentList from "./Components/Student/StudentList";
+import Assigned_class from "./Components/Student/Assigned_class.js";
+import Completed_class from "./Components/Student/completed_class.js";
 import StudentHeader from "./Components/Student/StudentHeader";
 import StudentDashboard from "./Components/Student/StudentDashboard";
 import Abacus from "./Components/Abacus/Abacus";
@@ -97,12 +102,17 @@ function App() {
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
+          <Route path="/ScheduleForm" element={<ScheduleForm/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+          <Route path="/AssignedClass" element={<AssignedClass/>}/>
+          <Route path="/CompleteClass" element={<CompleteClass/>}/>
+          <Route path="/Createmeeting" element={<Createmeeting/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
           <Route path="/meeting" element={<CreateMeeting/>}/>
           <Route path="/pending" element={<Pending/>}/>
-
+          <Route path="/assigned-class" element={<Assigned_class/>}/>
+          <Route path="/completed_class" element={<Completed_class/>}/>
           {/* Protected Routes */}
           <Route
             path="/adminDashboard"

@@ -1,136 +1,139 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TeacherHeader from "./TeacherHeader";
-import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherAddPopup from "./TeacherAddpopup";
-import "./AssignClass.css";
+import "./AssignedClass.css"; // Adjust based on actual filename
+import Sidebar from "./SidePannel";
+import AdminHeader from "./AdminHeader";
+import AdminOnlineClassPopup from "./AdminOnlineClassPopup";
+import { Container } from "react-bootstrap";
 
-const AssignClass = () => {
+const AssignedClass = () => {
+  // State management
   const [selectedRow, setSelectedRow] = useState(null);
+  const [editFormData, setEditFormData] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [showPopup, setShowPopup] = useState(false);
-  const [allClasses] = useState([
+  
+  // Sample data
+  const [allClasses, setAllClasses] = useState([
     {
-      id: 1,
-      title: "Online Course Class",
-      description: "Live session for online students",
-      dateTime: "02/28/2025 16:30:00",
+      id: 5,
+      title: "General Knowledge Quiz",
+      description: "A fun and engaging quiz covering various subjects",
+      dateTime: "03/04/2025 10:00:00",
       duration: 45,
-      createdBy: "Joe Black (Super Admin : 9000)",
-      createdFor: "Jason Sharlton (Teacher : 90006)",
-      classes: ["Class 4 (A)", "Class 4 (B)", "Class 4 (C)", "Class 4 (D)"],
+      createdBy: "James Anderson (Admin : 9040)",
+      createdFor: "William Carter (Teacher : 90030)",
+      classes: ["Class 6 (A)", "Class 6 (B)", "Class 6 (C)"],
       status: "Awaited",
     },
     {
-      id: 2,
-      title: "Maths Interactive Session",
-      description: "Doubt clearing session",
-      dateTime: "03/01/2025 10:00:00",
+      id: 6,
+      title: "Algebra Problem-Solving",
+      description: "Solving algebraic equations and real-world problems",
+      dateTime: "03/05/2025 12:30:00",
       duration: 60,
-      createdBy: "Sarah Williams (Admin : 9010)",
-      createdFor: "Michael Brown (Teacher : 90015)",
-      classes: ["Class 5 (A)", "Class 5 (B)"],
+      createdBy: "Sophia Martinez (Super Admin : 9050)",
+      createdFor: "Benjamin Lee (Teacher : 90035)",
+      classes: ["Class 7 (A)", "Class 7 (B)"],
       status: "In Progress",
     },
     {
-      id: 3,
-      title: "Science Lab Virtual Tour",
-      description: "Virtual experiments and learning",
-      dateTime: "03/02/2025 14:30:00",
+      id: 7,
+      title: "Computer Programming Basics",
+      description: "Introduction to programming concepts and logic",
+      dateTime: "03/06/2025 15:00:00",
       duration: 90,
-      createdBy: "Emma Davis (Admin : 9020)",
-      createdFor: "Sophia Wilson (Teacher : 90020)",
-      classes: ["Class 6 (A)", "Class 6 (B)", "Class 6 (C)"],
+      createdBy: "Ella Robinson (Admin : 9060)",
+      createdFor: "Daniel Harris (Teacher : 90040)",
+      classes: ["Class 8 (A)", "Class 8 (B)", "Class 8 (C)"],
       status: "Completed",
     },
     {
-      id: 4,
-      title: "English Grammar Workshop",
-      description: "Advanced writing techniques",
-      dateTime: "03/03/2025 12:00:00",
-      duration: 75,
-      createdBy: "David Miller (Admin : 9030)",
-      createdFor: "Olivia Johnson (Teacher : 90025)",
-      classes: ["Class 7 (A)", "Class 7 (B)"],
+      id: 8,
+      title: "Logical Reasoning Quiz",
+      description: "Testing students' logical thinking and problem-solving skills",
+      dateTime: "03/07/2025 17:00:00",
+      duration: 50,
+      createdBy: "Mason White (Admin : 9070)",
+      createdFor: "Isabella Thomas (Teacher : 90045)",
+      classes: ["Class 9 (A)", "Class 9 (B)"],
       status: "Awaited",
     },
   ]);
   
-  // Filtered classes based on search term
-  const [filteredClasses, setFilteredClasses] = useState(allClasses);
-
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 1024
-  );
-
+   
+   // Filtered classes based on search term
+   const [filteredClasses, setFilteredClasses] = useState(allClasses);
+ 
+  // Responsive sidebar handling
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
- const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
- 
-   useEffect(() => {
-     const handleResize = () => {
-       // Sidebar visible only for screens 1024px and above
-       setIsSidebarVisible(window.innerWidth >= 1024);
-       setIsSmallScreen(window.innerWidth < 768);
-       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-     };
-     window.addEventListener("resize", handleResize);
-     return () => window.removeEventListener("resize", handleResize);
-   }, []);
- 
-  
-  // Handle search functionality
   useEffect(() => {
-    if (searchTerm.trim() === "") {
-      setFilteredClasses(allClasses);
-      return;
-    }
+    const handleResize = () => {
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+
+
+   // Handle search functionality
+    useEffect(() => {
+      if (searchTerm.trim() === "") {
+        setFilteredClasses(allClasses);
+        return;
+      }
+      
+      const lowercasedSearch = searchTerm.toLowerCase();
+      const filtered = allClasses.filter(
+        (classItem) =>
+          classItem.title.toLowerCase().includes(lowercasedSearch) ||
+          classItem.description.toLowerCase().includes(lowercasedSearch) ||
+          classItem.createdBy.toLowerCase().includes(lowercasedSearch) ||
+          classItem.createdFor.toLowerCase().includes(lowercasedSearch) ||
+          classItem.status.toLowerCase().includes(lowercasedSearch) ||
+          classItem.classes.some(cls => cls.toLowerCase().includes(lowercasedSearch))
+      );
+      
+      setFilteredClasses(filtered);
+    }, [searchTerm, allClasses]);
     
-    const lowercasedSearch = searchTerm.toLowerCase();
-    const filtered = allClasses.filter(
-      (classItem) =>
-        classItem.title.toLowerCase().includes(lowercasedSearch) ||
-        classItem.description.toLowerCase().includes(lowercasedSearch) ||
-        classItem.createdBy.toLowerCase().includes(lowercasedSearch) ||
-        classItem.createdFor.toLowerCase().includes(lowercasedSearch) ||
-        classItem.status.toLowerCase().includes(lowercasedSearch) ||
-        classItem.classes.some(cls => cls.toLowerCase().includes(lowercasedSearch))
-    );
-    
-    setFilteredClasses(filtered);
-  }, [searchTerm, allClasses]);
-  
-  const handleAction = (action, rowData) => {
-    setSelectedRow(rowData);
-    switch (action) {
-      case "view":
-        setShowDetails(true);
-        break;
-      case "edit":
-        setShowEdit(true);
-        break;
-      case "remove":
-        setShowDeleteConfirm(true);
-        break;
-      default:
-        break;
-    }
-  };
-  
+    const handleAction = (action, rowData) => {
+      setSelectedRow(rowData);
+      switch (action) {
+        case "view":
+          setShowDetails(true);
+          break;
+          case "edit":
+            setEditFormData({...rowData});
+            setShowEdit(true);
+            break;  
+        case "remove":
+          setShowDeleteConfirm(true);
+          break;
+        default:
+          break;
+      }
+    };
+
   return (
-    <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex flex-column flex-md-row">
-        {isSidebarVisible && <TeacherSidePanel />}
-        <div className="assign-class main-container">
-          <div className="sub-container assign-container">
+    <div className="assigned-class-container">
+      <AdminHeader toggleSidebar={toggleSidebar} />
+      <div className="d-flex main-content-wrapper">
+        {isSidebarVisible && <Sidebar />}
+        <div className=" main-container">
+          <div className="sub-container">
             {/* Header Section */}
             <div
               className="d-flex justify-content-between align-items-center header-section"
@@ -166,15 +169,15 @@ const AssignClass = () => {
                   <i className="bi bi-plus"></i> Add Classes
                 </button>
               </div>
-              {showPopup && (
-                <TeacherAddPopup
-                  onClose={() => setShowPopup(false)}
-                  onSave={(data) => console.log(data)}
-                />
-              )}
+               {showPopup && (
+                              <AdminOnlineClassPopup
+                                onClose={() => setShowPopup(false)}
+                                onSave={(data) => console.log(data)}
+                              />
+                            )}
 
-              {/* Tools Buttons Below Add Button */}
-              <div className="tools-buttons mt-2 d-flex gap-2">
+             {/* Tools Buttons Below Add Button */}
+             <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
                   <i className="bi bi-file-text"></i>
                 </button>
@@ -249,7 +252,7 @@ const AssignClass = () => {
                             style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("view", classItem)}
                           >
-                            <i className="bi bi-plus" style={{ fontSize: "20px" }}></i>
+                            <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
                           </button>
 
                           <button
@@ -286,8 +289,9 @@ const AssignClass = () => {
         </div>
       </div>
       
-      {/* Modals remain unchanged
-      {showDetails && (
+
+       {/* Modals remain unchanged */}
+       {showDetails && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -351,83 +355,101 @@ const AssignClass = () => {
             </div>
           </div>
         </div>
-      )} */}
-
-      {showEdit && (
-        <div className="modal" style={{ display: "block" }}>
-          <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Edit Class</h5>
-                <button
-                  type="button"
-                  className="btn-close"
-                  onClick={() => setShowEdit(false)}
-                ></button>
-              </div>
-              <div className="modal-body">
-                {selectedRow && (
-                  <form>
-                    <div className="mb-3">
-                      <label className="form-label">Title</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        defaultValue={selectedRow.title}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        defaultValue={selectedRow.description}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Date Time</label>
-                      <input
-                        type="datetime-local"
-                        className="form-control"
-                        defaultValue={selectedRow.dateTime}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Duration (minutes)</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        defaultValue={selectedRow.duration}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Status</label>
-                      <select className="form-select">
-                        <option value="Awaited">Awaited</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </div>
-                  </form>
-                )}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setShowEdit(false)}
-                >
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
 
-      {showDeleteConfirm && (
+{showEdit && (
+  <div className="modal" style={{ display: "block" }}>
+    <div className="modal-dialog modal-lg">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Edit Class</h5>
+          <button
+            type="button"
+            className="btn-close"
+            onClick={() => setShowEdit(false)}
+          ></button>
+        </div>
+        <div className="modal-body">
+          {editFormData && (
+            <form>
+              <div className="mb-3">
+                <label className="form-label">Title</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={editFormData.title}
+                  onChange={(e) => setEditFormData({...editFormData, title: e.target.value})}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Description</label>
+                <textarea
+                  className="form-control"
+                  value={editFormData.description}
+                  onChange={(e) => setEditFormData({...editFormData, description: e.target.value})}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Date Time</label>
+                <input
+                  type="datetime-local"
+                  className="form-control"
+                  value={editFormData.dateTime}
+                  onChange={(e) => setEditFormData({...editFormData, dateTime: e.target.value})}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Duration (minutes)</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  value={editFormData.duration}
+                  onChange={(e) => setEditFormData({...editFormData, duration: e.target.value})}
+                />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Status</label>
+                <select 
+                  className="form-select" 
+                  value={editFormData.status}
+                  onChange={(e) => setEditFormData({...editFormData, status: e.target.value})}
+                >
+                  <option value="Awaited">Awaited</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+            </form>
+          )}
+        </div>
+        <div className="modal-footer">
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowEdit(false)}
+          >
+            Cancel
+          </button>
+          <button 
+            type="button" 
+            className="btn btn-primary"
+            onClick={() => {
+              const updatedClasses = allClasses.map(c => 
+                c.id === editFormData.id ? editFormData : c
+              );
+              setAllClasses(updatedClasses);
+              setShowEdit(false);
+            }}
+          >
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+{showDeleteConfirm && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog">
             <div className="modal-content">
@@ -450,9 +472,18 @@ const AssignClass = () => {
                 >
                   Cancel
                 </button>
-                <button type="button" className="btn btn-danger">
-                  Delete
-                </button>
+               
+<button 
+  type="button" 
+  className="btn btn-danger"
+  onClick={() => {
+    const updatedClasses = allClasses.filter(c => c.id !== selectedRow.id);
+    setAllClasses(updatedClasses);
+    setShowDeleteConfirm(false);
+  }}
+>
+  Delete
+</button>
               </div>
             </div>
           </div>
@@ -462,4 +493,4 @@ const AssignClass = () => {
   );
 };
 
-export default AssignClass; 
+export default AssignedClass;

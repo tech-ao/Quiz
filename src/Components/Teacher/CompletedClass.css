@@ -3,7 +3,7 @@
 /* Ensure table container is scrollable in all directions */
 .table-container {
   max-height: 300px;
-  overflow: auto;
+  overflo: auto;
   width: 99%;
   max-width: 100%;
   margin-right: 10%;

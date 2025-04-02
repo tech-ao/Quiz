@@ -4,7 +4,8 @@ import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import "./AddQuestion.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
-import BASE_URL from "../../redux/Services/Config";
+
+const BASE_URL = "http://srimathicare.in:8081";
 const ACCESS_TOKEN = "123";
 const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
@@ -420,13 +421,14 @@ const AddQuestion = () => {
               >
                 <FaEdit />
               </Button>
-              <Button 
-                variant="outline-danger" 
-                size="sm"
-                onClick={() => handleDeleteQuestion(q.id)}
-              >
-                <FaTrash />
-              </Button>
+              <Button
+  variant="outline-danger"
+  size="sm"
+  onClick={() => handleDeleteQuestion(q.questionId)} // Make sure q.questionId is defined
+>
+  <FaTrash />
+</Button>
+
             </td>
           </tr>
         ))
