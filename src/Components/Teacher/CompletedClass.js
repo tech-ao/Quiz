@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Table, Form, Button } from "react-bootstrap";
 import { FaCalendarAlt } from "react-icons/fa";
+import Pagination from "react-bootstrap/Pagination";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,9 +9,87 @@ import DatePicker from "react-datepicker";
 import "./CompletedClass.css";
 
 const completedClasses = [
-  { id: 1, subject: "History", teacher: "Mr. Brown", date: "2025-02-10" },
-  { id: 2, subject: "Geography", teacher: "Ms. White", date: "2025-02-15" },
-  { id: 3, subject: "Physics", teacher: "Dr. Adams", date: "2025-02-18" },
+  {
+    id: 1,
+    classTitle: "History of Ancient Civilizations",
+    description: "An overview of ancient civilizations and their impact on modern society.",
+    dateTime: "2025-02-10 10:00 AM",
+    duration: 60,
+    createdBy: "Mr. Brown",
+    createdFor: "Grade 10",
+  },
+  {
+    id: 2,
+    classTitle: "Geography: The Earth’s Landscapes",
+    description: "Understanding the different geographical landscapes and their formations.",
+    dateTime: "2025-02-15 02:00 PM",
+    duration: 45,
+    createdBy: "Ms. White",
+    createdFor: "Grade 9",
+  },
+  {
+    id: 3,
+    classTitle: "Introduction to Physics",
+    description: "Fundamental concepts of physics and their real-world applications.",
+    dateTime: "2025-02-18 11:30 AM",
+    duration: 50,
+    createdBy: "Dr. Adams",
+    createdFor: "Grade 11",
+  },
+  {
+    id: 4,
+    classTitle: "History of Ancient Civilizations",
+    description: "An overview of ancient civilizations and their impact on modern society.",
+    dateTime: "2025-02-10 10:00 AM",
+    duration: 60,
+    createdBy: "Mr. Brown",
+    createdFor: "Grade 10",
+  },
+  {
+    id: 5,
+    classTitle: "Geography: The Earth’s Landscapes",
+    description: "Understanding the different geographical landscapes and their formations.",
+    dateTime: "2025-02-15 02:00 PM",
+    duration: 45,
+    createdBy: "Ms. White",
+    createdFor: "Grade 9",
+  },
+  {
+    id: 6,
+    classTitle: "Introduction to Physics",
+    description: "Fundamental concepts of physics and their real-world applications.",
+    dateTime: "2025-02-18 11:30 AM",
+    duration: 50,
+    createdBy: "Dr. Adams",
+    createdFor: "Grade 11",
+  },
+  {
+    id: 7,
+    classTitle: "History of Ancient Civilizations",
+    description: "An overview of ancient civilizations and their impact on modern society.",
+    dateTime: "2025-02-10 10:00 AM",
+    duration: 60,
+    createdBy: "Mr. Brown",
+    createdFor: "Grade 10",
+  },
+  {
+    id: 8,
+    classTitle: "Geography: The Earth’s Landscapes",
+    description: "Understanding the different geographical landscapes and their formations.",
+    dateTime: "2025-02-15 02:00 PM",
+    duration: 45,
+    createdBy: "Ms. White",
+    createdFor: "Grade 9",
+  },
+  {
+    id: 9,
+    classTitle: "Introduction to Physics",
+    description: "Fundamental concepts of physics and their real-world applications.",
+    dateTime: "2025-02-18 11:30 AM",
+    duration: 50,
+    createdBy: "Dr. Adams",
+    createdFor: "Grade 11",
+  },
 ];
 
 const CompletedClass = () => {
@@ -20,6 +99,15 @@ const CompletedClass = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const datePickerRef = useRef(null);
   const filterIconRef = useRef(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 5; // Each page contains 5 rows
+
+  const totalPages = Math.ceil(completedClasses.length / rowsPerPage);
+   // Get data for current page
+   const startIndex = (currentPage - 1) * rowsPerPage;
+   const endIndex = startIndex + rowsPerPage;
+   const paginatedClasses = completedClasses.slice(startIndex, endIndex);
+
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
@@ -59,18 +147,18 @@ const CompletedClass = () => {
     setSearchTerm("");
     setSelectedDate(null);
   };
-
   const filteredClasses = completedClasses.filter((cls) => {
     const searchLower = searchTerm.toLowerCase();
     const matchesSearch =
-      cls.subject.toLowerCase().includes(searchLower) ||
-      cls.teacher.toLowerCase().includes(searchLower);
+      cls.classTitle.toLowerCase().includes(searchLower) || 
+      cls.createdBy.toLowerCase().includes(searchLower);
   
     if (!selectedDate) return matchesSearch;
   
     const selectedDateFormatted = selectedDate.toLocaleDateString("en-CA"); // YYYY-MM-DD format
-    return matchesSearch && cls.date === selectedDateFormatted;
+    return matchesSearch && cls.dateTime.includes(selectedDateFormatted);
   });
+  
   
 
   return (
@@ -79,12 +167,12 @@ const CompletedClass = () => {
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100 container-sub">
-          <Row className="sub-container align-items-center mb-4">
+          <Row className="sub-container align-items-center mb-2">
             <Col md={6} style={{ marginTop: "20px" }}>
               <h2 className="fw-bold">Completed Classes</h2>
             </Col>
           </Row>
-          <div className="d-flex justify-content-end align-items-center mb-3" style={{ position: "relative" }}>
+          <div className="d-flex justify-content-end align-items-center " style={{ position: "relative" }}>
             <Form.Control
               type="text"
               placeholder="Search subject...."
@@ -133,36 +221,66 @@ const CompletedClass = () => {
 
             </div>
           </div>
-          <Table responsive bordered style={{ width: "98%" }}>
+          
+          {/* Table */}
+          <Table responsive bordered  className="mb-0">
             <thead>
               <tr>
                 <th>#</th>
-                <th>Subject</th>
-                <th>Teacher</th>
-                <th>Date</th>
+                <th>Class Title</th>
+                <th>Created By</th>
+                <th>Date Time</th>
+                <th>Duration(in minutes)</th>
+                <th>Created by</th>
+                <th>Created for</th>
               </tr>
             </thead>
             <tbody>
-              {filteredClasses.length > 0 ? (
-                filteredClasses.map((cls, index) => (
+              {paginatedClasses.length > 0 ? (
+                paginatedClasses.map((cls, index) => (
                   <tr key={cls.id}>
-                    <td>{index + 1}</td>
-                    <td>{cls.subject}</td>
-                    <td>{cls.teacher}</td>
-                    <td>{cls.date}</td>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{cls.classTitle}</td>
+                    <td>{cls.description}</td>
+                    <td>{cls.dateTime}</td>
+                    <td>{cls.duration}</td>
+                    <td>{cls.createdBy}</td>
+                    <td>{cls.createdFor}</td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4" className="text-center py-3">No classes found matching your criteria</td>
+                  <td colSpan="4" className="text-center py-3">No classes found</td>
                 </tr>
               )}
             </tbody>
           </Table>
-        </Container>
+
+<div className="d-flex justify-content-center ">
+  <Pagination>
+    <Pagination.Prev
+      disabled={currentPage === 1}
+      onClick={() => setCurrentPage(currentPage - 1)}
+    />
+    {[...Array(totalPages)].map((_, index) => (
+      <Pagination.Item
+        key={index + 1}
+        active={index + 1 === currentPage}
+        onClick={() => setCurrentPage(index + 1)}
+      >
+        {index + 1}
+      </Pagination.Item>
+    ))}
+    <Pagination.Next
+      disabled={currentPage === totalPages}
+      onClick={() => setCurrentPage(currentPage + 1)}
+    />
+  </Pagination>
+</div>;        </Container>
       </div>
     </div>
   );
 };
+
 
 export default CompletedClass;
