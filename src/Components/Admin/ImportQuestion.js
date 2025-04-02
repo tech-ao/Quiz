@@ -177,7 +177,7 @@ const ImportQuestion = () => {
     ws['!cols'][4] = { width: 15 }; // Title column width
     ws['!cols'][5] = { width: 25 }; // Description column width
   
-    XLSX.writeFile(wb, "Question_Import_Template.xlsx");
+    XLSX.writeFile(wb, "Question_Import.xlsx");
   };
   return (
     <div>
@@ -188,7 +188,7 @@ const ImportQuestion = () => {
           <div className="sub-container">
             <main className="import-questions-container">
               <div className="sticky-head">
-                <h2 className="title">
+                <h2 className="title mb-3">
                   Import Questions{" "}
                   <span className="subtitle">Upload using Excel file</span>
                 </h2>
@@ -264,9 +264,9 @@ const ImportQuestion = () => {
                 {/* Display Uploaded Questions Table */}
                 {uploadedQuestions.length > 0 && (
                   <div className="uploaded-questions-table">
-                    <h3>Uploaded Questions (Level {level})</h3>
-                    <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-                      <Table striped bordered hover responsive>
+                    <h6>Uploaded Questions (Level {level})</h6>
+                    <div style={{ maxHeight: "350px", overflowY: "auto" }}>
+                      <Table responsive="md">
                         <thead>
                           <tr>
                             <th>S.No</th>

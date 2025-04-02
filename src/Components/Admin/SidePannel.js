@@ -5,6 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 const SidePannel = ({ isOpen, closeSidePanel }) => {
   const [isAttendanceOpen, setAttendanceOpen] = useState(false);
   const [isOnlineOpen, setOnlineOpen] = useState(false);
+  const [isScheduleOpen, setSchedule] = useState(false);
   const [isEnrollmentOpen, setEnrollmentOpen] = useState(false);
   const [isQuestionOpen, setQuestionOpen] = useState(false); // New state for Questions dropdown
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
@@ -21,6 +22,9 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
 
   const toggleOnlineMenu = () => {
     setOnlineOpen(!isOnlineOpen);
+  };
+  const toggleScheduleMenu = () => {
+    setSchedule(!isScheduleOpen);
   };
 
   const toggleAttendanceMenu = () => {
@@ -157,7 +161,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
 
 
         {/*Quiz Dropdown*/}
-           {/* Questions Dropdown */}
+        
            <li className="nav-item">
           <div
             className={`nav-link ${isQuizOpen ? "active" : ""}`}
@@ -233,6 +237,65 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </ul>
           )}
         </li>
+
+         {/* Schedule Dropdown */}
+         <li className="nav-item">
+          <div
+            className={`nav-link ${isScheduleOpen ? "active" : ""}`}
+            onClick={toggleScheduleMenu}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-question-circle"></i>
+              <span className="nav-text">Schedule Class</span>
+              <i className={`bi ${isScheduleOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+            </div>
+          </div>
+          {isScheduleOpen && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <Link
+                  to="/CreateMeeting"
+                  className={`nav-link ${location.pathname === "/CreteMeeting" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                    <i className="bi bi-plus-circle"></i>
+                    <span className="nav-text">Create Meeting</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/AssignedClass"
+                  className={`nav-link ${location.pathname === "/AssignedClass" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                    <i className="bi bi-plus-circle"></i>
+                    <span className="nav-text">Assigned Classes</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/CompleteClass"
+                  className={`nav-link ${location.pathname === "/CompleteClass" ? "active" : ""}`}
+                  onClick={closeSidePanel}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-upload"></i>
+                    <span className="nav-text">Complete Classes</span>
+                  </div>
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+        
         
 
       

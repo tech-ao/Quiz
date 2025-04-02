@@ -9,6 +9,7 @@ import {
 import ImportQuestion from "./Components/Admin/ImportQuestion";
 import  ScheduleForm from "./Components/Admin/ScheduleForm";
 import AddQuestion from "./Components/Admin/AddQuestion";
+import AssignedClass from "./Components/Admin/AssignedClass";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
@@ -98,6 +99,7 @@ function App() {
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
+          <Route path="/AssignedClass" element={<AssignedClass/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
 
 
