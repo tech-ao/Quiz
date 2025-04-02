@@ -145,50 +145,12 @@ const AddQuestion = () => {
     }
   };
 
-  const downloadSampleFile = () => {
-    // Sample data that matches your actual question structure
-    const sampleData = [
-      ["Sno", "Questions", "Answer", "Level", "Title", "Description"],
-      [
-        "1", 
-        "1,-2,2,3,2,5,6,-1", 
-        "2", 
-        "1", 
-        "Sample Title 1", 
-        "This is a sample description for question 1"
-      ],
-      [
-        "2", 
-        "1,2,3,4,5,6,7,8,9", 
-        "9", 
-        "1", 
-        "Sample Title 2", 
-        "This is a sample description for question 2"
-      ],
-      [
-        "3", 
-        "10,20,30,40,50", 
-        "50", 
-        "2", 
-        "Sample Title 3", 
-        "This is a sample description for question 3"
-      ]
-    ];
-  
-    const ws = XLSX.utils.aoa_to_sheet(sampleData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "SampleQuestions");
-    
-    // Format the header row
-    if (!ws['!cols']) ws['!cols'] = [];
-    ws['!cols'][0] = { width: 5 };  // Sno column width
-    ws['!cols'][1] = { width: 20 }; // Questions column width
-    ws['!cols'][2] = { width: 10 }; // Answer column width
-    ws['!cols'][3] = { width: 8 };  // Level column width
-    ws['!cols'][4] = { width: 15 }; // Title column width
-    ws['!cols'][5] = { width: 25 }; // Description column width
-  
-    XLSX.writeFile(wb, "Question_Import.xlsx");
+  const handleReset = () => {
+    setStoredNumbers([]);
+    setAnswer("");
+    setNote("");
+    setImage(null);
+    setImagePreview(null);
   };
 
   const handleDeleteQuestion = async (id) => {
