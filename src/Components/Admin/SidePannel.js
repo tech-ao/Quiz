@@ -255,8 +255,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
-                  to="/CreateMeeting"
-                  className={`nav-link ${location.pathname === "/CreteMeeting" ? "active" : ""}`}
+                  to="/Createmeeting"
+                  className={`nav-link ${location.pathname === "/Cretemeeting" ? "active" : ""}`}
                   onClick={closeSidePanel}
                   style={{ marginLeft: "15px" }}
                 >

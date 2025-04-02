@@ -11,6 +11,7 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const [isTestOpen, setTestOpen] = useState(false);
+  const[isOnlineMeetingOpen,setOnlineMeetingOpen]=useState(false)
 
   const handleLogoutClick = () => {
     setShowLogoutPopup(true);
@@ -40,6 +41,9 @@ const StudentSidePannel = ({ studyModeId }) => {
     setTestOpen(!isTestOpen);
   };
 
+  const toggleOnlineMenu = () => {
+    setOnlineMeetingOpen(!isOnlineMeetingOpen);
+  };
   return (
     <div className="side-panel bg-green" style={{ width: '250px', minHeight: '100vh', position: 'fixed' }}>
       <ul className="nav flex-column">
@@ -136,6 +140,48 @@ const StudentSidePannel = ({ studyModeId }) => {
               <span className="nav-text">Settings</span>
             </div>
           </div>
+        </li>
+        {/* Online Meeting Dropdown */}
+        <li className="nav-item">
+          <div
+            className={`nav-link ${isOnlineMeetingOpen ? 'active' : ''}`}
+            onClick={toggleOnlineMenu}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-patch-question"></i>
+              <span className="nav-text">Online Meeting</span>
+              <i className={`bi ${isOnlineMeetingOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+            </div>
+          </div>
+          {isOnlineMeetingOpen && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <div
+                  className={`nav-link ${location.pathname === '/assigned-class' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('/assigned-class')}
+                  style={{ marginLeft: '15px', cursor: 'pointer' }}
+                >
+                  <div className="icon-with-text" style={{ gap: '5px' }}>
+                    <i className="bi bi-calendar"></i>
+                    <span className="nav-text">Assigned Class</span>
+                  </div>
+                </div>
+              </li>
+              <li className="nav-item">
+                <div
+                  className={`nav-link ${location.pathname === '/completed_class' ? 'active' : ''}`}
+                  onClick={() => handleNavigation('/completed_class')}
+                  style={{ marginLeft: '15px', cursor: 'pointer' }}
+                >
+                  <div className="icon-with-text" style={{ gap: '5px' }}>
+                    <i className="bi bi-check2-circle"></i>
+                    <span className="nav-text">Completed Class</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          )}
         </li>
 
         {/* Online Class: Rendered only for online mode students */}

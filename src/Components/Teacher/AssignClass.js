@@ -249,7 +249,7 @@ const AssignClass = () => {
                             style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("view", classItem)}
                           >
-                            <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
+                            <i className="bi bi-plus" style={{ fontSize: "20px" }}></i>
                           </button>
 
                           <button
@@ -286,7 +286,7 @@ const AssignClass = () => {
         </div>
       </div>
       
-      {/* Modals remain unchanged */}
+      {/* Modals remain unchanged
       {showDetails && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
@@ -351,7 +351,7 @@ const AssignClass = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
 
       {showEdit && (
         <div className="modal" style={{ display: "block" }}>

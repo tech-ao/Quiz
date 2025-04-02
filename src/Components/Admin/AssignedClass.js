@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./AssignedClasss.css";
+import "./AssignedClass.css"; // Adjust based on actual filename
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 import AdminOnlineClassPopup from "./AdminOnlineClassPopup";
