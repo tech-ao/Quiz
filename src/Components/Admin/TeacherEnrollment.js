@@ -10,8 +10,7 @@ import AdminHeader from "../Admin/AdminHeader";
 import { fetchTeacherEnrollmentRequest } from "../../redux/Services/api";
 import ViewTeacherPanel from "../ViewTeacher"; // Optional: teacher view panel
 import { FiEye, FiMail } from "react-icons/fi";
-
-const BASE_URL = "http://santhwanamhhcs.in:8081/api";
+import BASE_URL from "../../redux/Services/Config";
 
 const TeacherEnrollment = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);

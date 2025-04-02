@@ -4,13 +4,12 @@ import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import "./AddQuestion.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
-
-const BASE_URL = "http://srimathicare.in:8081";
+import BASE_URL from "../../redux/Services/Config";
 const ACCESS_TOKEN = "123";
 const API_KEY = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
 
 const API_URL_CREATE = `${BASE_URL}/api/ImportExcel/CreateNewQuestion`;
-const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion/${id}`;
+const API_URL_DELETE = (id) => `${BASE_URL}/api/ImportExcel/DeleteQuestion?questionId=${id}`;
 const API_URL_UPDATE = (id) => `${BASE_URL}/api/ImportExcel/UpdateQuestion`;
 const API_URL_SEARCH = `${BASE_URL}/api/SearchAndList/SearchAndListQuestions`;
 
@@ -154,30 +153,37 @@ const AddQuestion = () => {
   };
 
   const handleDeleteQuestion = async (id) => {
+    if (!id) {
+      console.error("Error: questionId is undefined.");
+      alert("Error: Unable to delete question. ID is missing.");
+      return;
+    }
+  
+    console.log("Deleting question with ID:", id);
+  
     try {
       const response = await fetch(API_URL_DELETE(id), {
-        method: "DELETE",
+        method: "POST",
         headers: {
           "X-Api-Key": API_KEY,
-          AccessToken: ACCESS_TOKEN,
+          "AccessToken": ACCESS_TOKEN,
         },
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to delete question");
       }
-
+  
       const result = await response.json();
       console.log("Question deleted successfully:", result);
-
-      // Update local state
-      const updatedQuestions = questions.filter((q) => q.id !== id);
-      setQuestions(updatedQuestions);
+  
+      setQuestions((prevQuestions) => prevQuestions.filter((q) => q.questionId !== id));
     } catch (error) {
       console.error("Error deleting question:", error);
       alert("Failed to delete question. Please try again.");
     }
   };
+  
 
   const handleEditQuestion = (question) => {
     setSelectedQuestion({ ...question });

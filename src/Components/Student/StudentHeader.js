@@ -89,7 +89,7 @@ const Header = ({ toggleSidebar }) => {
   const handleLogout = () => {
     localStorage.removeItem("studentName");
     localStorage.removeItem("studentId");
-    navigate("/Login");
+    navigate("/");
     setShowLogoutConfirm(false);
   };
 

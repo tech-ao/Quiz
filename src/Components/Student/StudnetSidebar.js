@@ -4,6 +4,8 @@ import './StudentSidebar.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const StudentSidePannel = ({ studyModeId }) => {
+  console.log(studyModeId);
+  
   const location = useLocation();
   const navigate = useNavigate();
 

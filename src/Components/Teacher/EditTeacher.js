@@ -70,46 +70,65 @@ const EditTeacher = ({ show, onClose  }) => {
     useEffect(() => {
       if (selectedTeacher) {
           setFormData({
-            fullName: selectedTeacher.data.fullName || "",
-            lastName: "", // No last name field in the response, adjust accordingly
-            email: selectedTeacher.data.email || "",
-            phoneNumber: selectedTeacher.data.phoneNumber || "",
-            gender: selectedTeacher.data.gender || "",
-            dob:selectedTeacher.data.dob.split("T")[0] || "" ,
-            permanentAddress:selectedTeacher.data.permanentAddress || "",
-            nationalityId: selectedTeacher.data.nationalityId || "",
-            documentType: "",
-            documentNumber: "", // No documentNumber in response
-            photo: null, // No direct photo field, might be in teacherDocumentFileModels
-          
-            // Educational Qualifications
-            higherLevelEducation: selectedTeacher.data.educationQualificationModel?.higherLevelEducation || "",
-            institute: selectedTeacher.data.educationQualificationModel?.institute || "",
-            subjectSpecialist: selectedTeacher.data.educationQualificationModel?.subjectSpecialist || "",
-            yearOfGraduation: selectedTeacher.data.educationQualificationModel?.yearOfGraduation || "",
-          
-            // Professional Experience
-            employerName: selectedTeacher.data.professionalExperianceModel?.employerName || "",
-            jobTitle: selectedTeacher.data.professionalExperianceModel?.jobTitle || "",
-            yoe: selectedTeacher.data.professionalExperianceModel?.yoe || "",
-            experienceCertificate: null, // No experienceCertificate in response
-          
-            // Franchise-specific Requirements
-            availability: selectedTeacher.data.availabilityName || "",
-            preferredWorkDays: selectedTeacher.data.availabilityName || "", // No preferredWorkDays field in response
-            preferredWorkTimes: selectedTeacher.data.preferredWorkTimes|| "", // No preferredWorkTimes field in response
-            preferredCountry: selectedTeacher.data.preferedCountryName || "",
-          
-            // Resume Upload
-            resume: null, // No direct resume field in response
+              fullName: selectedTeacher.data.fullName || "",
+              dob: selectedTeacher.data.dob ? selectedTeacher.data.dob.split("T")[0] : "",
+              gender: selectedTeacher.data.gender || null,
+              phoneNumber: selectedTeacher.data.phoneNumber || "",
+              email: selectedTeacher.data.email || "",
+              permanentAddress: selectedTeacher.data.permanentAddress || "",
+              teacherModeId: selectedTeacher.data.teacherModeId || "",
+              currentResidentialAddress: selectedTeacher.data.currentResidentialAddress || "",
+              nationalityId: selectedTeacher.data.nationalityId || null,
+              availabilityId: selectedTeacher.data.availabilityId || null,
+              registerNo: selectedTeacher.data.registerNo || "",
+              preferedCountryId: selectedTeacher.data.preferedCountryId || null,
+  
+              // Professional Experience
+              professionalExperianceModel: {
+                  employerName: selectedTeacher.data.professionalExperianceModel?.employerName || "",
+                  jobTitle: selectedTeacher.data.professionalExperianceModel?.jobTitle || "",
+                  yoe: selectedTeacher.data.professionalExperianceModel?.yoe || "",
+              },
+  
+              // Educational Qualifications
+              educationQualificationModel: {
+                  higherLevelEducation: selectedTeacher.data.educationQualificationModel?.higherLevelEducation || "",
+                  institute: selectedTeacher.data.educationQualificationModel?.institute || "",
+                  subjectSpecialist: selectedTeacher.data.educationQualificationModel?.subjectSpecialist || "",
+                  yearOfGraduation: selectedTeacher.data.educationQualificationModel?.yearOfGraduation || "",
+              },
+  
+              // Compliance Information
+              complianceInformationModel: {
+                  isCriminalBackgroundCheck: selectedTeacher.data.complianceInformationModel?.isCriminalBackgroundCheck || false,
+              },
+  
+              // Document Files
+              teacherDocumentFileModels: selectedTeacher.data.teacherDocumentFileModels || [],
+  
+              // Preferred Work Schedule
+              preferedWorkScheduledName: selectedTeacher.data.preferedWorkScheduledName || "",
+              preferredWorkTimes: selectedTeacher.data.preferredWorkTimes || "",
+  
+              applicationDate: selectedTeacher.data.applicationDate || "",
+              declaration: selectedTeacher.data.declaration || false,
           });
       }
   }, [selectedTeacher]);
+  
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
-    };
+     const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox"
+        ? checked
+        : ["country", "grade", "gender", "studyModeId", "teacherModeId"].includes(name)
+          ? parseInt(value, 10)
+          : value,
+    }));
+  };
 
     const handleFileChange = (e) => {
         const { name, files } = e.target;
@@ -195,7 +214,14 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Date Of Birth</Form.Label>
-                        <Form.Control type="date" name="dob" value={formData.dob} onChange={handleChange} required />
+                         <Form.Control
+                                       type="date"
+                                       name="dob"
+                                       value={formData.dob}
+                                       onChange={handleChange}
+                                       required
+                                       max={new Date().toISOString().split("T")[0]} // Prevents future dates
+                                     />
                     </Form.Group>
                     </Col>
                     </Row>
@@ -254,21 +280,21 @@ const EditTeacher = ({ show, onClose  }) => {
                     </Form.Group>
                     </Col>
                     
-                    <Col md={6}>
+                    {/* <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Candidate Photo</Form.Label>
                         <Form.Control type="file" name="photo" onChange={handleFileChange} />
                     </Form.Group>
-                    </Col>
+                    </Col> */}
                     </Row>
 
                     <Row className="md-3">
-                      <Col md={6}>
+                      {/* <Col md={6}>
                     <Form.Group className="mb-3">
                         <Form.Label>Photo Id</Form.Label>
                         <Form.Control type="file" name="photoId" onChange={handleFileChange} />
                     </Form.Group>
-                            </Col>
+                            </Col> */}
                             <Col md={6}>
                     <Form.Group>
                         <Form.Label>Highest Level of Qualification</Form.Label>
@@ -326,12 +352,12 @@ const EditTeacher = ({ show, onClose  }) => {
                     </Row>
 
                     <Row className="md-3">
-                    <Col md={6}>
+                    {/* <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Experience Certificate (Upload)</Form.Label>
                         <Form.Control type="file" name="experienceCertificate" onChange={handleFileChange} />
                     </Form.Group>
-                    </Col>
+                    </Col> */}
                     
                     {/* Franchise-specific Requirements */}
                     <Col md={6}>
@@ -370,12 +396,12 @@ const EditTeacher = ({ show, onClose  }) => {
                     </Col>
                     
                     {/* Resume Upload */}
-                    <Col md={6}>
+                    {/* <Col md={6}>
                     <Form.Group className="mt-3 mb-3" >
                         <Form.Label>Upload Resume</Form.Label>
                         <Form.Control type="file" name="resume" onChange={handleFileChange} />
                     </Form.Group>
-                    </Col>
+                    </Col> */}
                     </Row>
                     
                     <Button variant="primary" type="submit">Save Teacher </Button>

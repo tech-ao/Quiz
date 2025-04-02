@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import { Container, Row, Col, Form, Button, Modal, InputGroup, FormControl, Alert } from 'react-bootstrap';
 import TeacherHeader from './TeacherHeader';
 import TeacherSidePannel from './TeacherSidepannel';
@@ -7,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const CreateMeeting = () => {
   const apiKey = 'AIzaSyA_7IDmGelq0zbqnGpZkIoBgH0pUPVlVyA';
   const clientId = '689086187609-2h4nagfqdjt11r3ub1kt322mr4gmmnrl.apps.googleusercontent.com';
+  const API_ENDPOINT = 'http://srimathicare.in:8081/api/Classess/Create';
 
   const tokenClient = useRef(null);
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -18,27 +20,24 @@ const CreateMeeting = () => {
   const [meetingData, setMeetingData] = useState({
     name: '',
     description: '',
-    level: '0',
+    meetingType: 'instant', 
     date: '',
     startTime: '',
     endTime: '',
-    attendees: '',
+    participants: '', 
   });
   const [isCreatingMeeting, setIsCreatingMeeting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [meetingLink, setMeetingLink] = useState('');
   const [showSignInAlert, setShowSignInAlert] = useState(false);
 
-  // Script Loading Effect
   useEffect(() => {
     const loadScripts = () => {
-      // Load the GIS library first
       const gisScript = document.createElement('script');
       gisScript.src = 'https://accounts.google.com/gsi/client';
       gisScript.async = true;
       gisScript.defer = true;
       gisScript.onload = () => {
-        // Then load GAPI
         const gapiScript = document.createElement('script');
         gapiScript.src = 'https://apis.google.com/js/api.js';
         gapiScript.async = true;
@@ -54,7 +53,6 @@ const CreateMeeting = () => {
     loadScripts();
   }, []);
 
-  // Initialize GAPI Client
   const initializeGapiClient = async () => {
     try {
       await new Promise((resolve, reject) => {
@@ -66,7 +64,6 @@ const CreateMeeting = () => {
         discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
       });
 
-      // Initialize token client
       tokenClient.current = window.google.accounts.oauth2.initTokenClient({
         client_id: clientId,
         scope: 'https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email',
@@ -80,21 +77,17 @@ const CreateMeeting = () => {
     }
   };
 
-  // Handle Token Response
   const handleTokenResponse = (response) => {
     if (response.error) {
       console.error('Token error:', response.error);
       return;
     }
     
-    // Set signed in state
     setIsSignedIn(true);
     
-    // Fetch user profile
     fetchUserProfile();
   };
 
-  // Fetch User Profile
   const fetchUserProfile = async () => {
     try {
       const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -116,17 +109,14 @@ const CreateMeeting = () => {
     }
   };
 
-  // Handle Sign In
   const handleSignIn = () => {
     if (tokenClient.current) {
-      // Request a token with appropriate scopes
       tokenClient.current.requestAccessToken({prompt: 'consent'});
     } else {
       console.error('Token client not initialized');
     }
   };
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMeetingData((prev) => ({
@@ -135,9 +125,7 @@ const CreateMeeting = () => {
     }));
   };
 
-  // Schedule Meeting
   const scheduleMeeting = async () => {
-    // First, check if user is signed in
     if (!isSignedIn) {
       setShowSignInAlert(true);
       return;
@@ -146,21 +134,24 @@ const CreateMeeting = () => {
     setIsCreatingMeeting(true);
     
     try {
-      // Combine date and times
-      const startDateTime = new Date(`${meetingData.date}T${meetingData.startTime}`);
-      const endDateTime = new Date(`${meetingData.date}T${meetingData.endTime}`);
+      let startDateTime, endDateTime;
+      if (meetingData.meetingType === 'instant') {
+        const now = new Date();
+        startDateTime = now;
+        endDateTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour duration by default
+      } else {
+        startDateTime = new Date(`${meetingData.date}T${meetingData.startTime}`);
+        endDateTime = new Date(`${meetingData.date}T${meetingData.endTime}`);
+      }
       
-      // Make sure Calendar API is loaded
       if (!window.gapi.client.calendar) {
         await window.gapi.client.load('calendar', 'v3');
       }
       
-      // Parse attendees
-      const attendeesList = meetingData.attendees.split(',').map(email => {
+      const participantsList = meetingData.participants.split(',').map(email => {
         return { email: email.trim() };
-      }).filter(attendee => attendee.email);
+      }).filter(participant => participant.email);
       
-      // Define meeting event
       const event = {
         summary: meetingData.name,
         description: meetingData.description,
@@ -172,7 +163,7 @@ const CreateMeeting = () => {
           dateTime: endDateTime.toISOString(),
           timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
         },
-        attendees: attendeesList,
+        attendees: participantsList,
         conferenceData: {
           createRequest: {
             requestId: `${Date.now()}-${Math.floor(Math.random() * 1000)}`
@@ -180,7 +171,6 @@ const CreateMeeting = () => {
         }
       };
 
-      // Create the event
       const response = await window.gapi.client.calendar.events.insert({
         calendarId: 'primary',
         resource: event,
@@ -188,44 +178,78 @@ const CreateMeeting = () => {
         sendUpdates: 'all'
       });
 
-      // Extract meeting link
       const conferenceData = response.result.conferenceData;
+      let meetLink = '';
       if (conferenceData && conferenceData.entryPoints) {
         const meetEntry = conferenceData.entryPoints.find(entry => entry.entryPointType === 'video');
         if (meetEntry) {
-          const meetLink = meetEntry.uri;
+          meetLink = meetEntry.uri;
           setMeetingLink(meetLink);
-          setShowPopup(true);
         } else {
           alert('Meeting created but no video link was generated.');
+          return;
         }
+      }
+
+      const apiPayload = {
+        id: 0,
+        name: meetingData.name,
+        instructor: userName, 
+        date: startDateTime.toISOString(),
+        createdBy: 0, 
+        time: meetingData.startTime,
+        meetingLink: meetLink,
+        studentIds: [],
+        createdFrom: 0,
+        timeStamp: new Date().toISOString(),
+        isDeleted: false,
+        objectId: `meeting-${Date.now()}`
+      };
+
+      const apiResponse = await axios.post(API_ENDPOINT, apiPayload, {
+        headers: {
+          'accept': 'text/plain',
+          'Content-Type': 'application/json',
+          "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+
+        }
+      });
+
+      if (apiResponse.status === 200 || apiResponse.status === 201) {
+        console.log('Meeting stored in database successfully', apiResponse.data);
+        setShowPopup(true);
       }
 
       // Reset form
       setMeetingData({
         name: '',
         description: '',
-        level: '0',
+        meetingType: 'instant',
         date: '',
         startTime: '',
         endTime: '',
-        attendees: '',
+        participants: '',
       });
     } catch (error) {
-      console.error('Error scheduling meeting:', error);
-      alert(`Failed to schedule meeting: ${error.message || 'Unknown error'}`);
+      console.error('Error in meeting process:', error);
+      
+      if (error.response) {
+        alert(`Failed to store meeting: ${error.response.data || 'Unknown error'}`);
+      } else if (error.message) {
+        alert(`Error: ${error.message}`);
+      } else {
+        alert('An unexpected error occurred');
+      }
     } finally {
       setIsCreatingMeeting(false);
     }
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     scheduleMeeting();
   };
 
-  // Copy meeting link
   const handleCopy = () => {
     navigator.clipboard.writeText(meetingLink);
   };
@@ -270,7 +294,6 @@ const CreateMeeting = () => {
          
           <div className="sub-container">
             <Form onSubmit={handleSubmit}>
-              {/* Form fields remain the same as in previous version */}
               <Row>
                 <Col md={6} className="mb-3">
                   <Form.Label>Name</Form.Label>
@@ -294,50 +317,66 @@ const CreateMeeting = () => {
                     required 
                   />
                 </Col>
-                <Col md={6} className="mb-3">
-                <Form.Label>Date</Form.Label>
-                <Form.Control 
-                  type="date" 
-                  name="date" 
-                  value={meetingData.date} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col md={4} className="mb-3">
-                <Form.Label>Time</Form.Label>
-                <Form.Control 
-                  type="time" 
-                  name="time" 
-                  value={meetingData.time} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </Col>
-              <Col md={4} className="mb-3">
-                <Form.Label>Start Time</Form.Label>
-                <Form.Control 
-                  type="time" 
-                  name="startTime" 
-                  value={meetingData.startTime} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </Col>
-              <Col md={4} className="mb-3">
-                <Form.Label>End Time</Form.Label>
-                <Form.Control 
-                  type="time" 
-                  name="endTime" 
-                  value={meetingData.endTime} 
-                  onChange={handleChange} 
-                  required 
-                />
-              </Col>
               </Row>
-              {/* Rest of the form remains the same */}
+              <Row>
+                <Col md={6} className="mb-3">
+                  <Form.Label>Meeting Type</Form.Label>
+                  <Form.Control 
+                    as="select"
+                    name="meetingType"
+                    value={meetingData.meetingType}
+                    onChange={handleChange}
+                  >
+                    <option value="instant">Instant Meeting</option>
+                    <option value="scheduled">Scheduled Meeting</option>
+                  </Form.Control>
+                </Col>
+                {meetingData.meetingType === 'scheduled' && (
+                  <>
+                    <Col md={6} className="mb-3">
+                      <Form.Label>Date</Form.Label>
+                      <Form.Control 
+                        type="date" 
+                        name="date" 
+                        value={meetingData.date} 
+                        onChange={handleChange} 
+                        required 
+                      />
+                    </Col>
+                    <Col md={6} className="mb-3">
+                      <Form.Label>Start Time</Form.Label>
+                      <Form.Control 
+                        type="time" 
+                        name="startTime" 
+                        value={meetingData.startTime} 
+                        onChange={handleChange} 
+                        required 
+                      />
+                    </Col>
+                    <Col md={6} className="mb-3">
+                      <Form.Label>End Time</Form.Label>
+                      <Form.Control 
+                        type="time" 
+                        name="endTime" 
+                        value={meetingData.endTime} 
+                        onChange={handleChange} 
+                        required 
+                      />
+                    </Col>
+                  </>
+                )}
+                <Col md={12} className="mb-3">
+                  <Form.Label>Participants (comma-separated emails)</Form.Label>
+                  <Form.Control 
+                    type="text" 
+                    name="participants" 
+                    value={meetingData.participants} 
+                    onChange={handleChange} 
+                    placeholder="Enter participant emails" 
+                    required 
+                  />
+                </Col>
+              </Row>
               <Button 
                 variant="primary" 
                 type="submit" 

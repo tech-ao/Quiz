@@ -7,7 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import ImportQuestion from "./Components/Admin/ImportQuestion";
-import  ScheduleForm from "./Components/Admin/ScheduleForm";
+import ScheduleForm from "./Components/Admin/ScheduleForm";
 import AddQuestion from "./Components/Admin/AddQuestion";
 import AssignedClass from "./Components/Admin/AssignedClass";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
@@ -71,6 +71,7 @@ import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
 import AssignStudent from "./Components/Admin/AssignStudent.js";
+import Pending from "./Components/Admin/Pending.js";
 
 
 // ProtectedRoute component to check login status
@@ -101,7 +102,8 @@ function App() {
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
           <Route path="/AssignedClass" element={<AssignedClass/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
-
+          <Route path="/meeting" element={<CreateMeeting/>}/>
+          <Route path="/pending" element={<Pending/>}/>
 
           {/* Protected Routes */}
           <Route
@@ -226,10 +228,12 @@ function App() {
             path="/studentOnlineClass"
             element={<ProtectedRoute element={<StudentOnlineClass />} />}
           />
-           <Route
+          <Route
             path="/assignstudent"
             element={<ProtectedRoute element={<AssignStudent />} />}
           />
+
+         
           <Route
             path="/studentSettings"
             element={<ProtectedRoute element={<StudentSettings />} />}
@@ -255,14 +259,14 @@ function App() {
             path="/AbacusKit"
             element={<ProtectedRoute element={<AbacusKit />} />}
           />
-           <Route
+          <Route
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
           />
-           <Route
+           {/* <Route
             path="/meeting"
             element={<ProtectedRoute element={<CreateMeeting />} />}
-          />
+          /> */}
         </Routes>
       </Router>
     </Provider>

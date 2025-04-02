@@ -148,8 +148,8 @@ export const fetchAvailability = async () => {
 
 export const fetchDashboardContent = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/Student/GetStudentDashBoard`, {
-      method: "GET",
+    const response = await fetch(`${BASE_URL}/SearchAndList/AdminDashBoard`, {
+      method: "POST",
       headers: getHeaders(),
     });
 
