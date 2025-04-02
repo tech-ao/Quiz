@@ -101,7 +101,7 @@ function App() {
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
           <Route path="/meeting" element={<CreateMeeting/>}/>
-
+          <Route path="/pending" element={<Pending/>}/>
 
           {/* Protected Routes */}
           <Route

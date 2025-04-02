@@ -51,6 +51,22 @@ const RegisterTeacher = () => {
     const { name, files } = e.target;
     const file = files[0];
     if (file) {
+
+       
+              const fileSize = file.size; // File size in bytes
+              const fileType = file.type; // MIME type (e.g., "image/png", "application/pdf")
+              const extension = file.name.split(".").pop().toLowerCase(); // File extension
+        
+              // Validation: Check file type and size
+              if (fileType.startsWith("image/") && fileSize > 100 * 1024) {
+                toast.error("Image file size must be less than 100KB!");
+                e.target.value = ""; // Reset input field
+                return;
+              } else if (fileType === "application/pdf" && fileSize > 2 * 1024 * 1024) {
+               toast.error("PDF file size must be less than 2MB!");
+                e.target.value = ""; // Reset input field
+                return;
+              }
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64Content = reader.result.split(",")[1];
@@ -234,9 +250,17 @@ const RegisterTeacher = () => {
                 type="text"
                 name="phoneNumber"
                 value={formData.phoneNumber}
-                onChange={handleInputChange}
                 isInvalid={!!errors.phoneNumber}
-                required
+                  onChange={(e) => {
+                    const regex = /^[0-9\b]+$/;
+                    if (e.target.value === "" || regex.test(e.target.value)) {
+                      setFormData((prevData) => ({
+                        ...prevData,
+                        phoneNumber: e.target.value,
+                      }));
+                    }
+                  }}
+                  maxLength={10}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.phoneNumber}
@@ -327,6 +351,8 @@ const RegisterTeacher = () => {
           <Col md={6}>
             <Form.Group controlId="experienceCertificate">
               <Form.Label>Experience Certificate</Form.Label>
+              <p style={{ color: "#f55050" }}>File size less than 2mb</p>
+
               <Form.Control
                 type="file"
                 name="experienceCertificate"
@@ -339,6 +365,8 @@ const RegisterTeacher = () => {
           <Col md={6}>
             <Form.Group controlId="teacherResume">
               <Form.Label>Upload Resume</Form.Label>
+              <p style={{ color: "#f55050" }}>File size less than 2mb</p>
+
               <Form.Control
                 type="file"
                 name="teacherResume"

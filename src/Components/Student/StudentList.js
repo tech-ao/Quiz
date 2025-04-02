@@ -273,9 +273,9 @@ const StudentList = () => {
                           <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                           <td>{student.gradeName}</td>
                         
-                          <td>{student.centreName}</td>
-                          <td>{student.centrePlace}</td>
-                          <td>{student.joiningDate ? new Date(student.joiningDate).toLocaleDateString('en-GB') : ''}</td>
+                          <td>{student.centerName}</td>
+                          <td>{student.place}</td>
+                          <td>{student.doj ? new Date(student.doj).toLocaleDateString('en-GB') : ''}</td>
                           <td>{student.currentLevelName}</td>
                           <td>{student.completedLevelName}</td>
                           <td>

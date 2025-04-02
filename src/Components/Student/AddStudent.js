@@ -27,9 +27,9 @@ const AddStudentPanel = ({ show, onClose }) => {
     gender: null,
     studyModeId: null,
     country: null,
-    centreName: "",       // New field: Centre Name
-    centrePlace: "",      // New field: Place
-    joiningDate: "",      // New field: Joining Date
+    centerName: "",       // New field: Centre Name
+    place: "",      // New field: Place
+    doj: "",      // New field: Joining Date
     currentLevel: null,     // New field: Current Level
     completedLevel: null,   // New field: Completed Level
     statusId: 1,
@@ -341,7 +341,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             <Form.Label>Centre Name</Form.Label>
             <Form.Control
               type="text"
-              name="centreName"
+              name="centerName"
               placeholder="Enter centre name"
               value={formData.centreName}
               onChange={handleInputChange}
@@ -353,7 +353,7 @@ const AddStudentPanel = ({ show, onClose }) => {
             <Form.Label>Place</Form.Label>
             <Form.Control
               type="text"
-              name="centrePlace"
+              name="place"
               placeholder="Enter place"
               value={formData.centrePlace}
               onChange={handleInputChange}
@@ -364,8 +364,8 @@ const AddStudentPanel = ({ show, onClose }) => {
           <Form.Group className="mb-3" controlId="formJoiningDate">
             <Form.Control
               type="date"
-              name="joiningDate"
-              value={formData.joiningDate}
+              name="doj"
+              value={formData.doj}
               onChange={handleInputChange}
               required
               min={new Date().toISOString().split("T")[0]} // Prevents past dates

@@ -22,9 +22,9 @@ const EditStudent = ({ show, onClose }) => {
     country: null,
     gender: null,
     statusId: null,
-    centreName: "",      // New field: Centre Name
-    centrePlace: "",     // New field: Place
-    joiningDate: "",     // New field: Joining Date
+    centerName: "",      // New field: center Name
+    place: "",     // New field: Place
+    doj: "",     // New field: Joining Date
     currentLevel: null,    // New field: Current Level
     completedLevel: null   // New field: Completed Level
   });
@@ -81,22 +81,24 @@ const EditStudent = ({ show, onClose }) => {
         country: selectedStudent.data.country || null,
         gender: selectedStudent.data.gender || null,
         statusId: selectedStudent.data.statusId || 1,
-        centreName: selectedStudent.data.centreName || "",
-        centrePlace: selectedStudent.data.centrePlace || "",
-        joiningDate: selectedStudent.data.joiningDate ? selectedStudent.data.joiningDate.split("T")[0] : "",
-        currentLevel: selectedStudent.data.currentLevelName || "",
-        completedLevel: selectedStudent.data.completedLevelName || ""
+        centerName: selectedStudent.data.centerName || "",
+        place: selectedStudent.data.place || "",
+        doj: selectedStudent.data.doj ? selectedStudent.data.doj.split("T")[0] : "",
+        currentLevel: selectedStudent.data.currentLevel || null,
+        completedLevel: selectedStudent.data.completedLevel || null
       });
     }
   }, [selectedStudent]);
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, files } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: ["country", "grade", "completedLevel", "currentLevel", "gender", "studyModeId"].includes(name)
+        ? parseInt(value, 10)
+        : value,
+    }));
 
     if (name === "countrySearch") {
       const searchValue = value.toLowerCase();
@@ -209,6 +211,7 @@ const EditStudent = ({ show, onClose }) => {
               value={formData.dob}
               onChange={handleInputChange}
               required
+              max={new Date().toISOString().split("T")[0]} // Prevents future dates
             />
           </Form.Group>
 
@@ -310,40 +313,42 @@ const EditStudent = ({ show, onClose }) => {
             />
           </Form.Group>
 
-          {/* New Input Groups for Centre Details */}
-          <Form.Group className="mb-3" controlId="formCentreName">
-            <Form.Label>Centre Name</Form.Label>
+          {/* New Input Groups for center Details */}
+          <Form.Group className="mb-3" controlId="formcenterName">
+            <Form.Label>center Name</Form.Label>
             <Form.Control
               type="text"
-              name="centreName"
-              placeholder="Enter centre name"
-              value={formData.centreName}
+              name="centerName"
+              placeholder="Enter center name"
+              value={formData.centerName}
               onChange={handleInputChange}
               required
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formCentrePlace">
+          <Form.Group className="mb-3" controlId="formplace">
             <Form.Label>Place</Form.Label>
             <Form.Control
               type="text"
-              name="centrePlace"
+              name="place"
               placeholder="Enter place"
-              value={formData.centrePlace}
+              value={formData.place}
               onChange={handleInputChange}
               required
             />
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formJoiningDate">
+          <Form.Group className="mb-3" controlId="formdoj">
             <Form.Label>Joining Date</Form.Label>
             <Form.Control
               type="date"
-              name="joiningDate"
-              value={formData.joiningDate}
+              name="doj"
+              value={formData.doj}
               onChange={handleInputChange}
               required
+              min={new Date().toISOString().split("T")[0]} // Prevents past dates
             />
+
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formCurrentLevel">
