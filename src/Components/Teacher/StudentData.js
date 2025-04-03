@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from '../Admin/SidePannel';
 import AddStudent from '../Student/AddStudent';
 import EditStudent from '../Student/EditStudent';
-import AdminHeader from '../Admin/AdminHeader';
+import TeacherSidePanel from "./TeacherSidepannel";
+import TeacherHeader from "./TeacherHeader";
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown, Badge } from 'react-bootstrap';
 import ViewStudentPanel from '../Student/ViewStudent';
 import { useLocation } from 'react-router-dom';
@@ -172,9 +172,9 @@ console.log("abcd");
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <Sidebar />}
+        {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
