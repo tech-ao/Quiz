@@ -3,21 +3,22 @@ import { Container, Row, Col, Table, Badge, Form, Button, Modal } from "react-bo
 import { FaCalendarAlt } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherHeader from "./TeacherHeader";
-import "../Teacher/PaymentHistory.css";
+import Sidebar from "./SidePannel";
+import AdminHeader from "./AdminHeader";
+// import "../Teacher/PaymentHistory.css";
 
 const studentList = ["Hudson", "Marlie", "Ayan Desai", "Kaylen", "Paul S. Bealer"];
 
 const initialPayments = [
-  { id: 1, studentName: "Hudson", amount: "$100", date: "2024-12-01", mode: "Online", status: "Completed" },
-  { id: 2, studentName: "Marlie", amount: "$50", date: "2024-12-02", mode: "Offline", status: "Pending" },
-  { id: 3, studentName: "Ayan Desai", amount: "$200", date: "2024-12-03", mode: "Online", status: "Failed" },
-  { id: 4, studentName: "Kaylen", amount: "$150", date: "2024-12-04", mode: "Offline", status: "Completed" },
-  { id: 5, studentName: "Paul S. Bealer", amount: "$250", date: "2024-12-05", mode: "Online", status: "Completed" },
-];
+    { id: 1, studentName: "Emma", amount: "$120", date: "2025-3-06", mode: "Online", status: "Pending" },
+    { id: 2, studentName: "Noah", amount: "$75", date: "2025-3-07", mode: "Offline", status: "Completed" },
+    { id: 3, studentName: "Liam J.", amount: "$180", date: "2025-2-08", mode: "Online", status: "Failed" },
+    { id: 4, studentName: "Olivia", amount: "$90", date: "2025-4-1", mode: "Offline", status: "Completed" },
+    { id: 5, studentName: "Sophia R.", amount: "$210", date: "2025-4-3", mode: "Online", status: "Completed" },
+  ];
+  
 
-const PaymentHistory = () => {
+const FeesPayment = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [filter, setFilter] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
@@ -142,9 +143,9 @@ const PaymentHistory = () => {
   
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+    <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
+    <div className="d-flex">
+      {isSidebarVisible && <Sidebar />}
         <Container className="main-container p-4 min-vh-100">
           <Row className="align-items-center mb-4">
             <Col md={6} style={{ marginTop: "20px" }}>
@@ -377,4 +378,4 @@ const PaymentHistory = () => {
   );
 };
 
-export default PaymentHistory;
+export default FeesPayment;

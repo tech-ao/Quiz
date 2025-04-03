@@ -12,6 +12,7 @@ import AddQuestion from "./Components/Admin/AddQuestion";
 import AssignedClass from "./Components/Admin/AssignedClass";
 import CompleteClass from "./Components/Admin/completeClass.js";
 import Createmeeting from "./Components/Admin/CreateMeeting.js";
+import FeesPayment from "./Components/Admin/FeesPayment.js";
 import AdminDashboard from "./Components/Admin/AdminDashboard";
 import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
@@ -113,6 +114,8 @@ function App() {
           <Route path="/pending" element={<Pending/>}/>
           <Route path="/assigned-class" element={<Assigned_class/>}/>
           <Route path="/completed_class" element={<Completed_class/>}/>
+          <Route path="/FeesPayment" element={<FeesPayment/>}/>
+
           {/* Protected Routes */}
           <Route
             path="/adminDashboard"

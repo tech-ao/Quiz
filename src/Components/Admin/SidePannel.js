@@ -3,46 +3,50 @@ import { useLocation, useNavigate, Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {
-  const [isAttendanceOpen, setAttendanceOpen] = useState(false);
-  const [isOnlineOpen, setOnlineOpen] = useState(false);
-  const [isScheduleOpen, setSchedule] = useState(false);
-  const [isEnrollmentOpen, setEnrollmentOpen] = useState(false);
-  const [isQuestionOpen, setQuestionOpen] = useState(false); // New state for Questions dropdown
+  const [openMenus, setOpenMenus] = useState({
+    attendance: false,
+    online: false,
+    schedule: false,
+    enrollment: false,
+    question: false,
+    quiz: false
+  });
+  
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
-  const [isQuizOpen ,setQuizOpen]=useState(false)
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Close the panel when clicking outside
-  const handleOutsideClick = (event) => {
-    if (!event.target.closest(".side-panel") && isOpen) {
-      closeSidePanel();
-    }
+  // Auto-expand menus based on current path
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    setOpenMenus(prev => ({
+      ...prev,
+      attendance: currentPath.includes('/teacherAttendance') || currentPath.includes('/studentAttendance'),
+      online: currentPath.includes('/onlineClass') || currentPath.includes('/AbacusMath'),
+      schedule: currentPath.includes('/Createmeeting') || currentPath.includes('/AssignedClass') || currentPath.includes('/CompleteClass'),
+      enrollment: currentPath.includes('/enrollmentRequest') || currentPath.includes('/teacherEnrollment'),
+      question: currentPath.includes('/addQuestion') || currentPath.includes('/ImportQuestion'),
+      quiz: currentPath.includes('/ScheduleForm')
+    }));
+  }, [location.pathname]);
+
+  const toggleMenu = (menuName) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [menuName]: !prev[menuName]
+    }));
   };
 
-  const toggleOnlineMenu = () => {
-    setOnlineOpen(!isOnlineOpen);
-  };
-  const toggleScheduleMenu = () => {
-    setSchedule(!isScheduleOpen);
+  // Check if current path is active
+  const isPathActive = (path) => {
+    return location.pathname === path;
   };
 
-  const toggleAttendanceMenu = () => {
-    setAttendanceOpen(!isAttendanceOpen);
+  // Check if a section is active
+  const isSectionActive = (paths) => {
+    return paths.some(path => location.pathname.includes(path));
   };
-
-  const toggleEnrollmentMenu = () => {
-    setEnrollmentOpen(!isEnrollmentOpen);
-  };
-
-  const toggleQuestionMenu = () => {
-    setQuestionOpen(!isQuestionOpen);
-  };
-  
-  const toggleQuizMenu = () => {
-    setQuizOpen(!isQuizOpen);
-  };
-
 
   // Show Logout Confirmation Popup
   const handleLogoutClick = () => {
@@ -52,8 +56,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   // Handle Logout
   const handleLogout = () => {
     setShowLogoutPopup(false);
-    localStorage.removeItem("userToken"); // Remove authentication token
-    navigate("/adminLogin"); // Redirect to login page
+    localStorage.removeItem("userToken");
+    navigate("/adminLogin");
   };
 
   // Cancel Logout
@@ -76,12 +80,12 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
 
   return (
     <div className={`side-panel ${isOpen ? "open" : ""}`}>
-      <ul className="nav flex-column">
+      <ul className="nav flex-column mb-1">
+        {/* Dashboard */}
         <li className="nav-item">
           <Link
             to="/adminDashboard"
-            className={`nav-link ${location.pathname === "/adminDashboard" ? "active" : ""}`}
-            onClick={closeSidePanel}
+            className={`nav-link ${isPathActive("/adminDashboard") ? "active" : ""}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-grid"></i>
@@ -89,11 +93,12 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
+
+        {/* Teacher */}
         <li className="nav-item">
           <Link
             to="/listTeacher"
-            className={`nav-link ${location.pathname === "/listTeacher" ? "active" : ""}`}
-            onClick={closeSidePanel}
+            className={`nav-link ${isPathActive("/listTeacher") ? "active" : ""}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-person"></i>
@@ -101,11 +106,12 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
-        <li className="nav-item">
+
+        {/* Students */}
+        <li className="nav-item ">
           <Link
             to="/studentList"
-            className={`nav-link ${location.pathname === "/studentList" ? "active" : ""}`}
-            onClick={closeSidePanel}
+            className={`nav-link ${isPathActive("/studentList") ? "active" : ""}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-person-bounding-box"></i>
@@ -117,23 +123,22 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         {/* Enrollment Request Dropdown */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isEnrollmentOpen ? "active" : ""}`}
-            onClick={toggleEnrollmentMenu}
+            className={`nav-link ${isSectionActive(["/enrollmentRequest", "/teacherEnrollment"]) ? "active" : ""}`}
+            onClick={() => toggleMenu("enrollment")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-book"></i>
               <span className="nav-text">Enrollment Request</span>
-              <i className={`bi ${isEnrollmentOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.enrollment ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isEnrollmentOpen && (
+          {openMenus.enrollment && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/enrollmentRequest"
-                  className={`nav-link ${location.pathname === "/enrollmentRequest" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/enrollmentRequest") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -145,8 +150,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/teacherEnrollment"
-                  className={`nav-link ${location.pathname === "/teacherEnrollment" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/teacherEnrollment") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -159,28 +163,25 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           )}
         </li>
 
-
-        {/*Quiz Dropdown*/}
-        
-           <li className="nav-item">
+        {/* Quiz Dropdown */}
+        <li className="nav-item">
           <div
-            className={`nav-link ${isQuizOpen ? "active" : ""}`}
-            onClick={toggleQuizMenu}
+            className={`nav-link ${isPathActive("/ScheduleForm") ? "active" : ""}`}
+            onClick={() => toggleMenu("quiz")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-question-circle"></i>
               <span className="nav-text">Quiz</span>
-              <i className={`bi ${isQuizOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.quiz ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isQuizOpen && (
+          {openMenus.quiz && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/ScheduleForm"
-                  className={`nav-link ${location.pathname ==="/ScheduleForm" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/ScheduleForm") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -196,23 +197,22 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         {/* Questions Dropdown */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isQuestionOpen ? "active" : ""}`}
-            onClick={toggleQuestionMenu}
+            className={`nav-link ${isSectionActive(["/addQuestion", "/ImportQuestion"]) ? "active" : ""}`}
+            onClick={() => toggleMenu("question")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-question-circle"></i>
               <span className="nav-text">Questions</span>
-              <i className={`bi ${isQuestionOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.question ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isQuestionOpen && (
+          {openMenus.question && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/addQuestion"
-                  className={`nav-link ${location.pathname === "/addQuestion" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/addQuestion") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -224,12 +224,11 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/ImportQuestion"
-                  className={`nav-link ${location.pathname === "/ImportQuestion" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/ImportQuestion") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
-                  <i className="bi bi-upload"></i>
+                    <i className="bi bi-upload"></i>
                     <span className="nav-text">Import Question</span>
                   </div>
                 </Link>
@@ -238,30 +237,29 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           )}
         </li>
 
-         {/* Schedule Dropdown */}
-         <li className="nav-item">
+        {/* Schedule Dropdown */}
+        <li className="nav-item">
           <div
-            className={`nav-link ${isScheduleOpen ? "active" : ""}`}
-            onClick={toggleScheduleMenu}
+            className={`nav-link ${isSectionActive(["/Createmeeting", "/AssignedClass", "/CompleteClass"]) ? "active" : ""}`}
+            onClick={() => toggleMenu("schedule")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-question-circle"></i>
               <span className="nav-text">Schedule Class</span>
-              <i className={`bi ${isScheduleOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.schedule ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isScheduleOpen && (
+          {openMenus.schedule && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/Createmeeting"
-                  className={`nav-link ${location.pathname === "/Cretemeeting" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/Createmeeting") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
-                    <i className="bi bi-plus-circle"></i>
+                    <i className="bi bi-camera-video"></i>
                     <span className="nav-text">Create Meeting</span>
                   </div>
                 </Link>
@@ -269,12 +267,11 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/AssignedClass"
-                  className={`nav-link ${location.pathname === "/AssignedClass" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/AssignedClass") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
-                    <i className="bi bi-plus-circle"></i>
+                    <i className="bi bi-people"></i>
                     <span className="nav-text">Assigned Classes</span>
                   </div>
                 </Link>
@@ -282,12 +279,11 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/CompleteClass"
-                  className={`nav-link ${location.pathname === "/CompleteClass" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/CompleteClass") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
-                  <i className="bi bi-upload"></i>
+                    <i className="bi bi-check-circle"></i>
                     <span className="nav-text">Complete Classes</span>
                   </div>
                 </Link>
@@ -295,31 +291,26 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </ul>
           )}
         </li>
-        
-        
-
-      
 
         {/* Online Menu */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isOnlineOpen ? "active" : ""}`}
-            onClick={toggleOnlineMenu}
+            className={`nav-link ${isSectionActive(["/onlineClass", "/AbacusMath"]) ? "active" : ""}`}
+            onClick={() => toggleMenu("online")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-calendar2-check"></i>
               <span className="nav-text">Online</span>
-              <i className={`bi ${isOnlineOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.online ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isOnlineOpen && (
+          {openMenus.online && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/onlineClass"
-                  className={`nav-link ${location.pathname === "/onlineClass" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/onlineClass") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -331,8 +322,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/AbacusMath"
-                  className={`nav-link ${location.pathname === "/AbacusMath" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/AbacusMath") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -348,23 +338,22 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
         {/* Attendance Menu */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isAttendanceOpen ? "active" : ""}`}
-            onClick={toggleAttendanceMenu}
+            className={`nav-link ${isSectionActive(["/teacherAttendance", "/studentAttendance"]) ? "active" : ""}`}
+            onClick={() => toggleMenu("attendance")}
             style={{ cursor: "pointer" }}
           >
             <div className="icon-with-text">
               <i className="bi bi-file-earmark-bar-graph"></i>
               <span className="nav-text">Attendance</span>
-              <i className={`bi ${isAttendanceOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.attendance ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isAttendanceOpen && (
+          {openMenus.attendance && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <Link
                   to="/teacherAttendance"
-                  className={`nav-link ${location.pathname === "/teacherAttendance" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/teacherAttendance") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -376,8 +365,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <li className="nav-item">
                 <Link
                   to="/studentAttendance"
-                  className={`nav-link ${location.pathname === "/studentAttendance" ? "active" : ""}`}
-                  onClick={closeSidePanel}
+                  className={`nav-link ${isPathActive("/studentAttendance") ? "active-sub" : ""}`}
                   style={{ marginLeft: "15px" }}
                 >
                   <div className="icon-with-text" style={{ gap: "5px" }}>
@@ -390,11 +378,24 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           )}
         </li>
 
+        {/* FeesPayment */}
+        <li className="nav-item">
+          <Link
+            to="/FeesPayment"
+            className={`nav-link ${isPathActive("/FeesPayment") ? "active" : ""}`}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-person"></i>
+              <span className="nav-text">Fees</span>
+            </div>
+          </Link>
+        </li>
+
+        {/* Notification */}
         <li className="nav-item">
           <Link
             to="/notification"
-            className={`nav-link ${location.pathname === "/notification" ? "active" : ""}`}
-            onClick={closeSidePanel}
+            className={`nav-link ${isPathActive("/notification") ? "active" : ""}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-bell"></i>
@@ -403,11 +404,11 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           </Link>
         </li>
 
+        {/* Settings */}
         <li className="nav-item">
           <Link
             to="/adminSettings"
-            className={`nav-link ${location.pathname === "/adminSettings" ? "active" : ""}`}
-            onClick={closeSidePanel}
+            className={`nav-link ${isPathActive("/adminSettings") ? "active" : ""}`}
           >
             <div className="icon-with-text">
               <i className="bi bi-gear"></i>
@@ -415,8 +416,10 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
             </div>
           </Link>
         </li>
+
+        {/* Logout */}
         <li className="nav-item" onClick={handleLogoutClick}>
-          <button  className="nav-link btn-link">
+          <button className="nav-link btn-link">
             <div className="icon-with-text">
               <i className="bi bi-box-arrow-right"></i>
               <span className="nav-text">Logout</span>
@@ -424,6 +427,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           </button>
         </li>
       </ul>
+
       {showLogoutPopup && (
         <div className="logout-confirmation-popup">
           <div className="popup-content">
