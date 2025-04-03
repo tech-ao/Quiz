@@ -5,6 +5,7 @@ import EditStudent from './EditStudent';
 import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown, Badge } from 'react-bootstrap';
 import ViewStudentPanel from './ViewStudent';
+import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
@@ -14,18 +15,7 @@ import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
 import "./StudentList.css"
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'Approved':
-      return 'success';
-    case 'Danger':
-      return 'error';
-    case 'Inactive':
-      return 'warning';
-    default:
-      return 'default';
-  }
-};
+
 
 const StudentList = () => {
   // For tablet view (768px to 1023px), sidebar is hidden by default (only shown for widths >=1024px)
@@ -33,10 +23,15 @@ const StudentList = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
-
+  const [teacherData, setTeacherData] = useState({});
+  const [error, setError] = useState(null);    
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
   const toggleSidebar = () => {
     setIsSidebarVisible(prev => !prev);
   };
+
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,7 +44,7 @@ const StudentList = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const { students, loading, error } = useSelector((state) => state.students);
+  const { students } = useSelector((state) => state.students);
   const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,6 +57,27 @@ const StudentList = () => {
 
   const studentsPerPage = 10;
 
+console.log("abcd");
+
+   useEffect(() => {
+         const storedStudentId = localStorage.getItem("studentId");
+         const newStudentId = location.state
+   
+         console.log("asd");
+         
+     
+         if (newStudentId) {
+           localStorage.setItem("teacherData", teacherData); // Store for persistence
+           setTeacherData(teacherData);
+         } else {
+           setError("Student ID is missing");
+           setLoading(false);
+         }
+       }, [location.state]);
+   
+     console.log(sessionStorage);
+   
+     console.log(teacherData.userData);
   useEffect(() => {
     const paginationDetail = {
       pageSize: studentsPerPage,
@@ -71,7 +87,7 @@ const StudentList = () => {
   }, [dispatch, currentPage]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value); 
     setCurrentPage(0);
   };
 
@@ -85,6 +101,9 @@ const StudentList = () => {
     }
     return gradeName.toString().trim();
   };
+
+  console.log("ABCD");
+  
 
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult.filter((student) => {

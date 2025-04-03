@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
+import { useLocation } from "react-router-dom";
+
 import {
   Container,
   Row,
@@ -24,83 +26,89 @@ import { fetchDashboardContent } from "../../redux/Services/Enum";
 
 const TeacherDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
+  const [teacherData, setTeacherData] = useState({});
+  const location = useLocation();
+  const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 992);
   const [sortBy, setSortBy] = useState("Recently");
   const [transactions, setTransactions] = useState([
-      {
-        purpose: "Fauget Cafe",
-        type: "Coffee Shop",
-        date: "Today",
-        timeAgo: "2m ago",
-        amount: 500,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 2 * 60 * 1000,
-      },
-      {
-        purpose: "Claudia Store",
-        type: "Accessories",
-        date: "Today",
-        timeAgo: "5m ago",
-        amount: 1000,
-        paymentType: "Transfer",
-        status: "Done",
-        timestamp: new Date().getTime() - 5 * 60 * 1000,
-      },
-      {
-        purpose: "Chidi Barber",
-        type: "Barber Shop",
-        date: "Today",
-        timeAgo: "1h ago",
-        amount: 500,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 60 * 60 * 1000,
-      },
-      {
-        purpose: "King's",
-        type: "Coffe Shop",
-        date: "Today",
-        timeAgo: "8h ago",
-        amount: 120,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 8 * 60 * 1000,
-      },
-      {
-        purpose: "NKM Furniture",
-        type: "Furniture",
-        date: "Yesturday",
-        timeAgo: "1h ago",
-        amount: 500,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 30 * 80 * 1000,
-      },
-      {
-        purpose: "Black Suits",
-        type: "Clothes",
-        date: "Today",
-        timeAgo: "2days ago",
-        amount: 1500,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 10 * 20 * 1000,
-      },
-      {
-        purpose: "Wilde Bears",
-        type: "Choclate Shop",
-        date: "Yesturday",
-        timeAgo: "8h ago",
-        amount: 300,
-        paymentType: "QR Code",
-        status: "Done",
-        timestamp: new Date().getTime() - 50 * 60 * 1000,
-      },
-    ]);
-  const navigate = useNavigate();
+    {
+      purpose: "Fauget Cafe",
+      type: "Coffee Shop",
+      date: "Today",
+      timeAgo: "2m ago",
+      amount: 500,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 2 * 60 * 1000,
+    },
+    {
+      purpose: "Claudia Store",
+      type: "Accessories",
+      date: "Today",
+      timeAgo: "5m ago",
+      amount: 1000,
+      paymentType: "Transfer",
+      status: "Done",
+      timestamp: new Date().getTime() - 5 * 60 * 1000,
+    },
+    {
+      purpose: "Chidi Barber",
+      type: "Barber Shop",
+      date: "Today",
+      timeAgo: "1h ago",
+      amount: 500,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 60 * 60 * 1000,
+    },
+    {
+      purpose: "King's",
+      type: "Coffe Shop",
+      date: "Today",
+      timeAgo: "8h ago",
+      amount: 120,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 8 * 60 * 1000,
+    },
+    {
+      purpose: "NKM Furniture",
+      type: "Furniture",
+      date: "Yesturday",
+      timeAgo: "1h ago",
+      amount: 500,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 30 * 80 * 1000,
+    },
+    {
+      purpose: "Black Suits",
+      type: "Clothes",
+      date: "Today",
+      timeAgo: "2days ago",
+      amount: 1500,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 10 * 20 * 1000,
+    },
+    {
+      purpose: "Wilde Bears",
+      type: "Choclate Shop",
+      date: "Yesturday",
+      timeAgo: "8h ago",
+      amount: 300,
+      paymentType: "QR Code",
+      status: "Done",
+      timestamp: new Date().getTime() - 50 * 60 * 1000,
+    },
+  ]);
+
+  console.log(teacherData);
   
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       setLoading(true);
@@ -115,6 +123,27 @@ const TeacherDashboard = () => {
     };
     fetchDashboardData();
   }, []);
+
+    useEffect(() => {
+      const storedStudentId = localStorage.getItem("studentId");
+      const newStudentId = location.state
+
+      console.log(newStudentId);
+      
+  
+      if (newStudentId) {
+        localStorage.setItem("teacherData", teacherData); // Store for persistence
+        setTeacherData(teacherData);
+      } else {
+        setError("Student ID is missing");
+        setLoading(false);
+      }
+    }, [location.state]);
+
+  console.log(sessionStorage);
+
+  console.log(teacherData.userData);
+
 
   // Stats data with routing paths
   const statsData = [
@@ -184,7 +213,7 @@ const TeacherDashboard = () => {
                 <Row className="g-3 dashboard-row mx-1">
                   {statsData.map((stat, index) => (
                     <Col xs={12} md={6} key={index} className="px-1">
-                      <Card 
+                      <Card
                         className="stats-card border-0"
                         onClick={() => handleCardClick(stat.path)}
                         style={{ cursor: "pointer" }}
@@ -200,8 +229,8 @@ const TeacherDashboard = () => {
                     </Col>
                   ))}
                 </Row>
-                <Row className="mt-4 mx-1"> 
-                <Col xs={12} className="px-1">
+                <Row className="mt-4 mx-1">
+                  <Col xs={12} className="px-1">
                     <Card className="payment-card border-0 h-100">
                       <Card.Body>
                         <div className="payment-history-header">
@@ -231,17 +260,17 @@ const TeacherDashboard = () => {
                             </div>
                           </div>
                           <div className="icon-container">
-  <Button className="icon-only-button me-2">
-    <FaPrint className="icon-only" />
-    <span className="button-text">Print</span>
-  </Button>
-  <Button className="icon-only-button">
-    <FaShareAlt className="icon-only" />
-    <span className="button-text">Share</span>
-  </Button>
-</div>
+                            <Button className="icon-only-button me-2">
+                              <FaPrint className="icon-only" />
+                              <span className="button-text">Print</span>
+                            </Button>
+                            <Button className="icon-only-button">
+                              <FaShareAlt className="icon-only" />
+                              <span className="button-text">Share</span>
+                            </Button>
+                          </div>
                         </div>
-                        
+
                         <div className="table_container">
                           <Table responsive="md" className="payment-table">
                             <thead className="payment-table-head">
@@ -274,26 +303,25 @@ const TeacherDashboard = () => {
                                     </small>
                                   </td>
                                   <td>
-  <div className=".status-cell-right "> {/* Right alignment */}
-    <span
-      className={`badge ${
-        transaction.status === "Done"
-          ? "bg-success"
-          : "bg-warning"
-      } rounded-pill`}
-    >
-      {transaction.status}
-    </span>
-  </div>
-</td>
+                                    <div className=".status-cell-right "> {/* Right alignment */}
+                                      <span
+                                        className={`badge ${transaction.status === "Done"
+                                            ? "bg-success"
+                                            : "bg-warning"
+                                          } rounded-pill`}
+                                      >
+                                        {transaction.status}
+                                      </span>
+                                    </div>
+                                  </td>
                                 </tr>
                               ))}
                             </tbody>
                           </Table>
                         </div>
-                        
+
                         <div className="text-center mt-4">
-                          <a 
+                          <a
                             href="#"
                             className="text-primary text-decoration-none"
                             onClick={(e) => {
@@ -310,11 +338,11 @@ const TeacherDashboard = () => {
                 </Row>
               </>
             ) : (
-              <Row className="g-4 dashboard-row mx-1"> 
+              <Row className="g-4 dashboard-row mx-1">
                 <Col xs={12} lg={5} md={6} xl={4} className="box-details px-1">
                   {statsData.map((stat, index) => (
                     <div key={index} className="mb-4 my-1">
-                      <Card 
+                      <Card
                         className="stats-card border-0"
                         onClick={() => handleCardClick(stat.path)}
                         style={{ cursor: "pointer" }}
@@ -403,11 +431,10 @@ const TeacherDashboard = () => {
                                 </td>
                                 <td>
                                   <span
-                                    className={`badge ${
-                                      transaction.status === "Done"
+                                    className={`badge ${transaction.status === "Done"
                                         ? "bg-success"
                                         : "bg-warning"
-                                    } rounded-pill`}
+                                      } rounded-pill`}
                                   >
                                     {transaction.status}
                                   </span>
@@ -418,7 +445,7 @@ const TeacherDashboard = () => {
                         </Table>
                       </div>
                       <div className="text-center mt-4">
-                        <a 
+                        <a
                           href="#"
                           className="text-primary text-decoration-none"
                           onClick={(e) => {

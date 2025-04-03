@@ -74,7 +74,7 @@ const LoginPage = () => {
             console.log("Login Successful:", data);
             sessionStorage.setItem("isLoggedIn", "true");
             sessionStorage.setItem("userRole", role);
-            const dashboardPath = role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
+            const dashboardPath = role === "Student" ? "/StudentDashboard" : "/teacherDashboard";
             navigate(dashboardPath, { state: { userData: data.data } });
           }
         } else {

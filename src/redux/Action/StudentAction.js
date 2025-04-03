@@ -4,7 +4,7 @@ import { fetchStudents, addStudent, editStudent ,getStudent , deleteStudent ,fet
 export const getStudents = (paginationDetail) => async (dispatch) => {
   dispatch({ type: "FETCH_STUDENTS_REQUEST" });
   try {
-    const students = await fetchStudents(paginationDetail);
+    const students = await fetchStudents(paginationDetail );
     dispatch({ type: "FETCH_STUDENTS_SUCCESS", payload: students });
   } catch (error) {
     dispatch({ type: "FETCH_STUDENTS_FAILURE", payload: error.message });

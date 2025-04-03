@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import AddStudent from '../Student/AddStudent';
 import EditStudent from '../Student/EditStudent';
+import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
-import TeacherSidepannel from "./TeacherSidepannel"
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown, Badge } from 'react-bootstrap';
 import ViewStudentPanel from '../Student/ViewStudent';
+import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
@@ -12,45 +13,38 @@ import { FaFilter } from "react-icons/fa"; // Import filter icon
 
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
-import "./StudentData.css" 
+import "./StudentData.css"
 
-const getStatusColor = (status) => {
-  switch (status) {
-    case 'Approved':
-      return 'success';
-    case 'Danger':
-      return 'error';
-    case 'Inactive':
-      return 'warning';
-    default:
-      return 'default';
-  }
-};
+
 
 const StudentData = () => {
+  // For tablet view (768px to 1023px), sidebar is hidden by default (only shown for widths >=1024px)
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
-
+  const [teacherData, setTeacherData] = useState({});
+  const [error, setError] = useState(null);    
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
   const toggleSidebar = () => {
     setIsSidebarVisible(prev => !prev);
   };
 
-    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
-  
-    useEffect(() => {
-      const handleResize = () => {
-        // Sidebar visible only for screens 1024px and above
-        setIsSidebarVisible(window.innerWidth >= 1024);
-        setIsSmallScreen(window.innerWidth < 768);
-        setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-      };
-      window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-    }, []);
-  
 
-  const { students, loading, error } = useSelector((state) => state.students);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Show sidebar only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const { students } = useSelector((state) => state.students);
   const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,16 +57,37 @@ const StudentData = () => {
 
   const studentsPerPage = 10;
 
+console.log("abcd");
+
+   useEffect(() => {
+         const storedStudentId = localStorage.getItem("studentId");
+         const newStudentId = location.state
+   
+         console.log("asd");
+         
+     
+         if (newStudentId) {
+           localStorage.setItem("teacherData", teacherData); // Store for persistence
+           setTeacherData(teacherData);
+         } else {
+           setError("Student ID is missing");
+           setLoading(false);
+         }
+       }, [location.state]);
+   
+     console.log(sessionStorage);
+   
+     console.log(teacherData.userData);
   useEffect(() => {
     const paginationDetail = {
       pageSize: studentsPerPage,
       pageNumber: currentPage + 1,
     };
-    dispatch(getStudents({ paginationDetail }));
+    dispatch(getStudents({ paginationDetail, teacherId: 1066 } ));
   }, [dispatch, currentPage]);
 
   const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
+    setSearchTerm(e.target.value); 
     setCurrentPage(0);
   };
 
@@ -80,7 +95,6 @@ const StudentData = () => {
     setCurrentPage(pageNumber - 1);
   };
 
-  // Helper function to extract the numeric grade (if gradeName is in "Level X" format)
   const extractGradeNumber = (gradeName) => {
     if (typeof gradeName === 'string' && gradeName.toLowerCase().includes('level')) {
       return gradeName.toLowerCase().replace('level', '').trim();
@@ -88,7 +102,9 @@ const StudentData = () => {
     return gradeName.toString().trim();
   };
 
-  // Filter students by search term and selected grade filter (if any)
+  console.log("ABCD");
+  
+
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
     ? students.data.searchAndListStudentResult.filter((student) => {
         const matchesSearch = [student.firstName, student.email]
@@ -158,7 +174,7 @@ const StudentData = () => {
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidepannel />}
+        {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>
@@ -172,15 +188,15 @@ const StudentData = () => {
                 </Row>
                 {/* Row 2: Search bar, Filter Icon, and Add Student Button in the same row */}
                 <Row className="mt-2">
-                  <Col className="searchcontainer">
+                  <Col className="search-container">
                     <Form.Control
                       placeholder="Search students by name or email"
                       value={searchTerm}
                       onChange={handleSearch}
                     />
                     <Dropdown className="filter-icon">
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{backgroundColor:"transparent" }}>
-                      <FaFilter style={{ fontSize: "30px", }} />
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ backgroundColor: "transparent" }}>
+                        <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu className="dropdown-menu-custom">
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>Clear Filter</Dropdown.Item>
@@ -195,7 +211,7 @@ const StudentData = () => {
                       variant="outline-success"
                       className="add-student-btn"
                       onClick={handleOpenAddStudent}
-                     
+                      style={{width:"250px"}}
                     >
                       <i className="bi bi-person-plus me-2"></i> Add Student
                     </Button>
@@ -204,10 +220,10 @@ const StudentData = () => {
               </>
             ) : (
               <Row>
-                <Col md={6}>
+                <Col xs={12} sm={12} md={isTablet ? 4 : 6}>
                   <h2 className="fw-bold" style={{ marginTop: "20px" }}>Student List</h2>
                 </Col>
-                <Col md={6} className="d-flex align-items-center">
+                <Col xs={12} sm={12} md={isTablet ? 8 : 6} className="d-flex align-items-center">
                   <InputGroup style={{ maxWidth: "430px", marginRight: '15px' }}>
                     <Form.Control
                       placeholder="Search students by name or email"
@@ -215,8 +231,8 @@ const StudentData = () => {
                       onChange={handleSearch}
                     />
                     <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px",backgroundColor:"transparent" }}>
-                        <FaFilter style={{ fontSize: "30px" }}  />
+                      <Dropdown.Toggle variant="success" id="dropdown-filter" style={{ marginLeft: "20px", backgroundColor: "transparent" }}>
+                        <FaFilter style={{ fontSize: "30px" }} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item onClick={() => setSelectedGrade(null)}>
@@ -230,7 +246,7 @@ const StudentData = () => {
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}>
+                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
                     <i className="bi bi-person-plus me-2"></i> Add Student
                   </Button>
                 </Col>
@@ -251,7 +267,12 @@ const StudentData = () => {
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Date of Birth</th>
-                    <th>Grade</th>
+                    <th>Level</th>                  
+                    <th>Centre Name</th>
+                    <th>Place</th>
+                    <th>Joining Date</th>
+                    <th>Current Level</th>
+                    <th>Completed Level</th>
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -270,6 +291,12 @@ const StudentData = () => {
                           <td>{student.phoneNumber}</td>
                           <td>{new Date(student.dob).toLocaleDateString('en-GB')}</td>
                           <td>{student.gradeName}</td>
+                        
+                          <td>{student.centerName}</td>
+                          <td>{student.place}</td>
+                          <td>{student.doj ? new Date(student.doj).toLocaleDateString('en-GB') : ''}</td>
+                          <td>{student.currentLevelName}</td>
+                          <td>{student.completedLevelName}</td>
                           <td>
                             <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
                               {student.statusName}
@@ -304,24 +331,24 @@ const StudentData = () => {
                   )}
                 </tbody>
               </Table>
-              <div className="d-flex justify-content-center mt-4">
-                <ReactPaginate
-                  pageCount={totalPages}
-                  pageRangeDisplayed={10}
-                  marginPagesDisplayed={2}
-                  onPageChange={(e) => handlePageChange(e.selected + 1)}
-                  containerClassName="pagination"
-                  activeClassName="active"
-                  pageClassName="page-item"
-                  pageLinkClassName="page-link"
-                  previousLabel="&laquo;"
-                  nextLabel="&raquo;"
-                  previousClassName="page-item"
-                  nextClassName="page-item"
-                  previousLinkClassName="page-link"
-                  nextLinkClassName="page-link"
-                />
-              </div>
+            </div>
+            <div className="d-flex justify-content-center mt-4">
+              <ReactPaginate
+                pageCount={totalPages}
+                pageRangeDisplayed={10}
+                marginPagesDisplayed={2}
+                onPageChange={(e) => handlePageChange(e.selected + 1)}
+                containerClassName="pagination"
+                activeClassName="active"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousLabel="&laquo;"
+                nextLabel="&raquo;"
+                previousClassName="page-item"
+                nextClassName="page-item"
+                previousLinkClassName="page-link"
+                nextLinkClassName="page-link"
+              />
             </div>
           </div>
         </Container>
