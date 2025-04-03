@@ -298,7 +298,7 @@ const EditTeacher = ({ show, onClose  }) => {
                             <Col md={6}>
                     <Form.Group>
                         <Form.Label>Highest Level of Qualification</Form.Label>
-                        <Form.Control type="text" name="higherLevelEducation" value={formData.higherLevelEducation} onChange={handleChange} required />
+                        <Form.Control type="text" name="higherLevelEducation" value={formData.educationQualificationModel?.higherLevelEducation} onChange={handleChange} required />
                     </Form.Group>
                     </Col>
                     </Row>
@@ -307,13 +307,13 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group>
                         <Form.Label>institute(s) Attended</Form.Label>
-                        <Form.Control type="text" name="institute" value={formData.institute} onChange={handleChange} required />
+                        <Form.Control type="text" name="institute" value={formData.educationQualificationModel?.institute} onChange={handleChange} required />
                     </Form.Group>
                     </Col>
                     <Col md={6}>
                     <Form.Group>
                         <Form.Label>Subject subjectSpecialist</Form.Label>
-                        <Form.Control type="text" name="subjectSpecialist" value={formData.subjectSpecialist} onChange={handleChange} required />
+                        <Form.Control type="text" name="subjectSpecialist" value={formData.educationQualificationModel?.subjectSpecialist} onChange={handleChange} required />
                     </Form.Group>
                     </Col>
                     </Row>
@@ -322,7 +322,7 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Year of Graduation</Form.Label>
-                        <Form.Control type="text" name="yearOfGraduation" value={formData.yearOfGraduation} onChange={handleChange} required />
+                        <Form.Control type="text" name="yearOfGraduation" value={formData.educationQualificationModel?.yearOfGraduation} onChange={handleChange} required />
                     </Form.Group>
                     </Col>
                     
@@ -330,7 +330,7 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Current/Previous Employer</Form.Label>
-                        <Form.Control type="text" name="employerName" value={formData.employerName} onChange={handleChange} />
+                        <Form.Control type="text" name="employerName" value={formData.professionalExperianceModel?.employerName} onChange={handleChange} />
                     </Form.Group>
                     </Col>
                     </Row>
@@ -339,14 +339,14 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Job Title</Form.Label>
-                        <Form.Control type="text" name="jobTitle" value={formData.jobTitle} onChange={handleChange} />
+                        <Form.Control type="text" name="jobTitle" value={formData.professionalExperianceModel?.jobTitle} onChange={handleChange} />
                     </Form.Group>
                     </Col>
 
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Years of Experience</Form.Label>
-                        <Form.Control type="text" name="yoe" value={formData.yoe} onChange={handleChange} />
+                        <Form.Control type="text" name="yoe" value={formData.professionalExperianceModel?.yoe} onChange={handleChange} />
                     </Form.Group>
                     </Col>
                     </Row>
@@ -374,7 +374,7 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Preferred Work Days</Form.Label>
-                        <Form.Control type="text" name="preferredWorkDays" value={formData.preferredWorkDays} onChange={handleChange} />
+                        <Form.Control type="text" name="preferredWorkDays" value={formData.preferedWorkScheduledName} onChange={handleChange} />
                     </Form.Group>
                     </Col>
                     <Col md={6}>

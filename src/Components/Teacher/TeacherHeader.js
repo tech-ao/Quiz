@@ -18,7 +18,7 @@ import UpdatePassword from "../Student/UpdatePassword";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudent } from "../../redux/Action/StudentAction";
 
-const TeacherHeader = ({ toggleSidebar }) => {
+const TeacherHeader = ({ toggleSidebar , teacherName }) => {
   const [showPopup, setShowPopup] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -257,7 +257,7 @@ const TeacherHeader = ({ toggleSidebar }) => {
             >
               <RiAdminLine className="headericon" style={{fontSize:"24px",height: isMobile ? "25px" : "25px"}}/>
               <span className="admin-name" style={{ color: "#09690c" }}>
-                Teacher
+                {teacherName}
               </span>
             </Button>
             {showPopup && (

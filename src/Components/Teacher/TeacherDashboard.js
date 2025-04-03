@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { useLocation } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
   Row,
@@ -23,9 +23,12 @@ import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "./TeacherDashboard.css";
 import { fetchDashboardContent } from "../../redux/Services/Enum";
+import { getTeacher } from "../../redux/Services/api";
 
 const TeacherDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
+  const [teacherId, setTeacherId] = useState(null);  
+  const dispatch = useDispatch();
   const [teacherData, setTeacherData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(null);
@@ -64,11 +67,36 @@ const TeacherDashboard = () => {
     fetchDashboardData();
   }, []);
 
+   useEffect(() => {
+      if (!teacherId) {
+        setLoading(false); // Stop loading if no teacherId
+        return;
+      }
+  
+      const fetchAllData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const teacherResponse = await getTeacher(teacherId);
+          setTeacherData(teacherResponse.data);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchAllData();
+    }, [teacherId, dispatch]);
+
   useEffect(() => {
     const teacherData = location.state;
     if (teacherData) {
       localStorage.setItem("teacherData", JSON.stringify(teacherData)); // Store as a string
-      setTeacherData(teacherData);
+      setTeacherId(teacherData?.userData.teacherId);
+      console.log(teacherData );
+      console.log(teacherId);
+      
     } else {
       const storedTeacherData = localStorage.getItem("teacherData");
       if (storedTeacherData) {
@@ -135,7 +163,7 @@ const TeacherDashboard = () => {
 
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData.fullName} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="teacher-main-container p-4 mx-auto">
