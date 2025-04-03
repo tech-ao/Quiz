@@ -1,17 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './StudentSidebar.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const StudentSidePannel = ({ studyModeId }) => {
-  console.log(studyModeId);
-  
   const location = useLocation();
   const navigate = useNavigate();
-
+  
+  const [openMenus, setOpenMenus] = useState({
+    test: false,
+    onlineMeeting: false
+  });
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
-  const [isTestOpen, setTestOpen] = useState(false);
-  const[isOnlineMeetingOpen,setOnlineMeetingOpen]=useState(false)
+
+  // Auto-expand menus based on current path
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    setOpenMenus(prev => ({
+      ...prev,
+      test: currentPath.includes('/Test') || currentPath.includes('/completedtest'),
+      onlineMeeting: currentPath.includes('/assigned-class') || currentPath.includes('/completed_class')
+    }));
+  }, [location.pathname]);
+
+  const toggleMenu = (menuName) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [menuName]: !prev[menuName]
+    }));
+  };
 
   const handleLogoutClick = () => {
     setShowLogoutPopup(true);
@@ -29,7 +47,6 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   // Handle navigation with studyModeId check for online class
   const handleNavigation = (path) => {
-    // For online class, ensure only online mode students can access
     if (path === '/StudentOnlineClass' && Number(studyModeId) !== 2) {
       console.warn("Access denied to Online Class for offline students.");
       return;
@@ -37,19 +54,15 @@ const StudentSidePannel = ({ studyModeId }) => {
     navigate(path);
   };
 
-  const toggleTestMenu = () => {
-    setTestOpen(!isTestOpen);
-  };
+  const isPathActive = (path) => location.pathname === path;
+  const isSectionActive = (paths) => paths.some(path => location.pathname.includes(path));
 
-  const toggleOnlineMenu = () => {
-    setOnlineMeetingOpen(!isOnlineMeetingOpen);
-  };
   return (
     <div className="side-panel bg-green" style={{ width: '250px', minHeight: '100vh', position: 'fixed' }}>
       <ul className="nav flex-column">
         <li className="nav-item">
           <div
-            className={`nav-link ${location.pathname === '/studentDashboard' ? 'active' : ''}`}
+            className={`nav-link ${isPathActive('/studentDashboard') ? 'active' : ''}`}
             onClick={() => handleNavigation('/studentDashboard')}
             style={{ cursor: 'pointer' }}
           >
@@ -63,21 +76,21 @@ const StudentSidePannel = ({ studyModeId }) => {
         {/* Test Dropdown */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isTestOpen ? 'active' : ''}`}
-            onClick={toggleTestMenu}
+            className={`nav-link ${isSectionActive(['/Test', '/completedtest']) ? 'active' : ''}`}
+            onClick={() => toggleMenu('test')}
             style={{ cursor: 'pointer' }}
           >
             <div className="icon-with-text">
               <i className="bi bi-patch-question"></i>
               <span className="nav-text">Test</span>
-              <i className={`bi ${isTestOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.test ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isTestOpen && (
+          {openMenus.test && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <div
-                  className={`nav-link ${location.pathname === '/Test' ? 'active' : ''}`}
+                  className={`nav-link ${isPathActive('/Test') ? 'active' : ''}`}
                   onClick={() => handleNavigation('/Test')}
                   style={{ marginLeft: '15px', cursor: 'pointer' }}
                 >
@@ -89,7 +102,7 @@ const StudentSidePannel = ({ studyModeId }) => {
               </li>
               <li className="nav-item">
                 <div
-                  className={`nav-link ${location.pathname === '/completedtest' ? 'active' : ''}`}
+                  className={`nav-link ${isPathActive('/completedtest') ? 'active' : ''}`}
                   onClick={() => handleNavigation('/completedtest')}
                   style={{ marginLeft: '15px', cursor: 'pointer' }}
                 >
@@ -105,7 +118,7 @@ const StudentSidePannel = ({ studyModeId }) => {
 
         <li className="nav-item">
           <div
-            className={`nav-link ${location.pathname === '/studentCertificate' ? 'active' : ''}`}
+            className={`nav-link ${isPathActive('/studentCertificate') ? 'active' : ''}`}
             onClick={() => handleNavigation('/studentCertificate')}
             style={{ cursor: 'pointer' }}
           >
@@ -118,7 +131,7 @@ const StudentSidePannel = ({ studyModeId }) => {
 
         <li className="nav-item">
           <div
-            className={`nav-link ${location.pathname === '/studentnotification' ? 'active' : ''}`}
+            className={`nav-link ${isPathActive('/studentnotification') ? 'active' : ''}`}
             onClick={() => handleNavigation('/studentnotification')}
             style={{ cursor: 'pointer' }}
           >
@@ -131,7 +144,7 @@ const StudentSidePannel = ({ studyModeId }) => {
 
         <li className="nav-item">
           <div
-            className={`nav-link ${location.pathname === '/studentSettings' ? 'active' : ''}`}
+            className={`nav-link ${isPathActive('/studentSettings') ? 'active' : ''}`}
             onClick={() => handleNavigation('/studentSettings')}
             style={{ cursor: 'pointer' }}
           >
@@ -141,36 +154,38 @@ const StudentSidePannel = ({ studyModeId }) => {
             </div>
           </div>
         </li>
+
         {/* Online Meeting Dropdown */}
         <li className="nav-item">
           <div
-            className={`nav-link ${isOnlineMeetingOpen ? 'active' : ''}`}
-            onClick={toggleOnlineMenu}
+            className={`nav-link ${isSectionActive(['/assigned-class', '/completed_class']) ? 'active' : ''}`}
+            onClick={() => toggleMenu('onlineMeeting')}
             style={{ cursor: 'pointer' }}
           >
             <div className="icon-with-text">
-              <i className="bi bi-patch-question"></i>
+              <i className="bi bi-laptop"></i>
               <span className="nav-text">Online Meeting</span>
-              <i className={`bi ${isOnlineMeetingOpen ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+              <i className={`bi ${openMenus.onlineMeeting ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
             </div>
           </div>
-          {isOnlineMeetingOpen && (
+          
+          {openMenus.onlineMeeting && (
             <ul className="nav flex-column sub-nav">
               <li className="nav-item">
                 <div
-                  className={`nav-link ${location.pathname === '/assigned-class' ? 'active' : ''}`}
+                  className={`nav-link ${isPathActive('/assigned-class') ? 'active' : ''}`}
                   onClick={() => handleNavigation('/assigned-class')}
                   style={{ marginLeft: '15px', cursor: 'pointer' }}
                 >
                   <div className="icon-with-text" style={{ gap: '5px' }}>
-                    <i className="bi bi-calendar"></i>
+                    <i className="bi bi-people"></i>
                     <span className="nav-text">Assigned Class</span>
                   </div>
                 </div>
               </li>
               <li className="nav-item">
                 <div
-                  className={`nav-link ${location.pathname === '/completed_class' ? 'active' : ''}`}
+                  className={`nav-link ${isPathActive('/completed_class') ? 'active' : ''}`}
                   onClick={() => handleNavigation('/completed_class')}
                   style={{ marginLeft: '15px', cursor: 'pointer' }}
                 >
@@ -183,22 +198,6 @@ const StudentSidePannel = ({ studyModeId }) => {
             </ul>
           )}
         </li>
-
-        {/* Online Class: Rendered only for online mode students */}
-        {Number(studyModeId) === 1 && (
-          <li className="nav-item">
-            <div
-              className={`nav-link ${location.pathname === '/StudentOnlineClass' ? 'active' : ''}`}
-              onClick={() => handleNavigation('/StudentOnlineClass')}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="icon-with-text">
-                <i className="bi bi-laptop"></i>
-                <span className="nav-text">Online Class</span>
-              </div>
-            </div>
-          </li>
-        )}
 
         <li className="nav-item">
           <div

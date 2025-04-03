@@ -19,16 +19,17 @@ const TeacherSidePanel = () => {
   useEffect(() => {
     const currentPath = location.pathname;
     
-    // Auto-expand Online Class menu if on related pages
-    if (currentPath.includes('/assignclass') || currentPath.includes('/completedclass')) {
-      setOpenMenus(prev => ({ ...prev, onlineClass: true }));
-    }
+   
     
     // Auto-expand Attendance menu if on related pages
     if (currentPath.includes('/attendance') || currentPath.includes('/approvedleave') || currentPath.includes('/attendanceData')) {
       setOpenMenus(prev => ({ ...prev, attendance: true }));
     }
     
+    // Auto-expand Online Class menu if on related pages
+    if (currentPath.includes('/meeting') || currentPath.includes('/assignclass') || currentPath.includes('/completedclass')) {
+      setOpenMenus(prev => ({ ...prev, onlineClass: true }));
+    }
     // Auto-expand Lesson Plan menu if on related pages
     if (currentPath.includes('/syllabus') || currentPath.includes('/topics') || currentPath.includes('/onlineClassShedule')) {
       setOpenMenus(prev => ({ ...prev, lessonPlan: true }));
@@ -85,7 +86,7 @@ const TeacherSidePanel = () => {
             {/* Online Class */}
             <li className="nav-item">
               <div 
-                className={`nav-link ${isSectionActive(['/assignclass', '/completedclass']) ? 'active' : ''}`} 
+                className={`nav-link ${isSectionActive(['/meeting','/assignclass', '/completedclass']) ? 'active' : ''}`} 
                 onClick={() => toggleMenu('onlineClass')} 
                 style={{ cursor: 'pointer' }}
               >
@@ -95,6 +96,7 @@ const TeacherSidePanel = () => {
                   <i className={`bi ${openMenus.onlineClass ? 'bi-chevron-down' : 'bi-chevron-right'} dropdown-icon`}></i>
                 </div>
               </div>
+
               {openMenus.onlineClass && (
                 <ul className="nav flex-column sub-nav">
                   <li className="nav-item">

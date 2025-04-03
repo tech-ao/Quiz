@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TeacherHeader from "./TeacherHeader";
 import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherAddPopup from "./TeacherAddpopup";
+// import TeacherAddPopup from "./TeacherAddpopup";
 import "./AssignClass.css";
 
 const AssignClass = () => {
@@ -159,20 +159,9 @@ const AssignClass = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button
-                  className="btn btn-success addbtn"
-                  onClick={() => setShowPopup(true)}
-                >
-                  <i className="bi bi-plus"></i> Add Classes
-                </button>
+                
               </div>
-              {showPopup && (
-                <TeacherAddPopup
-                  onClose={() => setShowPopup(false)}
-                  onSave={(data) => console.log(data)}
-                />
-              )}
-
+            
               {/* Tools Buttons Below Add Button */}
               <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
@@ -249,7 +238,7 @@ const AssignClass = () => {
                             style={{ color: "#198754", background: "transparent" }}
                             onClick={() => handleAction("view", classItem)}
                           >
-                            <i className="bi bi-plus" style={{ fontSize: "20px" }}></i>
+                            <i className="bi bi-link-45deg" style={{ fontSize: "20px" }}></i>
                           </button>
 
                           <button

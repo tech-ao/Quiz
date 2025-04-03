@@ -8,7 +8,7 @@
   background-color: #155724; /* Dark green background */
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Prevent scrolling */
+  overflow-y: auto; /* Prevent scrolling */
 }
 
 /* Navigation links inside the sidebar */
@@ -21,6 +21,7 @@
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
+
 
 
 
@@ -55,7 +56,7 @@
 .nav-text {
   opacity: 1;
   visibility: visible;
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
 }
 

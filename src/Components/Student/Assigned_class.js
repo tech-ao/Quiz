@@ -67,14 +67,7 @@ const Assigned_class = () => {
     window.innerWidth >= 1024
   );
 
-//   useEffect(() => {
-//       const handleResize = () => {
-//         setIsSidebarVisible(window.innerWidth >= 768);
-//       };
-//       window.addEventListener("resize", handleResize);
-//       return () => window.removeEventListener("resize", handleResize);
-//     }, []);
-  
+
     const toggleSidebar = () => {
       setIsSidebarVisible((prev) => !prev);
     };
@@ -116,22 +109,7 @@ const Assigned_class = () => {
     setFilteredClasses(filtered);
   }, [searchTerm, allClasses]);
   
-  const handleAction = (action, rowData) => {
-    setSelectedRow(rowData);
-    switch (action) {
-      case "view":
-        setShowDetails(true);
-        break;
-      case "edit":
-        setShowEdit(true);
-        break;
-      case "remove":
-        setShowDeleteConfirm(true);
-        break;
-      default:
-        break;
-    }
-  };
+
   
   return (
     <div>
@@ -169,19 +147,8 @@ const Assigned_class = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button
-                  className="btn btn-success addbtn"
-                  onClick={() => setShowPopup(true)}
-                >
-                  <i className="bi bi-plus"></i> Join class
-                </button>
-              </div>
-              {showPopup && (
-                <div
-                  onClose={() => setShowPopup(false)}
-                  onSave={(data) => console.log(data)}
-                />
-              )}
+       
+            </div>
 
             </div>
 
@@ -205,6 +172,7 @@ const Assigned_class = () => {
                     <th>Duration (mins)</th>
                     <th>Created By</th>
                     <th>Created For</th>
+                    <th>Join Class</th>
                    
                   </tr>
                 </thead>
@@ -218,6 +186,20 @@ const Assigned_class = () => {
                       <td>{classItem.duration}</td>
                       <td>{classItem.createdBy}</td>
                       <td>{classItem.createdFor}</td>
+                      <td>
+                      <button
+    className="btn btn-success btn-sm "
+    // onClick={() => setShowPopup(true)}
+    style={{
+      minWidth: '20px',
+      padding: '0.25rem 0.5rem',
+      borderRadius: '4px',
+      transition: 'all 0.2s ease'
+    }}
+  >
+    <i className="bi bi-plus-lg"></i>
+  </button>
+</td>
                       
                       
                     </tr>
