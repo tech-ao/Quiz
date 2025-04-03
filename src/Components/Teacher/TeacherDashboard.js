@@ -42,67 +42,7 @@ const TeacherDashboard = () => {
       paymentType: "QR Code",
       status: "Done",
       timestamp: new Date().getTime() - 2 * 60 * 1000,
-    },
-    {
-      purpose: "Claudia Store",
-      type: "Accessories",
-      date: "Today",
-      timeAgo: "5m ago",
-      amount: 1000,
-      paymentType: "Transfer",
-      status: "Done",
-      timestamp: new Date().getTime() - 5 * 60 * 1000,
-    },
-    {
-      purpose: "Chidi Barber",
-      type: "Barber Shop",
-      date: "Today",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 60 * 60 * 1000,
-    },
-    {
-      purpose: "King's",
-      type: "Coffe Shop",
-      date: "Today",
-      timeAgo: "8h ago",
-      amount: 120,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 8 * 60 * 1000,
-    },
-    {
-      purpose: "NKM Furniture",
-      type: "Furniture",
-      date: "Yesturday",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 30 * 80 * 1000,
-    },
-    {
-      purpose: "Black Suits",
-      type: "Clothes",
-      date: "Today",
-      timeAgo: "2days ago",
-      amount: 1500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 10 * 20 * 1000,
-    },
-    {
-      purpose: "Wilde Bears",
-      type: "Choclate Shop",
-      date: "Yesturday",
-      timeAgo: "8h ago",
-      amount: 300,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 50 * 60 * 1000,
-    },
+    }
   ]);
 
   console.log(teacherData);
@@ -124,27 +64,22 @@ const TeacherDashboard = () => {
     fetchDashboardData();
   }, []);
 
-    useEffect(() => {
-      const storedStudentId = localStorage.getItem("studentId");
-      const newStudentId = location.state
-
-      console.log(newStudentId);
-      
-  
-      if (newStudentId) {
-        localStorage.setItem("teacherData", teacherData); // Store for persistence
-        setTeacherData(teacherData);
+  useEffect(() => {
+    const teacherData = location.state;
+    if (teacherData) {
+      localStorage.setItem("teacherData", JSON.stringify(teacherData)); // Store as a string
+      setTeacherData(teacherData);
+    } else {
+      const storedTeacherData = localStorage.getItem("teacherData");
+      if (storedTeacherData) {
+        setTeacherData(JSON.parse(storedTeacherData)); // Convert back to object
       } else {
-        setError("Student ID is missing");
+        setError("Teacher data is missing");
         setLoading(false);
       }
-    }, [location.state]);
-
-  console.log(sessionStorage);
-
-  console.log(teacherData.userData);
-
-
+    }
+  }, [location.state]);
+ 
   // Stats data with routing paths
   const statsData = [
     { title: "Total Students", count: dashboardData?.studentsCount || 22, icon: FaBook, path: "/studentdata" },
