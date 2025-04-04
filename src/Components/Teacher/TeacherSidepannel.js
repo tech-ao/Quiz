@@ -185,6 +185,14 @@ const TeacherSidePanel = () => {
                 </ul>
               )}
             </li>
+            <li className="nav-item">
+              <Link to="/teachersettings" className={`nav-link ${isPathActive('/teachersettings') ? 'active' : ''}`}>
+                <div className="icon-with-text">
+                  <i className="bi bi-gear"></i>
+                  <span className="nav-text">Settings</span>
+                </div>
+              </Link>
+            </li>
 
             {/* Fee's */}
             <li className="nav-item">
