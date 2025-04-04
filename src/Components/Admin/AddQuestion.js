@@ -4,6 +4,7 @@ import { FaPlus, FaTrash, FaEdit } from "react-icons/fa";
 import "./AddQuestion.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import { toast } from "react-toastify";
 
 const BASE_URL = "http://srimathicare.in:8081";
 const ACCESS_TOKEN = "123";
@@ -100,51 +101,67 @@ const AddQuestion = () => {
       setImagePreview(URL.createObjectURL(file));
     }
   };
+const handleSubmitQuestion = async () => {
+  if (storedNumbers.length > 0 && answer.trim() !== "") {
+    const newQuestion = {
+      questions: storedNumbers.join(", "),
+      answer: parseInt(answer),
+      level: level, 
+      note: note,
+      image: imagePreview,
+    };
 
-  const handleSubmitQuestion = async () => {
-    if (storedNumbers.length > 0 && answer.trim() !== "") {
-      const newQuestion = {
-        questions: storedNumbers.join(", "),
-        answer: parseInt(answer),
-        level: level, 
-        note: note,
-        image: imagePreview,
-      };
+    try {
+      const response = await fetch(API_URL_CREATE, {
+        method: "POST",
+        headers: {
+          Accept: "text/plain",
+          "X-Api-Key": API_KEY,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newQuestion),
+      });
 
-      try {
-        const response = await fetch(API_URL_CREATE, {
-          method: "POST",
-          headers: {
-            Accept: "text/plain",
-            "X-Api-Key": API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newQuestion),
+      if (!response.ok) {
+        toast.error("Failed to add question", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
         });
-
-        if (!response.ok) {
-          throw new Error("Failed to add question");
-        }
-
-        const result = await response.json();
-        console.log("Question added successfully:", result);
-
-        // Update local state
-        setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
-        setStoredNumbers([]);
-        setAnswer("");
-        setNote("");
-        setImage(null);
-        setImagePreview(null);
-      } catch (error) {
-        console.error("Error adding question:", error);
-        alert("Failed to add question. Please try again.");
+        throw new Error("Failed to add question");
       }
-    } else {
-      alert("Please fill all fields.");
-    }
-  };
+      
+      const result = await response.json();
+      console.log("Question added successfully:", result);
 
+      // Update local state
+      setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+      setStoredNumbers([]);
+      setAnswer("");
+      setNote("");
+      setImage(null);
+      setImagePreview(null);
+
+      // Show success toast
+      toast.success("Question added successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } catch (error) {
+      console.error("Error adding question:", error);
+      alert("Failed to add question. Please try again.");
+    }
+  } else {
+    alert("Please fill all fields.");
+  }
+};
   const handleReset = () => {
     setStoredNumbers([]);
     setAnswer("");

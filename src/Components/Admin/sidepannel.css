@@ -1,113 +1,155 @@
-/* Sidebar Styling */
-.side-panel {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100vh; /* Full viewport height */
-  background-color: #155724; /* Dark green background */
+.admin-side-panel {
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Prevent scrolling */
+  height: calc(100vh - 100px); /* Adjust if header is 100px */
+  width: 230px;
+  overflow-y: auto; 
+  position: fixed;
+  top: 100px; /* below the header */
+  left: 0;
+  background-color: #E7FFEC;
+
+  /* Hide scrollbar for Webkit (Chrome, Safari) */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
 }
 
-/* Navigation links inside the sidebar */
-.nav-link {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  color: #fff;
-  font-size: 1rem;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
+/* Hide scrollbar - Webkit */
+.admin-side-panel::-webkit-scrollbar {
+  display: none;
 }
 
+.menu-content {
+  flex: 1;
 
-
-
-.nav-link.active {
-  font-weight: bold;
-  
+  padding-bottom: 8px;
 }
 
-/* Sub-navigation indentation */
-.sub-nav {
-  padding-left: 20px;
+.menu-section {
+  padding: 1rem;
 }
 
-.sub-nav .nav-link {
-  font-size: 0.9rem;
+.nav-item {
+  margin-bottom: 0.5rem;
 }
 
-/* Icon with text alignment */
 .icon-with-text {
   display: flex;
   align-items: center;
-  width: 100%; 
+  gap: 0.5rem;
 }
 
-/* Icon size and spacing */
-.icon-with-text i {
-  font-size: 1.5rem;
-  margin-right: 15px;
+.log{
+  justify-content: center;
 }
 
-/* Text animation inside navigation */
-.nav-text {
-  opacity: 1;
-  visibility: visible;
-  font-size: 13px;
-  white-space: nowrap;
+.nav-link {
+  color: #09690c;
+  text-decoration: none;
 }
 
-/* Dropdown arrow positioning */
+.nav-link:hover {
+  border-radius: 4px;
+}
+
+.nav-link.active {
+  border-radius: 4px;
+  font-weight: 500;
+}
+
 .dropdown-icon {
   margin-left: auto;
 }
 
-/* Logout section fixed at the bottom */
+.sub-nav {
+  padding-left: 25px;
+  margin-top: 0.5rem;
+}
+
+.sub-nav-text {
+  color: #09690c;
+  display: inline-block;
+}
+
+.menu-content::-webkit-scrollbar {
+  width: 5px;
+}
+
+.logout-confirmation-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  width: 300px;
+}
+
+.popup-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
 .logout-section {
   position: fixed;
   bottom: 0;
-  width: 230px;
+  width: 15%;
   background-color: #198754;
-  padding: 3px 0;
   text-align: center;
+  z-index: 1000;
 }
 
-.logout-section .nav-link {
-  justify-content: center;
-  color: white;
-  font-weight: bold;
+.menu-content::-webkit-scrollbar {
+  display: none;
 }
 
-/* Hamburger button styling */
-.hamburger-button {
-  display: block;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  cursor: pointer;
-  z-index: 200;
+.menu-content {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;  
 }
 
-.hamburger-button i {
-  font-size: 2rem;
-  color: #333;
-}
-
-/* Responsive styles */
 @media (max-width: 768px) {
-  .side-panel {
-    width: 220px; /* Slightly narrower for mobile screens */
+  .admin-side-panel {
+    width: 200px;
+    top: 100px;
+    height: calc(100vh - 100px);
+    left: 0;
+    background-color: #E7FFEC;
+    z-index: 999;
+    /* Optional: add transition if using slide-in menu */
+    transition: transform 0.3s ease-in-out;
   }
 
-  .icon-with-text i {
-    font-size: 1.3rem;
-    margin-right: 10px;
+  .logout-section {
+    width: 200px;
+    left: 0;
+    z-index: 100;
   }
 
-  .nav-link {
-    font-size: 0.9rem;
+  .log {
+    justify-content: center;
   }
 }
+
+
+/* Updated submenu active style to match main menu active style */
+.sub-nav .nav-link.active-sub {
+  background-color: rgba(9, 105, 12, 0.15);
+  border-radius: 4px;
+  font-weight: 500;
+  padding-left: 10px;
+}
+
+/* Removed the conflicting styles that were added at the bottom */

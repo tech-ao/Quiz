@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import "./sidepannel.css";
 
 const SidePannel = ({ isOpen, closeSidePanel }) => {
   const [openMenus, setOpenMenus] = useState({
@@ -79,8 +80,8 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
   }, [isOpen]);
 
   return (
-    <div className={`side-panel ${isOpen ? "open" : ""}`}>
-      <ul className="nav flex-column mb-1">
+    <div className={`admin-side-panel ${isOpen ? "open" : ""}`}>
+      <ul className="nav flex-column">
         {/* Dashboard */}
         <li className="nav-item">
           <Link

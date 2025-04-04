@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Eye, EyeSlash } from "react-bootstrap-icons";
 
 const PasswordChangePopup = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -7,12 +8,24 @@ const PasswordChangePopup = ({ onClose }) => {
     confirmPassword: "",
   });
   const [isPasswordVerified, setIsPasswordVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState({
+    oldPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const togglePasswordVisibility = (field) => {
+    setShowPassword((prev) => ({
+      ...prev,
+      [field]: !prev[field],
     }));
   };
 
@@ -93,7 +106,7 @@ const PasswordChangePopup = ({ onClose }) => {
             }}
           >
             {/* Old Password Input */}
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", position: "relative" }}>
               <label
                 style={{
                   display: "block",
@@ -106,26 +119,41 @@ const PasswordChangePopup = ({ onClose }) => {
                 Old Password
               </label>
               <input
-                type="password"
+                type={showPassword.oldPassword ? "text" : "password"}
                 name="oldPassword"
                 value={formData.oldPassword}
                 onChange={handleChange}
                 style={{
                   width: "100%",
-                  padding: "8px",
+                  padding: "8px 32px 8px 8px",
                   border: "1px solid #ddd",
                   borderRadius: "4px",
                   fontSize: "1rem",
                   outline: "none",
-                  transition: "all 0.2s ease",
-                  "&:focus": {
-                    borderColor: "#666",
-                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
-                  },
                 }}
                 required
                 autoFocus
               />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("oldPassword")}
+                style={{
+                  position: "absolute",
+                  right: "8px",
+                  top: "32px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#666",
+                  padding: "4px",
+                }}
+              >
+                {showPassword.oldPassword ? (
+                  <EyeSlash size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </button>
             </div>
 
             {/* Verify Button */}
@@ -136,26 +164,20 @@ const PasswordChangePopup = ({ onClose }) => {
               style={{
                 width: "100%",
                 padding: "8px",
-                right:'11px',
                 backgroundColor: isPasswordVerified ? "#86efac" : "#f87171",
                 color: "white",
                 border: "none",
                 borderRadius: "4px",
                 cursor: isPasswordVerified ? "default" : "pointer",
-                marginTop: "0.5rem",
                 fontSize: "1rem",
                 fontWeight: "500",
-                transition: "all 0.2s ease",
-                ":hover:not(:disabled)": {
-                  backgroundColor: isPasswordVerified ? "#4ade80" : "#ef4444",
-                },
               }}
             >
               {isPasswordVerified ? "Verified" : "Verify Password"}
             </button>
 
             {/* New Password Input */}
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", position: "relative" }}>
               <label
                 style={{
                   display: "block",
@@ -168,31 +190,46 @@ const PasswordChangePopup = ({ onClose }) => {
                 New Password
               </label>
               <input
-                type="password"
+                type={showPassword.newPassword ? "text" : "password"}
                 name="newPassword"
                 value={formData.newPassword}
                 onChange={handleChange}
                 style={{
                   width: "100%",
-                  padding: "8px",
+                  padding: "8px 32px 8px 8px",
                   border: "1px solid #ddd",
                   borderRadius: "4px",
                   fontSize: "1rem",
-                  outline: "none",
-                  transition: "all 0.2s ease",
                   backgroundColor: !isPasswordVerified ? "#f5f5f5" : "white",
-                  "&:focus": {
-                    borderColor: "#666",
-                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
-                  },
+                  outline: "none",
                 }}
                 required
                 disabled={!isPasswordVerified}
               />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("newPassword")}
+                style={{
+                  position: "absolute",
+                  right: "8px",
+                  top: "32px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#666",
+                  padding: "4px",
+                }}
+              >
+                {showPassword.newPassword ? (
+                  <EyeSlash size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </button>
             </div>
 
             {/* Confirm Password Input */}
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "100%", position: "relative" }}>
               <label
                 style={{
                   display: "block",
@@ -205,27 +242,42 @@ const PasswordChangePopup = ({ onClose }) => {
                 Confirm Password
               </label>
               <input
-                type="password"
+                type={showPassword.confirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 style={{
                   width: "100%",
-                  padding: "8px",
+                  padding: "8px 32px 8px 8px",
                   border: "1px solid #ddd",
                   borderRadius: "4px",
                   fontSize: "1rem",
-                  outline: "none",
-                  transition: "all 0.2s ease",
                   backgroundColor: !isPasswordVerified ? "#f5f5f5" : "white",
-                  "&:focus": {
-                    borderColor: "#666",
-                    boxShadow: "0 0 0 2px rgba(0,0,0,0.1)",
-                  },
+                  outline: "none",
                 }}
                 required
                 disabled={!isPasswordVerified}
               />
+              <button
+                type="button"
+                onClick={() => togglePasswordVisibility("confirmPassword")}
+                style={{
+                  position: "absolute",
+                  right: "8px",
+                  top: "32px",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "#666",
+                  padding: "4px",
+                }}
+              >
+                {showPassword.confirmPassword ? (
+                  <EyeSlash size={18} />
+                ) : (
+                  <Eye size={18} />
+                )}
+              </button>
             </div>
 
             {/* Update Button */}
@@ -235,19 +287,13 @@ const PasswordChangePopup = ({ onClose }) => {
               style={{
                 width: "100%",
                 padding: "8px",
-                right:'11px',
                 backgroundColor: !isPasswordVerified ? "#cccccc" : "#f87171",
                 color: "white",
                 border: "none",
                 borderRadius: "4px",
                 cursor: !isPasswordVerified ? "default" : "pointer",
-                marginTop: "0.5rem",
                 fontSize: "1rem",
                 fontWeight: "500",
-                transition: "all 0.2s ease",
-                ":hover:not(:disabled)": {
-                  backgroundColor: "#ef4444",
-                },
               }}
             >
               Update
