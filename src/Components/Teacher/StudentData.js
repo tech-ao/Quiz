@@ -57,6 +57,8 @@ const StudentData = () => {
 
   const studentsPerPage = 10;
 
+  console.log(teacherData);
+  
   useEffect(() => {
     const storedTeacherData = localStorage.getItem("teacherData");
   
@@ -166,9 +168,12 @@ const StudentData = () => {
 
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
 
+  console.log(teacherData);
+  
+
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData.name}/>
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container ">

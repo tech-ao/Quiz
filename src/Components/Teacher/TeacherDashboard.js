@@ -67,33 +67,34 @@ const TeacherDashboard = () => {
     fetchDashboardData();
   }, []);
 
-   useEffect(() => {
-      if (!teacherId) {
-        setLoading(false); // Stop loading if no teacherId
-        return;
-      }
+  //  useEffect(() => {
+  //     if (!teacherId) {
+  //       setLoading(false); // Stop loading if no teacherId
+  //       return;
+  //     }
   
-      const fetchAllData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const teacherResponse = await getTeacher(teacherId);
-          setTeacherData(teacherResponse.data);
-        } catch (error) {
-          setError(error.message);
-        } finally {
-          setLoading(false);
-        }
-      };
+  //     const fetchAllData = async () => {
+  //       setLoading(true);
+  //       setError(null);
+  //       try {
+  //         const teacherResponse = await getTeacher(teacherId);
+  //         setTeacherData(teacherResponse.data);
+  //       } catch (error) {
+  //         setError(error.message);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
   
-      fetchAllData();
-    }, [teacherId, dispatch]);
+  //     fetchAllData();
+  //   }, [teacherId, dispatch]);
 
   useEffect(() => {
     const teacherData = location.state;
     if (teacherData) {
       localStorage.setItem("teacherData", JSON.stringify(teacherData)); // Store as a string
       setTeacherId(teacherData?.userData.teacherId);
+      setTeacherData(teacherData?.userData)
       console.log(teacherData );
       console.log(teacherId);
       
@@ -163,7 +164,7 @@ const TeacherDashboard = () => {
 
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData.fullName} />
+      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData?.name} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="teacher-main-container p-4 mx-auto">
