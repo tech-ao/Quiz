@@ -254,7 +254,7 @@ function App() {
             element={<ProtectedRoute element={<Announcements />} />}
           />
           <Route
-            path="/TeacherSettings"
+            path="/teacherSettings"
             element={<ProtectedRoute element={<TeacherSettings />} />}
           />
           <Route

@@ -5,12 +5,16 @@ import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
 import { fetchProfileById, fetchGenders, fetchCountries } from '../../redux/Services/Enum';
 import { editTeacher } from '../../redux/Services/api';
+import { useLocation } from 'react-router-dom';
+import { FaEdit } from "react-icons/fa";
 
 const TeacherSettings = () => {
  
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  
+ 
+    const [teacherData, setTeacherData] = useState(null);
+    const [error, setError] = useState(null);    
+    const [loading, setLoading] = useState(true);
+    const location = useLocation();
   // Form data state
   const [formData, setFormData] = useState({
     name: '',
@@ -109,6 +113,18 @@ const TeacherSettings = () => {
     const date = new Date(dateString);
     return date.toISOString().split('T')[0];
   };
+  useEffect(() => {
+    const storedTeacherData = localStorage.getItem("teacherData");
+  
+    if (storedTeacherData) {
+      try {
+        setTeacherData(JSON.parse(storedTeacherData)); // Parse and set
+      } catch (error) {
+        console.error("Error parsing teacherData:", error);
+        localStorage.removeItem("teacherData"); // Remove corrupted data
+      }
+    }
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -157,6 +173,10 @@ const TeacherSettings = () => {
           formDataToSend.append(key, value);
         }
       });
+
+
+      console.log(teacherData);
+      
       
       // Call editTeacher API
       const response = await editTeacher(formDataToSend);
@@ -202,223 +222,119 @@ const TeacherSettings = () => {
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
-           <div className="d-flex flex-column flex-md-row">
-             {isSidebarVisible && <TeacherSidePanel />}
-        <Container className="main-container p-4 min-vh-100">
-          <div className="sub-container" style={{ width: "94%" }}>
-          <div className="sticky-top bg-white z-1 pt-1 px-4">
-        <Row className="mb-2"> {/* Reduced margin for compact look */}
-          <Col md={8}>
-            <h2 className="fw-bold mb-3">Teacher Settings</h2> {/* mb-0 removes extra space */}
-          </Col>
-        </Row>
-      </div>
 
-            <Card className="p-4 shadow-lg">
-              <Form onSubmit={handleSubmit}>
-                {/* Basic Information Row */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formName">
-                      <Form.Label>Name</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formDob">
-                      <Form.Label>Date of Birth</Form.Label>
-                      <Form.Control
-                        type="date"
-                        name="dob"
-                        value={formData.dob}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+      <div className="d-flex">
+        {isSidebarVisible && <TeacherSidePanel studyModeId={teacherData?.studyModeId}/>}
+        <Container className="main-container ">           
+          {/* Moved Sticky Header to main-container */}
+          <div className="sticky-header d-flex justify-content-between align-items-center">
+            <h2 className="fw-bold text-dark">teacher Settings</h2>
+            <FaEdit
+              size={24}
+              className="text-success cursor-pointer"
+              // onClick={handleOpenEditteacher}
+            />
+          </div>
+          <div className="sub-container">
+           
 
-                {/* Gender and Phone Row */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formGender">
-                      <Form.Label>Gender</Form.Label>
-                      <Form.Select
-                        name="gender"
-                        value={formData.gender || ''}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          gender: e.target.value ? parseInt(e.target.value) : null
-                        }))}
-                        required
-                      >
-                        <option value="">Select Gender</option>
-                        {genders.map(gender => (
-                          <option key={gender.item1} value={gender.item1}>
-                            {gender.item2}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formPhone">
-                      <Form.Label>Phone Number</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* Email and Nationality Row */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formEmail">
-                      <Form.Label>Email</Form.Label>
-                      <Form.Control
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formNationality">
-                      <Form.Label>Nationality</Form.Label>
-                      <Form.Select
-                        name="nationality"
-                        value={formData.nationality || ''}
-                        onChange={(e) => setFormData(prev => ({
-                          ...prev,
-                          nationality: e.target.value ? parseInt(e.target.value) : null
-                        }))}
-                        required
-                      >
-                        <option value="">Select Nationality</option>
-                        {countries.map(country => (
-                          <option key={country.item1} value={country.item1}>
-                            {country.item2}
-                          </option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* Address Row */}
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formPermanentAddress">
-                      <Form.Label>Permanent Address</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        name="permanentAddress"
-                        value={formData.permanentAddress}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formCurrentAddress">
-                      <Form.Label>Current Residential Address</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        rows={3}
-                        name="currentAddress"
-                        value={formData.currentAddress}
-                        onChange={handleInputChange}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* Document Uploads Section */}
-                <h5 className="mt-4 mb-3">Document Uploads</h5>
-                <Row className="mb-3">
-                  <Col md={6}>
-                    <Form.Group controlId="formExperienceCertificate">
-                      <Form.Label>Experience Certificate</Form.Label>
-                      <div className="d-flex align-items-center">
-                        <Form.Control
-                          type="file"
-                          name="experienceCertificate"
-                          onChange={handleFileChange}
-                          accept=".pdf,.doc,.docx"
-                          className="me-2"
-                        />
-                        {expCertPreview && (
-                          <Button 
-                            variant="link" 
-                            href={expCertPreview} 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            View
-                          </Button>
-                        )}
-                      </div>
-                      <Form.Text className="text-muted">
-                        File size less than 2MB
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group controlId="formResume">
-                      <Form.Label>Upload Resume</Form.Label>
-                      <div className="d-flex align-items-center">
-                        <Form.Control
-                          type="file"
-                          name="resume"
-                          onChange={handleFileChange}
-                          accept=".pdf,.doc,.docx"
-                          className="me-2"
-                        />
-                        {resumePreview && (
-                          <Button 
-                            variant="link" 
-                            href={resumePreview} 
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            View
-                          </Button>
-                        )}
-                      </div>
-                      <Form.Text className="text-muted">
-                        File size less than 2MB
-                      </Form.Text>
-                    </Form.Group>
-                  </Col>
-                </Row>
-
-                {/* Submit Button */}
-                <div className="d-flex justify-content-end mt-4">
-                  <Button variant="primary" type="submit" disabled={loading}>
-                    {loading ? 'Saving...' : 'Save Changes'}
-                  </Button>
+            <Card className="p-4">
+              <Card.Body className="d-flex flex-column align-items-center">
+                <div
+                  style={{
+                    border: "5px solid #4caf50",
+                    borderRadius: "50%",
+                    padding: "5px",
+                    display: "inline-block",
+                    height: "171px",
+                  }}
+                >
+                  {/* {loading ? (
+                    <p>Loading image...</p>
+                  ) : error ? (
+                    <p>{error}</p>
+                  ) : profileImage ? (
+                    <Image
+                      src={`data:image/jpeg;base64,${profileImage}`}
+                      alt="Profile"
+                      roundedCircle
+                      width="150"
+                      height="150px"
+                    />
+                  ) : (
+                    <p>No image available</p>
+                  )} */}
                 </div>
-              </Form>
+
+                <Row className="mt-4 w-100">
+                  <Col md={4}>
+                    <strong>First Name:</strong>
+                    <p>{teacherData?.firstName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Last Name:</strong>
+                    <p>{teacherData?.lastName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Email:</strong>
+                    <p>{teacherData?.email || "N/A"}</p>
+                  </Col>
+                </Row>
+
+                <Row className="mt-3 w-100">
+                  <Col md={4}>
+                    <strong>Phone:</strong>
+                    <p>{teacherData?.countryCode} {teacherData?.phoneNumber || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Date of Birth:</strong>
+                    <p>
+                      {teacherData?.dob 
+                        ? new Date(teacherData.dob).toLocaleDateString('en-GB')
+                        : "N/A"}
+                    </p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Gender:</strong>
+                    <p>{teacherData?.genderName || "N/A"}</p>
+                  </Col>
+                </Row>
+
+                <Row className="mt-3 w-100">
+                  <Col md={4}>
+                    <strong>Register Number:</strong>
+                    <p>{teacherData?.registerNumber || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Grade:</strong>
+                    <p>{teacherData?.gradeName || "N/A"}</p>
+                  </Col>
+                  <Col md={4}>
+                    <strong>Status:</strong>
+                    <p>{teacherData?.statusName || "N/A"}</p>
+                  </Col>
+                </Row>
+
+                <Row className="mt-3 w-100">
+                  <Col md={4}>
+                    <strong>Address:</strong>
+                    <p>{teacherData?.address || "N/A"}</p>
+                  </Col>
+                </Row>
+              </Card.Body>
             </Card>
           </div>
         </Container>
       </div>
-      </div>
-  
+
+      {/* {showEditteacher && (
+        <SettingEdit
+          show={showEditteacher}
+          onClose={handleCloseEditteacher}
+          teacherId={selectedteacherId}
+        />
+      )} */}
+    </div>
   );
 };
 
