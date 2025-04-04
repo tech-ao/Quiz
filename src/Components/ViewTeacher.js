@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Offcanvas, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../redux/Services/Config";
@@ -8,25 +8,196 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
   console.log("this is from view teachers", teacherData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [isUpdating, setIsUpdating] = useState(false); 
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [documentData, setDocumentData] = useState({});
+  const [blobUrls, setBlobUrls] = useState({});
+  
+  // Document type name mapping
+  const DOCUMENT_TYPE_NAMES = {
+    4: "Resume",
+    5: "Educational Certificates",
+    6: "Experience Certificates",
+    8: "Candidate Photo"
+  };
+
+  // Clean up function to revoke all blob URLs
+  const cleanUpBlobUrls = () => {
+    Object.values(blobUrls).forEach(url => {
+      URL.revokeObjectURL(url);
+    });
+    setBlobUrls({});
+  };
+
+  // Reset states when component shows
+  useEffect(() => {
+    if (show) {
+      setDocumentData({});
+      setError("");
+      setLoading(true);
+      
+      if (teacherData && teacherData.teacherId && teacherData.teacherDocumentFileModels) {
+        fetchDocuments();
+      } else {
+        setLoading(false);
+      }
+    }
+    
+    // Cleanup function
+    return () => {
+      cleanUpBlobUrls();
+    };
+  }, [show, teacherData]);
+
+  const fetchDocuments = async () => {
+    if (!teacherData || !teacherData.teacherDocumentFileModels) {
+      setLoading(false);
+      return;
+    }
+    
+    setLoading(true);
+    // Clean up previous blob URLs before creating new ones
+    cleanUpBlobUrls();
+    
+    const documents = {};
+    const newBlobUrls = {};
+    
+    try {
+      // Process all documents in teacherDocumentFileModels
+      for (const doc of teacherData.teacherDocumentFileModels) {
+        const { teacherId, documentTypeId } = doc;
+        
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/Teacher/GetTeacherDocument?Id=${teacherId}&documentTypeEnum=${documentTypeId}`,
+            {
+              headers: {
+                Accept: "text/plain",
+                "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+                AccessToken: "123",
+              },
+            }
+          );
+          
+          if (response.data && response.data.data) {
+            const base64Content = response.data.data.base64Content || response.data.data;
+            
+            // Store document data
+            documents[documentTypeId] = {
+              ...doc,
+              base64Content
+            };
+            
+            // Create blob URL for PDF documents
+            if (doc.extension.toLowerCase() === 'pdf' && base64Content) {
+              try {
+                const binaryString = window.atob(base64Content);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                  bytes[i] = binaryString.charCodeAt(i);
+                }
+                const blob = new Blob([bytes], { type: 'application/pdf' });
+                const blobUrl = URL.createObjectURL(blob);
+                newBlobUrls[documentTypeId] = blobUrl;
+                console.log(`Created blob URL for document type ${documentTypeId}: ${blobUrl}`);
+              } catch (blobError) {
+                console.error(`Error creating blob for document type ${documentTypeId}:`, blobError);
+              }
+            }
+          }
+        } catch (err) {
+          console.error(`Error fetching document type ${documentTypeId}:`, err);
+        }
+      }
+      
+      setDocumentData(documents);
+      setBlobUrls(newBlobUrls);
+      console.log("Document data loaded:", documents);
+      console.log("Blob URLs created:", newBlobUrls);
+    } catch (err) {
+      console.error("Error fetching documents:", err);
+      setError("Failed to load documents");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const formatDate = (dob) => {
     return dob ? new Date(dob).toLocaleDateString() : "N/A";
   };
 
-  
-  const sampleBase64PDF = `
-JVBERi0xLjQKJeLjz9MNCjEgMCBvYmo8PC9UeXBlL1BhZ2UvUGFyZW50
-IDUgMCBSL1Jlc291cmNlczw8L1Byb2NTZXRbL1BERi9UZXh0XS9YT2Jq
-ZWN0PDwvRjE8PC9UeXBlL0ZvbnQvU3VidHlwZS9UeXBlMQovQmFzZUZv
-bnQvSGVsdmV0aWNhL0VuY29kaW5nL1dpbkFuc2lFbmNvZGluZz4+Pj4+
-Pj4KZW5kb2JqCjUgMCBvYmo8PC9UeXBlL1BhZ2VzL0tpZHMgWzEgMCBS
-Xj4+CmVuZG9iagp4cmVmCjAgNgowMDAwMDAwMDAwIDY1NTM1IGYgCjAw
-MDAwMDAwMTAgMDAwMDAgbiAKMDAwMDAwMDAwMiAwMDAwMCBuIAowMDAw
-MDAwMDAzIDAwMDAwIG4gCjAwMDAwMDAwMDQgMDAwMDAgbiAKMDAwMDAw
-MDAwNSA2NTUzNSBmIAp0cmFpbGVyCjw8L1NpemUgNi9Sb290IDUgMCBS
-L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
-`;
+  const renderDocument = (documentTypeId) => {
+    const doc = documentData[documentTypeId];
+    
+    if (!doc || !doc.base64Content) {
+      return <p>Document not available</p>;
+    }
+
+    const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(doc.extension.toLowerCase());
+    const isPdf = doc.extension.toLowerCase() === 'pdf';
+    
+    if (isImage) {
+      return (
+        <img 
+          src={`data:image/${doc.extension};base64,${doc.base64Content}`}
+          alt={doc.name}
+          style={{ maxWidth: '100%', maxHeight: '300px' }}
+        />
+      );
+    } else if (isPdf) {
+      const pdfUrl = blobUrls[documentTypeId];
+      
+      if (!pdfUrl) {
+        return <p>Error loading PDF. Please try again.</p>;
+      }
+      
+      return (
+        <div className="pdf-container">
+          <p className="fw-bold mb-2">{doc.name}</p>
+          <div className="pdf-viewer-wrapper border rounded">
+            <object
+              data={pdfUrl}
+              type="application/pdf"
+              width="100%"
+              height="500px"
+              className="pdf-viewer"
+              key={`pdf-${documentTypeId}-${Date.now()}`} // Add a unique key to force re-render
+            >
+              <div className="p-3">
+                <p>It appears you don't have a PDF plugin for this browser.</p>
+                <a 
+                  href={pdfUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn btn-sm btn-primary"
+                >
+                  Click here to open the PDF
+                </a>
+              </div>
+            </object>
+          </div>
+          <div className="mt-2">
+            <a 
+              href={pdfUrl}
+              download={doc.name}
+              className="btn btn-sm btn-primary me-2"
+            >
+              Download PDF
+            </a>
+            <a 
+              href={pdfUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm btn-info"
+            >
+              Open in New Tab
+            </a>
+          </div>
+        </div>
+      );
+    } else {
+      return <p>Unsupported file type: {doc.extension}</p>;
+    }
+  };
 
   const updateStatus = async (statusEnum) => {
     try {
@@ -48,6 +219,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         },
       });
       toast.success("Status updated successfully!");
+      onClose(); // Close the offcanvas after successful update
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status. Please try again.");
@@ -64,13 +236,68 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
     updateStatus(2);
   };
 
+  // Generate document sections dynamically
+  const renderDocumentSections = () => {
+    if (!teacherData || !teacherData.teacherDocumentFileModels || teacherData.teacherDocumentFileModels.length === 0) {
+      return <p>No documents available</p>;
+    }
+
+    // Group documents by type
+    const documentsByType = {};
+    teacherData.teacherDocumentFileModels.forEach(doc => {
+      documentsByType[doc.documentTypeId] = doc;
+    });
+
+    return (
+      <div className="document-sections">
+        {Object.keys(documentsByType).map(typeId => {
+          const docTypeId = parseInt(typeId);
+          // Skip photo document as it's displayed separately
+          if (docTypeId === 8) return null;
+          
+          const docTypeName = DOCUMENT_TYPE_NAMES[docTypeId] || `Document Type ${docTypeId}`;
+          
+          return (
+            <div className="document-section mb-4" key={`doc-section-${docTypeId}`}>
+              <h6 className="mb-3">{docTypeName}</h6>
+              <div className="document-container">
+                {documentData[docTypeId] ? renderDocument(docTypeId) : <p>No {docTypeName.toLowerCase()} available</p>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Special case for candidate photo rendering
+  const renderCandidatePhoto = () => {
+    // Find photo document type from teacherDocumentFileModels
+    const photoDoc = teacherData?.teacherDocumentFileModels?.find(doc => doc.documentTypeId === 8);
+    return photoDoc && documentData[8] ? renderDocument(8) : <p>No photo available</p>;
+  };
+
+  // Handle close with cleanup
+  const handleClose = () => {
+    onClose();
+  };
+
   return (
-    <Offcanvas show={show} onHide={onClose} placement="end">
+    <Offcanvas 
+      show={show} 
+      onHide={handleClose} 
+      placement="end" 
+      className="teacher-view-offcanvas" 
+      style={{ width: "700px", maxWidth: "90%" }}
+    >
       <Offcanvas.Header closeButton>
         <Offcanvas.Title>View Teacher Details</Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body>
-        <h5>Personal Information</h5>
+        {loading && <div className="text-center py-3"><p>Loading teacher documents...</p></div>}
+        {error && <div className="alert alert-danger">{error}</div>}
+        
+        <h5 className="border-bottom pb-2 mb-3">Personal Information</h5>
         <Row className="mb-3">
           <Col>
             <strong>Full Name:</strong>
@@ -105,27 +332,20 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
         <Row className="mb-3">
-        <Col>
+          <Col>
             <strong>Nationality:</strong>
             <p>{teacherData?.nationalityName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Candidate Photo:</strong>
-            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
-              teacherData.teacherDocumentFileModels.map((file) =>
-                file.documentTypeId === 8 ? (
-                  <div key={file.teacherDocumentFileId}>
-                    <p>{file.name}</p>
-                  </div>
-                ) : null
-              )
-            ) : (
-              <p>N/A</p>
-            )}
+            <div className="document-container mt-2">
+              {renderCandidatePhoto()}
+            </div>
           </Col>
         </Row>
 
         {/* Address Information */}
+        <h5 className="border-bottom pb-2 mb-3 mt-4">Address Information</h5>
         <Row className="mb-3">
           <Col>
             <strong>Permanent Address:</strong>
@@ -143,7 +363,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
 
-        <h5>Education Qualification</h5>
+        <h5 className="border-bottom pb-2 mb-3 mt-4">Education Qualification</h5>
         <Row className="mb-3">
           <Col>
             <strong>Highest Level Education:</strong>
@@ -165,7 +385,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
 
-        <h5>Professional Experience</h5>
+        <h5 className="border-bottom pb-2 mb-3 mt-4">Professional Experience</h5>
         <Row className="mb-3">
           <Col>
             <strong>Year of Graduation:</strong>
@@ -194,6 +414,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         </Row>
 
         {/* Availability & Work Details */}
+        <h5 className="border-bottom pb-2 mb-3 mt-4">Availability & Work Details</h5>
         <Row className="mb-3">
           <Col>
             <strong>Availability:</strong>
@@ -212,42 +433,16 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
           </Col>
         </Row>
 
-        {/* Document & Media */}
-        <Row className="mb-3">
-          <Col>
-            <strong>Graduation Photo:</strong>
-            {teacherData?.graduationPhoto ? (
-              <img
-                src={teacherData.graduationPhoto}
-                alt="Graduation"
-                style={{ width: "100px", height: "auto" }}
-              />
-            ) : (
-              <p>N/A</p>
-            )}
-          </Col>
-          <Col>
-            <strong>Resume:</strong>
-            {teacherData?.teacherDocumentFileModels?.length > 0 ? (
-              teacherData.teacherDocumentFileModels.map((file) =>
-                file.documentTypeId === 4 ? (
-                  <div key={file.teacherDocumentFileId}>
-                    <p>{file.name}</p>
-                  </div>
-                ) : null
-              )
-            ) : (
-              <p>N/A</p>
-            )}
-          </Col>
-        </Row>
+        {/* Document & Media - Rendered dynamically */}
+        <h5 className="border-bottom pb-2 mb-3 mt-4">Documents</h5>
+        {renderDocumentSections()}
 
-        <div className="d-flex justify-content-center mt-3">
-          <Button variant="success" onClick={handleApprove} className="me-2" disabled={isUpdating}>
-            Approve
+        <div className="d-flex justify-content-center mt-4 mb-3">
+          <Button variant="success" onClick={handleApprove} className="me-3 px-4" disabled={isUpdating}>
+            {isUpdating ? "Processing..." : "Approve"}
           </Button>
-          <Button variant="danger" onClick={handleDeny} disabled={isUpdating}>
-            Reject
+          <Button variant="danger" onClick={handleDeny} className="px-4" disabled={isUpdating}>
+            {isUpdating ? "Processing..." : "Reject"}
           </Button>
         </div>
       </Offcanvas.Body>
