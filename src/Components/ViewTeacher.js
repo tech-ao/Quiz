@@ -208,7 +208,7 @@ L0luZm8gNiAwIFI+PgpzdGFydHhyZWYKNDY0CiUlRU9GCg==
         <Row className="mb-3">
           <Col>
             <strong>Work Schedule:</strong>
-            <p>{teacherData?.preferedWorkScheduledName || "N/A"}</p>
+            <p>{teacherData?.preferedWorkDays || "N/A"}</p>
           </Col>
         </Row>
 

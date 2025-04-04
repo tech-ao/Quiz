@@ -26,7 +26,7 @@ const EditTeacher = ({ show, onClose  }) => {
         phoneNumber: "",
         email: "",
         permanentAddress: "",
-        teacherModeId: "",
+        teacherModeId: null,
         currentResidentialAddress: "",
         nationalityId: null,
         availabilityId: null,
@@ -47,8 +47,8 @@ const EditTeacher = ({ show, onClose  }) => {
           isCriminalBackgroundCheck: false,
         },
         teacherDocumentFileModels: [],
-        preferedWorkScheduledName: "",
-        preferredWorkTimes: "",
+        preferedWorkDays: "",
+        preferedWorkTime: "",
         applicationDate: "",
         declaration: false,
     });
@@ -76,7 +76,7 @@ const EditTeacher = ({ show, onClose  }) => {
               phoneNumber: selectedTeacher.data.phoneNumber || "",
               email: selectedTeacher.data.email || "",
               permanentAddress: selectedTeacher.data.permanentAddress || "",
-              teacherModeId: selectedTeacher.data.teacherModeId || "",
+              teacherModeId: selectedTeacher.data.teacherModeId || null,
               currentResidentialAddress: selectedTeacher.data.currentResidentialAddress || "",
               nationalityId: selectedTeacher.data.nationalityId || null,
               availabilityId: selectedTeacher.data.availabilityId || null,
@@ -107,8 +107,8 @@ const EditTeacher = ({ show, onClose  }) => {
               teacherDocumentFileModels: selectedTeacher.data.teacherDocumentFileModels || [],
   
               // Preferred Work Schedule
-              preferedWorkScheduledName: selectedTeacher.data.preferedWorkScheduledName || "",
-              preferredWorkTimes: selectedTeacher.data.preferredWorkTimes || "",
+              preferedWorkDays: selectedTeacher.data.preferedWorkDays || "",
+              preferedWorkTime: selectedTeacher.data.preferedWorkTime || "",
   
               applicationDate: selectedTeacher.data.applicationDate || "",
               declaration: selectedTeacher.data.declaration || false,
@@ -374,13 +374,13 @@ const EditTeacher = ({ show, onClose  }) => {
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Preferred Work Days</Form.Label>
-                        <Form.Control type="text" name="preferredWorkDays" value={formData.preferedWorkScheduledName} onChange={handleChange} />
+                        <Form.Control type="text" name="preferredWorkDays" value={formData.preferedWorkDays} onChange={handleChange} />
                     </Form.Group>
                     </Col>
                     <Col md={6}>
                     <Form.Group className="mt-3">
                         <Form.Label>Preferred Work Times</Form.Label>
-                        <Form.Control type="text" name="preferredWorkTimes" value={formData.preferredWorkTimes} onChange={handleChange} />
+                        <Form.Control type="text" name="preferedWorkTime" value={formData.preferedWorkTime} onChange={handleChange} />
                     </Form.Group>
                     </Col>
                     </Row>

@@ -24,7 +24,7 @@ const AddTeacher = ({ show, onClose }) => {
     nationalityId: null,
     availabilityId: null,
     registerNo: "",
-    preferedCountryId: null,
+    preferedCountryId: null,    
     professionalExperianceModel: {
       employerName: "",
       jobTitle: "",
@@ -41,8 +41,8 @@ const AddTeacher = ({ show, onClose }) => {
     },
     teacherDocumentFileModels: [],
     createdBy: 0,
-    preferedWorkScheduledName: "",
-    preferredWorkTimes: "",
+    preferedWorkDays: "",
+    preferedWorkTime: "",
     applicationDate: "",
     declaration: false,
   });
@@ -630,23 +630,23 @@ const AddTeacher = ({ show, onClose }) => {
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group controlId="preferedWorkScheduledName">
+              <Form.Group controlId="preferedWorkDays">
                 <Form.Label>Preferred Work Days</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferedWorkScheduledName"
-                  value={formData.preferedWorkScheduledName}
+                  name="preferedWorkDays"
+                  value={formData.preferedWorkDays}
                   onChange={handleChange}
                 />
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group controlId="preferredWorkTimes">
+              <Form.Group controlId="preferedWorkTime">
                 <Form.Label>Preferred Work Times</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferredWorkTimes"
-                  value={formData.preferredWorkTimes}
+                  name="preferedWorkTime"
+                  value={formData.preferedWorkTime}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -662,8 +662,8 @@ const AddTeacher = ({ show, onClose }) => {
                   onChange={handleChange}
                 >
                   <option value="">Select Preferred Country</option>
-                  <option value="1">Only India</option>
-                  <option value="2">Other than India</option>
+                  <option value={1}>Only India</option>
+                  <option value={2}>Other than India</option>
                 </Form.Select>
               </Form.Group>
             </Col>
