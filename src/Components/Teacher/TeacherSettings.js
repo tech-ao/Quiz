@@ -1,519 +1,424 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Image, Spinner, Alert, Button, Modal, Form } from 'react-bootstrap';
-import { FaEdit, FaSave } from 'react-icons/fa'; // Import edit and save icons
+import { Container, Row, Col, Card, Form, Button, Spinner, Alert } from 'react-bootstrap';
+import { FaUpload } from 'react-icons/fa';
 import TeacherSidePanel from './TeacherSidepannel';
 import TeacherHeader from './TeacherHeader';
-import './TeacherSetting.css';
-import profilePic from '../images/dummmy_profile.jpg'; // Replace with actual path
-import { getStudent } from '../../redux/Services/api';
+import { fetchProfileById, fetchGenders, fetchCountries } from '../../redux/Services/Enum';
+import { editTeacher } from '../../redux/Services/api';
 
 const TeacherSettings = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
-  const [adminData, setAdminData] = useState(null);
+ 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  // State for edit modal
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [currentSection, setCurrentSection] = useState(null);
-  const [editData, setEditData] = useState({
+  // Form data state
+  const [formData, setFormData] = useState({
     name: '',
+    dob: '',
+    gender: null,
+    phoneNumber: '',
     email: '',
-    phone: '',
-    address: '',
-    gender: '',
-    qualification: '',
-    staffId: '',
-    role: '',
-    designation: '',
-    joiningDate: '',
-    salary: '',
-    contractType: '',
-    location: ''
+    nationality: null,
+    permanentAddress: '',
+    currentAddress: '',
+    experienceCertificate: null,
+    resume: null
   });
   
-  // State for profile pic upload
-  const [showProfilePicModal, setShowProfilePicModal] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  // Dropdown options
+  const [countries, setCountries] = useState([]);
+  const [genders, setGenders] = useState([]);
+  
+  // File preview states
+  const [expCertPreview, setExpCertPreview] = useState(null);
+  const [resumePreview, setResumePreview] = useState(null);
 
-  const toggleSidebar = () => setIsSidebarVisible((prev) => !prev);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+  
+    const toggleSidebar = () => {
+      setIsSidebarVisible((prev) => !prev);
     };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  
+     const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 992);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+    const [isMdLayout, setIsMdLayout] = useState(window.innerWidth >= 768 && window.innerWidth < 992);
+  
+    useEffect(() => {
+      const handleResize = () => {
+        setIsSidebarVisible(window.innerWidth >= 992);
+        setIsSmallScreen(window.innerWidth < 768);
+        setIsMdLayout(window.innerWidth >= 768 && window.innerWidth < 992);
+      };
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
+
+
 
   useEffect(() => {
-    const fetchAdminData = async () => {
-      setLoading(true);
-      setError(null);
+    const fetchData = async () => {
       try {
-        const adminResponse = await getStudent(1); // Adjust ID as needed
+        setLoading(true);
+        setError(null);
         
-        // For development purposes, set default data if API returns empty
-        const defaultData = {
-          name: "Andrews",
-          email: "andrews.tech@gmail.com",
-          phone: "61+ 6065 6528",
-          address: "21b-Square Area, Belgium",
-          gender: "Male",
-          qualification: "Master Degree in Mathematical",
-          staffId: "T12345",
-          role: "Senior Teacher",
-          designation: "Mathematics Faculty",
-          joiningDate: "01/15/2020",
-          salary: "5000",
-          contractType: "Full-time",
-          location: "Main Campus"
-        };
+        // Fetch dropdown options and teacher data in parallel
+        const [countriesData, gendersData, teacherData] = await Promise.all([
+          fetchCountries(),
+          fetchGenders(),
+          fetchProfileById() // Assuming this gets the current teacher's profile
+        ]);
         
-        // Merge API data with default data for any missing fields
-        const mergedData = adminResponse.data ? { ...defaultData, ...adminResponse.data } : defaultData;
-        setAdminData(mergedData);
-        setEditData(mergedData);
-      } catch (error) {
-        console.error("API Error:", error);
-        // Use default data if API fails
-        const defaultData = {
-          name: "Andrews",
-          email: "andrews.tech@gmail.com",
-          phone: "61+ 6065 6528",
-          address: "21b-Square Area, Belgium",
-          gender: "Male",
-          qualification: "Master Degree in Mathematical",
-          staffId: "T12345",
-          role: "Senior Teacher",
-          designation: "Mathematics Faculty",
-          joiningDate: "01/15/2020",
-          salary: "5000",
-          contractType: "Full-time",
-          location: "Main Campus"
-        };
-        setAdminData(defaultData);
-        setEditData(defaultData);
-        setError("Failed to load teacher data. Using sample data instead.");
+        setCountries(countriesData);
+        setGenders(gendersData);
+        
+        if (teacherData) {
+          setFormData({
+            name: teacherData.name || '',
+            dob: teacherData.dob ? formatDate(teacherData.dob) : '',
+            gender: teacherData.gender || null,
+            phoneNumber: teacherData.phoneNumber || '',
+            email: teacherData.email || '',
+            nationality: teacherData.nationality || null,
+            permanentAddress: teacherData.permanentAddress || '',
+            currentAddress: teacherData.currentAddress || '',
+            experienceCertificate: teacherData.experienceCertificate || null,
+            resume: teacherData.resume || null
+          });
+          
+          // Set file previews if URLs exist
+          if (teacherData.experienceCertificate) {
+            setExpCertPreview(teacherData.experienceCertificate);
+          }
+          if (teacherData.resume) {
+            setResumePreview(teacherData.resume);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch data:", err);
+        setError("Failed to load teacher data. Please try again.");
       } finally {
         setLoading(false);
       }
     };
-    fetchAdminData();
+    
+    fetchData();
   }, []);
 
-  // Section edit handler
-  const handleEdit = (section) => {
-    if (section === 'profile-picture') {
-      setShowProfilePicModal(true);
-      return;
-    }
-    
-    setCurrentSection(section);
-    setShowEditModal(true);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
   };
-  
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setEditData(prev => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
-  
-  // Handle save for text fields
-  const handleSave = () => {
-    // Here you would typically make an API call to update the data
-    // For now, we'll just update the local state
-    setAdminData(editData);
-    setShowEditModal(false);
-    
-    // Success message
-    alert("Profile updated successfully!");
-  };
-  
-  // Handle profile picture change
+
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+    const { name, files } = e.target;
+    if (files && files[0]) {
+      if (files[0].size > 2 * 1024 * 1024) {
+        alert("File size should be less than 2MB");
+        return;
+      }
+      
+      // Update form data
+      setFormData(prev => ({
+        ...prev,
+        [name]: files[0]
+      }));
+      
+      // Create preview
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewUrl(reader.result);
+      reader.onload = (event) => {
+        if (name === 'experienceCertificate') {
+          setExpCertPreview(event.target.result);
+        } else if (name === 'resume') {
+          setResumePreview(event.target.result);
+        }
       };
-      reader.readAsDataURL(file);
-    }
-  };
-  
-  // Handle profile picture upload
-  const handleUploadPicture = () => {
-    // Here you would typically upload the file to a server
-    // For now, we'll just update the preview as if it was successful
-    if (previewUrl) {
-      // In a real app, you'd update the profile pic URL after successful upload
-      // For now, we just close the modal since we're showing the preview image
-      setShowProfilePicModal(false);
-      alert("Profile picture updated successfully!");
-    } else {
-      alert("Please select an image first.");
+      reader.readAsDataURL(files[0]);
     }
   };
 
-  // Section title with edit button component
-  const SectionTitle = ({ title, section }) => (
-    <div className="d-flex justify-content-between align-items-center mb-2">
-      <h5 className="fw-bold text-secondary mb-0">{title}</h5>
-      <Button 
-        variant="link" 
-        className="p-0 text-primary" 
-        onClick={() => handleEdit(section)}
-        aria-label={`Edit ${section}`}
-      >
-        <FaEdit size={18} />
-      </Button>
-    </div>
-  );
-  
-  // Get modal fields based on current section
-  const getModalFields = () => {
-    switch (currentSection) {
-      case 'contact':
-        return (
-          <>
-            <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control 
-                type="email" 
-                name="email" 
-                value={editData.email || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Phone</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="phone" 
-                value={editData.phone || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Address</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="address" 
-                value={editData.address || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Gender</Form.Label>
-              <Form.Select name="gender" value={editData.gender || ''} onChange={handleInputChange}>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Qualification</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="qualification" 
-                value={editData.qualification || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-          </>
-        );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
       
-      case 'staff':
-        return (
-          <>
-            <Form.Group className="mb-3">
-              <Form.Label>Name</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="name" 
-                value={editData.name || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Staff ID</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="staffId" 
-                value={editData.staffId || ''} 
-                onChange={handleInputChange}
-                readOnly 
-              />
-              <Form.Text className="text-muted">Staff ID cannot be changed</Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Role</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="role" 
-                value={editData.role || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Designation</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="designation" 
-                value={editData.designation || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Date of Joining</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="joiningDate" 
-                value={editData.joiningDate || ''} 
-                onChange={handleInputChange}
-                readOnly 
-              />
-              <Form.Text className="text-muted">Joining date cannot be changed</Form.Text>
-            </Form.Group>
-          </>
-        );
+      // Prepare form data
+      const formDataToSend = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formDataToSend.append(key, value);
+        }
+      });
       
-      case 'salary':
-        return (
-          <>
-            <Form.Group className="mb-3">
-              <Form.Label>Basic Salary</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="salary" 
-                value={editData.salary || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Contract Type</Form.Label>
-              <Form.Select name="contractType" value={editData.contractType || ''} onChange={handleInputChange}>
-                <option value="Full-time">Full-time</option>
-                <option value="Part-time">Part-time</option>
-                <option value="Contract">Contract</option>
-                <option value="Temporary">Temporary</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Work Location</Form.Label>
-              <Form.Control 
-                type="text" 
-                name="location" 
-                value={editData.location || ''} 
-                onChange={handleInputChange} 
-              />
-            </Form.Group>
-          </>
-        );
+      // Call editTeacher API
+      const response = await editTeacher(formDataToSend);
       
-      default:
-        return null;
+      if (response.success) {
+        alert("Profile updated successfully!");
+        // Refresh data
+        const updatedTeacher = await fetchProfileById();
+        if (updatedTeacher) {
+          setFormData(prev => ({
+            ...prev,
+            ...updatedTeacher,
+            dob: updatedTeacher.dob ? formatDate(updatedTeacher.dob) : ''
+          }));
+        }
+      } else {
+        throw new Error(response.message || "Failed to update profile");
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert(err.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
     }
   };
+
+  if (loading && !formData.name) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <Spinner animation="border" variant="primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <Alert variant="danger">{error}</Alert>
+      </div>
+    );
+  }
 
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
-      <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+           <div className="d-flex flex-column flex-md-row">
+             {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container p-4 min-vh-100">
           <div className="sub-container" style={{ width: "94%" }}>
-            <Row className="mb-4">
-              <Col md={8} style={{ marginTop: "25px" }}>
-                <h2 className="fw-bold">Teacher Profile</h2>
-              </Col>
-            </Row>
+          <div className="sticky-top bg-white z-1 pt-1 px-4">
+        <Row className="mb-2"> {/* Reduced margin for compact look */}
+          <Col md={8}>
+            <h2 className="fw-bold mb-3">Teacher Settings</h2> {/* mb-0 removes extra space */}
+          </Col>
+        </Row>
+      </div>
 
-            {loading ? (
-              <Spinner animation="border" variant="primary" />
-            ) : error ? (
-              <Alert variant="danger">{error}</Alert>
-            ) : (
-              <Card className="p-4 shadow-lg profile-card">
-                {/* Desktop Layout */}
-                <div className="d-none d-md-block">
-                  <Row>
-                    {/* Left Column - Profile Picture & Name */}
-                    <Col md={4} className="d-flex flex-column align-items-center">
-                      <div className="position-relative">
-                        <Image
-                          src={previewUrl || profilePic}
-                          roundedCircle
-                          className="profile-pic mb-3"
-                          alt="Profile"
-                        />
-                        <Button 
-                          variant="link" 
-                          className="position-absolute bottom-0 end-0 bg-white rounded-circle p-1"
-                          onClick={() => handleEdit('profile-picture')}
-                          aria-label="Edit profile picture"
-                        >
-                          <FaEdit size={16} className="text-primary" />
-                        </Button>
-                      </div>
-                      <h4 className="text-success fw-bold mb-2">
-                        {adminData?.name || "Andrews"}
-                      </h4>
-                      <hr className="w-50" />
-                    </Col>
-
-                    {/* Right Column - Contact Info */}
-                    <Col md={8} className="d-flex flex-column">
-                      <SectionTitle title="Contact Information" section="contact" />
-                      <p>Email: <span className="text-primary">{adminData?.email || "andrews.tech@gmail.com"}</span></p>
-                      <p>Phone: <span className="text-primary">{adminData?.phone || "61+ 6065 6528"}</span></p>
-                      <p>Address: <span className="text-primary">{adminData?.address || "21b-Square Area, Belgium"}</span></p>
-                      <p>Gender: <span className="text-primary">{adminData?.gender || "Male"}</span></p>
-                      <p>Qualification: <span className="text-primary">{adminData?.qualification || "Master Degree in Mathematical"}</span></p>
-                    </Col>
-                  </Row>
-
-                  {/* Additional Info Below Profile */}
-                  <Row className="mt-4">
-                    {/* Left Column - Staff Details */}
-                    <Col md={4} className="d-flex flex-column staff-info">
-                      <SectionTitle title="Staff Information" section="staff" />
-                      <p>Staff ID: <span className="text-primary">{adminData?.staffId || "N/A"}</span></p>
-                      <p>Role: <span className="text-primary">{adminData?.role || "N/A"}</span></p>
-                      <p>Designation: <span className="text-primary">{adminData?.designation || "N/A"}</span></p>
-                      <p>Date of Joining: <span className="text-primary">{adminData?.joiningDate || "N/A"}</span></p>
-                    </Col>
-                  
-                    {/* Right Column - Salary Details */}
-                    <Col md={8} className="d-flex flex-column">
-                      <hr className="mb-3"/>
-                      <SectionTitle title="Contract & Salary" section="salary" />
-                      <p>Basic Salary: <span className="text-primary">${adminData?.salary || "N/A"}</span></p>
-                      <p>Contract Type: <span className="text-primary">{adminData?.contractType || "N/A"}</span></p>
-                      <p>Work Location: <span className="text-primary">{adminData?.location || "N/A"}</span></p>
-                    </Col>
-                  </Row>
-                </div>
-
-                {/* Mobile Layout */}
-                <div className="d-md-none">
-                  {/* Profile Picture & Name */}
-                  <div className="d-flex flex-column align-items-center mb-4">
-                    <div className="position-relative">
-                      <Image
-                        src={previewUrl || profilePic}
-                        roundedCircle
-                        className="profile-pic mb-3"
-                        alt="Profile"
-                        style={{ width: "150px", height: "150px" }}
+            <Card className="p-4 shadow-lg">
+              <Form onSubmit={handleSubmit}>
+                {/* Basic Information Row */}
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formName">
+                      <Form.Label>Name</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
                       />
-                      <Button 
-                        variant="link" 
-                        className="position-absolute bottom-0 end-0 bg-white rounded-circle p-1"
-                        onClick={() => handleEdit('profile-picture')}
-                        aria-label="Edit profile picture"
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formDob">
+                      <Form.Label>Date of Birth</Form.Label>
+                      <Form.Control
+                        type="date"
+                        name="dob"
+                        value={formData.dob}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                {/* Gender and Phone Row */}
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formGender">
+                      <Form.Label>Gender</Form.Label>
+                      <Form.Select
+                        name="gender"
+                        value={formData.gender || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          gender: e.target.value ? parseInt(e.target.value) : null
+                        }))}
+                        required
                       >
-                        <FaEdit size={16} className="text-primary" />
-                      </Button>
-                    </div>
-                    <h4 className="text-success fw-bold mb-2">
-                      {adminData?.name || "Andrews"}
-                    </h4>
-                    <hr className="w-50 mb-4" />
-                  </div>
+                        <option value="">Select Gender</option>
+                        {genders.map(gender => (
+                          <option key={gender.item1} value={gender.item1}>
+                            {gender.item2}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formPhone">
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="phoneNumber"
+                        value={formData.phoneNumber}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-                  {/* Staff Information */}
-                  <div className="mb-4">
-                    <SectionTitle title="Staff Information" section="staff" />
-                    <p>Staff ID: <span className="text-primary">{adminData?.staffId || "N/A"}</span></p>
-                    <p>Role: <span className="text-primary">{adminData?.role || "N/A"}</span></p>
-                    <p>Designation: <span className="text-primary">{adminData?.designation || "N/A"}</span></p>
-                    <p>Date of Joining: <span className="text-primary">{adminData?.joiningDate || "N/A"}</span></p>
-                  </div>
+                {/* Email and Nationality Row */}
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formEmail">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formNationality">
+                      <Form.Label>Nationality</Form.Label>
+                      <Form.Select
+                        name="nationality"
+                        value={formData.nationality || ''}
+                        onChange={(e) => setFormData(prev => ({
+                          ...prev,
+                          nationality: e.target.value ? parseInt(e.target.value) : null
+                        }))}
+                        required
+                      >
+                        <option value="">Select Nationality</option>
+                        {countries.map(country => (
+                          <option key={country.item1} value={country.item1}>
+                            {country.item2}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-                  {/* Contact Information */}
-                  <div className="mb-4">
-                    <SectionTitle title="Contact Information" section="contact" />
-                    <p>Email: <span className="text-primary">{adminData?.email || "andrews.tech@gmail.com"}</span></p>
-                    <p>Phone: <span className="text-primary">{adminData?.phone || "61+ 6065 6528"}</span></p>
-                    <p>Address: <span className="text-primary">{adminData?.address || "21b-Square Area, Belgium"}</span></p>
-                    <p>Gender: <span className="text-primary">{adminData?.gender || "Male"}</span></p>
-                    <p>Qualification: <span className="text-primary">{adminData?.qualification || "Master Degree in Mathematical"}</span></p>
-                  </div>
+                {/* Address Row */}
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formPermanentAddress">
+                      <Form.Label>Permanent Address</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="permanentAddress"
+                        value={formData.permanentAddress}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formCurrentAddress">
+                      <Form.Label>Current Residential Address</Form.Label>
+                      <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="currentAddress"
+                        value={formData.currentAddress}
+                        onChange={handleInputChange}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-                  {/* Contract & Salary */}
-                  <div>
-                    <hr className="mb-3"/>
-                    <SectionTitle title="Contract & Salary" section="salary" />
-                    <p>Basic Salary: <span className="text-primary">${adminData?.salary || "N/A"}</span></p>
-                    <p>Contract Type: <span className="text-primary">{adminData?.contractType || "N/A"}</span></p>
-                    <p>Work Location: <span className="text-primary">{adminData?.location || "N/A"}</span></p>
-                  </div>
+                {/* Document Uploads Section */}
+                <h5 className="mt-4 mb-3">Document Uploads</h5>
+                <Row className="mb-3">
+                  <Col md={6}>
+                    <Form.Group controlId="formExperienceCertificate">
+                      <Form.Label>Experience Certificate</Form.Label>
+                      <div className="d-flex align-items-center">
+                        <Form.Control
+                          type="file"
+                          name="experienceCertificate"
+                          onChange={handleFileChange}
+                          accept=".pdf,.doc,.docx"
+                          className="me-2"
+                        />
+                        {expCertPreview && (
+                          <Button 
+                            variant="link" 
+                            href={expCertPreview} 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View
+                          </Button>
+                        )}
+                      </div>
+                      <Form.Text className="text-muted">
+                        File size less than 2MB
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formResume">
+                      <Form.Label>Upload Resume</Form.Label>
+                      <div className="d-flex align-items-center">
+                        <Form.Control
+                          type="file"
+                          name="resume"
+                          onChange={handleFileChange}
+                          accept=".pdf,.doc,.docx"
+                          className="me-2"
+                        />
+                        {resumePreview && (
+                          <Button 
+                            variant="link" 
+                            href={resumePreview} 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            View
+                          </Button>
+                        )}
+                      </div>
+                      <Form.Text className="text-muted">
+                        File size less than 2MB
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                {/* Submit Button */}
+                <div className="d-flex justify-content-end mt-4">
+                  <Button variant="primary" type="submit" disabled={loading}>
+                    {loading ? 'Saving...' : 'Save Changes'}
+                  </Button>
                 </div>
-              </Card>
-            )}
+              </Form>
+            </Card>
           </div>
         </Container>
       </div>
-      
-      {/* Edit Modal for Text Fields */}
-      <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            Edit {currentSection === 'contact' ? 'Contact Information' : 
-                 currentSection === 'staff' ? 'Staff Information' : 
-                 currentSection === 'salary' ? 'Contract & Salary' : ''}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            {getModalFields()}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowEditModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="success" onClick={handleSave}>
-            <FaSave className="me-2" /> Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      
-      {/* Profile Picture Upload Modal */}
-      <Modal show={showProfilePicModal} onHide={() => setShowProfilePicModal(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Update Profile Picture</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="text-center mb-3">
-            <Image 
-              src={previewUrl || profilePic} 
-              roundedCircle 
-              style={{ width: '150px', height: '150px', objectFit: 'cover' }} 
-            />
-          </div>
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Select new profile picture</Form.Label>
-            <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowProfilePicModal(false)}>
-            Cancel
-          </Button>
-          <Button variant="success" onClick={handleUploadPicture}>
-            <FaSave className="me-2" /> Upload
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+      </div>
+  
   );
 };
 
