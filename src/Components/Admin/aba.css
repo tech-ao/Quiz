@@ -274,7 +274,7 @@ font-weight: bold;
 .abacus.bead-bg-1,
 .beads-column-item.bead-bg-1,
 .beads-column-row.middle-bg-1 {
-  background-color: #f593c5; /* Light Red */
+  background-color: #fbf8fa; /* Light Red */
 }
 
 .abacus.bead-bg-2,
@@ -299,15 +299,18 @@ font-weight: bold;
 }
 
 .bead {
-  width: 18px; /* Increased size for better visibility */
+  width: 25px;
   height: 18px;
-  background: radial-gradient(circle,#f7f5cb, Yellow,rgb(154, 154, 60) ); /* Vibrant gradient */
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 4px 8px rgba(244, 161, 230, 0.3); /* Adds depth */
- 
+  margin-bottom: 1px;
+  background-image: url('/public/2-removebg-preview.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 0; /* remove circular shape */
+  box-shadow: 0 4px 8px rgba(244, 161, 230, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 
 /* Bead Hover Effect */
 .bead:hover {
