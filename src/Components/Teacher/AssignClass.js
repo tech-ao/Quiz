@@ -5,88 +5,74 @@ import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherAddPopup from "./TeacherAddpopup";
 import "./AssignClass.css";
 
+const BASE_URL = 'http://srimathicare.in:8081/api';
+const API_KEY = '3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
+
+const getUserData = () => {
+  const storedData = localStorage.getItem('teacherData');
+  return storedData ? JSON.parse(storedData) : {};
+};
+
 const AssignClass = () => {
+  const userData = getUserData();
+  console.log("*******", userData);
+
   const [selectedRow, setSelectedRow] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
   const [showPopup, setShowPopup] = useState(false);
-  const [allClasses] = useState([
-    {
-      id: 1,
-      title: "Online Course Class",
-      description: "Live session for online students",
-      dateTime: "02/28/2025 16:30:00",
-      duration: 45,
-      createdBy: "Joe Black (Super Admin : 9000)",
-      createdFor: "Jason Sharlton (Teacher : 90006)",
-      classes: ["Class 4 (A)", "Class 4 (B)", "Class 4 (C)", "Class 4 (D)"],
-      status: "Awaited",
-    },
-    {
-      id: 2,
-      title: "Maths Interactive Session",
-      description: "Doubt clearing session",
-      dateTime: "03/01/2025 10:00:00",
-      duration: 60,
-      createdBy: "Sarah Williams (Admin : 9010)",
-      createdFor: "Michael Brown (Teacher : 90015)",
-      classes: ["Class 5 (A)", "Class 5 (B)"],
-      status: "In Progress",
-    },
-    {
-      id: 3,
-      title: "Science Lab Virtual Tour",
-      description: "Virtual experiments and learning",
-      dateTime: "03/02/2025 14:30:00",
-      duration: 90,
-      createdBy: "Emma Davis (Admin : 9020)",
-      createdFor: "Sophia Wilson (Teacher : 90020)",
-      classes: ["Class 6 (A)", "Class 6 (B)", "Class 6 (C)"],
-      status: "Completed",
-    },
-    {
-      id: 4,
-      title: "English Grammar Workshop",
-      description: "Advanced writing techniques",
-      dateTime: "03/03/2025 12:00:00",
-      duration: 75,
-      createdBy: "David Miller (Admin : 9030)",
-      createdFor: "Olivia Johnson (Teacher : 90025)",
-      classes: ["Class 7 (A)", "Class 7 (B)"],
-      status: "Awaited",
-    },
-  ]);
+  const [allClasses, setAllClasses] = useState([]);
+  const [filteredClasses, setFilteredClasses] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   
-  // Filtered classes based on search term
-  const [filteredClasses, setFilteredClasses] = useState(allClasses);
-
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 1024
-  );
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
- const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
- 
-   useEffect(() => {
-     const handleResize = () => {
-       // Sidebar visible only for screens 1024px and above
-       setIsSidebarVisible(window.innerWidth >= 1024);
-       setIsSmallScreen(window.innerWidth < 768);
-       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-     };
-     window.addEventListener("resize", handleResize);
-     return () => window.removeEventListener("resize", handleResize);
-   }, []);
- 
-  
-  // Handle search functionality
+  const fetchClassesByTeacherId = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`http://srimathicare.in:8081/api/Classess/GetClassesListByTeacherId?TeacherId=1`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'X-Api-Key': API_KEY
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+      
+      if (responseData.isSuccess && responseData.statusCode === 200) {
+        // Use the data array from the response
+        const classesData = Array.isArray(responseData.data) ? responseData.data : [];
+        console.log("Classes data:", classesData);
+        setAllClasses(classesData);
+        setFilteredClasses(classesData);
+      } else {
+        throw new Error(responseData.message || 'Failed to fetch classes');
+      }
+    } catch (error) {
+      console.error('Error fetching classes:', error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchClassesByTeacherId();
+  }, []);
+
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setFilteredClasses(allClasses);
@@ -96,17 +82,15 @@ const AssignClass = () => {
     const lowercasedSearch = searchTerm.toLowerCase();
     const filtered = allClasses.filter(
       (classItem) =>
-        classItem.title.toLowerCase().includes(lowercasedSearch) ||
-        classItem.description.toLowerCase().includes(lowercasedSearch) ||
-        classItem.createdBy.toLowerCase().includes(lowercasedSearch) ||
-        classItem.createdFor.toLowerCase().includes(lowercasedSearch) ||
-        classItem.status.toLowerCase().includes(lowercasedSearch) ||
-        classItem.classes.some(cls => cls.toLowerCase().includes(lowercasedSearch))
+        (classItem.name && classItem.name.toLowerCase().includes(lowercasedSearch)) ||
+        (classItem.description && classItem.description.toLowerCase().includes(lowercasedSearch)) ||
+        (classItem.instructor && classItem.instructor.toLowerCase().includes(lowercasedSearch)) ||
+        (classItem.createdBy && classItem.createdBy.toLowerCase().includes(lowercasedSearch))
     );
     
     setFilteredClasses(filtered);
   }, [searchTerm, allClasses]);
-  
+
   const handleAction = (action, rowData) => {
     setSelectedRow(rowData);
     switch (action) {
@@ -123,7 +107,17 @@ const AssignClass = () => {
         break;
     }
   };
-  
+
+  // Format date and time for display
+  const formatDateTime = (date, time) => {
+    if (!date) return "N/A";
+    try {
+      return `${date} ${time || ""}`.trim();
+    } catch (error) {
+      return "Invalid Date";
+    }
+  };
+
   return (
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
@@ -131,25 +125,11 @@ const AssignClass = () => {
         {isSidebarVisible && <TeacherSidePanel />}
         <div className="assign-class main-container">
           <div className="sub-container assign-container">
-            {/* Header Section */}
-            <div
-              className="d-flex justify-content-between align-items-center header-section"
-              style={{
-                marginTop: "20px",
-                position: "sticky",
-                top: "0",
-                backgroundColor: "white",
-                padding: "10px",
-                zIndex: "1",
-              }}
-            >
-              <h4 className="live-classes-heading">
-                <b>Live Classes</b>
-              </h4>
+            <div className="d-flex justify-content-between align-items-center header-section" style={{ marginTop: "20px", position: "sticky", top: "0", backgroundColor: "white", padding: "10px", zIndex: "1" }}>
+              <h4 className="live-classes-heading"><b>Live Classes</b></h4>
             </div>
 
-            {/* Search and Tools Section */}
-            <div className="d-flex flex-column align-items-end" style={{width:'98%'}}>
+            <div className="d-flex flex-column align-items-end" style={{ width: '98%' }}>
               <div className="d-flex justify-content-between align-items-center w-100">
                 <input
                   type="text"
@@ -169,11 +149,13 @@ const AssignClass = () => {
               {showPopup && (
                 <TeacherAddPopup
                   onClose={() => setShowPopup(false)}
-                  onSave={(data) => console.log(data)}
+                  onSave={(data) => {
+                    console.log(data);
+                    fetchClassesByTeacherId(); 
+                  }}
                 />
               )}
 
-              {/* Tools Buttons Below Add Button */}
               <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
                   <i className="bi bi-file-text"></i>
@@ -190,104 +172,105 @@ const AssignClass = () => {
               </div>
             </div>
 
-            {/* Table Container with Horizontal and Vertical Scrolling */}
             <div 
               style={{
                 overflow: "auto",
-                maxHeight: "calc(100vh - 200px)", // Adjust based on your header/search section height
+                maxHeight: "calc(100vh - 200px)", 
                 marginTop: "15px",
                 border: "1px solid #dee2e6",
                 borderRadius: "4px"
               }}
             >
-              <table className="table table-bordered table-hover table-custom m-0">
-                <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
-                  <tr>
-                    <th style={{ width: "50px" }}>#</th>
-                    <th>Class Title</th>
-                    <th>Description</th>
-                    <th>Date Time</th>
-                    <th>Duration (mins)</th>
-                    <th>Created By</th>
-                    <th>Created For</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredClasses.map((classItem, index) => (
-                    <tr key={classItem.id}>
-                      <td className="text-center">{index + 1}</td>
-                      <td>{classItem.title}</td>
-                      <td>{classItem.description}</td>
-                      <td>{classItem.dateTime}</td>
-                      <td>{classItem.duration}</td>
-                      <td>{classItem.createdBy}</td>
-                      <td>{classItem.createdFor}</td>
-                      <td>
-                        <select
-                          className="form-select form-select-sm"
-                          defaultValue={classItem.status}
-                        >
-                          <option value="Awaited">Awaited</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      </td>
-                      <td className="action-column">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "8px",
-                            flexWrap: "nowrap",
-                          }}
-                        >
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("view", classItem)}
-                          >
-                            <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("edit", classItem)}
-                          >
-                            <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("remove", classItem)}
-                          >
-                            <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  
-                  {filteredClasses.length === 0 && (
+              {loading ? (
+                <div className="text-center py-3">Loading classes...</div>
+              ) : error ? (
+                <div className="text-center py-3 text-danger">{error}</div>
+              ) : (
+                <table className="table table-bordered table-hover table-custom m-0">
+                  <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
                     <tr>
-                      <td colSpan="9" className="text-center py-3">
-                        No classes found matching your search criteria.
-                      </td>
+                      <th style={{ width: "50px" }}>#</th>
+                      <th>Class Name</th>
+                      <th>Description</th>
+                      <th>Date Time</th>
+                      <th>Instructor</th>
+                      <th>Created By</th>
+                      <th>Meeting Link</th>
+                      <th>Action</th>
                     </tr>
-                  )}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {Array.isArray(filteredClasses) && filteredClasses.length > 0 ? (
+                      filteredClasses.map((classItem, index) => (
+                        <tr key={classItem.id || index}>
+                          <td className="text-center">{index + 1}</td>
+                          <td>{classItem.name || "N/A"}</td>
+                          <td>{classItem.description || "N/A"}</td>
+                          <td>{formatDateTime(classItem.date, classItem.time)}</td>
+                          <td>{classItem.instructor || "N/A"}</td>
+                          <td>{classItem.createdBy || "N/A"}</td>
+                          <td>
+                            {classItem.meetingLink ? (
+                              <a href={classItem.meetingLink} target="_blank" rel="noopener noreferrer">
+                                Join Meeting
+                              </a>
+                            ) : (
+                              "N/A"
+                            )}
+                          </td>
+                          <td className="action-column">
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: "8px",
+                                flexWrap: "nowrap",
+                              }}
+                            >
+                              <button
+                                className="btn btn-sm"
+                                style={{ color: "#198754", background: "transparent" }}
+                                onClick={() => handleAction("view", classItem)}
+                              >
+                                <i className="bi bi-eye" style={{ fontSize: "20px" }}></i>
+                              </button>
+
+                              <button
+                                className="btn btn-sm"
+                                style={{ color: "#198754", background: "transparent" }}
+                                onClick={() => handleAction("edit", classItem)}
+                              >
+                                <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
+                              </button>
+
+                              <button
+                                className="btn btn-sm"
+                                style={{ color: "#198754", background: "transparent" }}
+                                onClick={() => handleAction("remove", classItem)}
+                              >
+                                <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" className="text-center py-3">
+                          No classes found.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
       </div>
       
-      {/* Modals remain unchanged */}
-      {showDetails && (
+      {showDetails && selectedRow && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -300,44 +283,40 @@ const AssignClass = () => {
                 ></button>
               </div>
               <div className="modal-body">
-                {selectedRow && (
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <strong>Title:</strong> {selectedRow.title}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Description:</strong> {selectedRow.description}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Date Time:</strong> {selectedRow.dateTime}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Duration:</strong> {selectedRow.duration}{" "}
-                        minutes
-                      </div>
+                <div className="row">
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <strong>Name:</strong> {selectedRow.name || "N/A"}
                     </div>
-                    <div className="col-md-6">
-                      <div className="mb-3">
-                        <strong>Created By:</strong> {selectedRow.createdBy}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Created For:</strong> {selectedRow.createdFor}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Status:</strong> {selectedRow.status}
-                      </div>
-                      <div className="mb-3">
-                        <strong>Classes:</strong>
-                        <ul className="list-unstyled">
-                          {selectedRow.classes.map((cls) => (
-                            <li key={cls}>{cls}</li>
-                          ))}
-                        </ul>
-                      </div>
+                    <div className="mb-3">
+                      <strong>Description:</strong> {selectedRow.description || "N/A"}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Date:</strong> {selectedRow.date || "N/A"}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Time:</strong> {selectedRow.time || "N/A"}
                     </div>
                   </div>
-                )}
+                  <div className="col-md-6">
+                    <div className="mb-3">
+                      <strong>Instructor:</strong> {selectedRow.instructor || "N/A"}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Created By:</strong> {selectedRow.createdBy || "N/A"}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Meeting Link:</strong> {selectedRow.meetingLink ? (
+                        <a href={selectedRow.meetingLink} target="_blank" rel="noopener noreferrer">
+                          {selectedRow.meetingLink}
+                        </a>
+                      ) : "N/A"}
+                    </div>
+                    <div className="mb-3">
+                      <strong>Created From:</strong> {selectedRow.createdFrom || "N/A"}
+                    </div>
+                  </div>
+                </div>
               </div>
               <div className="modal-footer">
                 <button
@@ -353,7 +332,7 @@ const AssignClass = () => {
         </div>
       )}
 
-      {showEdit && (
+      {showEdit && selectedRow && (
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -366,49 +345,57 @@ const AssignClass = () => {
                 ></button>
               </div>
               <div className="modal-body">
-                {selectedRow && (
-                  <form>
-                    <div className="mb-3">
-                      <label className="form-label">Title</label>
+                <form>
+                  <div className="mb-3">
+                    <label className="form-label">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      defaultValue={selectedRow.name || ""}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Description</label>
+                    <textarea
+                      className="form-control"
+                      defaultValue={selectedRow.description || ""}
+                    />
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Date</label>
                       <input
-                        type="text"
+                        type="date"
                         className="form-control"
-                        defaultValue={selectedRow.title}
+                        defaultValue={selectedRow.date || ""}
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Description</label>
-                      <textarea
-                        className="form-control"
-                        defaultValue={selectedRow.description}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Date Time</label>
+                    <div className="col-md-6 mb-3">
+                      <label className="form-label">Time</label>
                       <input
-                        type="datetime-local"
+                        type="time"
                         className="form-control"
-                        defaultValue={selectedRow.dateTime}
+                        defaultValue={selectedRow.time || ""}
                       />
                     </div>
-                    <div className="mb-3">
-                      <label className="form-label">Duration (minutes)</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        defaultValue={selectedRow.duration}
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label className="form-label">Status</label>
-                      <select className="form-select">
-                        <option value="Awaited">Awaited</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Completed">Completed</option>
-                      </select>
-                    </div>
-                  </form>
-                )}
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Instructor</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      defaultValue={selectedRow.instructor || ""}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Meeting Link</label>
+                    <input
+                      type="url"
+                      className="form-control"
+                      defaultValue={selectedRow.meetingLink || ""}
+                    />
+                  </div>
+                </form>
               </div>
               <div className="modal-footer">
                 <button
@@ -441,6 +428,7 @@ const AssignClass = () => {
               </div>
               <div className="modal-body">
                 <p>Are you sure you want to delete this class?</p>
+                {selectedRow && <p><strong>{selectedRow.name || "Unnamed class"}</strong></p>}
               </div>
               <div className="modal-footer">
                 <button
@@ -450,7 +438,15 @@ const AssignClass = () => {
                 >
                   Cancel
                 </button>
-                <button type="button" className="btn btn-danger">
+                <button 
+                  type="button" 
+                  className="btn btn-danger"
+                  onClick={() => {
+                    console.log("Deleting class:", selectedRow);
+                    setShowDeleteConfirm(false);
+                
+                  }}
+                >
                   Delete
                 </button>
               </div>
@@ -462,4 +458,4 @@ const AssignClass = () => {
   );
 };
 
-export default AssignClass; 
+export default AssignClass;
