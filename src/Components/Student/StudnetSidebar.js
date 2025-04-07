@@ -26,8 +26,8 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   // Handle navigation with studyModeId check for online class
   const handleNavigation = (path) => {
-    // For online class, ensure only online mode students can access
-    if (path === '/StudentOnlineClass' && Number(studyModeId) !== 2) {
+    if (path === '/student-assigned-class' && Number(studyModeId) !== 1) {
+      // Changed from !== 2 to !== 2 for alignment with display condition
       console.warn("Access denied to Online Class for offline students.");
       return;
     }
@@ -136,21 +136,22 @@ const StudentSidePannel = ({ studyModeId }) => {
           </div>
         </li>
 
-        {/* Online Class: Rendered only for online mode students */}
-        {Number(studyModeId) === 1 && (
-          <li className="nav-item">
-            <div
-              className={`nav-link ${location.pathname === '/StudentOnlineClass' ? 'active' : ''}`}
-              onClick={() => handleNavigation('/StudentOnlineClass')}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="icon-with-text">
-                <i className="bi bi-laptop"></i>
-                <span className="nav-text">Online Class</span>
-              </div>
-            </div>
-          </li>
-        )}
+     {/* Online Class: Rendered only for online mode students */}
+{Number(studyModeId) === 1 && (
+  <li className="nav-item">
+    <div
+      className={`nav-link ${location.pathname === '/student-assigned-class' ? 'active' : ''}`}
+      onClick={() => handleNavigation('/student-assigned-class')}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className="icon-with-text">
+        <i className="bi bi-laptop"></i>
+        <span className="nav-text">Online Class</span>
+      </div>
+    </div>
+  </li>
+)}
+
 
         <li className="nav-item">
           <div

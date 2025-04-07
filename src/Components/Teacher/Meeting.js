@@ -18,8 +18,6 @@ const getUserData = () => {
 
 const OnlineClass = () => {
   const userData = getUserData();
-  console.log(userData)
-
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -67,17 +65,8 @@ const OnlineClass = () => {
       }
 
       const result = await response.json();
-      console.log('API result:', result);
-  
       const studentsArray = result?.data?.searchAndListStudentResult ?? [];
-  
-      if (!Array.isArray(studentsArray)) {
-        console.error('Expected an array for searchAndListStudentResult but got:', studentsArray);
-        setStudents([]);
-      } else {
-        setStudents(studentsArray);
-      }
-  
+      setStudents(Array.isArray(studentsArray) ? studentsArray : []);
     } catch (error) {
       console.error('Error fetching students:', error);
       setStudents([]);
@@ -85,7 +74,7 @@ const OnlineClass = () => {
       setLoading(false);
     }
   };
-  
+
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -125,29 +114,26 @@ const OnlineClass = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     let studentIds = [];
+    let teacherIds = [];
     
+    teacherIds.push(JSON.parse(localStorage.getItem('userId')) || '');
+  
     if (includeAllStudents) {
       studentIds = students.map(student => student.studentId);
     } else {
       studentIds = selectedStudents.map(student => student.studentId);
     }
-
-    studentIds = [...studentIds, 1056]; // Example ID to include
-
+  
     if (includeAdmin) {
-      const userData = localStorage.getItem('userData');
-      if (userData) {
-        const parsedUserData = JSON.parse(userData);
-        if (parsedUserData.teacherId && !studentIds.includes(parsedUserData.teacherId)) {
-          studentIds.push(parsedUserData.teacherId);
-        }
+      if (teacherIds && !teacherIds.includes(teacherIds)) {
+        teacherIds.push(teacherIds);
       }
     }
-
+  
     const payload = {
-      id: 1068,
+      id: 0,
       name: newClass.name,
       instructor: newClass.instructor,
       description: `${newClass.name} class by ${newClass.instructor}`,
@@ -156,6 +142,7 @@ const OnlineClass = () => {
       time: newClass.time,
       meetingLink: 'https://meet.google.com/xut-strx-bvb',
       studentIds: studentIds, 
+      teacherIds: teacherIds,
       createdFrom: 1,
       timeStamp: new Date().toISOString(),
       isDeleted: false,

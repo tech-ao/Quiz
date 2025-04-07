@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TeacherHeader from "./TeacherHeader";
-import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherAddPopup from "./TeacherAddpopup";
-import "./AssignClass.css";
+import TeacherHeader from "./AdminHeader";
+import TeacherSidePanel from "./SidePannel";
+import TeacherAddPopup from "../Teacher/TeacherAddpopup";
+import "../Teacher/AssignClass.css";
 
 const BASE_URL = 'http://srimathicare.in:8081/api';
 const API_KEY = '3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
@@ -51,7 +51,6 @@ const AssignClass = () => {
           'X-Api-Key': API_KEY
         },
         body: JSON.stringify({
-          teacherId: localStorage.getItem('userId'),
           paginationDetail: {
             pageSize: pageSize,
             pageNumber: page

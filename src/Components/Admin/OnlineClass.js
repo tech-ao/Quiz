@@ -7,13 +7,6 @@ import '../Teacher/OnlineClassShedule.css';
 const BASE_URL= 'http://srimathicare.in:8081/api';
 const API_KEY ='3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
 
-const teachers = [
-  { id: 1, name: 'Mr. Smith' },
-  { id: 2, name: 'Ms. Johnson' },
-  { id: 3, name: 'Dr. Lee' },
-  { id: 4, name: 'Prof. Brown' },
-];
-
 const getUserData = () => {
   const storedData = localStorage.getItem('userData');
   return storedData ? JSON.parse(storedData) : {};
@@ -33,7 +26,6 @@ const OnlineClass = () => {
     userType: 'All', 
     teacherName: '',
   });
-  const [includeAdmin, setIncludeAdmin] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -106,30 +98,34 @@ const OnlineClass = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let participantIds = [];
+    let studentIds = [];
+    let teacherIds = [];
+    let adminIds = [1]; 
     
     if (newClass.userType === 'All') {
-      participantIds = [...teachersList.map(teacher => teacher.teacherId), ...students.map(student => student.studentId)];
+      teacherIds = teachersList.map(teacher => teacher.teacherId);
+      studentIds = students.map(student => student.studentId);
     } else if (newClass.userType === 'Teachers') {
-      participantIds = teachersList.map(teacher => teacher.teacherId);
+      teacherIds = teachersList.map(teacher => teacher.teacherId);
+      studentIds = []; 
     } else if (newClass.userType === 'Students') {
-      participantIds = students.map(student => student.studentId);
-    }
-    
-    if (includeAdmin) {
-      participantIds.push(1);
+      studentIds = students.map(student => student.studentId);
+      teacherIds = [];
     }
 
     const payload = {
-      id: 1068,
+      id: 0, 
       name: newClass.name,
       instructor: newClass.instructor,
       description: `${newClass.name} class by ${newClass.instructor}`,
       date: new Date(newClass.date).toISOString(),
-      createdBy: 1,
+      createdBy: userData.id || 1,
+      createdByRole: 1, 
       time: newClass.time,
-      meetingLink: '',
-      studentIds: participantIds.length > 0 ? participantIds : [0],
+      meetingLink: 'https://meet.google.com/qhw-ifuc-zan',
+      studentIds: studentIds.length > 0 ? studentIds : [0],
+      teacherIds: teacherIds.length > 0 ? teacherIds : [0],
+      adminIds: adminIds,
       createdFrom: 1,
       timeStamp: new Date().toISOString(),
       isDeleted: false,
@@ -137,12 +133,12 @@ const OnlineClass = () => {
     };
 
     try {
-      const response = await fetch('http://srimathicare.in:8081/api/Classess/Create', {
+      const response = await fetch(`${BASE_URL}/Classess/Create`, {
         method: 'POST',
         headers: {
           'accept': 'text/plain',
           'Content-Type': 'application/json',
-          'X-Api-Key': '3ec1b120-a9aa-4f52-9f51-eb4671ee1280'
+          'X-Api-Key': API_KEY
         },
         body: JSON.stringify(payload)
       });
@@ -154,6 +150,15 @@ const OnlineClass = () => {
       const result = await response.json();
       alert(`Class scheduled successfully: ${newClass.name}`);
       console.log('API Response:', result);
+      
+      setNewClass({
+        name: userData.email || '',
+        date: '',
+        time: '',
+        instructor: userData.teacherId || '',
+        userType: 'All',
+        teacherName: '',
+      });
     } catch (err) {
       console.error('Failed to schedule class:', err);
       alert('Failed to schedule class. Please try again later.');
@@ -227,9 +232,12 @@ const OnlineClass = () => {
                     onChange={handleChange}
                   >
                     <option value="All">All</option>
-                    <option value="Teachers">Teachers</option>
-                    <option value="Students">Students</option>
+                    <option value="Teachers">Teachers Only</option>
+                    <option value="Students">Students Only</option>
                   </Form.Control>
+                  <Form.Text className="text-muted">
+                    Admin will always be included in all class schedules.
+                  </Form.Text>
                 </Col>
               </Row>
           

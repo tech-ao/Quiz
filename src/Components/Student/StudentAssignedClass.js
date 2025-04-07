@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TeacherHeader from "./TeacherHeader";
-import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherAddPopup from "./TeacherAddpopup";
-import "./AssignClass.css";
+import StudentHeader from "./StudentHeader";
+import StudentSidePannel from "./StudnetSidebar";
+import TeacherAddPopup from "../Teacher/TeacherAddpopup";
+import "../Teacher/AssignClass.css";
 
 const BASE_URL = 'http://srimathicare.in:8081/api';
 const API_KEY = '3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
 
 const getUserData = () => {
-  const storedData = localStorage.getItem('userData');
+  const storedData = localStorage.getItem('studentId');
   return storedData ? JSON.parse(storedData) : {};
 };
 
 const AssignClass = () => {
   const userData = getUserData();
-  const teacherIdArray = userData.userId;
-
-  console.log("Teacher ID from localStorage:", teacherIdArray);
+  const studentId = userData.userId;
+  console.log(localStorage.getItem('studentId'));
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -51,13 +50,13 @@ const AssignClass = () => {
           'X-Api-Key': API_KEY
         },
         body: JSON.stringify({
-          teacherId: localStorage.getItem('userId'),
-          paginationDetail: {
-            pageSize: pageSize,
-            pageNumber: page
-          }
-        })
-      });
+            studentId: localStorage.getItem('studentId'), 
+            paginationDetail: {
+              pageSize: pageSize,
+              pageNumber: page
+            }
+          })
+        });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -102,7 +101,7 @@ const AssignClass = () => {
 
   useEffect(() => {
     fetchClasses(currentPage);
-  }, [currentPage]);
+  }, [currentPage, studentId]);
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
@@ -217,9 +216,9 @@ const AssignClass = () => {
 
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <StudentHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <StudentSidePannel />}
         <div className="assign-class main-container">
           <div className="sub-container assign-container">
             <div className="d-flex justify-content-between align-items-center header-section" style={{ marginTop: "20px", position: "sticky", top: "0", backgroundColor: "white", padding: "10px", zIndex: "1" }}>
@@ -236,22 +235,7 @@ const AssignClass = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button
-                  className="btn btn-success addbtn"
-                  onClick={() => setShowPopup(true)}
-                >
-                  <i className="bi bi-plus"></i> Add Classes
-                </button>
               </div>
-              {showPopup && (
-                <TeacherAddPopup
-                  onClose={() => setShowPopup(false)}
-                  onSave={(data) => {
-                    console.log(data);
-                    fetchClasses(currentPage);
-                  }}
-                />
-              )}
 
               <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
