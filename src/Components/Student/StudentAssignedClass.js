@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TeacherHeader from "./TeacherHeader";
-import TeacherSidePanel from "./TeacherSidepannel";
-// import TeacherAddPopup from "./TeacherAddpopup";
-import "./AssignClass.css";
+import StudentHeader from "./StudentHeader";
+import StudentSidePannel from "./StudnetSidebar";
+import TeacherAddPopup from "../Teacher/TeacherAddpopup";
+import "../Teacher/AssignClass.css";
 
 const BASE_URL = 'http://srimathicare.in:8081/api';
 const API_KEY = '3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
 
 const getUserData = () => {
-  const storedData = localStorage.getItem('userData');
+  const storedData = localStorage.getItem('studentId');
   return storedData ? JSON.parse(storedData) : {};
 };
 
 const AssignClass = () => {
   const userData = getUserData();
-  const teacherIdArray = userData.userId;
-
-  console.log("Teacher ID from localStorage:", teacherIdArray);
+  const studentId = userData.userId;
+  console.log(localStorage.getItem('studentId'));
 
   const [selectedRow, setSelectedRow] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
@@ -51,13 +50,13 @@ const AssignClass = () => {
           'X-Api-Key': API_KEY
         },
         body: JSON.stringify({
-          teacherId: localStorage.getItem('userId'),
-          paginationDetail: {
-            pageSize: pageSize,
-            pageNumber: page
-          }
-        })
-      });
+            studentId: localStorage.getItem('studentId'), 
+            paginationDetail: {
+              pageSize: pageSize,
+              pageNumber: page
+            }
+          })
+        });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -102,7 +101,7 @@ const AssignClass = () => {
 
   useEffect(() => {
     fetchClasses(currentPage);
-  }, [currentPage]);
+  }, [currentPage, studentId]);
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
@@ -217,9 +216,9 @@ const AssignClass = () => {
 
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <StudentHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex flex-column flex-md-row">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <StudentSidePannel />}
         <div className="assign-class main-container">
           <div className="sub-container assign-container">
             <div className="d-flex justify-content-between align-items-center header-section" style={{ marginTop: "20px", position: "sticky", top: "0", backgroundColor: "white", padding: "10px", zIndex: "1" }}>
@@ -236,23 +235,8 @@ const AssignClass = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                
               </div>
-<<<<<<< HEAD
-            
-              {/* Tools Buttons Below Add Button */}
-=======
-              {showPopup && (
-                <TeacherAddPopup
-                  onClose={() => setShowPopup(false)}
-                  onSave={(data) => {
-                    console.log(data);
-                    fetchClasses(currentPage);
-                  }}
-                />
-              )}
 
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
               <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
                   <i className="bi bi-file-text"></i>
@@ -278,81 +262,6 @@ const AssignClass = () => {
                 borderRadius: "4px"
               }}
             >
-<<<<<<< HEAD
-              <table className="table table-bordered table-hover table-custom m-0">
-                <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
-                  <tr>
-                    <th style={{ width: "50px" }}>#</th>
-                    <th>Class Title</th>
-                    <th>Description</th>
-                    <th>Date Time</th>
-                    <th>Duration (mins)</th>
-                    <th>Created By</th>
-                    <th>Created For</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredClasses.map((classItem, index) => (
-                    <tr key={classItem.id}>
-                      <td className="text-center">{index + 1}</td>
-                      <td>{classItem.title}</td>
-                      <td>{classItem.description}</td>
-                      <td>{classItem.dateTime}</td>
-                      <td>{classItem.duration}</td>
-                      <td>{classItem.createdBy}</td>
-                      <td>{classItem.createdFor}</td>
-                      <td>
-                        <select
-                          className="form-select form-select-sm"
-                          defaultValue={classItem.status}
-                        >
-                          <option value="Awaited">Awaited</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      </td>
-                      <td className="action-column">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "8px",
-                            flexWrap: "nowrap",
-                          }}
-                        >
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("view", classItem)}
-                          >
-                            <i className="bi bi-link-45deg" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("edit", classItem)}
-                          >
-                            <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("remove", classItem)}
-                          >
-                            <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  
-                  {filteredClasses.length === 0 && (
-=======
               {loading ? (
                 <div className="text-center py-3">Loading classes...</div>
               ) : error ? (
@@ -360,7 +269,6 @@ const AssignClass = () => {
               ) : (
                 <table className="table table-bordered table-hover table-custom m-0">
                   <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
                     <tr>
                       <th style={{ width: "50px" }}>#</th>
                       <th>Class Name</th>
@@ -458,12 +366,7 @@ const AssignClass = () => {
         </div>
       </div>
       
-<<<<<<< HEAD
-      {/* Modals remain unchanged
-      {showDetails && (
-=======
       {showDetails && selectedRow && (
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -532,7 +435,7 @@ const AssignClass = () => {
             </div>
           </div>
         </div>
-      )} */}
+      )}
 
       {showEdit && selectedRow && (
         <div className="modal" style={{ display: "block" }}>

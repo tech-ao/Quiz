@@ -49,6 +49,7 @@ import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
 import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import GoogleMeetPage from "./Components/google/MeetForm.js";
+import StudentAssignClass from "./Components/Student/StudentAssignedClass.js";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -75,8 +76,12 @@ import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
+<<<<<<< HEAD
 import AssignStudent from "./Components/Admin/AssignStudent.js";
 import Pending from "./Components/Admin/Pending.js";
+=======
+import AdminAssignedClasses from "./Components/Admin/AdminAssignedClasses.js"
+>>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
 
 
 // ProtectedRoute component to check login status

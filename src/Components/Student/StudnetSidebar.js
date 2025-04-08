@@ -47,7 +47,12 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   // Handle navigation with studyModeId check for online class
   const handleNavigation = (path) => {
+<<<<<<< HEAD
     if (path === '/StudentOnlineClass' && Number(studyModeId) !== 2) {
+=======
+    if (path === '/student-assigned-class' && Number(studyModeId) !== 1) {
+      // Changed from !== 2 to !== 2 for alignment with display condition
+>>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
       console.warn("Access denied to Online Class for offline students.");
       return;
     }
@@ -155,6 +160,7 @@ const StudentSidePannel = ({ studyModeId }) => {
           </div>
         </li>
 
+<<<<<<< HEAD
         {/* Online Meeting Dropdown */}
         <li className="nav-item">
           <div
@@ -198,6 +204,24 @@ const StudentSidePannel = ({ studyModeId }) => {
             </ul>
           )}
         </li>
+=======
+     {/* Online Class: Rendered only for online mode students */}
+{Number(studyModeId) === 1 && (
+  <li className="nav-item">
+    <div
+      className={`nav-link ${location.pathname === '/student-assigned-class' ? 'active' : ''}`}
+      onClick={() => handleNavigation('/student-assigned-class')}
+      style={{ cursor: 'pointer' }}
+    >
+      <div className="icon-with-text">
+        <i className="bi bi-laptop"></i>
+        <span className="nav-text">Online Class</span>
+      </div>
+    </div>
+  </li>
+)}
+
+>>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
 
         <li className="nav-item">
           <div
