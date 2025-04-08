@@ -12,6 +12,9 @@ const getUserData = () => {
   return storedData ? JSON.parse(storedData) : {};
 };
 
+const today = new Date().toISOString().split("T")[0];
+
+
 const OnlineClass = () => {
   const userData = getUserData();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -209,6 +212,7 @@ const OnlineClass = () => {
                     value={newClass.date}
                     onChange={handleChange}
                     required
+                    min={today}
                   />
                 </Col>
                 <Col md={6} className="mb-3">
