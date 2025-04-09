@@ -70,7 +70,8 @@ import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
-import AdminAssignedClasses from "./Components/Admin/AdminAssignedClasses.js"
+import AdminAssignedClasses from "./Components/Admin/AdminAssignedClasses.js";
+import Payment from "./Components/Admin/payment.js";
 
 
 // ProtectedRoute component to check login status
@@ -103,6 +104,7 @@ function App() {
           <Route path="/meeting" element={<CreateMeeting/>}/>
           <Route path="/student-assigned-class"element={<StudentAssignClass/>}/>
           <Route path="/AdminAssignedClasses" element={<AdminAssignedClasses/>}/>
+          <Route path="/Payment" element={<Payment/>}/>
 
 
           {/* Protected Routes */}
