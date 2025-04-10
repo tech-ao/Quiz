@@ -10,7 +10,7 @@ import { getStudent } from "../../redux/Services/api";
 import "./completedtest.css"; // Updated CSS file name
 
 const CompletedTest = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 768);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [tests, setTests] = useState([
     { id: 1, name: "Math Quiz", level: 1, date: "2025-01-25", duration: "30 mins", totalQuestions: 10, details: [] },
     { id: 2, name: "Science Test", level: 2, date: "2025-01-26", duration: "45 mins", totalQuestions: 15, details: [] },
@@ -67,7 +67,7 @@ const CompletedTest = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsSidebarVisible(window.innerWidth >= 768);
+      setIsSidebarVisible(window.innerWidth >= 1024);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

@@ -1,49 +1,45 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import AdminHeader from '../Admin/AdminHeader';
-import SidePannel from './SidePannel';
-import '../Teacher/OnlineClassShedule.css'; // Custom CSS for styling
+import TeacherSidePannel from './SidePannel';
+import '../Teacher/OnlineClassShedule.css';
 
-// Sample class data
-const classSchedule = [
-  { id: 1, name: 'Mathematics 101', date: '2024-12-01', time: '10:00 AM', instructor: 'Mr. Smith' },
-  { id: 2, name: 'English Literature', date: '2024-12-02', time: '11:00 AM', instructor: 'Ms. Johnson' },
-  { id: 3, name: 'Physics 201', date: '2024-12-03', time: '01:00 PM', instructor: 'Dr. Lee' },
-  { id: 4, name: 'Computer Science', date: '2024-12-04', time: '02:00 PM', instructor: 'Prof. Brown' },
-];
+const BASE_URL= 'http://srimathicare.in:8081/api';
+const API_KEY ='3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
 
-const teachers = [
-  { id: 1, name: 'Mr. Smith' },
-  { id: 2, name: 'Ms. Johnson' },
-  { id: 3, name: 'Dr. Lee' },
-  { id: 4, name: 'Prof. Brown' },
-];
+const getUserData = () => {
+  const storedData = localStorage.getItem('userData');
+  return storedData ? JSON.parse(storedData) : {};
+};
+
+const today = new Date().toISOString().split("T")[0];
+
 
 const OnlineClass = () => {
+  const userData = getUserData();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  const [students, setStudents] = useState([]);
+  const [teachersList, setTeachers] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [newClass, setNewClass] = useState({
-    name: '',
+    name: userData.email || '',
     date: '',
     time: '',
-    instructor: '',
-    userType: 'Student', // Default is 'Student'
-    teacherName: '', // Empty by default for Student
+    instructor: userData.teacherId || '',
+    userType: 'All', 
+    teacherName: '',
   });
 
   useEffect(() => {
     const handleResize = () => {
-      // Sidebar visible only for screens 1024px and above
       setIsSidebarVisible(window.innerWidth >= 1024);
-      setIsSmallScreen(window.innerWidth < 768);
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
     };
     window.addEventListener("resize", handleResize);
+    fetchStudents();
+    fetchTeachers();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Corrected toggleSidebar function using setIsSidebarVisible
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   };
@@ -56,24 +52,132 @@ const OnlineClass = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const fetchStudents = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListStudent`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Api-Key': API_KEY
+        },
+        body: JSON.stringify({ paginationDetail: { pageSize: 100, pageNumber: 1 } })
+      });
+
+      const data = await response.json();
+      const studentList = data?.data?.searchAndListStudentResult || [];
+      setStudents(studentList);
+    } catch (error) {
+      console.error('Error fetching students:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchTeachers = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListTeacher`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-Api-Key': API_KEY
+        },
+        body: JSON.stringify({ paginationDetail: { pageSize: 100, pageNumber: 1 } })
+      });
+
+      const data = await response.json();
+      const teacherList = data?.data?.searchAndListTeacherResult || [];
+      setTeachers(teacherList);
+    } catch (error) {
+      console.error('Error fetching teachers:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('New class scheduled:', newClass);
-    alert(`New class scheduled: ${newClass.name}`);
+
+    let studentIds = [];
+    let teacherIds = [];
+    let adminIds = [1]; 
+    
+    if (newClass.userType === 'All') {
+      teacherIds = teachersList.map(teacher => teacher.teacherId);
+      studentIds = students.map(student => student.studentId);
+    } else if (newClass.userType === 'Teachers') {
+      teacherIds = teachersList.map(teacher => teacher.teacherId);
+      studentIds = []; 
+    } else if (newClass.userType === 'Students') {
+      studentIds = students.map(student => student.studentId);
+      teacherIds = [];
+    }
+
+    const payload = {
+      id: 0, 
+      name: newClass.name,
+      instructor: newClass.instructor,
+      description: `${newClass.name} class by ${newClass.instructor}`,
+      date: new Date(newClass.date).toISOString(),
+      createdBy: userData.id || 1,
+      createdByRole: 1, 
+      time: newClass.time,
+      meetingLink: 'https://meet.google.com/qhw-ifuc-zan',
+      studentIds: studentIds.length > 0 ? studentIds : [0],
+      teacherIds: teacherIds.length > 0 ? teacherIds : [0],
+      adminIds: adminIds,
+      createdFrom: 1,
+      timeStamp: new Date().toISOString(),
+      isDeleted: false,
+      objectId: 'default-obj-id'
+    };
+
+    try {
+      const response = await fetch(`${BASE_URL}/Classess/Create`, {
+        method: 'POST',
+        headers: {
+          'accept': 'text/plain',
+          'Content-Type': 'application/json',
+          'X-Api-Key': API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server responded with ${response.status}`);
+      }
+
+      const result = await response.json();
+      alert(`Class scheduled successfully: ${newClass.name}`);
+      console.log('API Response:', result);
+      
+      setNewClass({
+        name: userData.email || '',
+        date: '',
+        time: '',
+        instructor: userData.teacherId || '',
+        userType: 'All',
+        teacherName: '',
+      });
+    } catch (err) {
+      console.error('Failed to schedule class:', err);
+      alert('Failed to schedule class. Please try again later.');
+    }
   };
 
   return (
     <div>
-      {/* Admin Header with Toggle Sidebar */}
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <SidePannel />}
-        <Container className="main-container ">
+        {isSidebarVisible && <TeacherSidePannel />}
+        <Container className="main-container">
           <div className="online-sticky-header">
             <h2>Schedule Class</h2>
           </div>
           <div className="sub-container">
-            {/* Teacher's New Class Schedule Form */}
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col md={6} className="mb-3">
@@ -84,6 +188,7 @@ const OnlineClass = () => {
                     value={newClass.name}
                     onChange={handleChange}
                     placeholder="Enter Class Name"
+                    required
                   />
                 </Col>
                 <Col md={6} className="mb-3">
@@ -94,6 +199,7 @@ const OnlineClass = () => {
                     value={newClass.instructor}
                     onChange={handleChange}
                     placeholder="Enter Instructor Name"
+                    required
                   />
                 </Col>
               </Row>
@@ -105,6 +211,8 @@ const OnlineClass = () => {
                     name="date"
                     value={newClass.date}
                     onChange={handleChange}
+                    required
+                    min={today}
                   />
                 </Col>
                 <Col md={6} className="mb-3">
@@ -114,10 +222,10 @@ const OnlineClass = () => {
                     name="time"
                     value={newClass.time}
                     onChange={handleChange}
+                    required
                   />
                 </Col>
               </Row>
-              {/* User Type Selection */}
               <Row>
                 <Col md={6} className="mb-3">
                   <Form.Label>User Type</Form.Label>
@@ -127,32 +235,16 @@ const OnlineClass = () => {
                     value={newClass.userType}
                     onChange={handleChange}
                   >
-                    <option value="Student">Student</option>
-                    <option value="Teacher">Teacher</option>
+                    <option value="All">All</option>
+                    <option value="Teachers">Teachers Only</option>
+                    <option value="Students">Students Only</option>
                   </Form.Control>
+                  <Form.Text className="text-muted">
+                    Admin will always be included in all class schedules.
+                  </Form.Text>
                 </Col>
               </Row>
-              {/* Teacher Name Selection (only visible if Teacher is selected) */}
-              {newClass.userType === 'Teacher' && (
-                <Row>
-                  <Col md={6} className="mb-3">
-                    <Form.Label>Teacher Name</Form.Label>
-                    <Form.Control
-                      as="select"
-                      name="teacherName"
-                      value={newClass.teacherName}
-                      onChange={handleChange}
-                    >
-                      <option value="">Select Teacher</option>
-                      {teachers.map((teacher) => (
-                        <option key={teacher.id} value={teacher.name}>
-                          {teacher.name}
-                        </option>
-                      ))}
-                    </Form.Control>
-                  </Col>
-                </Row>
-              )}
+          
               <Button variant="success" type="submit">
                 Schedule Class
               </Button>

@@ -11,35 +11,83 @@ function NotificationPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedDate, setSelectedDate] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [notifications, setNotifications] = useState([
-    { id: 1, title: "Notification 1", content: "Details of notification iowrhwihoiffkefaofifoi ehfeuofheeof heoiefhqeofhae foiaehfaeofihnai cie jddiq duhdu udd1", receivedDate: "2024-02-15", isRead: false },
-    { id: 2, title: "Notification 2", content: "Details of notification 2", receivedDate: "2024-02-16", isRead: false },
-    { id: 3, title: "Notification 3", content: "Details of notification 3", receivedDate: "2024-02-17", isRead: false },
-    { id: 4, title: "Notification 4", content: "Details of notification 4", receivedDate: "2024-02-18", isRead: false },
-    { id: 5, title: "Notification 5", content: "Details of notification 5", receivedDate: "2024-02-19", isRead: false },
-    { id: 6, title: "Notification 1", content: "Details of notification 1", receivedDate: "2024-02-15", isRead: false },
-    { id: 7, title: "Notification 2", content: "Details of notification 2", receivedDate: "2024-02-16", isRead: false },
-    { id: 8, title: "Notification 3", content: "Details of notification 3", receivedDate: "2024-02-17", isRead: false },
-    { id: 9, title: "Notification 4", content: "Details of notification 4", receivedDate: "2024-02-18", isRead: false },
-    { id: 20, title: "Notification 5", content: "Details of notification 5", receivedDate: "2024-02-19", isRead: false },
-  ]);
+  const [notifications, setNotifications] = useState([]); // Initialize as an empty array
   const [selectedNotification, setSelectedNotification] = useState(null);
-  
- const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
- 
-   useEffect(() => {
-     const handleResize = () => {
-       // Sidebar visible only for screens 1024px and above
-       setIsSidebarVisible(window.innerWidth >= 1024);
-       setIsSmallScreen(window.innerWidth < 768);
-       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
-     };
-     window.addEventListener("resize", handleResize);
-     return () => window.removeEventListener("resize", handleResize);
-   }, []);
- 
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  const [loading, setLoading] = useState(true); // To indicate loading state
+  const [error, setError] = useState(null); // To handle API errors
+
+  const studentId = 1065; // Replace with the actual student ID or fetch it dynamically
+  const apiKey = "3ec1b120-a9aa-4f52-9f51-eb4671ee1280";
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Sidebar visible only for screens 1024px and above
+      setIsSidebarVisible(window.innerWidth >= 1024);
+      setIsSmallScreen(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(
+          "http://srimathicare.in:8081/api/SearchAndList/SearchAndListNotification",
+          {
+            method: "POST",
+            headers: {
+              accept: "text/plain",
+              "X-Api-Key": apiKey,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              studentId: studentId,
+              paginationDetail: {
+                pageSize: 100,
+                pageNumber: 1,
+              },
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const message = `An error occurred: ${response.status}`;
+          throw new Error(message);
+        }
+
+        const data = await response.json();
+        if (data.isSuccess && data.data && data.data.notifications) {
+          // Map the API response to the structure used in your component
+          const formattedNotifications = data.data.notifications.map((notif) => ({
+            id: notif.notificationId,
+            title: notif.message, // Assuming 'message' is the title
+            content: notif.message, // Assuming 'message' is also the content for simplicity
+            receivedDate: notif.meetingDate || new Date().toISOString().split("T")[0], // Use meetingDate if available, otherwise current date
+            isRead: notif.isRead,
+          }));
+          setNotifications(formattedNotifications);
+        } else {
+          setNotifications([]); // Set to empty array if no notifications
+        }
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching notifications:", err);
+        setNotifications([]); // Ensure notifications are empty on error
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNotifications();
+  }, [studentId, apiKey]); // Re-fetch if studentId or apiKey changes
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
@@ -78,6 +126,14 @@ function NotificationPage() {
     return matchesSearch && matchesDate;
   });
 
+  if (loading) {
+    return <div>Loading notifications...</div>;
+  }
+
+  if (error) {
+    return <div>Error loading notifications: {error}</div>;
+  }
+
   return (
     <div className="notification-page">
       <StudentHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
@@ -90,14 +146,13 @@ function NotificationPage() {
               <Col md={6}>
                 <h2 className="fw-bold">Notifications</h2>
               </Col>
-              <Col md={6} className="d-flex justify-content-end" style={{marginTop:"10px"}}>
+              <Col md={6} className="d-flex justify-content-end" style={{ marginTop: "10px" }}>
                 <input
                   type="text"
                   className="form-control search-input"
                   placeholder="Search notifications..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  
                 />
                 <button className="btn btn-light filter-btn" onClick={handleFilterClick}>
                   <FaFilter style={{ fontSize: "30px" }} />
@@ -129,10 +184,12 @@ function NotificationPage() {
                   key={notification.id}
                   className={`notification-item ${notification.isRead ? "read" : "unread"}`}
                   onClick={() => handleNotificationClick(notification.id)}
-                  style={{margin:"0 15px 0 10px"}}
+                  style={{ margin: "0 15px 0 10px" }}
                 >
                   <div className="notification-title">{notification.title}</div>
-                  <small className="text-muted" style={{marginRight:"30px"}}>Received on: {notification.receivedDate}</small>
+                  <small className="text-muted" style={{ marginRight: "30px" }}>
+                    Received on: {notification.receivedDate}
+                  </small>
                 </ListGroup.Item>
               ))
             ) : (
