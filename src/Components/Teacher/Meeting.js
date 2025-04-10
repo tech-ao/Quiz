@@ -11,6 +11,8 @@ const teachers = [
   { id: 4, name: 'Prof. Brown' },
 ];
 
+const today = new Date().toISOString().split("T")[0];
+
 const getUserData = () => {
   const storedData = localStorage.getItem('userData');
   return storedData ? JSON.parse(storedData) : {};
@@ -111,12 +113,12 @@ const OnlineClass = () => {
   const handleIncludeAdmin = (e) => {
     setIncludeAdmin(e.target.checked);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     let studentIds = [];
     let teacherIds = [];
+    let adminIds = [];
     
     teacherIds.push(JSON.parse(localStorage.getItem('userId')) || '');
   
@@ -127,9 +129,7 @@ const OnlineClass = () => {
     }
   
     if (includeAdmin) {
-      if (teacherIds && !teacherIds.includes(teacherIds)) {
-        teacherIds.push(teacherIds);
-      }
+      adminIds.push(1); 
     }
   
     const payload = {
@@ -143,10 +143,8 @@ const OnlineClass = () => {
       meetingLink: 'https://meet.google.com/xut-strx-bvb',
       studentIds: studentIds, 
       teacherIds: teacherIds,
+      adminIds: adminIds, 
       createdFrom: 1,
-      timeStamp: new Date().toISOString(),
-      isDeleted: false,
-      objectId: 'default-obj-id'
     };
     
     try {
@@ -159,11 +157,11 @@ const OnlineClass = () => {
         },
         body: JSON.stringify(payload)
       });
-
+  
       if (!response.ok) {
         throw new Error(`Server responded with ${response.status}`);
       }
-
+  
       const result = await response.json();
       alert(`Class scheduled successfully: ${newClass.name}`);
       console.log('API Response:', result);
@@ -185,7 +183,6 @@ const OnlineClass = () => {
       alert('Failed to schedule class. Please try again later.');
     }
   };
-
   return (
     <div>
       <AdminHeader toggleSidebar={toggleSidebar} />
@@ -230,6 +227,8 @@ const OnlineClass = () => {
                     value={newClass.date}
                     onChange={handleChange}
                     required
+                    min={today}
+
                   />
                 </Col>
                 <Col md={6} className="mb-3">
