@@ -28,13 +28,13 @@ const LoginPage = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-  
+
     try {
       const apiUrl =
         role === "Student"
           ? `${BASE_URL}/Login/StudentSignin?Email=${encodeURIComponent(userId)}&Password=${encodeURIComponent(password)}`
           : `${BASE_URL}/Login/TeacherSignin?Email=${encodeURIComponent(userId)}&Password=${encodeURIComponent(password)}`;
-  
+
       const response = await fetch(apiUrl, {
         method: "POST",
         headers: {
@@ -43,14 +43,13 @@ const LoginPage = () => {
           AccessToken: "123",
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log("Full Response Data:", data);
-  
+
         if (data && data.isSuccess && data.data) {
           console.log("isFirstLogin Value:", data.data.isFirstLogin);
-<<<<<<< HEAD
           console.log(role)
           
           if (data.data.statusId === 2 || data.data.statusId === 3) {
@@ -62,23 +61,6 @@ const LoginPage = () => {
                      
             if (role === "Teacher") {
               setTeacherId(data.data.teacherId);             
-=======
-          console.log(role);
-  
-          if (data.data.isFirstLogin) {
-            if (role === "Teacher") {
-              if (data.data.statusId !== 1) {
-                toast.error("You're not allowed to login. Your registration status is pending.");
-              } else {
-                setTeacherId(data.data.teacherId);
-                setShowPopup(true);
-                setUserData(data);
-                console.log(data.data);
-              }
-            } else {
-              setStudentId(data.data.studentId);
-              setShowPopup(true);
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
               setUserData(data.data);
               setShowPopup(true);
               console.log(data.data);
@@ -90,19 +72,9 @@ const LoginPage = () => {
             }}
            else {
             console.log("Login Successful:", data);
-<<<<<<< HEAD
             sessionStorage.setItem("isLoggedIn", "true");
             sessionStorage.setItem("userRole", role);
             const dashboardPath = role === "Student" ? "/StudentDashboard" : "/teacherDashboard";
-=======
-            
-            // Save user details in local storage
-            localStorage.setItem("userId", role === "Teacher" ? data.data.teacherId : data.data.studentId);
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userRole", role);
-            
-            const dashboardPath = role === "Student" ? "/StudentDashboard" : "/TeacherDashboard";
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
             navigate(dashboardPath, { state: { userData: data.data } });
           }
         } else {

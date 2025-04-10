@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import TeacherHeader from "./TeacherHeader";
 import TeacherSidePanel from "./TeacherSidepannel";
-// import TeacherAddPopup from "./TeacherAddpopup";
+import TeacherAddPopup from "./TeacherAddpopup";
 import "./AssignClass.css";
 
 const BASE_URL = 'http://srimathicare.in:8081/api';
@@ -238,10 +238,6 @@ const AssignClass = () => {
                 />
                 
               </div>
-<<<<<<< HEAD
-            
-              {/* Tools Buttons Below Add Button */}
-=======
               {showPopup && (
                 <TeacherAddPopup
                   onClose={() => setShowPopup(false)}
@@ -252,7 +248,6 @@ const AssignClass = () => {
                 />
               )}
 
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
               <div className="tools-buttons mt-2 d-flex gap-2">
                 <button className="btn btn-outline-secondary">
                   <i className="bi bi-file-text"></i>
@@ -278,7 +273,6 @@ const AssignClass = () => {
                 borderRadius: "4px"
               }}
             >
-<<<<<<< HEAD
               <table className="table table-bordered table-hover table-custom m-0">
                 <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
                   <tr>
@@ -350,17 +344,11 @@ const AssignClass = () => {
                       </td>
                     </tr>
                   ))}
-                  
+                  </tbody>
+                  </table>
                   {filteredClasses.length === 0 && (
-=======
-              {loading ? (
-                <div className="text-center py-3">Loading classes...</div>
-              ) : error ? (
-                <div className="text-center py-3 text-danger">{error}</div>
-              ) : (
-                <table className="table table-bordered table-hover table-custom m-0">
-                  <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
+                  <table>
+                    <thead>
                     <tr>
                       <th style={{ width: "50px" }}>#</th>
                       <th>Class Name</th>
@@ -370,7 +358,7 @@ const AssignClass = () => {
                       <th>Instructor</th>
                       <th>Actions</th>
                     </tr>
-                  </thead>
+                    </thead>
                   <tbody>
                     {Array.isArray(filteredClasses) && filteredClasses.length > 0 ? (
                       filteredClasses.map((classItem, index) => (
@@ -458,12 +446,7 @@ const AssignClass = () => {
         </div>
       </div>
       
-<<<<<<< HEAD
-      {/* Modals remain unchanged
-      {showDetails && (
-=======
       {showDetails && selectedRow && (
->>>>>>> 8b05349f963512c9d5cf63072d6903ed00e1eaf0
         <div className="modal" style={{ display: "block" }}>
           <div className="modal-dialog modal-lg">
             <div className="modal-content">
@@ -532,7 +515,7 @@ const AssignClass = () => {
             </div>
           </div>
         </div>
-      )} */}
+      )} 
 
       {showEdit && selectedRow && (
         <div className="modal" style={{ display: "block" }}>
