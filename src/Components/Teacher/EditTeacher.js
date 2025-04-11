@@ -25,6 +25,7 @@ const EditTeacher = ({ show, onClose }) => {
     dob: "",
     gender: null,
     phoneNumber: "",
+    statusId: 1,
     email: "",
     permanentAddress: "",
     teacherModeId: null,
@@ -84,6 +85,7 @@ const EditTeacher = ({ show, onClose }) => {
         availabilityId: selectedTeacher.data.availabilityId || null,
         registerNo: selectedTeacher.data.registerNo || "",
         preferedCountryId: selectedTeacher.data.preferedCountryId || null,
+        statusId:selectedTeacher.data.statusId || 1,
 
         // Professional Experience
         professionalExperianceModel: {
