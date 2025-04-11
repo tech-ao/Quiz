@@ -1,0 +1,19 @@
+/* Custom button spacing */
+.custom-button-spacing {
+    margin-right: 1rem !important; /* Default gap between buttons */
+  }
+  
+  /* Large screen - gap between buttons (left and right) */
+  @media (min-width: 1024px) {
+    .custom-button-spacing {
+      margin-right: 2rem !important; /* Increased gap for larger screens */
+    }
+  }
+  
+  /* Small screen - gap between buttons (top and bottom) */
+  @media (max-width: 1023px) {
+    .custom-button-spacing {
+      margin-bottom: 1rem !important; /* Gap at the bottom for small screens */
+    }
+  }
+  

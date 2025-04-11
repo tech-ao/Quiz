@@ -155,17 +155,17 @@ const FeesPayment = () => {
 
           <div className="container">
   {/* Search, Date Filter, and Add Fees in One Row */}
-  <Row className="mb-3 d-flex justify-content-end align-items-center gap-2">
+  <Row className="mb-3 d-flex justify-content-left align-items-center gap-2">
 
      {/* Add Fees Button */}
-     <Col xs="auto" className="p-0 m-0">
+     <Col xs="6" className="p-0 m-0">
       <Button className="btn btn-success addbtn" onClick={() => setShowPopup(true)}>
         <i className="bi bi-plus"></i> Add Fees
       </Button>
     </Col>
 
     {/* Date Picker */}
-    <Col xs="auto" className="p-0 m-0">
+    <Col xs="2" className="p-0 m-0">
       <DatePicker
         selected={selectedDate}
         onChange={(date) => setSelectedDate(date)}
@@ -176,14 +176,14 @@ const FeesPayment = () => {
     </Col>
 
     {/* Search Bar */}
-    <Col xs="auto" className="p-0 m-0">
+    <Col xs="8" className="p-0 m-0">
       <Form.Control
         type="text"
         placeholder="Search Name..."
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         className="search-input"
-        style={{ width: "180px", marginRight: "0px" }}
+        style={{ width: "300px", marginRight: "0px" }}
       />
     </Col>
 

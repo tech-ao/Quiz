@@ -117,57 +117,67 @@ const Completed_class = () => {
 <div className="d-flex">
   {isSidebarVisible && <SidePannel  />}
         <Container className="main-container p-4 min-vh-100 container-sub">
-          <Row className="sub-container align-items-center mb-2">
-            <Col md={6} style={{ marginTop: "20px" }}>
-              <h2 className="fw-bold">Completed Classes</h2>
-            </Col>
-          </Row>
+        <div className="sticky-header bg-white py-3 px-2 mb-3 d-flex  flex-md-row  align-items-start align-items-md-center ">
+  <h2 className="fw-bold mb-0">Completed Classes</h2>
 
-          {/* Search & Filter */}
-          <div className="d-flex justify-content-end align-items-center" style={{ position: "relative" }}>
-            <Form.Control
-              type="text"
-              placeholder="Search subject..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-Bar"
-            />
-            <div ref={filterIconRef} className="Filtericon" style={{ position: "relative", marginLeft: "10px" }}>
-              <FaCalendarAlt
-                size={24}
-                style={{ cursor: "pointer", color: "green" }}
-                onClick={() => setShowDatePicker(!showDatePicker)}
-              />
-              {showDatePicker && (
-                <div
-                  ref={datePickerRef}
-                  className="datepick"
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    right: "0",
-                    zIndex: 1000,
-                    background: "white",
-                    padding: "6px",
-                    borderRadius: "5px",
-                    boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-                  }}
-                >
-                  <DatePicker
-                    selected={selectedDate}
-                    onChange={(date) => {
-                      setSelectedDate(date);
-                      setShowDatePicker(false);
-                    }}
-                    inline
-                  />
-                  <p className="text-center mt-2" style={{ cursor: "pointer", color: "green", fontWeight: "bold" }} onClick={clearFilters}>
-                    Clear
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
+  <div className="d-flex align-items-center" style={{ position: "relative" }}>
+    <Form.Control
+      type="text"
+      placeholder="Search subject..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      className="search-Bar"
+    />
+    <div
+      ref={filterIconRef}
+      className="Filtericon"
+      style={{ position: "relative", marginLeft: "10px" }}
+    >
+      <FaCalendarAlt
+        size={24}
+        style={{ cursor: "pointer", color: "green" }}
+        onClick={() => setShowDatePicker(!showDatePicker)}
+      />
+      {showDatePicker && (
+        <div
+          ref={datePickerRef}
+          className="datepick"
+          style={{
+            position: "absolute",
+            top: "100%",
+            right: "0",
+            zIndex: 1000,
+            background: "white",
+            padding: "6px",
+            borderRadius: "5px",
+            boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => {
+              setSelectedDate(date);
+              setShowDatePicker(false);
+            }}
+            inline
+          />
+          <p
+            className="text-center mt-2"
+            style={{
+              cursor: "pointer",
+              color: "green",
+              fontWeight: "bold",
+            }}
+            onClick={clearFilters}
+          >
+            Clear
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+</div>
+
 
           {/* Table */}
           <Table responsive bordered className="mb-0">
