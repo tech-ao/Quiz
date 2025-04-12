@@ -150,13 +150,8 @@ const PaymentHistory = () => {
             <Col md={6} style={{ marginTop: "20px" }}>
               <h2 className="fw-bold">Payment History</h2>
             </Col>
-          </Row>
 
-          <div className="container">
-  {/* Search, Date Filter, and Add Fees in One Row */}
-  <Row className="mb-3 d-flex justify-content-end align-items-center gap-2">
-
-     {/* Add Fees Button */}
+             {/* Add Fees Button */}
      <Col xs="auto" className="p-0 m-0">
       <Button className="btn btn-success addbtn" onClick={() => setShowPopup(true)}>
         <i className="bi bi-plus"></i> Add Fees
@@ -182,14 +177,10 @@ const PaymentHistory = () => {
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         className="search-input"
-        style={{ width: "180px", marginRight: "0px" }}
+        style={{ width: "300px", marginRight: "0px" }}
       />
     </Col>
-
-   
-  </Row>
-</div>
-
+          </Row>
 
 
           <Table responsive bordered style={{ width: "98%" }}>

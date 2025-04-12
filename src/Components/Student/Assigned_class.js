@@ -117,40 +117,32 @@ const Assigned_class = () => {
 
     <div className="d-flex">
       {isSidebarVisible && <SidePannel  />}
-      <Container className="main-container ">
-          <div className="sub-container assign-container">
-            {/* Header Section */}
-            <div
-              className="d-flex justify-content-between align-items-center header-section"
-              style={{
-                marginTop: "20px",
-                position: "sticky",
-                top: "0",
-                backgroundColor: "white",
-                padding: "10px",
-                zIndex: "1",
-              }}
-            >
-              <h4 className="live-classes-heading">
-                <b>Live Classes</b>
-              </h4>
-            </div>
+      <Container className="main-container">
+  {/* Sticky Header with Title and Search */}
+  <div
+    className="d-flex justify-content-between align-items-center flex-wrap"
+    style={{
+      position: "sticky",
+      top: 0,
+      zIndex: 1000,
+      backgroundColor: "#fff",
+      padding: "10px 15px",
+    }}
+  >
+    <h4 className="live-classes-heading mb-2 mb-md-0"><b>Live Classes</b></h4>
+    <input
+      type="text"
+      className="form-control search-box"
+      style={{ width: isSmallScreen ? "100%" : "250px", maxWidth: "100%" }}
+      placeholder="Search..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+  </div>
 
-            {/* Search and Tools Section */}
-            <div className="d-flex flex-column align-items-end" style={{width:'98%'}}>
-              <div className="d-flex justify-content-between align-items-center w-100">
-                <input
-                  type="text"
-                  className="form-control search-box"
-                  style={{ width: "20%" }}
-                  placeholder="Search..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-       
-            </div>
+  <div className="sub-container assign-container">
+    {/* Table Section remains the same */}
 
-            </div>
 
             {/* Table Container with Horizontal and Vertical Scrolling */}
             <div 

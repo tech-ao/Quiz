@@ -49,10 +49,8 @@ import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
 import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import GoogleMeetPage from "./Components/google/MeetForm.js";
-import StudentAssignClass from "./Components/Student/StudentAssignedClass.js";
 
 import "react-toastify/dist/ReactToastify.css";
-import AssignStudent from "./Components/Admin/AssignStudent.js";
 
 // Import Redux Provider and Store
 import { Provider } from "react-redux";
@@ -77,8 +75,8 @@ import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
-import AdminAssignedClasses from "./Components/Admin/AdminAssignedClasses.js";
-import Payment from "./Components/Admin/payment.js";
+import AssignStudent from "./Components/Admin/AssignStudent.js";
+import Pending from "./Components/Admin/Pending.js";
 
 
 // ProtectedRoute component to check login status
@@ -113,10 +111,10 @@ function App() {
           <Route path="/Createmeeting" element={<Createmeeting/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
           <Route path="/meeting" element={<CreateMeeting/>}/>
-          <Route path="/student-assigned-class"element={<StudentAssignClass/>}/>
-          <Route path="/AdminAssignedClasses" element={<AdminAssignedClasses/>}/>
-          <Route path="/Payment" element={<Payment/>}/>
-
+          <Route path="/pending" element={<Pending/>}/>
+          <Route path="/assigned-class" element={<Assigned_class/>}/>
+          <Route path="/completed_class" element={<Completed_class/>}/>
+          <Route path="/FeesPayment" element={<FeesPayment/>}/>
 
           {/* Protected Routes */}
           <Route
