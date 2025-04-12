@@ -133,23 +133,18 @@ const AssignedClass = () => {
       <div className="d-flex main-content-wrapper">
         {isSidebarVisible && <Sidebar />}
         <div className=" main-container">
-          <div className="sub-container">
-            {/* Header Section */}
-            <div
-              className="d-flex justify-content-between align-items-center header-section"
-              style={{
-                marginTop: "20px",
-                position: "sticky",
-                top: "0",
-                backgroundColor: "white",
-                padding: "10px",
-                zIndex: "1",
-              }}
+
+        <div
+              className="sticky-header d-flex justify-content-between align-items-center header-section"
+            
             >
               <h4 className="live-classes-heading">
                 <b>Live Classes</b>
               </h4>
             </div>
+          <div className="sub-container">
+            {/* Header Section */}
+           
 
             {/* Search and Tools Section */}
             <div className="d-flex flex-column align-items-end" style={{width:'98%'}}>

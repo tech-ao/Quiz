@@ -126,7 +126,6 @@ body {
   position: fixed;
   top: 100px;
   left: 250px;
-  overflow-y: hidden;
   width: calc(100% - 250px);
   height: calc(100vh - 100px);
   transition: left 0.3s ease-in-out, width 0.3s ease-in-out;
@@ -204,7 +203,6 @@ body {
   width: 100%;
   padding: 10px;
   border-radius: 20px;
-  max-height: 90%;
   overflow-x: hidden;
   word-wrap: break-word;
 }
