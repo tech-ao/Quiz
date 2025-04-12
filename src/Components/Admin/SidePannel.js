@@ -191,6 +191,19 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
                   </div>
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  to="/RegisteredStudents"
+                  className={`nav-link ${isPathActive("/RegisteredStudents") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-person-bounding-box"></i>
+                    <span className="nav-text">Registered Students</span>
+                  </div>
+                </Link>
+              </li>
+
             </ul>
           )}
         </li>

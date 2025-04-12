@@ -18,6 +18,7 @@ import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
 import ListTeacher from "./Components/Teacher/ListTeacher";
 import QuizPage from "./Components/QuizTest";
+import RegisteredStudents from "./Components/Admin/RegisteredStudent.js"
 import StudentList from "./Components/Student/StudentList";
 import Assigned_class from "./Components/Student/Assigned_class.js";
 import Completed_class from "./Components/Student/completed_class.js";
@@ -104,6 +105,7 @@ function App() {
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/ScheduleForm" element={<ScheduleForm/>}/>
+          <Route path="/RegisteredStudents" element={<RegisteredStudents/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
           <Route path="/AssignedClass" element={<AssignedClass/>}/>

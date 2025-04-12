@@ -6,15 +6,14 @@ import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
 
 const ScheduleForm = () => {
-  const [isSidebarVisible, setIsSidebarVisible] = useState(
-    window.innerWidth >= 1024
-  );
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [days, setDays] = useState("");
   const [startDate, setStartDate] = useState("");
   const [totalTime, setTotalTime] = useState("");
   const [manualQuestions, setManualQuestions] = useState("");
   const [mentalQuestions, setMentalQuestions] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [fees, setFees] = useState("");
 
   // Toggle Sidebar
   const toggleSidebar = () => {
@@ -65,6 +64,7 @@ const ScheduleForm = () => {
       totalTime,
       manualQuestions,
       mentalQuestions,
+      fees,
     });
     alert("Schedule saved successfully!");
   };
@@ -88,26 +88,36 @@ const ScheduleForm = () => {
               </Col>
             </Row>
 
-            <Card
-              className="p-4 ms-3 shadow-lg"
-              style={{ backgroundColor: "rgb(207, 245, 215)" }}
-            >
+            <Card className="p-4 ms-3 shadow-lg" style={{ backgroundColor: "rgb(207, 245, 215)" }}>
               <Row className="justify-content-center">
                 <Col md={12}>
                   <Form onSubmit={handleSubmit}>
-                    {/* Number of Days */}
-                    <Col md={11}>
-                      <Form.Group className="mb-4">
-                        <Form.Label className="fw-bold">Number of Days</Form.Label>
-                        <Form.Control
-                          type="number"
-                          value={days}
-                          onChange={handleDaysChange}
-                          placeholder="Enter number of days"
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
+                    {/* Number of Days and Total Time in a single row */}
+                    <Row className="mb-4">
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold">Number of Days</Form.Label>
+                          <Form.Control
+                            type="number"
+                            value={days}
+                            onChange={handleDaysChange}
+                            placeholder="Enter number of days"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={5}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold">Total Time</Form.Label>
+                          <Form.Control
+                            type="time"
+                            value={totalTime}
+                            onChange={(e) => setTotalTime(e.target.value)}
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
 
                     {/* Start Date and End Date */}
                     <Row className="Schedule-start-end mb-4">
@@ -117,7 +127,7 @@ const ScheduleForm = () => {
                           <Form.Control
                             type="date"
                             value={startDate}
-                            min={getTodayDate()} // Prevent past date
+                            min={getTodayDate()}
                             onChange={handleStartDateChange}
                             required
                           />
@@ -130,19 +140,6 @@ const ScheduleForm = () => {
                         </Form.Group>
                       </Col>
                     </Row>
-
-                    {/* Total Time (Change input type to time) */}
-                    <Col md={11}>
-                      <Form.Group className="mb-4">
-                        <Form.Label className="fw-bold">Total Time</Form.Label>
-                        <Form.Control
-                          type="time" // Changed from number to time
-                          value={totalTime}
-                          onChange={(e) => setTotalTime(e.target.value)}
-                          required
-                        />
-                      </Form.Group>
-                    </Col>
 
                     {/* Manual and Mental Questions */}
                     <Row className="Schedule-man-men mb-4">
@@ -172,14 +169,26 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
+                    {/* Fees Field */}
+                    <Row className="mb-4">
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold">Fees</Form.Label>
+                          <Form.Control
+                            type="number"
+                            value={fees}
+                            onChange={(e) => setFees(e.target.value)}
+                            placeholder="Enter fees"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+
                     {/* Submit Button */}
                     <Row className="mt-4">
                       <Col md={12} className="d-flex justify-content-center rounded">
-                        <Button
-                          variant="primary"
-                          type="submit"
-                          className="Schedule-button text-center"
-                        >
+                        <Button variant="primary" type="submit" className="Schedule-button text-center">
                           Save
                         </Button>
                       </Col>
