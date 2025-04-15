@@ -154,7 +154,7 @@ const RegisterTeacher = () => {
                     gender: "",
                     phoneNumber: "",
                     email: "",
-                    statusId: 0,
+                    statusId: 3,
                     permanentAddress: "",
                     currentResidentialAddress: "",
                     nationalityId:"",
