@@ -93,6 +93,8 @@ export const editTeacher = async (TeacherData) => {
 };
 
 export const getTeacher = async (TeacherId) => {
+  console.log(TeacherId);
+  
   const response = await fetch(`${BASE_URL}/Teacher/GetByTeacherid?TeacherId=${TeacherId}`, {
     method: "GET",
     headers: getHeaders(),

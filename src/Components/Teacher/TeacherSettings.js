@@ -7,6 +7,10 @@ import { fetchProfileById, fetchGenders, fetchCountries } from '../../redux/Serv
 import { editTeacher } from '../../redux/Services/api';
 import { useLocation } from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTeacher } from "../../redux/Action/TeacherAction";
+import StudentData from './StudentData';
+
 
 const TeacherSettings = () => {
  
@@ -37,7 +41,12 @@ const TeacherSettings = () => {
   const [expCertPreview, setExpCertPreview] = useState(null);
   const [resumePreview, setResumePreview] = useState(null);
 
+  const { students } = useSelector((state) => state.students);
+console.log(students);
+const teacherDetails = useSelector((state) => state.teachers?.selectedTeacher?.data);
+console.log(teacherDetails);
 
+    const dispatch = useDispatch();
   
     const toggleSidebar = () => {
       setIsSidebarVisible((prev) => !prev);
@@ -57,9 +66,27 @@ const TeacherSettings = () => {
       return () => window.removeEventListener("resize", handleResize);
     }, []);
   
+ useEffect(() => {
+    const storedTeacherData = localStorage.getItem("teacherData");
+  
+    if (storedTeacherData) {
+      try {
+        setTeacherData(JSON.parse(storedTeacherData)); // Parse and set
+      } catch (error) {
+        console.error("Error parsing teacherData:", error);
+        localStorage.removeItem("teacherData"); // Remove corrupted data
+      }
+    }
+  }, []);
 
+  console.log(teacherData);
+  
 
+  useEffect(() => {
+    dispatch(fetchTeacher(teacherData?.userData.teacherId));
+  }, [dispatch, teacherData?.userData.teacherId]);
 
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,26 +103,26 @@ const TeacherSettings = () => {
         setCountries(countriesData);
         setGenders(gendersData);
         
-        if (teacherData) {
+        if (teacherDetails) {
           setFormData({
-            name: teacherData.name || '',
-            dob: teacherData.dob ? formatDate(teacherData.dob) : '',
-            gender: teacherData.gender || null,
-            phoneNumber: teacherData.phoneNumber || '',
-            email: teacherData.email || '',
-            nationality: teacherData.nationality || null,
-            permanentAddress: teacherData.permanentAddress || '',
-            currentAddress: teacherData.currentAddress || '',
-            experienceCertificate: teacherData.experienceCertificate || null,
-            resume: teacherData.resume || null
+            name: teacherDetails.name || '',
+            dob: teacherDetails.dob ? formatDate(teacherData.dob) : '',
+            gender: teacherDetails.gender || null,
+            phoneNumber: teacherDetails.phoneNumber || '',
+            email: teacherDetails.email || '',
+            nationality: teacherDetails.nationality || null,
+            permanentAddress: teacherDetails.permanentAddress || '',
+            currentAddress: teacherDetails.currentAddress || '',
+            experienceCertificate: teacherDetails.experienceCertificate || null,
+            resume: teacherDetails.resume || null
           });
           
           // Set file previews if URLs exist
-          if (teacherData.experienceCertificate) {
-            setExpCertPreview(teacherData.experienceCertificate);
+          if (teacherDetails.experienceCertificate) {
+            setExpCertPreview(teacherDetails.experienceCertificate);
           }
-          if (teacherData.resume) {
-            setResumePreview(teacherData.resume);
+          if (teacherDetails.resume) {
+            setResumePreview(teacherDetails.resume);
           }
         }
       } catch (err) {
@@ -269,56 +296,50 @@ const TeacherSettings = () => {
                 <Row className="mt-4 w-100">
                   <Col md={4}>
                     <strong>First Name:</strong>
-                    <p>{teacherData?.firstName || "N/A"}</p>
+                    <p>{teacherDetails?.fullName || "N/A"}</p>
                   </Col>
-                  <Col md={4}>
-                    <strong>Last Name:</strong>
-                    <p>{teacherData?.lastName || "N/A"}</p>
-                  </Col>
+               
                   <Col md={4}>
                     <strong>Email:</strong>
-                    <p>{teacherData?.email || "N/A"}</p>
+                    <p>{teacherDetails?.email || "N/A"}</p>
                   </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
                   <Col md={4}>
                     <strong>Phone:</strong>
-                    <p>{teacherData?.countryCode} {teacherData?.phoneNumber || "N/A"}</p>
+                    <p>{teacherDetails?.countryCode} {teacherDetails?.phoneNumber || "N/A"}</p>
                   </Col>
                   <Col md={4}>
                     <strong>Date of Birth:</strong>
                     <p>
-                      {teacherData?.dob 
-                        ? new Date(teacherData.dob).toLocaleDateString('en-GB')
+                      {teacherDetails?.dob 
+                        ? new Date(teacherDetails.dob).toLocaleDateString('en-GB')
                         : "N/A"}
                     </p>
                   </Col>
                   <Col md={4}>
                     <strong>Gender:</strong>
-                    <p>{teacherData?.genderName || "N/A"}</p>
+                    <p>{teacherDetails?.genderName || "N/A"}</p>
                   </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
                   <Col md={4}>
                     <strong>Register Number:</strong>
-                    <p>{teacherData?.registerNumber || "N/A"}</p>
+                    <p>{teacherDetails?.registerNo || "N/A"}</p>
                   </Col>
-                  <Col md={4}>
-                    <strong>Grade:</strong>
-                    <p>{teacherData?.gradeName || "N/A"}</p>
-                  </Col>
+                 
                   <Col md={4}>
                     <strong>Status:</strong>
-                    <p>{teacherData?.statusName || "N/A"}</p>
+                    <p>{teacherDetails?.statusName || "N/A"}</p>
                   </Col>
                 </Row>
 
                 <Row className="mt-3 w-100">
                   <Col md={4}>
                     <strong>Address:</strong>
-                    <p>{teacherData?.address || "N/A"}</p>
+                    <p>{teacherDetails?.permanentAddress || "N/A"}</p>
                   </Col>
                 </Row>
               </Card.Body>

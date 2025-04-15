@@ -6,6 +6,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "../Teacher/PaymentHistory.css";
+import { useSelector, useDispatch } from "react-redux";
+import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 
 const studentList = ["Hudson", "Marlie", "Ayan Desai", "Kaylen", "Paul S. Bealer"];
 
@@ -20,6 +22,8 @@ const initialPayments = [
 const PaymentHistory = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [filter, setFilter] = useState("");
+  const [teacherData, setTeacherData] = useState(null);
+
   const [selectedDate, setSelectedDate] = useState(null);
   const [payments, setPayments] = useState(initialPayments);
   const [showPopup, setShowPopup] = useState(false);
@@ -34,8 +38,12 @@ const PaymentHistory = () => {
   const [newPaymentMode, setNewPaymentMode] = useState("Online");
   const [newPaymentStatus, setNewPaymentStatus] = useState("Pending");
   const [newDate, setNewDate] = useState(new Date());
+    const dispatch = useDispatch();
+  const { students } = useSelector((state) => state.students);
 
   const datePickerRef = useRef(null);
+  console.log(students);
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -51,6 +59,30 @@ const PaymentHistory = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
+  useEffect(() => {
+    const storedTeacherData = localStorage.getItem("teacherData");
+  
+    if (storedTeacherData) {
+      try {
+        setTeacherData(JSON.parse(storedTeacherData)); // Parse and set
+      } catch (error) {
+        console.error("Error parsing teacherData:", error);
+        localStorage.removeItem("teacherData"); // Remove corrupted data
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+        if (teacherData && teacherData.userData) {
+          const paginationDetail = {
+            pageSize: 15,
+            pageNumber: 1,
+          };
+      
+          dispatch(getStudents({ paginationDetail, teacherId: teacherData.userData.teacherId }));
+        }
+      }, [dispatch, 1, teacherData]);
+  
   const renderStatusBadge = (status) => {
     switch (status) {
       case "Completed":
@@ -65,13 +97,16 @@ const PaymentHistory = () => {
   };
 
   // Filter payments by name and date
-  const filteredPayments = payments
-    .filter((payment) => payment.studentName.toLowerCase().includes(filter.toLowerCase()))
-    .filter((payment) => {
-      if (!selectedDate) return true;
-      const selectedDateFormatted = selectedDate.toISOString().split("T")[0]; // YYYY-MM-DD format
-      return payment.date === selectedDateFormatted;
-    });
+  const filteredPayments = Array.isArray(students?.data?.searchAndListStudentResult)
+  ? students.data.searchAndListStudentResult.filter((student) => {
+      const matchesSearch = [student.firstName, student.email]
+        .join(' ')
+        .toLowerCase()
+      
+      return matchesSearch ;
+    })
+  : [];
+
 
   // Function to add a new payment
   const handleAddPayment = () => {
@@ -188,8 +223,8 @@ const PaymentHistory = () => {
               <tr>
                 <th>#</th>
                 <th>Student Name</th>
-                <th>Amount</th>
-                <th>Date</th>
+                <th>Date of Birth</th>
+                <th>Amount</th>              
                 <th>Payment Mode</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -199,12 +234,12 @@ const PaymentHistory = () => {
               {filteredPayments.length > 0 ? (
                 filteredPayments.map((payment) => (
                   <tr key={payment.id}>
-                    <td>{payment.id}</td>
-                    <td>{payment.studentName}</td>
-                    <td>{payment.amount}</td>
-                    <td>{payment.date}</td>
-                    <td>{payment.mode}</td>
-                    <td>{renderStatusBadge(payment.status)}</td>
+                    <td>{payment.registerNumber}</td>
+                    <td>{payment.firstName}</td>
+                    <td>{payment.dob}</td>
+                    <td>{"121"}</td>
+                    <td>{"online"}</td>
+                    <td>{renderStatusBadge(payment.statusName)}</td>
                     <td className="action-column">
   <div className="d-flex justify-content-center align-items-center gap-2">
     <button

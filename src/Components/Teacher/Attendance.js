@@ -4,6 +4,9 @@ import { FunnelFill } from "react-bootstrap-icons";
 import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "./Attendance.css";
+import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
+import { useSelector, useDispatch } from "react-redux";
+
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const Attendance = () => {
@@ -14,16 +17,21 @@ const Attendance = () => {
     { id: 3, name: "Alice Johnson", registerNumber: "REG003", level: "Level-3", date: "2024-12-04", status: "Present", checked: false },
     { id: 4, name: "Jake", registerNumber: "REG004", level: "Level-4", date: "2024-12-04", status: "Present", checked: false },
     { id: 5, name: "Jason Smith", registerNumber: "REG005", level: "Level-0", date: "2024-12-04", status: "Present", checked: false },
-    { id: 6, name: "Wilson", registerNumber: "REG006", level: "Level-5", date: "2024-12-04", status: "Present", checked: false },
+    { id: 6, name: "mmmmm", registerNumber: "REG006", level: "Level-5", date: "2024-12-04", status: "Present", checked: false },
   ]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedLevel, setSelectedLevel] = useState("");
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const [bulkStatus, setBulkStatus] = useState("");
+    const [teacherData, setTeacherData] = useState(null);
+    const studentsPerPage = 10;
+    const dispatch = useDispatch();
+
 
 const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  const { students } = useSelector((state) => state.students);
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,8 +43,32 @@ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+console.log(teacherData);
 
+useEffect(() => {
+    const storedTeacherData = localStorage.getItem("teacherData");
+  
+    if (storedTeacherData) {
+      try {
+        setTeacherData(JSON.parse(storedTeacherData)); // Parse and set
+      } catch (error) {
+        console.error("Error parsing teacherData:", error);
+        localStorage.removeItem("teacherData"); // Remove corrupted data
+      }
+    }
+  }, []);
 
+useEffect(() => {
+    if (teacherData && teacherData.userData) {
+      const paginationDetail = {
+        pageSize: studentsPerPage,
+        pageNumber: 1,
+      };
+  
+      dispatch(getStudents({ paginationDetail, teacherId: teacherData.userData.teacherId }));
+    }
+  }, [dispatch, 1, teacherData]);
+  
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
@@ -72,12 +104,16 @@ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
     }
   };
 
-  const filteredRecords = attendanceRecords.filter(
-    (record) =>
-      (record.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        record.registerNumber.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (selectedLevel === "" || record.level === selectedLevel)
-  );
+  const filteredRecords = Array.isArray(students?.data?.searchAndListStudentResult)
+  ? students.data.searchAndListStudentResult.filter((student) => {
+      const matchesSearch = [student.firstName, student.email]
+        .join(' ')
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      
+      return matchesSearch ;
+    })
+  : [];
 
   return (
     <div>
@@ -133,7 +169,7 @@ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
                     <th>Name</th>
                     <th>Register Number</th>
                     <th>Level</th>
-                    <th>Date</th>
+                    <th>Date of Birth</th>
                     <th>Attendance</th>
                   </tr>
                 </thead>
@@ -148,10 +184,10 @@ const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
                             onChange={() => handleCheckboxChange(index)}
                           />
                         </td>
-                        <td>{record.name}</td>
+                        <td>{record.firstName}</td>
                         <td>{record.registerNumber}</td>
-                        <td>{record.level}</td>
-                        <td>{record.date}</td>
+                        <td>{record.gradeName}</td>
+                        <td>{new Date(record.dob).toLocaleDateString('en-GB')}</td>
                         <td >
                           <Form.Select className="attendance-clmn"
                             value={record.status}

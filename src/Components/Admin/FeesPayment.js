@@ -28,6 +28,7 @@ const FeesPayment = () => {
     const [showDetails, setShowDetails] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const studentsPerPage = 10;
 
   // Form states
   const [newStudent, setNewStudent] = useState("");
@@ -37,6 +38,7 @@ const FeesPayment = () => {
   const [newDate, setNewDate] = useState(new Date());
 
   const datePickerRef = useRef(null);
+console.log();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -47,6 +49,8 @@ const FeesPayment = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+    
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
