@@ -17,6 +17,9 @@ const EditTeacher = ({ show, onClose }) => {
   const [teachingModes, setTeachingModes] = useState([]);
   const [availability, setAvailability] = useState([]);
   const [documentTypes, setDocumentTypes] = useState([]);
+  const [preferdCountries, setPreferedCountriesData] = useState([]);
+  const [errors, setErrors] = useState({});
+
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,6 +68,7 @@ const EditTeacher = ({ show, onClose }) => {
       setTeachingModes(await fetchTeacherMode());
       setAvailability(await fetchAvailability());
       setDocumentTypes(await fetchDocumentType());
+      setPreferedCountriesData(await fetchPreferedCountry());
     };
     fetchData();
   }, []);
@@ -72,7 +76,7 @@ const EditTeacher = ({ show, onClose }) => {
   useEffect(() => {
     if (selectedTeacher) {
       setFormData({
-        teacherId:selectedTeacher.data.teacherId || null ,
+        teacherId: selectedTeacher.data.teacherId || null,
         fullName: selectedTeacher.data.fullName || "",
         dob: selectedTeacher.data.dob ? selectedTeacher.data.dob.split("T")[0] : "",
         gender: selectedTeacher.data.gender || null,
@@ -85,7 +89,7 @@ const EditTeacher = ({ show, onClose }) => {
         availabilityId: selectedTeacher.data.availabilityId || null,
         registerNo: selectedTeacher.data.registerNo || "",
         preferedCountryId: selectedTeacher.data.preferedCountryId || null,
-        statusId:selectedTeacher.data.statusId || 1,
+        statusId: selectedTeacher.data.statusId || 1,
 
         // Professional Experience
         professionalExperianceModel: {
@@ -128,7 +132,7 @@ const EditTeacher = ({ show, onClose }) => {
       ...prevData,
       [name]: type === "checkbox"
         ? checked
-        : ["country", "grade", "gender", "studyModeId", "teacherModeId" , "preferedCountryId"].includes(name)
+        : ["country", "grade", "gender", "studyModeId", "teacherModeId", "preferedCountryId"].includes(name)
           ? parseInt(value, 10)
           : value,
     }));
@@ -146,7 +150,7 @@ const EditTeacher = ({ show, onClose }) => {
     }));
   };
 
-  
+
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
@@ -320,7 +324,7 @@ const EditTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Highest Level of Qualification</Form.Label>
-                <Form.Control type="text" name="higherLevelEducation" value={formData.educationQualificationModel?.higherLevelEducation}  onChange={(e) => handleNestedChange(e, "educationQualificationModel")} required />
+                <Form.Control type="text" name="higherLevelEducation" value={formData.educationQualificationModel?.higherLevelEducation} onChange={(e) => handleNestedChange(e, "educationQualificationModel")} required />
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -336,7 +340,7 @@ const EditTeacher = ({ show, onClose }) => {
             <Col md={6}>
               <Form.Group>
                 <Form.Label>Subject subjectSpecialist</Form.Label>
-                <Form.Control type="text" name="subjectSpecialist" value={formData.educationQualificationModel?.subjectSpecialist}onChange={(e) => handleNestedChange(e, "educationQualificationModel")} required />
+                <Form.Control type="text" name="subjectSpecialist" value={formData.educationQualificationModel?.subjectSpecialist} onChange={(e) => handleNestedChange(e, "educationQualificationModel")} required />
               </Form.Group>
             </Col>
             <Col md={6}>
@@ -438,13 +442,57 @@ const EditTeacher = ({ show, onClose }) => {
 
           <Row className="md-3">
             <Col md={6}>
-              <Form.Group className="mt-3">
+              <Form.Group controlId="preferedCountryId">
                 <Form.Label>Preferred Country</Form.Label>
-                <Form.Select name="preferredCountry" value={formData.preferredCountry} onChange={handleChange}>
-                  <option>Only India</option>
+                <Form.Select
+                  name="preferedCountryId"
+                  value={formData.preferedCountryId}
+                  onChange={handleChange}
+                  isInvalid={!!errors.preferedCountryId}
+                >
+                  <option value="">Select Prefered Country</option>
+                  {preferdCountries.map((country, index) => (
+                    <option key={index} value={country.item1}>
+                      {country.item2}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>
+            {formData.preferedCountryId == 2 && (
+              <>
+                <h4>Legal and Compliance Information</h4>
+                <Col md={6}>
+                  <Form.Group controlId="isCriminalBackgroundCheck">
+                    <Form.Label>Criminal Background Check</Form.Label>
+                    <Form.Select
+                      name="isCriminalBackgroundCheck"
+                      value={
+                        formData.complianceInformationModel.isCriminalBackgroundCheck === true
+                          ? "true"
+                          : "false"
+                      }
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          complianceInformationModel: {
+                            ...formData.complianceInformationModel,
+                            isCriminalBackgroundCheck: e.target.value === "true",
+                          },
+                        })
+                      }
+                    >
+                      <option value="false">Not Done</option>
+                      <option value="true">Done</option>
+                    </Form.Select>
+                  </Form.Group>
+                </Col>
+              </>
+            )}
+
+
+
+
 
             {/* Resume Upload */}
             {/* <Col md={6}>

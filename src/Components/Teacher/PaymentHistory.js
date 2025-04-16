@@ -179,7 +179,7 @@ const PaymentHistory = () => {
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <TeacherSidePanel teachingModeid ={teacherData?.userData?.stausId}/>}
         <Container className="main-container p-4 min-vh-100">
           <Row className="align-items-center mb-4">
             <Col md={6} style={{ marginTop: "20px" }}>

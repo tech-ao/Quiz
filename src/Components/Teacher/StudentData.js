@@ -175,7 +175,7 @@ const StudentData = () => {
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData.name}/>
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <TeacherSidePanel teachingModeid ={teacherData?.userData?.stausId}/>}
         <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>

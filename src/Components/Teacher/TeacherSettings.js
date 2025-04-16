@@ -251,7 +251,7 @@ console.log(teacherDetails);
       <TeacherHeader toggleSidebar={toggleSidebar} />
 
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel studyModeId={teacherData?.studyModeId}/>}
+        {isSidebarVisible && <TeacherSidePanel teachingModeid ={teacherData?.userData?.stausId}/>}
         <Container className="main-container ">           
           {/* Moved Sticky Header to main-container */}
           <div className="sticky-header d-flex justify-content-between align-items-center">

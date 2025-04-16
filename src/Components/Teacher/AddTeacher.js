@@ -730,13 +730,13 @@ const AddTeacher = ({ show, onClose }) => {
                   </Form.Group>
                 </Col>
                 <Col md={6}>
-                  <Form.Group controlId="workAuthorization">
+                  <Form.Group controlId="Work Authorization">
                     <Form.Label>Work Authorization (Upload)</Form.Label>
                     <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
 
                     <Form.Control
                       type="file"
-                      name="workAuthorization"
+                      name="Work Authorization"
                       onChange={handleFileChange}
                       accept="application/pdf"
                     />
@@ -745,13 +745,13 @@ const AddTeacher = ({ show, onClose }) => {
               </Row>
               <Row className="mb-3">
                 <Col md={6}>
-                  <Form.Group controlId="healthMedicalFitness">
+                  <Form.Group controlId="healthAndMedicalFitness">
                     <Form.Label>Health and Medical Fitness (Upload)</Form.Label>
                     <p style={{ color: "#f55050" }}>Pdf size less than 2mb</p>
 
                     <Form.Control
                       type="file"
-                      name="healthMedicalFitness"
+                      name="Health And Medical Fitness"
                       onChange={handleFileChange}
                       accept="application/pdf"
                     />
@@ -763,7 +763,7 @@ const AddTeacher = ({ show, onClose }) => {
                     <p style={{ color: "#f55050" }}>Image size less than 100Kb & Pdf less than 2mb</p>
                     <Form.Control
                       type="file"
-                      name="proofOfAddress"
+                      name="Proof Of Address"
                       onChange={handleFileChange}
                       accept="application/pdf, image/*"
                     />
