@@ -8,8 +8,7 @@ import TeacherHeader from "./TeacherHeader";
 import "../Teacher/PaymentHistory.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
-
-const studentList = ["Hudson", "Marlie", "Ayan Desai", "Kaylen", "Paul S. Bealer"];
+import { addPaymentAction } from "../../redux/Action/PaymentAction";
 
 const initialPayments = [
   { id: 1, studentName: "Hudson", amount: "$100", date: "2024-12-01", mode: "Online", status: "Completed" },
@@ -108,25 +107,30 @@ const PaymentHistory = () => {
   : [];
 
 
-  // Function to add a new payment
-  const handleAddPayment = () => {
-    if (!newStudent || !newAmount) {
-      alert("Please fill in all required fields.");
-      return;
-    }
+ 
 
-    const newPayment = {
-      id: payments.length + 1,
-      studentName: newStudent,
-      amount: `$${newAmount}`,
-      date: newDate.toISOString().split("T")[0],
-      mode: newPaymentMode,
-      status: newPaymentStatus,
+  const handleAddPayment = () => {
+    const requestBody = {
+      id: 0,
+      studentId: 123, // replace with actual studentId
+      createdBy: 456, // replace with actual createdBy (user id)
+      createdOn: new Date().toISOString(),
+      date: new Date().toISOString(),
+      createdByRole: 1,
+      description: "Payment for April month", // update this as needed
+      isDeleted: false,
+      paymentMode: 1, // e.g., 1 for Cash, 2 for Card etc.
+      paymentModeName: "Cash", // corresponding name
+      status: 1, // 1 for completed, 0 for pending
+      statusName: "Completed",
+      amount: 500 // set your payment amount
     };
 
-    setPayments([...payments, newPayment]);
+    dispatch(addPaymentAction(requestBody));
     setShowPopup(false);
   };
+
+
   const handleAction = (action, rowData) => {
     setSelectedRow(rowData);
     switch (action) {
@@ -307,8 +311,8 @@ const PaymentHistory = () => {
         <Form.Label>Student Name</Form.Label>
         <Form.Select value={newStudent} onChange={(e) => setNewStudent(e.target.value)}>
           <option value="">Select Student</option>
-          {studentList.map((student, index) => (
-            <option key={index} value={student}>{student}</option>
+          {filteredPayments.map((student, index) => (
+            <option key={index} value={student.firstName}>{student.firstName}</option>
           ))}
         </Form.Select>
       </Form.Group>
@@ -374,9 +378,9 @@ const PaymentHistory = () => {
               <Form.Label>Student Name</Form.Label>
               <Form.Select value={newStudent} onChange={(e) => setNewStudent(e.target.value)}>
                 <option value="">Select Student</option>
-                {studentList.map((student, index) => (
-                  <option key={index} value={student}>
-                    {student}
+                {filteredPayments.map((student, index) => (
+                  <option key={index} value={student.firstName}>
+                    {student.firstName}
                   </option>
                 ))}
               </Form.Select>
