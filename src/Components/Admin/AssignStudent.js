@@ -4,7 +4,9 @@ import { Offcanvas, Button } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getStudents } from "../../redux/Action/StudentAction";
 import { getTeachers } from "../../redux/Action/TeacherAction";
-
+import { toast } from "react-toastify";
+import StudentSidePannel from "../Student/StudnetSidebar";
+import "react-toastify/dist/ReactToastify.css";
 const AssignStudent = ({ show, onClose }) => {
   const dispatch = useDispatch();
   const students = useSelector((state) => state.students.students);
@@ -77,7 +79,7 @@ const AssignStudent = ({ show, onClose }) => {
         throw new Error("Failed to assign students");
       }
 
-      alert("Students successfully assigned!");
+      toast.success("Students successfully assigned!");
       setSelectedStudents([]);
       setSelectedTeacher(null);
       onClose();

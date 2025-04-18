@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import TeacherHeader from "./TeacherHeader";
-import TeacherSidePanel from "./TeacherSidepannel";
-import TeacherAddPopup from "./TeacherAddpopup";
-import "./AssignClass.css";
+import TeacherHeader from "./AdminHeader";
+import TeacherSidePanel from "./SidePannel";
+import TeacherAddPopup from "../Teacher/TeacherAddpopup";
+import "../Teacher/AssignClass.css";
 
 const BASE_URL = 'http://srimathicare.in:8081/api';
 const API_KEY = '3ec1b120-a9aa-4f52-9f51-eb4671ee1280';
@@ -51,7 +51,6 @@ const AssignClass = () => {
           'X-Api-Key': API_KEY
         },
         body: JSON.stringify({
-          teacherId: localStorage.getItem('userId'),
           paginationDetail: {
             pageSize: pageSize,
             pageNumber: page
@@ -236,7 +235,12 @@ const AssignClass = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                
+                <button
+                  className="btn btn-success addbtn"
+                  onClick={() => setShowPopup(true)}
+                >
+                  <i className="bi bi-plus"></i> Add Classes
+                </button>
               </div>
               {showPopup && (
                 <TeacherAddPopup
@@ -273,82 +277,13 @@ const AssignClass = () => {
                 borderRadius: "4px"
               }}
             >
-              <table className="table table-bordered table-hover table-custom m-0">
-                <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
-                  <tr>
-                    <th style={{ width: "50px" }}>#</th>
-                    <th>Class Title</th>
-                    <th>Description</th>
-                    <th>Date Time</th>
-                    <th>Duration (mins)</th>
-                    <th>Created By</th>
-                    <th>Created For</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredClasses.map((classItem, index) => (
-                    <tr key={classItem.id}>
-                      <td className="text-center">{index + 1}</td>
-                      <td>{classItem.title}</td>
-                      <td>{classItem.description}</td>
-                      <td>{classItem.dateTime}</td>
-                      <td>{classItem.duration}</td>
-                      <td>{classItem.createdBy}</td>
-                      <td>{classItem.createdFor}</td>
-                      <td>
-                        <select
-                          className="form-select form-select-sm"
-                          defaultValue={classItem.status}
-                        >
-                          <option value="Awaited">Awaited</option>
-                          <option value="In Progress">In Progress</option>
-                          <option value="Completed">Completed</option>
-                        </select>
-                      </td>
-                      <td className="action-column">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: "8px",
-                            flexWrap: "nowrap",
-                          }}
-                        >
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("view", classItem)}
-                          >
-                            <i className="bi bi-link-45deg" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("edit", classItem)}
-                          >
-                            <i className="bi bi-pencil" style={{ fontSize: "20px" }}></i>
-                          </button>
-
-                          <button
-                            className="btn btn-sm"
-                            style={{ color: "#198754", background: "transparent" }}
-                            onClick={() => handleAction("remove", classItem)}
-                          >
-                            <i className="bi bi-trash" style={{ fontSize: "20px" }}></i>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                  </tbody>
-                  </table>
-                  {filteredClasses.length === 0 && (
-                  <table>
-                    <thead>
+              {loading ? (
+                <div className="text-center py-3">Loading classes...</div>
+              ) : error ? (
+                <div className="text-center py-3 text-danger">{error}</div>
+              ) : (
+                <table className="table table-bordered table-hover table-custom m-0">
+                  <thead style={{ position: "sticky", top: "0", backgroundColor: "white", zIndex: "1" }}>
                     <tr>
                       <th style={{ width: "50px" }}>#</th>
                       <th>Class Name</th>
@@ -358,7 +293,7 @@ const AssignClass = () => {
                       <th>Instructor</th>
                       <th>Actions</th>
                     </tr>
-                    </thead>
+                  </thead>
                   <tbody>
                     {Array.isArray(filteredClasses) && filteredClasses.length > 0 ? (
                       filteredClasses.map((classItem, index) => (
@@ -515,7 +450,7 @@ const AssignClass = () => {
             </div>
           </div>
         </div>
-      )} 
+      )}
 
       {showEdit && selectedRow && (
         <div className="modal" style={{ display: "block" }}>

@@ -120,7 +120,7 @@ const LoginPage = () => {
       console.log("Password Update Response:", result);
 
       if (result.isSuccess) {
-        alert("Password updated successfully. Please log in with your new password.");
+        toast.success("Password updated successfully. Please log in with your new password.");
         setShowPopup(false);
         setPassword(""); // Reset password field
         setUserId(userData.email); // Keep email prefilled

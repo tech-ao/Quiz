@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { useLocation } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
 import {
   Container,
   Row,
@@ -23,9 +23,12 @@ import TeacherSidePanel from "./TeacherSidepannel";
 import TeacherHeader from "./TeacherHeader";
 import "./TeacherDashboard.css";
 import { fetchDashboardContent } from "../../redux/Services/Enum";
+import { getTeacher } from "../../redux/Services/api";
 
 const TeacherDashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
+  const [teacherId, setTeacherId] = useState(null);  
+  const dispatch = useDispatch();
   const [teacherData, setTeacherData] = useState({});
   const location = useLocation();
   const [error, setError] = useState(null);
@@ -42,67 +45,7 @@ const TeacherDashboard = () => {
       paymentType: "QR Code",
       status: "Done",
       timestamp: new Date().getTime() - 2 * 60 * 1000,
-    },
-    {
-      purpose: "Claudia Store",
-      type: "Accessories",
-      date: "Today",
-      timeAgo: "5m ago",
-      amount: 1000,
-      paymentType: "Transfer",
-      status: "Done",
-      timestamp: new Date().getTime() - 5 * 60 * 1000,
-    },
-    {
-      purpose: "Chidi Barber",
-      type: "Barber Shop",
-      date: "Today",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 60 * 60 * 1000,
-    },
-    {
-      purpose: "King's",
-      type: "Coffe Shop",
-      date: "Today",
-      timeAgo: "8h ago",
-      amount: 120,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 8 * 60 * 1000,
-    },
-    {
-      purpose: "NKM Furniture",
-      type: "Furniture",
-      date: "Yesturday",
-      timeAgo: "1h ago",
-      amount: 500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 30 * 80 * 1000,
-    },
-    {
-      purpose: "Black Suits",
-      type: "Clothes",
-      date: "Today",
-      timeAgo: "2days ago",
-      amount: 1500,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 10 * 20 * 1000,
-    },
-    {
-      purpose: "Wilde Bears",
-      type: "Choclate Shop",
-      date: "Yesturday",
-      timeAgo: "8h ago",
-      amount: 300,
-      paymentType: "QR Code",
-      status: "Done",
-      timestamp: new Date().getTime() - 50 * 60 * 1000,
-    },
+    }
   ]);
 
   console.log(teacherData);
@@ -124,27 +67,48 @@ const TeacherDashboard = () => {
     fetchDashboardData();
   }, []);
 
-    useEffect(() => {
-      const storedStudentId = localStorage.getItem("studentId");
-      const newStudentId = location.state
-
-      console.log(newStudentId);
-      
+  //  useEffect(() => {
+  //     if (!teacherId) {
+  //       setLoading(false); // Stop loading if no teacherId
+  //       return;
+  //     }
   
-      if (newStudentId) {
-        localStorage.setItem("teacherData", teacherData); // Store for persistence
-        setTeacherData(teacherData);
+  //     const fetchAllData = async () => {
+  //       setLoading(true);
+  //       setError(null);
+  //       try {
+  //         const teacherResponse = await getTeacher(teacherId);
+  //         setTeacherData(teacherResponse.data);
+  //       } catch (error) {
+  //         setError(error.message);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
+  
+  //     fetchAllData();
+  //   }, [teacherId, dispatch]);
+
+  useEffect(() => {
+    const teacherData = location.state;
+    if (teacherData) {
+      localStorage.setItem("teacherData", JSON.stringify(teacherData)); // Store as a string
+      setTeacherId(teacherData?.userData.teacherId);
+      setTeacherData(teacherData?.userData)
+      console.log(teacherData );
+      console.log(teacherId);
+      
+    } else {
+      const storedTeacherData = localStorage.getItem("teacherData");
+      if (storedTeacherData) {
+        setTeacherData(JSON.parse(storedTeacherData)); // Convert back to object
       } else {
-        setError("Student ID is missing");
+        setError("Teacher data is missing");
         setLoading(false);
       }
-    }, [location.state]);
-
-  console.log(sessionStorage);
-
-  console.log(teacherData.userData);
-
-
+    }
+  }, [location.state]);
+ 
   // Stats data with routing paths
   const statsData = [
     { title: "Total Students", count: dashboardData?.studentsCount || 22, icon: FaBook, path: "/studentdata" },
@@ -200,7 +164,7 @@ const TeacherDashboard = () => {
 
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData?.name} />
       <div className="d-flex flex-column flex-md-row">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="teacher-main-container p-4 mx-auto">

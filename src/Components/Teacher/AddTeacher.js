@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { addTeacherAction, getTeachers } from "../../redux/Action/TeacherAction";
-import { fetchCountries, fetchGenders, fetchTeacherMode, fetchAvailability } from "../../redux/Services/Enum";
+import { fetchCountries, fetchGenders, fetchTeacherMode, fetchAvailability ,fetchPreferedCountry} from "../../redux/Services/Enum";
 import { addTeacher } from "../../redux/Services/Teacher.js"
 import InputMask from "react-input-mask";
 import BASE_URL from "../../redux/Services/Config.js";
@@ -24,7 +24,7 @@ const AddTeacher = ({ show, onClose }) => {
     nationalityId: null,
     availabilityId: null,
     registerNo: "",
-    preferedCountryId: null,
+    preferedCountryId: null,    
     professionalExperianceModel: {
       employerName: "",
       jobTitle: "",
@@ -41,8 +41,8 @@ const AddTeacher = ({ show, onClose }) => {
     },
     teacherDocumentFileModels: [],
     createdBy: 0,
-    preferedWorkScheduledName: "",
-    preferredWorkTimes: "",
+    preferedWorkDays: "",
+    preferedWorkTime: "",
     applicationDate: "",
     declaration: false,
   });
@@ -51,6 +51,7 @@ const AddTeacher = ({ show, onClose }) => {
 
   const [errors, setErrors] = useState({});
   const [countries, setCountries] = useState([]);
+  const [preferdCountries , setPreferedCountriesData] = useState([]);
   const [teachingModes, setTeachingMode] = useState([]);
   const [genders, setGenders] = useState([]);
   const [availabilitys, setAvailability] = useState([]);
@@ -79,7 +80,7 @@ const AddTeacher = ({ show, onClose }) => {
       ...prevData,
       [name]: type === "checkbox"
         ? checked
-        : ["country", "grade", "gender", "studyModeId", "teacherModeId"].includes(name)
+        : ["country", "grade", "gender", "studyModeId", "teacherModeId" , "preferedCountryId"].includes(name)
           ? parseInt(value, 10)
           : value,
     }));
@@ -143,6 +144,9 @@ const AddTeacher = ({ show, onClose }) => {
       try {
         const countriesData = await fetchCountries();
         setCountries(countriesData);
+
+        const preferedCountriesData = await fetchPreferedCountry();
+        setPreferedCountriesData(preferedCountriesData);
 
         const gendersData = await fetchGenders();
         setGenders(gendersData);
@@ -630,23 +634,23 @@ const AddTeacher = ({ show, onClose }) => {
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group controlId="preferedWorkScheduledName">
+              <Form.Group controlId="preferedWorkDays">
                 <Form.Label>Preferred Work Days</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferedWorkScheduledName"
-                  value={formData.preferedWorkScheduledName}
+                  name="preferedWorkDays"
+                  value={formData.preferedWorkDays}
                   onChange={handleChange}
                 />
               </Form.Group>
             </Col>
             <Col md={4}>
-              <Form.Group controlId="preferredWorkTimes">
+              <Form.Group controlId="preferedWorkTime">
                 <Form.Label>Preferred Work Times</Form.Label>
                 <Form.Control
                   type="text"
-                  name="preferredWorkTimes"
-                  value={formData.preferredWorkTimes}
+                  name="preferedWorkTime"
+                  value={formData.preferedWorkTime}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -660,10 +664,14 @@ const AddTeacher = ({ show, onClose }) => {
                   name="preferedCountryId"
                   value={formData.preferedCountryId}
                   onChange={handleChange}
+                  isInvalid={!!errors.preferedCountryId}
                 >
-                  <option value="">Select Preferred Country</option>
-                  <option value="1">Only India</option>
-                  <option value="2">Other than India</option>
+                  <option value="">Select Prefered Country</option>
+                  {preferdCountries.map((country, index) => (
+                    <option key={index} value={country.item1}>
+                      {country.item2}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>

@@ -117,7 +117,7 @@ export const editTeacher = async (teacherData) => {
 };
 
 export const getTeacher = async (teacherId) => {
-  const response = await fetch(`${BASE_URL}/Teacher/GetUserById?UserId=${teacherId}`, {
+  const response = await fetch(`${BASE_URL}/Teacher/GetByTeacherid?TeacherId=${teacherId}`, {
     method: "GET",
     headers: getHeaders(),
   });

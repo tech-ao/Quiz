@@ -23,7 +23,7 @@ const StudentData = () => {
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
   const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [selectedGrade, setSelectedGrade] = useState(null); // state for grade filter
-  const [teacherData, setTeacherData] = useState({});
+  const [teacherData, setTeacherData] = useState(null);
   const [error, setError] = useState(null);    
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -57,34 +57,33 @@ const StudentData = () => {
 
   const studentsPerPage = 10;
 
-console.log("abcd");
-
-   useEffect(() => {
-         const storedStudentId = localStorage.getItem("studentId");
-         const newStudentId = location.state
-   
-         console.log("asd");
-         
-     
-         if (newStudentId) {
-           localStorage.setItem("teacherData", teacherData); // Store for persistence
-           setTeacherData(teacherData);
-         } else {
-           setError("Student ID is missing");
-           setLoading(false);
-         }
-       }, [location.state]);
-   
-     console.log(sessionStorage);
-   
-     console.log(teacherData.userData);
+  console.log(teacherData);
+  
   useEffect(() => {
-    const paginationDetail = {
-      pageSize: studentsPerPage,
-      pageNumber: currentPage + 1,
-    };
-    dispatch(getStudents({ paginationDetail, teacherId: 1066 } ));
-  }, [dispatch, currentPage]);
+    const storedTeacherData = localStorage.getItem("teacherData");
+  
+    if (storedTeacherData) {
+      try {
+        setTeacherData(JSON.parse(storedTeacherData)); // Parse and set
+      } catch (error) {
+        console.error("Error parsing teacherData:", error);
+        localStorage.removeItem("teacherData"); // Remove corrupted data
+      }
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    if (teacherData && teacherData.userData) {
+      const paginationDetail = {
+        pageSize: studentsPerPage,
+        pageNumber: currentPage + 1,
+      };
+  
+      dispatch(getStudents({ paginationDetail, teacherId: teacherData.userData.teacherId }));
+    }
+  }, [dispatch, currentPage, teacherData]);
+  
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value); 
@@ -102,7 +101,6 @@ console.log("abcd");
     return gradeName.toString().trim();
   };
 
-  console.log("ABCD");
   
 
   const filteredStudents = Array.isArray(students?.data?.searchAndListStudentResult)
@@ -170,9 +168,12 @@ console.log("abcd");
 
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
 
+  console.log(teacherData);
+  
+
   return (
     <div>
-      <TeacherHeader toggleSidebar={toggleSidebar} />
+      <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData.name}/>
       <div className="d-flex">
         {isSidebarVisible && <TeacherSidePanel />}
         <Container className="main-container ">
@@ -246,9 +247,9 @@ console.log("abcd");
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
+                  {/* <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
                     <i className="bi bi-person-plus me-2"></i> Add Student
-                  </Button>
+                  </Button> */}
                 </Col>
               </Row>
             )}
