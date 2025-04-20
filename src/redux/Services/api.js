@@ -16,11 +16,11 @@ const getHeaders = () => ({
 console.log(BASE_URL);
 
 // STUDENT FUNCTIONS
-export const fetchStudents = async (paginationDetail) => {
+export const fetchStudents = async (isCompetition ,paginationDetail) => {
   const response = await fetch(`${BASE_URL}/SearchAndList/SearchAndListStudent`, {
     method: "POST",
     headers: getHeaders(),
-    body: JSON.stringify(paginationDetail),
+    body: JSON.stringify(isCompetition,paginationDetail),
   });
   if (!response.ok) throw new Error("Failed to fetch students");
   return await response.json();

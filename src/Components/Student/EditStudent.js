@@ -12,6 +12,8 @@ const EditStudent = ({ show, onClose }) => {
     userId: null,
     firstName: "",
     lastName: "",
+    isCompetition: false,
+
     parentName: "",
     studyModeId: null,
     email: "",
@@ -123,7 +125,7 @@ const EditStudent = ({ show, onClose }) => {
     setIsSubmitting(true);
     try {
       await dispatch(editStudentAction(formData, selectedStudent.studentId));
-      dispatch(getStudents({ paginationDetail }));
+      dispatch(getStudents({isCompetition:false, paginationDetail }));
       toast.success("Student modified successfully!");
       onClose();
     } catch (error) {

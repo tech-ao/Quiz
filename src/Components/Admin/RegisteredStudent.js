@@ -81,7 +81,7 @@ console.log("abcd");
       pageSize: studentsPerPage,
       pageNumber: currentPage + 1,
     };
-    dispatch(getStudents({ paginationDetail }));
+    dispatch(getStudents({isCompetition:true, paginationDetail }));
   }, [dispatch, currentPage]);
 
   const handleSearch = (e) => {

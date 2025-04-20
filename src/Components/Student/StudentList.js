@@ -83,7 +83,7 @@ console.log("abcd");
       pageSize: studentsPerPage,
       pageNumber: currentPage + 1,
     };
-    dispatch(getStudents({ paginationDetail }));
+    dispatch(getStudents({isCompetition:false, paginationDetail }));
   }, [dispatch, currentPage]);
 
   const handleSearch = (e) => {
@@ -159,7 +159,7 @@ console.log("abcd");
     dispatch(deleteStudentAction(selectedStudentId))
       .then(() => {
         toast.success("Student deleted successfully!");
-        dispatch(getStudents({ paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
+        dispatch(getStudents({  isCompetition: false, paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
         setShowDeleteModal(false);
         setSelectedStudentId(null);
       })

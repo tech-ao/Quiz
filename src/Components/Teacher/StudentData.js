@@ -80,7 +80,7 @@ const StudentData = () => {
         pageNumber: currentPage + 1,
       };
   
-      dispatch(getStudents({ paginationDetail, teacherId: teacherData.userData.teacherId }));
+      dispatch(getStudents({ isCompetition:false ,paginationDetail, teacherId: teacherData.userData.teacherId }));
     }
   }, [dispatch, currentPage, teacherData]);
   
@@ -157,7 +157,7 @@ const StudentData = () => {
     dispatch(deleteStudentAction(selectedStudentId))
       .then(() => {
         toast.success("Student deleted successfully!");
-        dispatch(getStudents({ paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
+        dispatch(getStudents({ isCompetition:false ,paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
         setShowDeleteModal(false);
         setSelectedStudentId(null);
       })

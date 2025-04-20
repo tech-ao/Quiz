@@ -34,6 +34,8 @@ const AddStudentPanel = ({ show, onClose }) => {
     completedLevel: null,   // New field: Completed Level
     statusId: 1,
     createdBy: 1,
+    isCompetition: false,
+
     profile: {
       name: "",
       extension: "",
@@ -122,7 +124,7 @@ const AddStudentPanel = ({ show, onClose }) => {
       console.log(formData);
 
       await dispatch(addStudentAction(formData));
-      dispatch(getStudents({ paginationDetail }));
+      dispatch(getStudents({isCompetition:false, paginationDetail }));
       toast.success("Student added successfully!");
       onClose();
     } catch (error) {
