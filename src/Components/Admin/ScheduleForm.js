@@ -1,11 +1,15 @@
-// Import required modules
 import React, { useState, useEffect } from "react";
 import { Card, Form, Button, Container, Row, Col } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import "./ScheduleForm.css";
 import Sidebar from "./SidePannel";
 import AdminHeader from "./AdminHeader";
+import { addSheduleAction } from "../../redux/Action/SheduleAction";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ScheduleForm = () => {
+  const dispatch = useDispatch();
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [days, setDays] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -15,12 +19,10 @@ const ScheduleForm = () => {
   const [endDate, setEndDate] = useState("");
   const [fees, setFees] = useState("");
 
-  // Toggle Sidebar
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       setIsSidebarVisible(window.innerWidth >= 768);
@@ -29,7 +31,6 @@ const ScheduleForm = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Calculate End Date when Days or Start Date changes
   const calculateEndDate = (days, startDate) => {
     if (days && startDate) {
       const start = new Date(startDate);
@@ -40,39 +41,50 @@ const ScheduleForm = () => {
     }
   };
 
-  // Handle Days Input
   const handleDaysChange = (e) => {
     const value = e.target.value;
     setDays(value);
     calculateEndDate(value, startDate);
   };
 
-  // Handle Start Date Input (Prevent Past Date)
   const handleStartDateChange = (e) => {
     const value = e.target.value;
     setStartDate(value);
     calculateEndDate(days, value);
   };
 
-  // Handle Form Submit
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log({
-      days,
-      startDate,
-      endDate,
-      totalTime,
-      manualQuestions,
-      mentalQuestions,
-      fees,
-    });
-    alert("Schedule saved successfully!");
-  };
-
-  // Get today's date in YYYY-MM-DD format for min attribute
   const getTodayDate = () => {
     const today = new Date();
     return today.toISOString().split("T")[0];
+  };
+
+  const clearForm = () => {
+    setDays("");
+    setStartDate("");
+    setTotalTime("");
+    setManualQuestions("");
+    setMentalQuestions("");
+    setEndDate("");
+    setFees("");
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const requestBody = {
+      noOfDays: parseInt(days),
+      totalTime,
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
+      manual: parseInt(manualQuestions),
+      mental: parseInt(mentalQuestions),
+      fees: parseFloat(fees)
+    };
+
+    dispatch(addSheduleAction(requestBody));
+
+    toast.success("Schedule created successfully!");
+    clearForm();
   };
 
   return (
@@ -92,7 +104,6 @@ const ScheduleForm = () => {
               <Row className="justify-content-center">
                 <Col md={12}>
                   <Form onSubmit={handleSubmit}>
-                    {/* Number of Days and Total Time in a single row */}
                     <Row className="mb-4">
                       <Col md={6}>
                         <Form.Group>
@@ -119,7 +130,6 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
-                    {/* Start Date and End Date */}
                     <Row className="Schedule-start-end mb-4">
                       <Col md={6}>
                         <Form.Group>
@@ -141,7 +151,6 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
-                    {/* Manual and Mental Questions */}
                     <Row className="Schedule-man-men mb-4">
                       <Col md={6}>
                         <Form.Group>
@@ -169,7 +178,6 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
-                    {/* Fees Field */}
                     <Row className="mb-4">
                       <Col md={6}>
                         <Form.Group>
@@ -185,7 +193,6 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
-                    {/* Submit Button */}
                     <Row className="mt-4">
                       <Col md={12} className="d-flex justify-content-center rounded">
                         <Button variant="primary" type="submit" className="Schedule-button text-center">
@@ -200,6 +207,9 @@ const ScheduleForm = () => {
           </div>
         </Container>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
     </div>
   );
 };
