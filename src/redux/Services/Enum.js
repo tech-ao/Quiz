@@ -1,4 +1,5 @@
 import BASE_URL from "./Config";
+import axios from "axios";
 const COMMON_HEADERS = {
   Accept: "application/json",
   "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
@@ -226,3 +227,46 @@ export const fetchProfileById  = async (userId) => {
   }
 };
 
+export const questionGenerateAction = async ({ numberOfQn, rangePerQn, level }) => {
+  try {
+    const url = `${BASE_URL}/Exam/QuestionAutoGenerator?NoOfQuestions=${numberOfQn}&Level=${level}&NumbersPerQuestion=${rangePerQn}`;
+    
+    const response = await fetch(url, {
+      method: "POST",
+      headers: getHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status}`);
+    }
+
+    const data = await response.text(); // since Accept is text/plain
+    console.log("Auto Generated Questions:", data);
+    return data;
+  } catch (error) {
+    console.error("Failed to generate questions:", error);
+    throw error;
+  }
+};
+
+export const getListOfQuestions = async (level) => {
+  try {
+    const requestBody = {
+      level: level,
+      pagination: {
+        pageSize: 0,
+        pageNumber: 0,
+      },
+    };
+
+    // Send the POST request with headers and body
+    const response = await axios.post(`${BASE_URL}/SearchAndList/SearchAndListQuestions`, requestBody, {
+      headers: getHeaders(),
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching question list:", error);
+    throw error;
+  }
+};
