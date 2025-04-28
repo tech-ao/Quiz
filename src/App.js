@@ -50,6 +50,7 @@ import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
 import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import GoogleMeetPage from "./Components/google/MeetForm.js";
+import ExamList from "./Components/Admin/ExamList.js";
 
 import "react-toastify/dist/ReactToastify.css";
 
@@ -134,6 +135,11 @@ function App() {
           <Route
             path="/assignment"
             element={<ProtectedRoute element={<TeacherAssignment />} />}
+          />
+
+<Route
+            path="/examList"
+            element={<ProtectedRoute element={<ExamList />} />}
           />
           <Route
             path="/approvedleave"

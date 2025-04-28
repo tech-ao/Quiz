@@ -164,49 +164,7 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
           )}
         </li>
 
-        {/* Quiz Dropdown */}
-        <li className="nav-item">
-          <div
-            className={`nav-link ${isPathActive("/ScheduleForm") ? "active" : ""}`}
-            onClick={() => toggleMenu("quiz")}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-question-circle"></i>
-              <span className="nav-text">Quiz</span>
-              <i className={`bi ${openMenus.quiz ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
-            </div>
-          </div>
-          {openMenus.quiz && (
-            <ul className="nav flex-column sub-nav">
-              <li className="nav-item">
-                <Link
-                  to="/ScheduleForm"
-                  className={`nav-link ${isPathActive("/ScheduleForm") ? "active-sub" : ""}`}
-                  style={{ marginLeft: "15px" }}
-                >
-                  <div className="icon-with-text" style={{ gap: "5px" }}>
-                    <i className="bi bi-clock"></i>
-                    <span className="nav-text">Schedule Time</span>
-                  </div>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  to="/RegisteredStudents"
-                  className={`nav-link ${isPathActive("/RegisteredStudents") ? "active-sub" : ""}`}
-                  style={{ marginLeft: "15px" }}
-                >
-                  <div className="icon-with-text" style={{ gap: "5px" }}>
-                  <i className="bi bi-person-bounding-box"></i>
-                    <span className="nav-text">Registered Students</span>
-                  </div>
-                </Link>
-              </li>
-
-            </ul>
-          )}
-        </li>
+      
 
         {/* Questions Dropdown */}
         <li className="nav-item">
@@ -429,6 +387,63 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
               <span className="nav-text">Settings</span>
             </div>
           </Link>
+        </li>
+
+          {/* Quiz Dropdown */}
+          <li className="nav-item">
+          <div
+            className={`nav-link ${isPathActive("/ScheduleForm") ? "active" : ""}`}
+            onClick={() => toggleMenu("quiz")}
+            style={{ cursor: "pointer" }}
+          >
+            <div className="icon-with-text">
+              <i className="bi bi-question-circle"></i>
+              <span className="nav-text">Quiz</span>
+              <i className={`bi ${openMenus.quiz ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+            </div>
+          </div>
+          {openMenus.quiz && (
+            <ul className="nav flex-column sub-nav">
+              <li className="nav-item">
+                <Link
+                  to="/ScheduleForm"
+                  className={`nav-link ${isPathActive("/ScheduleForm") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                    <i className="bi bi-clock"></i>
+                    <span className="nav-text">Schedule Time</span>
+                  </div>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  to="/RegisteredStudents"
+                  className={`nav-link ${isPathActive("/RegisteredStudents") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-person-bounding-box"></i>
+                    <span className="nav-text">Registered Students</span>
+                  </div>
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link
+                  to="/examList"
+                  className={`nav-link ${isPathActive("/examList") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-person-bounding-box"></i>
+                    <span className="nav-text">Exam List</span>
+                  </div>
+                </Link>
+              </li>
+
+            </ul>
+          )}
         </li>
 
         {/* Logout */}

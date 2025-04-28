@@ -20,19 +20,23 @@ const ScheduleForm = () => {
   const [mentalQuestions, setMentalQuestions] = useState("");
   const [endDate, setEndDate] = useState("");
   const [fees, setFees] = useState("");
+  const [uploadFile, setUploadFile] = useState(null);
+
   const [scheduleList, setScheduleList] = useState([]);
   const [editModal, setEditModal] = useState(false);
   const [editSchedule, setEditSchedule] = useState(null);
+
   const COMMON_HEADERS = {
     Accept: "text/plain",
     "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
     AccessToken: "123",
     "Content-Type": "application/json",
   };
-  
+
   const getHeaders = () => ({
     ...COMMON_HEADERS,
   });
+
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
@@ -80,6 +84,7 @@ const ScheduleForm = () => {
     setMentalQuestions("");
     setEndDate("");
     setFees("");
+    setUploadFile(null);
   };
 
   const fetchSchedules = async () => {
@@ -88,12 +93,8 @@ const ScheduleForm = () => {
         method: "GET",
         headers: getHeaders(),
       });
-  
       if (!response.ok) throw new Error("Failed to fetch schedules");
-  
       const data = await response.json();
-      console.log(data);
-      
       setScheduleList(data.data);
     } catch (error) {
       console.error("Failed to fetch schedules", error);
@@ -106,20 +107,42 @@ const ScheduleForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const requestBody = {
-      noOfDays: parseInt(days),
-      totalTime,
-      startDate: new Date(startDate).toISOString(),
-      endDate: new Date(endDate).toISOString(),
-      manual: parseInt(manualQuestions),
-      mental: parseInt(mentalQuestions),
-      fees: parseFloat(fees)
+    if (!uploadFile) {
+      toast.error("Please upload a file!");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Content = reader.result.split(",")[1];
+      const extension = uploadFile.name.split(".").pop();
+      const name = uploadFile.name;
+
+      const requestBody = {      
+        noOfDays: parseInt(days),
+        totalTime,
+        startDate: new Date(startDate).toISOString(),
+        endDate: new Date(endDate).toISOString(),
+        manual: parseInt(manualQuestions),
+        mental: parseInt(mentalQuestions),
+        fees: parseFloat(fees),
+        qrDocumentFileModel: {         
+          documentTypeId: 16,
+          extension: extension,
+          name: name,
+          base64Content: base64Content,
+          timeStamp: new Date().toISOString(),
+          isDeleted: true,
+        },
+      };
+
+      dispatch(addSheduleAction(requestBody));
+      toast.success("Schedule created successfully!");
+      clearForm();
+      fetchSchedules();
     };
 
-    dispatch(addSheduleAction(requestBody));
-    toast.success("Schedule created successfully!");
-    clearForm();
-    fetchSchedules();
+    reader.readAsDataURL(uploadFile);
   };
 
   const openEditModal = (schedule) => {
@@ -164,9 +187,9 @@ const ScheduleForm = () => {
           fees: parseFloat(editSchedule.fees)
         })
       });
-  
+
       if (!response.ok) throw new Error("Failed to update schedule");
-  
+
       toast.success("Schedule updated successfully!");
       setEditModal(false);
       fetchSchedules();
@@ -175,7 +198,6 @@ const ScheduleForm = () => {
       toast.error("Failed to update schedule.");
     }
   };
-  
 
   return (
     <div>
@@ -220,7 +242,7 @@ const ScheduleForm = () => {
                       </Col>
                     </Row>
 
-                    <Row className="Schedule-start-end mb-4">
+                    <Row className="mb-4">
                       <Col md={6}>
                         <Form.Group>
                           <Form.Label className="fw-bold">Start Date</Form.Label>
@@ -236,12 +258,16 @@ const ScheduleForm = () => {
                       <Col md={5}>
                         <Form.Group>
                           <Form.Label className="fw-bold">End Date</Form.Label>
-                          <Form.Control type="date" value={endDate} readOnly />
+                          <Form.Control
+                            type="date"
+                            value={endDate}
+                            readOnly
+                          />
                         </Form.Group>
                       </Col>
                     </Row>
 
-                    <Row className="Schedule-man-men mb-4">
+                    <Row className="mb-4">
                       <Col md={6}>
                         <Form.Group>
                           <Form.Label className="fw-bold">Manual</Form.Label>
@@ -249,7 +275,6 @@ const ScheduleForm = () => {
                             type="number"
                             value={manualQuestions}
                             onChange={(e) => setManualQuestions(e.target.value)}
-                            placeholder="Enter number of manual questions"
                             required
                           />
                         </Form.Group>
@@ -261,7 +286,6 @@ const ScheduleForm = () => {
                             type="number"
                             value={mentalQuestions}
                             onChange={(e) => setMentalQuestions(e.target.value)}
-                            placeholder="Enter number of mental questions"
                             required
                           />
                         </Form.Group>
@@ -276,7 +300,16 @@ const ScheduleForm = () => {
                             type="number"
                             value={fees}
                             onChange={(e) => setFees(e.target.value)}
-                            placeholder="Enter fees"
+                            required
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col md={6}>
+                        <Form.Group>
+                          <Form.Label className="fw-bold">Upload QR</Form.Label>
+                          <Form.Control
+                            type="file"
+                            onChange={(e) => setUploadFile(e.target.files[0])}
                             required
                           />
                         </Form.Group>
@@ -284,8 +317,8 @@ const ScheduleForm = () => {
                     </Row>
 
                     <Row className="mt-4">
-                      <Col md={12} className="d-flex justify-content-center rounded">
-                        <Button variant="primary" type="submit" className="Schedule-button text-center">
+                      <Col md={12} className="d-flex justify-content-center">
+                        <Button variant="success" type="submit">
                           Save
                         </Button>
                       </Col>
@@ -328,12 +361,10 @@ const ScheduleForm = () => {
                 ))}
               </tbody>
             </Table>
-
           </div>
         </Container>
       </div>
 
-      {/* Edit Modal */}
       <Modal show={editModal} onHide={() => setEditModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Edit Schedule</Modal.Title>
@@ -350,7 +381,6 @@ const ScheduleForm = () => {
                   onChange={handleEditChange}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Total Time</Form.Label>
                 <Form.Control
@@ -360,7 +390,6 @@ const ScheduleForm = () => {
                   onChange={handleEditChange}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Start Date</Form.Label>
                 <Form.Control
@@ -370,7 +399,6 @@ const ScheduleForm = () => {
                   onChange={handleEditChange}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Manual</Form.Label>
                 <Form.Control
@@ -380,7 +408,6 @@ const ScheduleForm = () => {
                   onChange={handleEditChange}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Mental</Form.Label>
                 <Form.Control
@@ -390,7 +417,6 @@ const ScheduleForm = () => {
                   onChange={handleEditChange}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Fees</Form.Label>
                 <Form.Control
@@ -407,13 +433,13 @@ const ScheduleForm = () => {
           <Button variant="secondary" onClick={() => setEditModal(false)}>
             Cancel
           </Button>
-          <Button variant="primary" onClick={handleUpdate}>
+          <Button variant="success" onClick={handleUpdate}>
             Update
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer />
     </div>
   );
 };

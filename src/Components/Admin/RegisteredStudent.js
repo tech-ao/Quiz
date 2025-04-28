@@ -265,10 +265,9 @@ console.log("abcd");
                     <th>Date of Birth</th>
                     <th>Level</th>                  
                     <th>Centre Name</th>
-                    <th>Place</th>
+                   
                     <th>Joining Date</th>
-                    <th>Current Level</th>
-                    <th>Completed Level</th>
+            
                     <th>Status</th>
                     <th>Actions</th>
                   </tr>
@@ -289,10 +288,9 @@ console.log("abcd");
                           <td>{student.gradeName}</td>
                         
                           <td>{student.centerName}</td>
-                          <td>{student.place}</td>
+                       
                           <td>{student.doj ? new Date(student.doj).toLocaleDateString('en-GB') : ''}</td>
-                          <td>{student.currentLevelName}</td>
-                          <td>{student.completedLevelName}</td>
+                         
                           <td>
                             <Badge bg={student.statusName === 'Pending' ? 'warning' : 'success'}>
                               {student.statusName}
@@ -307,9 +305,9 @@ console.log("abcd");
                                 <Dropdown.Item onClick={() => handleOpenViewStudent(student.studentId)}>
                                   <i className="bi bi-eye me-2"></i>View
                                 </Dropdown.Item>
-                                <Dropdown.Item onClick={() => handleOpenEditStudent(student.studentId)}>
+                                {/* <Dropdown.Item onClick={() => handleOpenEditStudent(student.studentId)}>
                                   <i className="bi bi-pencil me-2"></i>Edit
-                                </Dropdown.Item>
+                                </Dropdown.Item> */}
                                 <Dropdown.Item onClick={() => handleOpenDeleteModal(student.studentId)}>
                                   <i className="bi bi-trash me-2"></i>Delete
                                 </Dropdown.Item>
