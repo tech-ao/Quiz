@@ -10,7 +10,8 @@ import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
 import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
 import BASE_URL from "../../redux/Services/Config";
-const EnrollmentRequestList = () => {
+
+const CompetionEnrollmentRequestList = () => {
    const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
     const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -65,7 +66,7 @@ const EnrollmentRequestList = () => {
     const fetchRequests = async () => {
       try {
         setLoading(true);
-        const response = await fetchStudentEnrollmentRequest({ isCompetition: false, paginationDetail });
+        const response = await fetchStudentEnrollmentRequest({isCompetition: true, paginationDetail});
         if (response && response.data) {
           setRequests(response.data.searchAndListStudentResult || []);
         } else {
@@ -251,4 +252,4 @@ const EnrollmentRequestList = () => {
   );
 };
 
-export default EnrollmentRequestList;
+export default CompetionEnrollmentRequestList;

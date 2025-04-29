@@ -442,6 +442,34 @@ const SidePannel = ({ isOpen, closeSidePanel }) => {
                 </Link>
               </li>
 
+              <li className="nav-item">
+                <Link
+                  to="/competionEnrollment"
+                  className={`nav-link ${isPathActive("/competionEnrollment") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-person-bounding-box"></i>
+                    <span className="nav-text">competion Enrollment Request</span>
+                  </div>
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link
+                  to="/competionPaymentHistory"
+                  className={`nav-link ${isPathActive("/competionPaymentHistory") ? "active-sub" : ""}`}
+                  style={{ marginLeft: "15px" }}
+                >
+                  <div className="icon-with-text" style={{ gap: "5px" }}>
+                  <i className="bi bi-person-bounding-box"></i>
+                    <span className="nav-text">competion PaymentHistory</span>
+                  </div>
+                </Link>
+              </li>
+
+              
+
             </ul>
           )}
         </li>

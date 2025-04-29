@@ -79,7 +79,8 @@ import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
 import AssignStudent from "./Components/Admin/AssignStudent.js";
 import Pending from "./Components/Admin/Pending.js";
-
+import CompetionEnrollmentRequestList from "./Components/Admin/CompetionRegisterStudent.js";
+import CompetionPaymentHistory from "./Components/Admin/CompetionPaymentHistory.js";
 
 // ProtectedRoute component to check login status
 const ProtectedRoute = ({ element }) => {
@@ -104,20 +105,20 @@ function App() {
           <Route path="/adminAttendance" element={<AdminAttendance />} />
           <Route path="/teacherAttendance" element={<TeacherAttendance />} />
           <Route path="/studentAttendance" element={<StudentAttendance />} />
-          <Route path="/studentdata" element={<StudentData/>}/>
-          <Route path="/ScheduleForm" element={<ScheduleForm/>}/>
-          <Route path="/RegisteredStudents" element={<RegisteredStudents/>}/>
-          <Route path="/AddQuestion" element={<AddQuestion/>}/>
-          <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
-          <Route path="/AssignedClass" element={<AssignedClass/>}/>
-          <Route path="/CompleteClass" element={<CompleteClass/>}/>
-          <Route path="/Createmeeting" element={<Createmeeting/>}/>
-          <Route path="/meet" element={<GoogleMeetPage/>}/>
-          <Route path="/meeting" element={<CreateMeeting/>}/>
-          <Route path="/pending" element={<Pending/>}/>
-          <Route path="/assigned-class" element={<Assigned_class/>}/>
-          <Route path="/completed_class" element={<Completed_class/>}/>
-          <Route path="/FeesPayment" element={<FeesPayment/>}/>
+          <Route path="/studentdata" element={<StudentData />} />
+          <Route path="/ScheduleForm" element={<ScheduleForm />} />
+          <Route path="/RegisteredStudents" element={<RegisteredStudents />} />
+          <Route path="/AddQuestion" element={<AddQuestion />} />
+          <Route path="/ImportQuestion" element={<ImportQuestion />} />
+          <Route path="/AssignedClass" element={<AssignedClass />} />
+          <Route path="/CompleteClass" element={<CompleteClass />} />
+          <Route path="/Createmeeting" element={<Createmeeting />} />
+          <Route path="/meet" element={<GoogleMeetPage />} />
+          <Route path="/meeting" element={<CreateMeeting />} />
+          <Route path="/pending" element={<Pending />} />
+          <Route path="/assigned-class" element={<Assigned_class />} />
+          <Route path="/completed_class" element={<Completed_class />} />
+          <Route path="/FeesPayment" element={<FeesPayment />} />
 
           {/* Protected Routes */}
           <Route
@@ -136,8 +137,17 @@ function App() {
             path="/assignment"
             element={<ProtectedRoute element={<TeacherAssignment />} />}
           />
+          <Route
+            path="/competionEnrollment"
+            element={<ProtectedRoute element={<CompetionEnrollmentRequestList />} />}
+          />
+          <Route
+            path="/competionPaymentHistory"
+            element={<ProtectedRoute element={<CompetionPaymentHistory />} />}
+          />
 
-<Route
+
+          <Route
             path="/examList"
             element={<ProtectedRoute element={<ExamList />} />}
           />
@@ -252,7 +262,7 @@ function App() {
             element={<ProtectedRoute element={<AssignStudent />} />}
           />
 
-         
+
           <Route
             path="/studentSettings"
             element={<ProtectedRoute element={<StudentSettings />} />}
@@ -282,7 +292,7 @@ function App() {
             path="/completedtest"
             element={<ProtectedRoute element={<CompletedTest />} />}
           />
-           {/* <Route
+          {/* <Route
             path="/meeting"
             element={<ProtectedRoute element={<CreateMeeting />} />}
           /> */}

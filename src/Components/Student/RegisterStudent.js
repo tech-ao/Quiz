@@ -35,6 +35,7 @@ const RegisterStudent = () => {
     studyModeId: "",
     country: "",
     statusId: 3,
+    isCompetition: false,
     createdBy: 1,
     profile: {
       name: "",
@@ -143,7 +144,8 @@ const RegisterStudent = () => {
           studyModeId: "",
           country: "",
           statusId: 3,
-          createdBy: 1
+          createdBy: 1,
+          isCompetition: false
         });
         setPreview(null);
         setBirthCertificatePreview(null);
