@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../Admin/SidePannel';
-import AddStudent from './AddStudent';
-import EditStudent from './EditStudent';
+import AddStudent from '../Student/AddStudent';
+import EditStudent from '../Student/EditStudent';
 import AdminHeader from '../Admin/AdminHeader';
 import { Container, Row, Col, Button, Table, Form, InputGroup, Modal, Dropdown, Badge } from 'react-bootstrap';
-import ViewStudentPanel from './ViewStudent';
+import ViewStudentPanel from '../Student/ViewStudent';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { getStudents, fetchStudent, deleteStudentAction } from "../../redux/Action/StudentAction";
 import { toast } from 'react-toastify';
 import { FaFilter } from "react-icons/fa"; // Import filter icon
-
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
-import "./StudentList.css"
 
 
 
-const StudentList = () => {
+const RegisteredStudents = () => {
   // For tablet view (768px to 1023px), sidebar is hidden by default (only shown for widths >=1024px)
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
@@ -83,7 +81,7 @@ console.log("abcd");
       pageSize: studentsPerPage,
       pageNumber: currentPage + 1,
     };
-    dispatch(getStudents({isCompetition:false, paginationDetail }));
+    dispatch(getStudents({isCompetition:true, paginationDetail }));
   }, [dispatch, currentPage]);
 
   const handleSearch = (e) => {
@@ -159,7 +157,7 @@ console.log("abcd");
     dispatch(deleteStudentAction(selectedStudentId))
       .then(() => {
         toast.success("Student deleted successfully!");
-        dispatch(getStudents({  isCompetition: false, paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
+        dispatch(getStudents({ paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
         setShowDeleteModal(false);
         setSelectedStudentId(null);
       })
@@ -246,9 +244,7 @@ console.log("abcd");
                       </Dropdown.Menu>
                     </Dropdown>
                   </InputGroup>
-                  <Button variant="outline-success" onClick={handleOpenAddStudent}  style={{width:"250px"}}>
-                    <i className="bi bi-person-plus me-2"></i> Add Student
-                  </Button>
+                  
                 </Col>
               </Row>
             )}
@@ -378,4 +374,4 @@ console.log("abcd");
   );
 };
 
-export default StudentList;
+export default RegisteredStudents;

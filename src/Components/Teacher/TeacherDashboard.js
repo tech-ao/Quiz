@@ -166,7 +166,7 @@ const TeacherDashboard = () => {
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData?.name} />
       <div className="d-flex flex-column flex-md-row">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <TeacherSidePanel teachingModeid ={teacherData?.userData?.stausId}/>}
         <Container className="teacher-main-container p-4 mx-auto">
           <div className="sticky-title align-items-center mb-4">
             <h2 className="fw-bold text-left">Teacher Dashboard</h2>

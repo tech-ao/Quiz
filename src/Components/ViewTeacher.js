@@ -11,13 +11,16 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [documentData, setDocumentData] = useState({});
   const [blobUrls, setBlobUrls] = useState({});
-  
+
   // Document type name mapping
   const DOCUMENT_TYPE_NAMES = {
     4: "Resume",
     5: "Educational Certificates",
     6: "Experience Certificates",
-    8: "Candidate Photo"
+    8: "Candidate Photo",
+    13: "Proof Of Address",
+    14: "Work Authorization",
+    15: "Health And Medical Fitness"
   };
 
   // Clean up function to revoke all blob URLs
@@ -34,14 +37,14 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
       setDocumentData({});
       setError("");
       setLoading(true);
-      
+
       if (teacherData && teacherData.teacherId && teacherData.teacherDocumentFileModels) {
         fetchDocuments();
       } else {
         setLoading(false);
       }
     }
-    
+
     // Cleanup function
     return () => {
       cleanUpBlobUrls();
@@ -53,19 +56,19 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
       setLoading(false);
       return;
     }
-    
+
     setLoading(true);
     // Clean up previous blob URLs before creating new ones
     cleanUpBlobUrls();
-    
+
     const documents = {};
     const newBlobUrls = {};
-    
+
     try {
       // Process all documents in teacherDocumentFileModels
       for (const doc of teacherData.teacherDocumentFileModels) {
         const { teacherId, documentTypeId } = doc;
-        
+
         try {
           const response = await axios.get(
             `${BASE_URL}/Teacher/GetTeacherDocument?Id=${teacherId}&documentTypeEnum=${documentTypeId}`,
@@ -77,16 +80,16 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
               },
             }
           );
-          
+
           if (response.data && response.data.data) {
             const base64Content = response.data.data.base64Content || response.data.data;
-            
+
             // Store document data
             documents[documentTypeId] = {
               ...doc,
               base64Content
             };
-            
+
             // Create blob URL for PDF documents
             if (doc.extension.toLowerCase() === 'pdf' && base64Content) {
               try {
@@ -108,7 +111,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           console.error(`Error fetching document type ${documentTypeId}:`, err);
         }
       }
-      
+
       setDocumentData(documents);
       setBlobUrls(newBlobUrls);
       console.log("Document data loaded:", documents);
@@ -127,17 +130,17 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
 
   const renderDocument = (documentTypeId) => {
     const doc = documentData[documentTypeId];
-    
+
     if (!doc || !doc.base64Content) {
       return <p>Document not available</p>;
     }
 
     const isImage = ['jpg', 'jpeg', 'png', 'gif'].includes(doc.extension.toLowerCase());
     const isPdf = doc.extension.toLowerCase() === 'pdf';
-    
+
     if (isImage) {
       return (
-        <img 
+        <img
           src={`data:image/${doc.extension};base64,${doc.base64Content}`}
           alt={doc.name}
           style={{ maxWidth: '100%', maxHeight: '300px' }}
@@ -145,11 +148,11 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
       );
     } else if (isPdf) {
       const pdfUrl = blobUrls[documentTypeId];
-      
+
       if (!pdfUrl) {
         return <p>Error loading PDF. Please try again.</p>;
       }
-      
+
       return (
         <div className="pdf-container">
           <p className="fw-bold mb-2">{doc.name}</p>
@@ -164,9 +167,9 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             >
               <div className="p-3">
                 <p>It appears you don't have a PDF plugin for this browser.</p>
-                <a 
-                  href={pdfUrl} 
-                  target="_blank" 
+                <a
+                  href={pdfUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-sm btn-primary"
                 >
@@ -176,14 +179,14 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             </object>
           </div>
           <div className="mt-2">
-            <a 
+            <a
               href={pdfUrl}
               download={doc.name}
               className="btn btn-sm btn-primary me-2"
             >
               Download PDF
             </a>
-            <a 
+            <a
               href={pdfUrl}
               target="_blank"
               rel="noopener noreferrer"
@@ -254,9 +257,9 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
           const docTypeId = parseInt(typeId);
           // Skip photo document as it's displayed separately
           if (docTypeId === 8) return null;
-          
+
           const docTypeName = DOCUMENT_TYPE_NAMES[docTypeId] || `Document Type ${docTypeId}`;
-          
+
           return (
             <div className="document-section mb-4" key={`doc-section-${docTypeId}`}>
               <h6 className="mb-3">{docTypeName}</h6>
@@ -283,11 +286,11 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
   };
 
   return (
-    <Offcanvas 
-      show={show} 
-      onHide={handleClose} 
-      placement="end" 
-      className="teacher-view-offcanvas" 
+    <Offcanvas
+      show={show}
+      onHide={handleClose}
+      placement="end"
+      className="teacher-view-offcanvas"
       style={{ width: "700px", maxWidth: "90%" }}
     >
       <Offcanvas.Header closeButton>
@@ -296,7 +299,7 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
       <Offcanvas.Body>
         {loading && <div className="text-center py-3"><p>Loading teacher documents...</p></div>}
         {error && <div className="alert alert-danger">{error}</div>}
-        
+
         <h5 className="border-bottom pb-2 mb-3">Personal Information</h5>
         <Row className="mb-3">
           <Col>
@@ -376,9 +379,11 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
         </Row>
         <Row className="mb-3">
           <Col>
-            <strong>Degrees/Certifications:</strong>
-            <p>{teacherData?.degrees || "N/A"}</p>
+            <strong>prefered Country:</strong>
+            <p>{teacherData?.preferedCountryName || "N/A"}</p>
           </Col>
+
+
           <Col>
             <strong>Subject Specialist:</strong>
             <p>{teacherData?.educationQualificationModel?.subjectSpecialist || "N/A"}</p>
@@ -411,7 +416,22 @@ const ViewTeacher = ({ show, onClose, teacherData }) => {
             <strong>Preferred Countries:</strong>
             <p>{teacherData?.preferedCountryName || "N/A"}</p>
           </Col>
+
+          {teacherData?.preferedCountryId === 2  && (
+            <Col>
+              <strong>Criminal Background Check:</strong>
+              <p>
+                {teacherData?.complianceInformationModel?.isCriminalBackgroundCheck === true
+                  ? "Yes"
+                  : teacherData?.complianceInformationModel?.isCriminalBackgroundCheck === false
+                    ? "No"
+                    : "N/A"}
+              </p>
+            </Col>
+          )}
         </Row>
+
+
 
         {/* Availability & Work Details */}
         <h5 className="border-bottom pb-2 mb-3 mt-4">Availability & Work Details</h5>

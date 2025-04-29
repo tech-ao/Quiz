@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 100px); /* Adjust if header is 100px */
-  width: 230px;
+  width: 20%;
   overflow-y: auto; 
   position: fixed;
   top: 100px; /* below the header */

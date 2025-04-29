@@ -18,6 +18,7 @@ import Login from "./Components/Student/Login";
 import AdminLoginPage from "./Components/Admin/AdminLogin";
 import ListTeacher from "./Components/Teacher/ListTeacher";
 import QuizPage from "./Components/QuizTest";
+import RegisteredStudents from "./Components/Admin/RegisteredStudent.js"
 import StudentList from "./Components/Student/StudentList";
 import Assigned_class from "./Components/Student/Assigned_class.js";
 import Completed_class from "./Components/Student/completed_class.js";
@@ -49,10 +50,8 @@ import TeacherAttendance from "./Components/Admin/TeacherAttendance";
 import Syllabus from "./Components/Teacher/Syllabus";
 import TeacherAssignment from "./Components/Teacher/TeacherAssignment";
 import GoogleMeetPage from "./Components/google/MeetForm.js";
-import StudentAssignClass from "./Components/Student/StudentAssignedClass.js";
 
 import "react-toastify/dist/ReactToastify.css";
-import AssignStudent from "./Components/Admin/AssignStudent.js";
 
 // Import Redux Provider and Store
 import { Provider } from "react-redux";
@@ -77,8 +76,8 @@ import ApprovalLeave from "./Components/Teacher/ApprovalLeave";
 import Topics from "./Components/Teacher/Topics";
 import CompletedTest from "./Components/Student/completedtest";
 import CreateMeeting from "./Components/Teacher/Meeting";
-import AdminAssignedClasses from "./Components/Admin/AdminAssignedClasses.js";
-import Payment from "./Components/Admin/payment.js";
+import AssignStudent from "./Components/Admin/AssignStudent.js";
+import Pending from "./Components/Admin/Pending.js";
 
 
 // ProtectedRoute component to check login status
@@ -106,6 +105,7 @@ function App() {
           <Route path="/studentAttendance" element={<StudentAttendance />} />
           <Route path="/studentdata" element={<StudentData/>}/>
           <Route path="/ScheduleForm" element={<ScheduleForm/>}/>
+          <Route path="/RegisteredStudents" element={<RegisteredStudents/>}/>
           <Route path="/AddQuestion" element={<AddQuestion/>}/>
           <Route path="/ImportQuestion" element={<ImportQuestion/>}/>
           <Route path="/AssignedClass" element={<AssignedClass/>}/>
@@ -113,10 +113,10 @@ function App() {
           <Route path="/Createmeeting" element={<Createmeeting/>}/>
           <Route path="/meet" element={<GoogleMeetPage/>}/>
           <Route path="/meeting" element={<CreateMeeting/>}/>
-          <Route path="/student-assigned-class"element={<StudentAssignClass/>}/>
-          <Route path="/AdminAssignedClasses" element={<AdminAssignedClasses/>}/>
-          <Route path="/Payment" element={<Payment/>}/>
-
+          <Route path="/pending" element={<Pending/>}/>
+          <Route path="/assigned-class" element={<Assigned_class/>}/>
+          <Route path="/completed_class" element={<Completed_class/>}/>
+          <Route path="/FeesPayment" element={<FeesPayment/>}/>
 
           {/* Protected Routes */}
           <Route

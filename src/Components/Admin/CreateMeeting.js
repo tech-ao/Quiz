@@ -388,6 +388,7 @@ const Createmeeting = () => {
               <Button 
                 variant="primary" 
                 type="submit" 
+                style={{ marginBottom:"10px" }}
                 disabled={isCreatingMeeting || !isSignedIn}
               >
                 {isCreatingMeeting ? 'Creating...' : 'Create Meeting'}
@@ -396,6 +397,7 @@ const Createmeeting = () => {
                 <Button 
                   variant="secondary" 
                   className="ml-2" 
+                  style={{ marginLeft:"20px" }}
                   onClick={handleSignIn}
                 >
                   Sign In with Google

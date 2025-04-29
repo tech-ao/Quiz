@@ -80,7 +80,7 @@ const StudentData = () => {
         pageNumber: currentPage + 1,
       };
   
-      dispatch(getStudents({ paginationDetail, teacherId: teacherData.userData.teacherId }));
+      dispatch(getStudents({ isCompetition:false ,paginationDetail, teacherId: teacherData.userData.teacherId }));
     }
   }, [dispatch, currentPage, teacherData]);
   
@@ -157,7 +157,7 @@ const StudentData = () => {
     dispatch(deleteStudentAction(selectedStudentId))
       .then(() => {
         toast.success("Student deleted successfully!");
-        dispatch(getStudents({ paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
+        dispatch(getStudents({ isCompetition:false ,paginationDetail: { pageSize: studentsPerPage, pageNumber: currentPage + 1 } }));
         setShowDeleteModal(false);
         setSelectedStudentId(null);
       })
@@ -175,7 +175,7 @@ const StudentData = () => {
     <div>
       <TeacherHeader toggleSidebar={toggleSidebar} teacherName ={teacherData?.userData.name}/>
       <div className="d-flex">
-        {isSidebarVisible && <TeacherSidePanel />}
+        {isSidebarVisible && <TeacherSidePanel teachingModeid ={teacherData?.userData?.stausId}/>}
         <Container className="main-container ">
           {/* Sticky Header */}
           <div className="sticky-top bg-white py-3" style={{ top: 0, zIndex: 1020 }}>

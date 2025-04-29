@@ -6,6 +6,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 const StudentSidePannel = ({ studyModeId }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  console.log(studyModeId);
+  
   
   const [openMenus, setOpenMenus] = useState({
     test: false,
@@ -47,10 +49,7 @@ const StudentSidePannel = ({ studyModeId }) => {
 
   // Handle navigation with studyModeId check for online class
   const handleNavigation = (path) => {
-    if (path === '/StudentOnlineClass' && Number(studyModeId) !== 2) {
-      console.warn("Access denied to Online Class for offline students.");
-      return;
-    }
+    
     navigate(path);
   };
 
@@ -156,48 +155,54 @@ const StudentSidePannel = ({ studyModeId }) => {
         </li>
 
         {/* Online Meeting Dropdown */}
+      
         <li className="nav-item">
-          <div
-            className={`nav-link ${isSectionActive(['/assigned-class', '/completed_class']) ? 'active' : ''}`}
-            onClick={() => toggleMenu('onlineMeeting')}
-            style={{ cursor: 'pointer' }}
-          >
-            <div className="icon-with-text">
-              <i className="bi bi-laptop"></i>
-              <span className="nav-text">Online Meeting</span>
-              <i className={`bi ${openMenus.onlineMeeting ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+  {studyModeId === 1 && (
+    <>
+      <div
+        className={`nav-link ${isSectionActive(['/assigned-class', '/completed_class']) ? 'active' : ''}`}
+        onClick={() => toggleMenu('onlineMeeting')}
+        style={{ cursor: 'pointer' }}
+      >
+        <div className="icon-with-text">
+          <i className="bi bi-laptop"></i>
+          <span className="nav-text">Online Meeting</span>
+          <i className={`bi ${openMenus.onlineMeeting ? "bi-chevron-down" : "bi-chevron-right"} dropdown-icon`} />
+        </div>
+      </div>
+
+      {openMenus.onlineMeeting && (
+        <ul className="nav flex-column sub-nav">
+          <li className="nav-item">
+            <div
+              className={`nav-link ${isPathActive('/assigned-class') ? 'active' : ''}`}
+              onClick={() => handleNavigation('/assigned-class')}
+              style={{ marginLeft: '15px', cursor: 'pointer' }}
+            >
+              <div className="icon-with-text" style={{ gap: '5px' }}>
+                <i className="bi bi-people"></i>
+                <span className="nav-text">Assigned Class</span>
+              </div>
             </div>
-          </div>
-          
-          {openMenus.onlineMeeting && (
-            <ul className="nav flex-column sub-nav">
-              <li className="nav-item">
-                <div
-                  className={`nav-link ${isPathActive('/assigned-class') ? 'active' : ''}`}
-                  onClick={() => handleNavigation('/assigned-class')}
-                  style={{ marginLeft: '15px', cursor: 'pointer' }}
-                >
-                  <div className="icon-with-text" style={{ gap: '5px' }}>
-                    <i className="bi bi-people"></i>
-                    <span className="nav-text">Assigned Class</span>
-                  </div>
-                </div>
-              </li>
-              <li className="nav-item">
-                <div
-                  className={`nav-link ${isPathActive('/completed_class') ? 'active' : ''}`}
-                  onClick={() => handleNavigation('/completed_class')}
-                  style={{ marginLeft: '15px', cursor: 'pointer' }}
-                >
-                  <div className="icon-with-text" style={{ gap: '5px' }}>
-                    <i className="bi bi-check2-circle"></i>
-                    <span className="nav-text">Completed Class</span>
-                  </div>
-                </div>
-              </li>
-            </ul>
-          )}
-        </li>
+          </li>
+          <li className="nav-item">
+            <div
+              className={`nav-link ${isPathActive('/completed_class') ? 'active' : ''}`}
+              onClick={() => handleNavigation('/completed_class')}
+              style={{ marginLeft: '15px', cursor: 'pointer' }}
+            >
+              <div className="icon-with-text" style={{ gap: '5px' }}>
+                <i className="bi bi-check2-circle"></i>
+                <span className="nav-text">Completed Class</span>
+              </div>
+            </div>
+          </li>
+        </ul>
+      )}
+    </>
+  )}
+</li>
+
 
         <li className="nav-item">
           <div

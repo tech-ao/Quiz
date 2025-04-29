@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './TeacherSidepannel.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const TeacherSidePanel = () => {
+const TeacherSidePanel = (teachingModeid) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({
