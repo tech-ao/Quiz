@@ -94,7 +94,7 @@ const ViewStudentPanel = ({ show, onClose }) => {
               }}
             >
               {loading ? (
-                <p>Loading image...</p>
+                <p className="img" style={{ marginTop: "50px" }}>Loading image...</p>
               ) : error ? (
                 <p>{error}</p>
               ) : profileImage ? (

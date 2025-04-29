@@ -139,7 +139,7 @@ const RegisterStudent = () => {
           phoneNumber: "",
           dob: "",
           grade: "",
-          address: "", 
+          address: "",
           gender: "",
           studyModeId: "",
           country: "",
@@ -170,18 +170,20 @@ const RegisterStudent = () => {
           <h2 className="form-title">Register New Student</h2>
           <Form onSubmit={handleSubmit}>
             {/* Personal Information */}
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formStudentFirstName">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="firstName"
-                  placeholder="Enter first name"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Form.Group>
+            <Row className="me-3">
+              <Col md={6}>
+                <Form.Group as={Col} controlId="formStudentFirstName">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="firstName"
+                    placeholder="Enter first name"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </Form.Group>
+              </Col>
 
               <Form.Group as={Col} controlId="formStudentLastName">
                 <Form.Label>Last Name</Form.Label>
@@ -195,52 +197,58 @@ const RegisterStudent = () => {
                 />
               </Form.Group>
             </Row>
-
-            <Form.Group className="mb-3" controlId="formStudentEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Enter email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-            </Form.Group>
-
-            {/* Contact Information */}
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formPhoneNumber">
-                <Form.Label>Phone Number</Form.Label>
+            <Row className="me-3 ms-3 mt-2 mb-3">
+              <Col md={12}></Col>
+              <Form.Group as={Col}/*className="mb-3"*/ controlId="formStudentEmail">
+                <Form.Label>Email</Form.Label>
                 <Form.Control
-                  type="text"
-                  name="phoneNumber"
-                  placeholder="Enter phone number"
-                  value={formData.phoneNumber}
-                  onChange={(e) => {
-                    const regex = /^[0-9\b]+$/;
-                    if (e.target.value === "" || regex.test(e.target.value)) {
-                      setFormData((prevData) => ({
-                        ...prevData,
-                        phoneNumber: e.target.value,
-                      }));
-                    }
-                  }}
-                  maxLength={10}
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                  value={formData.email}
+                  onChange={handleInputChange}
                   required
                 />
+
               </Form.Group>
+
+            </Row>
+
+            {/* Contact Information */}
+            <Row className="mb-3 me-3 mt-2">
+              <Col md={6}>
+                <Form.Group as={Col} controlId="formPhoneNumber">
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="phoneNumber"
+                    placeholder="Enter phone number"
+                    value={formData.phoneNumber}
+                    onChange={(e) => {
+                      const regex = /^[0-9\b]+$/;
+                      if (e.target.value === "" || regex.test(e.target.value)) {
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          phoneNumber: e.target.value,
+                        }));
+                      }
+                    }}
+                    maxLength={10}
+                    required
+                  />
+                </Form.Group>
+              </Col>
 
               <Form.Group as={Col} controlId="formDob">
                 <Form.Label>Date of Birth</Form.Label>
-                 <Form.Control
-                              type="date"
-                              name="dob"
-                              value={formData.dob}
-                              onChange={handleInputChange}
-                              required
-                              max={new Date().toISOString().split("T")[0]} // Prevents future dates
-                            />
+                <Form.Control
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleInputChange}
+                  required
+                  max={new Date().toISOString().split("T")[0]} // Prevents future dates
+                />
               </Form.Group>
             </Row>
 
@@ -320,20 +328,20 @@ const RegisterStudent = () => {
               </Form.Select>
             </Form.Group>
 
-            
+
 
             <Form.Group className="mb-3" controlId="formAddress">
-  <Form.Label>Address</Form.Label>
-  <Form.Control
-    as="textarea"
-    name="address"
-    rows={3}
-    placeholder="Enter your address"
-    value={formData.address}
-    onChange={handleInputChange}
-    required
-  />
-</Form.Group>
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                as="textarea"
+                name="address"
+                rows={3}
+                placeholder="Enter your address"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
 
             <div className="d-flex align-items-center justify-content-between">
               <Link to="/" className="text-decoration-none text-success me-2">
