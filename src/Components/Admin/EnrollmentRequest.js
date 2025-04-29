@@ -9,19 +9,23 @@ import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
 import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
+import { Modal } from "react-bootstrap";
+
 
 const BASE_URL = "http://srimathicare.in:8081/api";
 
 const EnrollmentRequestList = () => {
-   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
-    const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRequestIds, setSelectedRequestIds] = useState([]);
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showAppoveModal, setShowAppoveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const [showViewStudent, setShowViewStudent] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const dispatch = useDispatch();
@@ -30,7 +34,7 @@ const EnrollmentRequestList = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-  
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -91,16 +95,29 @@ const EnrollmentRequestList = () => {
   };
 
   const handleApprove = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(1);
+    if (selectedRequestIds.length === 0) {
+      toast.error("Please select the students.");
+      return;
+    }
+  
+    const success = await updateStatus(1);
+    if (success) {
+      setShowAppoveModal(false);
+    }
+  };
+  
+  const handleDeny = async () => {
+    if (selectedRequestIds.length === 0) {
+      toast.error("Please select the students.");
+      return false;
+    }
+  
+    const success = await updateStatus(2);
+    if (success) {
+      setShowRejectModal(false);
     }
   };
 
-  const handleDeny = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(2);
-    }
-  };
 
   const updateStatus = async (statusEnum) => {
     try {
@@ -131,8 +148,10 @@ const EnrollmentRequestList = () => {
         )
       );
       setSelectedRequestIds([]);
+      return true;
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
+      return false;
     }
   };
 
@@ -140,7 +159,25 @@ const EnrollmentRequestList = () => {
     setSelectedStudentId(studentId);
     setShowViewStudent(true);
   };
+  const handleOpenAppoveModal = () => {
+    //setSelectedTeacherId(teacherId);
+    setShowAppoveModal(true);
+  };
+  const handleCloseAppoveModal = () => {
+    setShowAppoveModal(false);
+    // setSelectedTeacherId(null);
+  };
 
+  // reject fuction 
+
+  const handleOpenRejectModal = () => {
+    //setSelectedTeacherId(teacherId);
+    setShowRejectModal(true);
+  };
+  const handleCloseRejectModal = () => {
+    setShowRejectModal(false);
+    // setSelectedTeacherId(null);
+  };
   // New function: Opens the default email client with the student's email address
   const handleEmailAction = (email) => {
     window.location.href = `mailto:${email}`;
@@ -171,12 +208,12 @@ const EnrollmentRequestList = () => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  style={{ maxWidth: "400px", marginRight: "0px" }}
+                  style={{ maxWidth: "400px", marginRight: "5px" }}
                 />
-                <Button variant="success" onClick={handleApprove}>
+                <Button variant="success" onClick={handleOpenAppoveModal}style={{ marginRight: "5px" }}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny} >
+                <Button variant="danger" onClick={handleOpenRejectModal} >
                   Reject
                 </Button>
               </Col>
@@ -249,6 +286,41 @@ const EnrollmentRequestList = () => {
         </Container>
       </div>
       <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
+
+      <Modal show={showAppoveModal} onHide={handleCloseAppoveModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Approve Students</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to approve the selected students?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAppoveModal}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={handleApprove}>
+            Approve
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reject Students</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to reject the selected students?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseRejectModal}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDeny}>
+            Reject
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 };

@@ -176,7 +176,7 @@ const ListTeacher = () => {
                     onChange={handleSearch}
                   />
                 </InputGroup>
-                <Button variant="outline-success" onClick={handleOpenAssignStudent} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" }}>
+                <Button variant="outline-success" onClick={handleOpenAssignStudent} style={{ maxWidth: isSmallScreen ? "45%" : "200px", width:"250px" , marginRight: "5px"}}>
                   <i className="bi bi-person-plus me-2"></i> Assign Students
                 </Button>
 
@@ -219,10 +219,10 @@ const ListTeacher = () => {
                         <td>{teacher.phoneNumber}</td>
                         <td>
                           <div className="d-flex">
-                            <Button variant="outline-primary" size="sm" onClick={() => handleOpenEditTeacher(teacher.teacherId)}>
+                            <Button variant="outline-primary" size="sm" onClick={() => handleOpenEditTeacher(teacher.teacherId)}style={{ marginRight: "5px" }}>
                               <FaEdit />
                             </Button>
-                            <Button variant="outline-danger" size="sm" onClick={() => handleOpenDeleteModal(teacher.teacherId)}>
+                            <Button variant="outline-danger" size="sm" onClick={() => handleOpenDeleteModal(teacher.teacherId)}style={{ marginRight: "5px" }}>
                               <FaTrash />
                             </Button>
                             <Button variant="outline-info" size="sm" onClick={() => handleOpenViewTeacher(teacher.teacherId)}>
@@ -268,7 +268,7 @@ const ListTeacher = () => {
         </Container>
 
         <AddTeacher show={showAddTeacher} onClose={handleCloseAddTeacher} />
-        <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} teacherId={selectedTeacherId} />
+        <EditTeacher show={showEditTeacher} onClose={handleCloseEditTeacher} teacherId={selectedTeacherId}style={{ marginRight: "5px" }} />
         <ViewTeacher show={showViewTeacher} onClose={handleCloseViewTeacher} teacherData={teacherData} />
 
         <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>

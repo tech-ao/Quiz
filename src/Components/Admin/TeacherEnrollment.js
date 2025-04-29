@@ -11,6 +11,7 @@ import { fetchTeacherEnrollmentRequest } from "../../redux/Services/api";
 import ViewTeacherPanel from "../ViewTeacher"; // Optional: teacher view panel
 import { FiEye, FiMail } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
+import { Modal } from "react-bootstrap";
 
 const TeacherEnrollment = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -24,6 +25,8 @@ const TeacherEnrollment = () => {
   const [error, setError] = useState("");
   const [showViewTeacher, setShowViewTeacher] = useState(false);
   const [teacherData, setTeacherData] = useState(null); 
+   const [showAppoveModal, setShowAppoveModal] = useState(false);
+    const [showRejectModal, setShowRejectModal] = useState(false);
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
@@ -101,6 +104,26 @@ const TeacherEnrollment = () => {
     } else {
       toast.error("No teachers selected.");
     }
+  };
+
+  const handleOpenAppoveModal = () => {
+    //setSelectedTeacherId(teacherId);
+    setShowAppoveModal(true);
+  };
+  const handleCloseAppoveModal = () => {
+    setShowAppoveModal(false);
+    // setSelectedTeacherId(null);
+  };
+
+  // reject fuction 
+
+  const handleOpenRejectModal = () => {
+    //setSelectedTeacherId(teacherId);
+    setShowRejectModal(true);
+  };
+  const handleCloseRejectModal = () => {
+    setShowRejectModal(false);
+    // setSelectedTeacherId(null);
   };
 
   const updateStatus = async (statusEnum) => {
@@ -181,12 +204,12 @@ const TeacherEnrollment = () => {
                     setSearchTerm(e.target.value);
                     setCurrentPage(1);
                   }}
-                  style={{ maxWidth: "400px", marginRight: "0px" }}
+                  style={{ maxWidth: "400px", marginRight: "5px" }}
                 />
-                <Button variant="success" onClick={handleApprove}>
+                <Button variant="success" onClick={handleOpenAppoveModal}style={{ marginRight: "5px" }}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleDeny}>
+                <Button variant="danger" onClick={handleOpenRejectModal}>
                   Reject
                 </Button>
               </Col>
@@ -270,6 +293,40 @@ const TeacherEnrollment = () => {
         </Container>
       </div>
       <ViewTeacherPanel show={showViewTeacher} onClose={handleCloseViewTeacher} teacherData={teacherData} />
+
+      <Modal show={showAppoveModal} onHide={handleCloseAppoveModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Approve Students</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Are you sure you want to approve the selected students?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseAppoveModal}>
+                  Cancel
+                </Button>
+                <Button variant="success" onClick={handleApprove}>
+                  Approve
+                </Button>
+              </Modal.Footer>
+            </Modal>
+      
+            <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>Reject Students</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Are you sure you want to reject the selected students?
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseRejectModal}>
+                  Cancel
+                </Button>
+                <Button variant="danger" onClick={handleDeny}>
+                  Reject
+                </Button>
+              </Modal.Footer>
+            </Modal>
     </div>
   );
 };
