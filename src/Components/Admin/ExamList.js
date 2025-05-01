@@ -23,17 +23,16 @@ const ExamList = () => {
   const [filteredExamList, setFilteredExamList] = useState([]);
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
 
-  const [filterStatus, setFilterStatus] = useState(""); // "" for all
+  const [filterStatus, setFilterStatus] = useState(""); 
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 15;
-  const studentId = 1071; // Hardcoded or you can get dynamically if needed
 
   const fetchExamList = async (pageNumber = 1) => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/SearchAndList/SearchAndListExams`, // Use BASE_URL for the API
+        `${BASE_URL}/SearchAndList/SearchAndListExams`, 
         {
-          studentId: studentId,
+         
           paginationDetail: {
             pageSize: pageSize,
             pageNumber: pageNumber,
