@@ -109,6 +109,7 @@ const EnrollmentRequestList = () => {
     }
   
     const success = await updateStatus(2);
+    
     if (success) {
       setShowRejectModal(false);
     }
