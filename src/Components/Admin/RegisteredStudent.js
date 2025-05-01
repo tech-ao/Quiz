@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import { FaFilter } from "react-icons/fa"; // Import filter icon
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
+import CompetionViewStudentPanel from "../Admin/competionViewStudent";
 
 
 
@@ -350,7 +351,7 @@ console.log("abcd");
 
       <AddStudent show={showAddStudent} onClose={handleCloseAddStudent} />
       <EditStudent show={showEditStudent} onClose={handleCloseEditStudent} selectedStudentId={selectedStudentId} />
-      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
+      <CompetionViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
 
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>

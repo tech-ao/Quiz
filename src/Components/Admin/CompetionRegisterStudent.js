@@ -10,6 +10,7 @@ import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
 import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
 import BASE_URL from "../../redux/Services/Config";
+import CompetionViewStudentPanel from "../Admin/competionViewStudent";
 
 const CompetionEnrollmentRequestList = () => {
    const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -247,7 +248,7 @@ const CompetionEnrollmentRequestList = () => {
           </div>
         </Container>
       </div>
-      <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
+      <CompetionViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
     </div>
   );
 };
