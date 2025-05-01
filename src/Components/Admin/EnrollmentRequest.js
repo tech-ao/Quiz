@@ -93,6 +93,7 @@ const EnrollmentRequestList = () => {
   const handleApprove = async () => {
     if (selectedRequestIds.length === 0) {
       toast.error("Please select the students.");
+      
       return;
     }
   
