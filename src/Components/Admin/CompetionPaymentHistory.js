@@ -2,17 +2,26 @@ import React, { useEffect, useState } from "react";
 import { Container, Table, Spinner, Alert, Badge } from "react-bootstrap";
 import axios from "axios";
 import BASE_URL from "../../redux/Services/Config";
+import AdminHeader from "./AdminHeader";  // Import AdminHeader
+import Sidebar from "./SidePannel"; // Import Sidebar
 
 const CompetionPaymentHistory = () => {
   const [paymentData, setPaymentData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= 768 && window.innerWidth < 1024);
 
   const COMMON_HEADERS = {
     Accept: "text/plain",
     "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
     AccessToken: "123",
     "Content-Type": "application/json",
+  };
+
+  const toggleSidebar = () => {
+    setIsSidebarVisible((prev) => !prev);
   };
 
   useEffect(() => {
@@ -39,52 +48,60 @@ const CompetionPaymentHistory = () => {
   }, []);
 
   return (
-    <Container className="mt-4">
-      <h3 className="mb-3">Payment History</h3>
+    <>
+      <AdminHeader toggleSidebar={toggleSidebar} />  {/* Add AdminHeader here */}
+      <div className="d-flex">
+        {isSidebarVisible && <Sidebar />}  {/* Toggle Sidebar visibility based on state */}
+        <Container className="main-container">
+          <div className="sub-container">
+            <h3 className="mb-3">Payment History</h3>
 
-      {loading ? (
-        <div className="text-center">
-          <Spinner animation="border" />
-        </div>
-      ) : error ? (
-        <Alert variant="danger">{error}</Alert>
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Schedule ID</th>
-              <th>Student ID</th>
-              <th>Document Name</th>
-              <th>Extension</th>
-              <th>Timestamp</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paymentData.map((payment) => (
-              <tr key={payment.id}>
-                <td>{payment.id}</td>
-                <td>{payment.scheduleId}</td>
-                <td>{payment.studentId}</td>
-                <td>{payment.name}</td>
-                <td>
-                  <Badge bg="secondary">{payment.extension}</Badge>
-                </td>
-                <td>{new Date(payment.timeStamp).toLocaleString()}</td>
-                <td>
-                  {payment.isDeleted ? (
-                    <Badge bg="danger">Deleted</Badge>
-                  ) : (
-                    <Badge bg="success">Active</Badge>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
-    </Container>
+            {loading ? (
+              <div className="text-center">
+                <Spinner animation="border" />
+              </div>
+            ) : error ? (
+              <Alert variant="danger">{error}</Alert>
+            ) : (
+              <Table striped bordered hover responsive>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Schedule ID</th>
+                    <th>Student ID</th>
+                    <th>Document Name</th>
+                    <th>Extension</th>
+                    <th>Timestamp</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {paymentData.map((payment) => (
+                    <tr key={payment.id}>
+                      <td>{payment.id}</td>
+                      <td>{payment.scheduleId}</td>
+                      <td>{payment.studentId}</td>
+                      <td>{payment.name}</td>
+                      <td>
+                        <Badge bg="secondary">{payment.extension}</Badge>
+                      </td>
+                      <td>{new Date(payment.timeStamp).toLocaleString()}</td>
+                      <td>
+                        {payment.isDeleted ? (
+                          <Badge bg="danger">Deleted</Badge>
+                        ) : (
+                          <Badge bg="success">Active</Badge>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </div>
+        </Container>
+      </div>
+    </>
   );
 };
 

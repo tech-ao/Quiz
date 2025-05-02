@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination, Modal } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import {
+  Container, Row, Col, Table, Form, Button, Badge, Spinner,
+  Pagination, Modal
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
 import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
-import ViewStudentPanel from "../Student/ViewStudent";
-import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
+import { fetchStudent } from "../../redux/Action/StudentAction";
+import CompetionViewStudentPanel from "./competionViewStudent";
+import { FiEye, FiMail } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
-import CompetionViewStudentPanel from "../Admin/CompetionViewStudent";
 
 const CompetionEnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -26,17 +29,12 @@ const CompetionEnrollmentRequestList = () => {
   const [selectedStudentId, setSelectedStudentId] = useState(null);
   const [showAppoveModal, setShowAppoveModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+  const [remarks, setRemarks] = useState("");
+
   const dispatch = useDispatch();
-
-  const toggleSidebar = () => {
-    setIsSidebarVisible((prev) => !prev);
-  };
-
-
 
   useEffect(() => {
     const handleResize = () => {
-      // Sidebar visible only for screens 1024px and above
       setIsSidebarVisible(window.innerWidth >= 1024);
       setIsSmallScreen(window.innerWidth < 768);
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -47,7 +45,6 @@ const CompetionEnrollmentRequestList = () => {
 
   const studentsPerPage = 10;
 
-  // Filter requests by search term (matching first name or email)
   const filteredRequests = requests.filter((request) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -62,10 +59,7 @@ const CompetionEnrollmentRequestList = () => {
   const totalPages = Math.ceil(filteredRequests.length / studentsPerPage);
 
   useEffect(() => {
-    const paginationDetail = {
-      pageSize: studentsPerPage,
-      pageNumber: currentPage,
-    };
+    const paginationDetail = { pageSize: studentsPerPage, pageNumber: currentPage };
     const fetchRequests = async () => {
       try {
         setLoading(true);
@@ -85,26 +79,14 @@ const CompetionEnrollmentRequestList = () => {
   }, [currentPage]);
 
   const handleSelectRequest = (studentId) => {
-    setSelectedRequestIds((prevSelected) =>
-      prevSelected.includes(studentId)
-        ? prevSelected.filter((id) => id !== studentId)
-        : [...prevSelected, studentId]
+    setSelectedRequestIds((prev) =>
+      prev.includes(studentId)
+        ? prev.filter((id) => id !== studentId)
+        : [...prev, studentId]
     );
   };
 
-  const handleApprove = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(1);
-    }
-  };
-
-  const handleDeny = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(2);
-    }
-  };
-
-  const updateStatus = async (statusEnum) => {
+  const updateStatus = async (statusEnum, remarks = "") => {
     try {
       if (selectedRequestIds.length === 0) {
         toast.error("No students selected.");
@@ -114,6 +96,7 @@ const CompetionEnrollmentRequestList = () => {
       const requestBody = {
         statusEnum,
         studentIdList: selectedRequestIds,
+        remarks,
       };
 
       await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
@@ -123,6 +106,7 @@ const CompetionEnrollmentRequestList = () => {
           AccessToken: "123",
         },
       });
+
       toast.success("Status updated successfully!");
 
       setRequests((prev) =>
@@ -133,19 +117,21 @@ const CompetionEnrollmentRequestList = () => {
         )
       );
       setSelectedRequestIds([]);
+      setRemarks("");
+      setShowAppoveModal(false);
+      setShowRejectModal(false);
     } catch (error) {
       toast.error("Failed to update status. Please try again.");
     }
   };
 
+  const handleApprove = () => updateStatus(1);
+  const handleDeny = () => updateStatus(2, remarks);
+
   const handleOpenViewStudent = (studentId) => {
     setSelectedStudentId(studentId);
+    dispatch(fetchStudent(studentId));
     setShowViewStudent(true);
-  };
-
-  // New function: Opens the default email client with the student's email address
-  const handleEmailAction = (email) => {
-    window.location.href = `mailto:${email}`;
   };
 
   const handleCloseViewStudent = () => {
@@ -153,34 +139,18 @@ const CompetionEnrollmentRequestList = () => {
     setSelectedStudentId(null);
   };
 
-  const handleOpenAppoveModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowAppoveModal(true);
-  };
-  const handleCloseAppoveModal = () => {
-    setShowAppoveModal(false);
-    // setSelectedTeacherId(null);
-  };
-
-  // reject fuction 
-
-  const handleOpenRejectModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowRejectModal(true);
-  };
-  const handleCloseRejectModal = () => {
-    setShowRejectModal(false);
-    // setSelectedTeacherId(null);
+  const handleEmailAction = (email) => {
+    window.location.href = `mailto:${email}`;
   };
 
   return (
     <div>
-      <AdminHeader toggleSidebar={toggleSidebar} />
+      <AdminHeader toggleSidebar={() => setIsSidebarVisible((prev) => !prev)} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container ">
+        <Container className="main-container">
           <div className="sticky-header">
-            <Row className="align-items-center" style={{ marginTop: "20px" }}>
+            <Row className="align-items-center mt-3">
               <Col md={6}>
                 <h2 className="fw-bold">Student Enrollment Request</h2>
               </Col>
@@ -195,10 +165,10 @@ const CompetionEnrollmentRequestList = () => {
                   }}
                   style={{ maxWidth: "400px", marginRight: "5px" }}
                 />
-                <Button variant="success" onClick={handleOpenAppoveModal} style={{ marginRight: "5px" }}>
+                <Button variant="success" onClick={() => setShowAppoveModal(true)} style={{ marginRight: "5px" }}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleOpenRejectModal} >
+                <Button variant="danger" onClick={() => setShowRejectModal(true)}>
                   Reject
                 </Button>
               </Col>
@@ -206,9 +176,7 @@ const CompetionEnrollmentRequestList = () => {
           </div>
           <div className="sub-container">
             {loading ? (
-              <div className="text-center">
-                <Spinner animation="border" />
-              </div>
+              <div className="text-center"><Spinner animation="border" /></div>
             ) : error ? (
               <div className="alert alert-danger">{error}</div>
             ) : (
@@ -230,7 +198,11 @@ const CompetionEnrollmentRequestList = () => {
                   {currentRequests.map((request, index) => (
                     <tr key={request.id || index}>
                       <td>
-                        <Form.Check type="checkbox" onChange={() => handleSelectRequest(request.studentId)} />
+                        <Form.Check
+                          type="checkbox"
+                          checked={selectedRequestIds.includes(request.studentId)}
+                          onChange={() => handleSelectRequest(request.studentId)}
+                        />
                       </td>
                       <td>{indexOfFirstRequest + index + 1}</td>
                       <td>{request.studentId}</td>
@@ -270,40 +242,45 @@ const CompetionEnrollmentRequestList = () => {
           </div>
         </Container>
       </div>
+
       <CompetionViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
-      <Modal show={showAppoveModal} onHide={handleCloseAppoveModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Approve Students</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                Are you sure you want to approve the selected students?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseAppoveModal}>
-                  Cancel
-                </Button>
-                <Button variant="success" onClick={handleApprove}>
-                  Approve
-                </Button>
-              </Modal.Footer>
-            </Modal>
-      
-            <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Reject Students</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                Are you sure you want to reject the selected students?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseRejectModal}>
-                  Cancel
-                </Button>
-                <Button variant="danger" onClick={handleDeny}>
-                  Reject
-                </Button>
-              </Modal.Footer>
-            </Modal>
+
+      {/* Approve Modal */}
+      <Modal show={showAppoveModal} onHide={() => setShowAppoveModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Approve Students</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to approve the selected students?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowAppoveModal(false)}>Cancel</Button>
+          <Button variant="success" onClick={handleApprove}>Approve</Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Reject Modal */}
+      <Modal show={showRejectModal} onHide={() => setShowRejectModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reject Students</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you want to reject the selected students?</p>
+          <Form.Group controlId="remarks">
+            <Form.Label>Remarks <span className="text-danger">*</span></Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              placeholder="Enter remarks..."
+              required
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRejectModal(false)}>Cancel</Button>
+          <Button variant="danger" onClick={handleDeny} disabled={!remarks.trim()}>Reject</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

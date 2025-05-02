@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { FaFilter } from "react-icons/fa"; // Import filter icon
 import ReactPaginate from 'react-paginate';
 import 'react-toastify/dist/ReactToastify.css';
-import CompetionViewStudentPanel from "../Admin/CompetionViewStudent";
+import CompetionViewStudentPanel from './competionViewStudent';
 
 
 

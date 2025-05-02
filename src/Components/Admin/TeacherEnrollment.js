@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination } from "react-bootstrap";
+import {
+  Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination, Modal
+} from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { fetchTeacher } from "../../redux/Action/TeacherAction";
@@ -8,10 +10,9 @@ import "./EnrollmentRequest.css";
 import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchTeacherEnrollmentRequest } from "../../redux/Services/api";
-import ViewTeacherPanel from "../ViewTeacher"; // Optional: teacher view panel
+import ViewTeacherPanel from "../ViewTeacher";
 import { FiEye, FiMail } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
-import { Modal } from "react-bootstrap";
 
 const TeacherEnrollment = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
@@ -24,9 +25,9 @@ const TeacherEnrollment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showViewTeacher, setShowViewTeacher] = useState(false);
-  const [teacherData, setTeacherData] = useState(null); 
-   const [showAppoveModal, setShowAppoveModal] = useState(false);
-    const [showRejectModal, setShowRejectModal] = useState(false);
+  const [teacherData, setTeacherData] = useState(null);
+  const [showAppoveModal, setShowAppoveModal] = useState(false);
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
@@ -43,9 +44,8 @@ const TeacherEnrollment = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const teachersPerPage = 10; // For pagination
+  const teachersPerPage = 10;
 
-  // Filter requests by search term (matching teacher name or email)
   const filteredRequests = requests.filter((request) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -60,21 +60,21 @@ const TeacherEnrollment = () => {
   const totalPages = Math.ceil(filteredRequests.length / teachersPerPage);
 
   useEffect(() => {
-    const paginationDetail = {
-      pageSize: teachersPerPage,
-      pageNumber: currentPage,
-    };
     const fetchRequests = async () => {
       try {
         setLoading(true);
+        const paginationDetail = {
+          pageSize: teachersPerPage,
+          pageNumber: currentPage,
+        };
         const response = await fetchTeacherEnrollmentRequest({ paginationDetail });
-        if (response && response.data) {
-          setRequests(response.data.searchAndListTeacherResult || []);
+        if (response?.data?.searchAndListTeacherResult) {
+          setRequests(response.data.searchAndListTeacherResult);
         } else {
           setError("Failed to fetch enrollment requests.");
         }
-      } catch (err) {
-        setError("An error occurred while fetching data. Please try again.");
+      } catch {
+        setError("An error occurred while fetching data.");
       } finally {
         setLoading(false);
       }
@@ -83,61 +83,28 @@ const TeacherEnrollment = () => {
   }, [currentPage]);
 
   const handleSelectRequest = (teacherId) => {
-    setSelectedRequestIds((prevSelected) =>
-      prevSelected.includes(teacherId)
-        ? prevSelected.filter((id) => id !== teacherId)
-        : [...prevSelected, teacherId]
+    setSelectedRequestIds((prev) =>
+      prev.includes(teacherId) ? prev.filter((id) => id !== teacherId) : [...prev, teacherId]
     );
   };
 
-  const handleApprove = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(1);
-    } else {
-      toast.error("No teachers selected.");
-    }
-  };
-
-  const handleDeny = async () => {
-    if (selectedRequestIds.length > 0) {
-      await updateStatus(2);
-    } else {
-      toast.error("No teachers selected.");
-    }
-  };
-
-  const handleOpenAppoveModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowAppoveModal(true);
-  };
-  const handleCloseAppoveModal = () => {
-    setShowAppoveModal(false);
-    // setSelectedTeacherId(null);
-  };
-
-  // reject fuction 
-
-  const handleOpenRejectModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowRejectModal(true);
-  };
-  const handleCloseRejectModal = () => {
-    setShowRejectModal(false);
-    // setSelectedTeacherId(null);
-  };
+  const handleOpenAppoveModal = () => setShowAppoveModal(true);
+  const handleCloseAppoveModal = () => setShowAppoveModal(false);
+  const handleOpenRejectModal = () => setShowRejectModal(true);
+  const handleCloseRejectModal = () => setShowRejectModal(false);
 
   const updateStatus = async (statusEnum) => {
+    if (!selectedRequestIds.length) {
+      toast.error("No teachers selected.");
+      return;
+    }
+
     try {
-      if (!selectedRequestIds || selectedRequestIds.length === 0) {
-        toast.error("No teachers selected.");
-        return;
-      }
-  
       const requestBody = {
         statusEnum,
         teacherIdsList: selectedRequestIds,
       };
-  
+
       await axios.post(`${BASE_URL}/Teacher/UpdateTeacherStatus`, requestBody, {
         headers: {
           Accept: "application/json",
@@ -146,31 +113,29 @@ const TeacherEnrollment = () => {
           "Content-Type": "application/json",
         },
       });
-  
+
       toast.success("Status updated successfully!");
-  
-      // Remove updated teachers from the pending enrollment list.
-      setRequests((prev) =>
-        prev.filter((teacher) => !selectedRequestIds.includes(teacher.teacherId))
-      );
+      setRequests((prev) => prev.filter((teacher) => !selectedRequestIds.includes(teacher.teacherId)));
       setSelectedRequestIds([]);
+
+      if (statusEnum === 1) handleCloseAppoveModal();
+      if (statusEnum === 2) handleCloseRejectModal();
     } catch (error) {
-      console.error("Error updating status:", error.response ? error.response.data : error.message);
-      toast.error("Failed to update status. Please try again.");
+      console.error("Error updating status:", error.response || error.message);
+      toast.error("Failed to update status.");
     }
   };
-  
+
   const handleOpenViewTeacher = async (teacherId) => {
     try {
       const response = await dispatch(fetchTeacher(teacherId));
-      if (response && response.data) {
+      if (response?.data) {
         setTeacherData(response.data);
         setShowViewTeacher(true);
       } else {
-        toast.error("Invalid API response format.");
+        toast.error("Invalid teacher data.");
       }
-    } catch (error) {
-      console.error("Error fetching teacher details:", error);
+    } catch {
       toast.error("Failed to fetch teacher details.");
     }
   };
@@ -181,7 +146,7 @@ const TeacherEnrollment = () => {
 
   const handleCloseViewTeacher = () => {
     setShowViewTeacher(false);
-    setTeacherData(null); // Reset teacher data when closing the view
+    setTeacherData(null);
   };
 
   return (
@@ -206,7 +171,7 @@ const TeacherEnrollment = () => {
                   }}
                   style={{ maxWidth: "400px", marginRight: "5px" }}
                 />
-                <Button variant="success" onClick={handleOpenAppoveModal}style={{ marginRight: "5px" }}>
+                <Button variant="success" onClick={handleOpenAppoveModal} style={{ marginRight: "5px" }}>
                   Approve
                 </Button>
                 <Button variant="danger" onClick={handleOpenRejectModal}>
@@ -217,9 +182,7 @@ const TeacherEnrollment = () => {
           </div>
           <div className="sub-container">
             {loading ? (
-              <div className="text-center">
-                <Spinner animation="border" />
-              </div>
+              <div className="text-center"><Spinner animation="border" /></div>
             ) : error ? (
               <div className="alert alert-danger">{error}</div>
             ) : (
@@ -227,9 +190,9 @@ const TeacherEnrollment = () => {
                 <thead>
                   <tr>
                     <th>Select</th>
-                    <th>S.Number</th>
+                    <th>S.No.</th>
                     <th>Name</th>
-                    <th>Date Of Birth</th>
+                    <th>DOB</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Gender</th>
@@ -239,23 +202,20 @@ const TeacherEnrollment = () => {
                 </thead>
                 <tbody>
                   {currentRequests.map((request, index) => (
-                    <tr key={request.id || index}>
+                    <tr key={request.teacherId}>
                       <td>
                         <Form.Check
                           type="checkbox"
                           onChange={() => handleSelectRequest(request.teacherId)}
+                          checked={selectedRequestIds.includes(request.teacherId)}
                         />
                       </td>
                       <td>{indexOfFirstRequest + index + 1}</td>
                       <td>{request.fullName}</td>
                       <td>
-                        {request.dob 
-                            ? new Date(request.dob).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: '2-digit', 
-                                day: '2-digit' 
-                            }) 
-                            : 'N/A'}
+                        {request.dob
+                          ? new Date(request.dob).toLocaleDateString("en-US", { year: "numeric", month: "2-digit", day: "2-digit" })
+                          : "N/A"}
                       </td>
                       <td>{request.email}</td>
                       <td>{request.phoneNumber}</td>
@@ -283,7 +243,11 @@ const TeacherEnrollment = () => {
             <Pagination className="justify-content-center">
               <Pagination.Prev onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))} disabled={currentPage === 1} />
               {[...Array(totalPages).keys()].map((number) => (
-                <Pagination.Item key={number} active={number + 1 === currentPage} onClick={() => setCurrentPage(number + 1)}>
+                <Pagination.Item
+                  key={number}
+                  active={number + 1 === currentPage}
+                  onClick={() => setCurrentPage(number + 1)}
+                >
                   {number + 1}
                 </Pagination.Item>
               ))}
@@ -292,41 +256,30 @@ const TeacherEnrollment = () => {
           </div>
         </Container>
       </div>
+
       <ViewTeacherPanel show={showViewTeacher} onClose={handleCloseViewTeacher} teacherData={teacherData} />
 
       <Modal show={showAppoveModal} onHide={handleCloseAppoveModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Approve Students</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                Are you sure you want to approve the selected students?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseAppoveModal}>
-                  Cancel
-                </Button>
-                <Button variant="success" onClick={handleApprove}>
-                  Approve
-                </Button>
-              </Modal.Footer>
-            </Modal>
-      
-            <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
-              <Modal.Header closeButton>
-                <Modal.Title>Reject Students</Modal.Title>
-              </Modal.Header>
-              <Modal.Body>
-                Are you sure you want to reject the selected students?
-              </Modal.Body>
-              <Modal.Footer>
-                <Button variant="secondary" onClick={handleCloseRejectModal}>
-                  Cancel
-                </Button>
-                <Button variant="danger" onClick={handleDeny}>
-                  Reject
-                </Button>
-              </Modal.Footer>
-            </Modal>
+        <Modal.Header closeButton>
+          <Modal.Title>Approve Teachers</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to approve the selected teachers?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseAppoveModal}>Cancel</Button>
+          <Button variant="success" onClick={() => updateStatus(1)}>Approve</Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal show={showRejectModal} onHide={handleCloseRejectModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reject Teachers</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to reject the selected teachers?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseRejectModal}>Cancel</Button>
+          <Button variant="danger" onClick={() => updateStatus(2)}>Reject</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

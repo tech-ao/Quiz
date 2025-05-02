@@ -82,35 +82,7 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
       </Offcanvas.Header>
       <Offcanvas.Body className="modalbg">
         {/* Profile Image Section */}
-        {/* <Row className="mb-3">
-          <Col className="text-center">
-            <div
-              style={{
-                border: "5px solid #4caf50",
-                borderRadius: "50%",
-                padding: "5px",
-                display: "inline-block",
-                height: "171px"
-              }}
-            >
-              {loading ? (
-                <p className="img" style={{ marginTop: "50px" }}>Loading image...</p>
-              ) : error ? (
-                <p>{error}</p>
-              ) : profileImage ? (
-                <Image
-                  src={`data:image/jpeg;base64,${profileImage}`}
-                  alt="Profile"
-                  roundedCircle
-                  width="150"
-                  height="150px"
-                />
-              ) : (
-                <p>alwin image available</p>
-              )}
-            </div>
-          </Col>
-        </Row> */}
+      
 
         <Row className="mb-3">
           <Col>
@@ -174,18 +146,36 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
             <p>{studentData?.lastName || "N/A"}</p>
           </Col>
         </Row>
-        {/* <Row className="mb-3">
-         
-        </Row> */}
-        {/* Approve and Reject Buttons */}
-        <div className="d-flex justify-content-center mt-3">
-          <Button variant="success"  className="me-2">
-            Attendace
-          </Button>
-          <Button variant="success" >
-            Fees
-          </Button>
-        </div>
+         <Row className="mb-3">
+          <Col className="text-center">
+            <div
+              style={{
+                border: "5px solid #4caf50",
+                width:"100%",
+              
+                padding: "5px",
+                display: "inline-block",
+                height: "171px"
+              }}
+            >
+              {loading ? (
+                <p className="img" style={{ marginTop: "50px" }}>Loading image...</p>
+              ) : error ? (
+                <p>{error}</p>
+              ) : profileImage ? (
+                <Image
+                  src={`data:image/jpeg;base64,${profileImage}`}
+                  alt="Profile"
+                  roundedCircle
+                  width="150"
+                  height="150px"
+                />
+              ) : (
+                <p>Payment History</p>
+              )}
+            </div>
+          </Col>
+        </Row>
       </Offcanvas.Body>
     </Offcanvas>
   );

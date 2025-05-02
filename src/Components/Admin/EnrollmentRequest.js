@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Container, Row, Col, Table, Form, Button, Badge, Spinner, Pagination , Modal} from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Table,
+  Form,
+  Button,
+  Badge,
+  Spinner,
+  Pagination,
+  Modal,
+} from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -8,8 +19,10 @@ import Sidebar from "../Admin/SidePannel";
 import AdminHeader from "../Admin/AdminHeader";
 import { fetchStudentEnrollmentRequest } from "../../redux/Services/api";
 import ViewStudentPanel from "../Student/ViewStudent";
-import { FiEye, FiMail } from "react-icons/fi";  // Imported FiMail along with FiEye
+import { FiEye, FiMail } from "react-icons/fi";
 import BASE_URL from "../../redux/Services/Config";
+import { fetchStudent } from "../../redux/Action/StudentAction";
+
 const EnrollmentRequestList = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(window.innerWidth >= 1024);
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
@@ -24,17 +37,15 @@ const EnrollmentRequestList = () => {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [showViewStudent, setShowViewStudent] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState(null);
+  const [remark, setRemark] = useState("");
   const dispatch = useDispatch();
 
   const toggleSidebar = () => {
     setIsSidebarVisible((prev) => !prev);
   };
 
-
-
   useEffect(() => {
     const handleResize = () => {
-      // Sidebar visible only for screens 1024px and above
       setIsSidebarVisible(window.innerWidth >= 1024);
       setIsSmallScreen(window.innerWidth < 768);
       setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
@@ -45,7 +56,6 @@ const EnrollmentRequestList = () => {
 
   const studentsPerPage = 10;
 
-  // Filter requests by search term (matching first name or email)
   const filteredRequests = requests.filter((request) => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -93,40 +103,38 @@ const EnrollmentRequestList = () => {
   const handleApprove = async () => {
     if (selectedRequestIds.length === 0) {
       toast.error("Please select the students.");
-      
       return;
     }
-  
-    const success = await updateStatus(1);
+    const success = await updateStatus(1, remark);
     if (success) {
       setShowAppoveModal(false);
+      setRemark("");
     }
   };
-  
+
   const handleDeny = async () => {
     if (selectedRequestIds.length === 0) {
       toast.error("Please select the students.");
-      return false;
+      return;
     }
-  
-    const success = await updateStatus(2);
-    
+    const success = await updateStatus(2, remark);
     if (success) {
       setShowRejectModal(false);
+      setRemark("");
     }
   };
 
-
-  const updateStatus = async (statusEnum) => {
+  const updateStatus = async (statusEnum, remarkText) => {
     try {
       if (selectedRequestIds.length === 0) {
         toast.error("No students selected.");
-        return;
+        return false;
       }
 
       const requestBody = {
         statusEnum,
         studentIdList: selectedRequestIds,
+        remark: remarkText,
       };
 
       await axios.post(`${BASE_URL}/Student/UpdateStudentStatus`, requestBody, {
@@ -136,8 +144,8 @@ const EnrollmentRequestList = () => {
           AccessToken: "123",
         },
       });
-      toast.success("Status updated successfully!");
 
+      toast.success("Status updated successfully!");
       setRequests((prev) =>
         prev.map((student) =>
           selectedRequestIds.includes(student.studentId)
@@ -155,30 +163,8 @@ const EnrollmentRequestList = () => {
 
   const handleOpenViewStudent = (studentId) => {
     setSelectedStudentId(studentId);
+    dispatch(fetchStudent(studentId));
     setShowViewStudent(true);
-  };
-  const handleOpenAppoveModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowAppoveModal(true);
-  };
-  const handleCloseAppoveModal = () => {
-    setShowAppoveModal(false);
-    // setSelectedTeacherId(null);
-  };
-
-  // reject fuction 
-
-  const handleOpenRejectModal = () => {
-    //setSelectedTeacherId(teacherId);
-    setShowRejectModal(true);
-  };
-  const handleCloseRejectModal = () => {
-    setShowRejectModal(false);
-    // setSelectedTeacherId(null);
-  };
-  // New function: Opens the default email client with the student's email address
-  const handleEmailAction = (email) => {
-    window.location.href = `mailto:${email}`;
   };
 
   const handleCloseViewStudent = () => {
@@ -186,12 +172,34 @@ const EnrollmentRequestList = () => {
     setSelectedStudentId(null);
   };
 
+  const handleOpenAppoveModal = () => {
+    setShowAppoveModal(true);
+    setRemark("");
+  };
+  const handleCloseAppoveModal = () => {
+    setShowAppoveModal(false);
+    setRemark("");
+  };
+
+  const handleOpenRejectModal = () => {
+    setShowRejectModal(true);
+    setRemark("");
+  };
+  const handleCloseRejectModal = () => {
+    setShowRejectModal(false);
+    setRemark("");
+  };
+
+  const handleEmailAction = (email) => {
+    window.location.href = `mailto:${email}`;
+  };
+
   return (
     <div>
       <AdminHeader toggleSidebar={toggleSidebar} />
       <div className="d-flex">
         {isSidebarVisible && <Sidebar />}
-        <Container className="main-container ">
+        <Container className="main-container">
           <div className="sticky-header">
             <Row className="align-items-center" style={{ marginTop: "20px" }}>
               <Col md={6}>
@@ -208,10 +216,10 @@ const EnrollmentRequestList = () => {
                   }}
                   style={{ maxWidth: "400px", marginRight: "5px" }}
                 />
-                <Button variant="success" onClick={handleOpenAppoveModal}style={{ marginRight: "5px" }}>
+                <Button variant="success" onClick={handleOpenAppoveModal} style={{ marginRight: "5px" }}>
                   Approve
                 </Button>
-                <Button variant="danger" onClick={handleOpenRejectModal} >
+                <Button variant="danger" onClick={handleOpenRejectModal}>
                   Reject
                 </Button>
               </Col>
@@ -283,6 +291,7 @@ const EnrollmentRequestList = () => {
           </div>
         </Container>
       </div>
+
       <ViewStudentPanel show={showViewStudent} onClose={handleCloseViewStudent} />
 
       <Modal show={showAppoveModal} onHide={handleCloseAppoveModal}>
@@ -290,7 +299,8 @@ const EnrollmentRequestList = () => {
           <Modal.Title>Approve Students</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to approve the selected students?
+          <p>Are you sure you want to approve the selected students?</p>
+       
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseAppoveModal}>
@@ -307,7 +317,17 @@ const EnrollmentRequestList = () => {
           <Modal.Title>Reject Students</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to reject the selected students?
+          <p>Are you sure you want to reject the selected students?</p>
+          <Form.Group controlId="rejectRemark">
+            <Form.Label>Remark (optional)</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+              placeholder="Enter any remarks here..."
+            />
+          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseRejectModal}>
@@ -318,7 +338,6 @@ const EnrollmentRequestList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-
     </div>
   );
 };

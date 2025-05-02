@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Offcanvas, Row, Col, Image, Button } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector ,useDispatch} from "react-redux";
 import { toast } from "react-toastify";
 import BASE_URL from "../../redux/Services/Config";
 
 const ViewStudentPanel = ({ show, onClose }) => {
   const { selectedStudent } = useSelector((state) => state.students);
   const studentData = selectedStudent && selectedStudent.data;
+
+  
+    const { students } = useSelector((state) => state.students);
+    const dispatch = useDispatch();
+
+    console.log(selectedStudent);
+    
+  
 
   // State to hold the profile image
   const [profileImage, setProfileImage] = useState(null);
