@@ -82,7 +82,7 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
       </Offcanvas.Header>
       <Offcanvas.Body className="modalbg">
         {/* Profile Image Section */}
-        <Row className="mb-3">
+        {/* <Row className="mb-3">
           <Col className="text-center">
             <div
               style={{
@@ -110,7 +110,7 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
               )}
             </div>
           </Col>
-        </Row>
+        </Row> */}
 
         <Row className="mb-3">
           <Col>
@@ -127,13 +127,17 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
             <strong>Email:</strong>
             <p>{studentData?.email || "N/A"}</p>
           </Col>
-        </Row>
-        <Row className="mb-3">
           <Col>
             <strong>Phone Number:</strong>
             <p>
               {studentData?.countryCode || ""} {studentData?.phoneNumber || "N/A"}
             </p>
+          </Col>
+        </Row>
+        <Row className="mb-3">
+        <Col>
+            <strong>Gender:</strong>
+            <p>{studentData?.genderName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Date of Birth:</strong>
@@ -141,9 +145,9 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
           </Col>
         </Row>
         <Row className="mb-3">
-          <Col>
-            <strong>Gender:</strong>
-            <p>{studentData?.genderName || "N/A"}</p>
+        <Col>
+            <strong>Grade:</strong>
+            <p>{studentData?.gradeName || "N/A"}</p>
           </Col>
           <Col>
             <strong>Register Number:</strong>
@@ -151,9 +155,9 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
           </Col>
         </Row>
         <Row className="mb-3">
-          <Col>
-            <strong>Grade:</strong>
-            <p>{studentData?.gradeName || "N/A"}</p>
+        <Col>
+            <strong>Address:</strong>
+            <p>{studentData?.address || "N/A"}</p>
           </Col>
           <Col>
             <strong>Status:</strong>
@@ -162,10 +166,17 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
         </Row>
         <Row className="mb-3">
           <Col>
-            <strong>Address:</strong>
-            <p>{studentData?.address || "N/A"}</p>
+            <strong>Center name:</strong>
+            <p>{studentData?.firstName || "Nalwin/A"}</p>
+          </Col>
+          <Col>
+            <strong>Fees amount:</strong>
+            <p>{studentData?.lastName || "N/A"}</p>
           </Col>
         </Row>
+        {/* <Row className="mb-3">
+         
+        </Row> */}
         {/* Approve and Reject Buttons */}
         <div className="d-flex justify-content-center mt-3">
           <Button variant="success"  className="me-2">
