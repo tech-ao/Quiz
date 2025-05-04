@@ -13,11 +13,46 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
   const [profileImage, setProfileImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [scheduleData, setScheduleData] = useState(null);
 
   // Format date of birth if available
   const formatDate = (dob) => {
     return dob ? new Date(dob).toLocaleDateString() : "N/A";
   };
+
+  const COMMON_HEADERS = {
+    Accept: "text/plain",
+    "X-Api-Key": "3ec1b120-a9aa-4f52-9f51-eb4671ee1280",
+    AccessToken: "123",
+    "Content-Type": "application/json",
+  };
+
+  const getHeaders = () => ({
+    ...COMMON_HEADERS,
+  });
+
+
+  useEffect(() => {
+    const fetchLatestScheduleId = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/ScheduleTime/GetAll`, {
+          headers: getHeaders(),
+        });
+
+        if (response.data?.data?.length > 0) {
+          const latestSchedule = response.data.data.at(-1); // ✅ get the last item
+          setScheduleData(latestSchedule);
+        } else {
+          toast.error("No schedules found");
+        }
+      } catch (error) {
+        console.error("Failed to fetch schedules:", error);
+        toast.error("Failed to fetch schedule data");
+      }
+    };
+
+    fetchLatestScheduleId();
+  }, []);
 
   // Fetch profile image on component mount or when studentData changes
   useEffect(() => {
@@ -143,7 +178,7 @@ const CompetionViewStudentPanel = ({ show, onClose }) => {
           </Col>
           <Col>
             <strong>Fees amount:</strong>
-            <p>{studentData?.lastName || "N/A"}</p>
+            <p>{scheduleData?.fees || "N/A"}</p>
           </Col>
         </Row>
          <Row className="mb-3">
